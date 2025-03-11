@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
+/*   Updated: 2025/03/11 22:35:25 by mmalie           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -5,7 +17,7 @@
 
 # include <stdio.h>
 # include <readline/readline.h>
-# include <readline.history.h>
+# include <readline/history.h>
 # include <unistd.h>
 # include <fcntl.h>
 # include <sys/types.h>
@@ -21,7 +33,7 @@
 # include <term.h>
 
 /* Custom libraries */
-
+# include "../libft/libft.h"
 
 /* Structures */
 
