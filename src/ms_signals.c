@@ -6,11 +6,33 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:49:10 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/11 15:09:19 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/11 21:56:40 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
+/* Define which signals are caught and how they are handled.
+ * 
+ * - SIGINT (ctrl + c): display a new prompt on new line
+ * - [TODO] Not sure about SICQUIT. ctrl + \ may need to be handled in a different way
+ * - NB: ctrl + d sends NO signal, but an EOF to the main function reading from stdin
+ *
+ */
+
+void	init_signals(void)
+{
+	init_sigset();
+	init_sigaction();
+}
+
+void	init_sigset(void) // define which signals are handled
+{
+	sigset_t	sigset;
+
+	sigemptyset(&sigset); // necessary for init
+	sigaddset(&sigset, SIGINT);
+	sigaddset(&sigset, SIGQUIT);
+}
+
 void	init_sigaction(void) // define how signals are handled
 {
 	struct sigaction	act;
@@ -20,28 +42,14 @@ void	init_sigaction(void) // define how signals are handled
 	act.sa_flags = 0;
 }
 
-void	init_sigset(void)
-{
-	sigset_t	sigset;
-
-	sigemptyset(&sigset);
-	sigaddset(&sigset, SIG????);
-	
-}
-
 void	signal_handler(int signum)
 {
-	if (signum == SSS)
+	if (signum == SIGINT) // ctrl+c: display a new prompt on new line
 	{
 		//
 	}
-	else if (signum == SSS)
-	{
-		//
-	}
-	else if (signum == SSS)
+	else if (signum == SIGQUIT) // ctrl+\: should do nothing instead of interrupting
 	{
 		//
 	}
 }
-*/
