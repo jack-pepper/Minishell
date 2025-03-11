@@ -6,7 +6,7 @@
 #    By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/11 13:50:01 by mmalie            #+#    #+#              #
-#    Updated: 2025/03/11 13:54:14 by mmalie           ###   ########.fr        #
+#    Updated: 2025/03/11 14:16:15 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ CFLAGS=-g -Wall -Wextra -Werror
 ### Dependencies ###
 ####################
 
-DEPS = minishell.h
+DEPS = ./inc/minishell.h
 DEPS_LIBFT = ./libft/libft.h
 LIBFT = ./libft/libft.a
 
@@ -35,7 +35,7 @@ LIBFT = ./libft/libft.a
 ### Source files ###
 ####################
 
-SRC = minishell.c \
+SRC = ./src/minishell.c \
 
 ### Object files
 OBJ = $(SRC:.c=.o)
