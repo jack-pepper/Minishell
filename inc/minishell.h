@@ -37,6 +37,9 @@
 	// ms_environment.c
 
 	// ms_signals.c
+void	init_sigaction(void);
+void	init_sigset(void);
+void	signal_handler(int signum);
 
 	// ms_launcher.c
 
