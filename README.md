@@ -7,7 +7,11 @@
 19/03 [m] include readline (added both -lreadline -lncurses to Makefile, it *should* work on all systems).
 	/!\ I'm working on Linux. Let's check whether there are compatibility issues with MacOS.
           You might have to install readline (brew install readline).
+19/03 [m] add a simple prompt ("one-shot", simply returns the given string)
 
+
+### IDEAS
+19/03 [m] prompt: include later the prompt symbol as an env variable at startup? It would allow to modify it easily.
 
 ### POSTPONED ISSUES (MUST CHECK BEFORE VALIDATING THE PROJECT)
 19/03 [m] make sure readline is correctly included (an installation during compilation may be needed)
