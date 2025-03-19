@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/11 22:35:25 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/20 00:16:27 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,10 @@
 # include "../libft/libft.h"
 
 /* Structures */
-
+typedef	struct s_shell
+{
+	HISTORY_STATE	hist;
+}		t_shell;
 
 /* Prototypes */ // "ms_filename.c"
 
