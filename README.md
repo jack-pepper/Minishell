@@ -17,3 +17,4 @@
 19/03 [m] make sure readline is correctly included (an installation during compilation may be needed)
 
 ### @Morgan: I use a Linux VM (Ubuntu), but my host system is MacOS. I tested the make file and it looks to be working correctly on my end.
+I am currently working on setting up a webhook so we can be notified in slack every time one of us pushes an update on Git Hub.
