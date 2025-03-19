@@ -6,9 +6,11 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:49:10 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/11 21:56:40 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/19 11:45:22 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../inc/minishell.h"
 
 /* Define which signals are caught and how they are handled.
  * 

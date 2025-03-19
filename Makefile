@@ -6,7 +6,7 @@
 #    By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/11 13:50:01 by mmalie            #+#    #+#              #
-#    Updated: 2025/03/11 14:16:15 by mmalie           ###   ########.fr        #
+#    Updated: 2025/03/19 12:05:36 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ LIBFT = ./libft/libft.a
 ####################
 
 SRC = ./src/minishell.c \
+      ./src/ms_signals.c \
 
 ### Object files
 OBJ = $(SRC:.c=.o)
@@ -50,7 +51,7 @@ $(LIBFT):
 	cd libft && make
 
 $(NAME): $(OBJ) $(LIBFT)
-	$(CC) $(OBJ) -Llibft -lft -o $(NAME)
+	$(CC) $(OBJ) -Llibft -lft -lreadline -lncurses -o $(NAME)
 
 ######################################
 ### Compile .c files into .o files ###
