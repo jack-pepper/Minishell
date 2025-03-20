@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:49:10 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/19 11:45:22 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/20 11:52:08 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ void	init_sigaction(void) // define how signals are handled
 
 void	signal_handler(int signum)
 {
-	if (signum == SIGINT) // ctrl+c: display a new prompt on new line
+	if (signum == SIGINT) // ctrl+c: should display a new prompt on new line instead of quitting
 	{
-		//
+		// should free memory as well
 	}
 	else if (signum == SIGQUIT) // ctrl+\: should do nothing instead of interrupting
 	{

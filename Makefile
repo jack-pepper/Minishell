@@ -6,7 +6,7 @@
 #    By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/11 13:50:01 by mmalie            #+#    #+#              #
-#    Updated: 2025/03/19 12:05:36 by mmalie           ###   ########.fr        #
+#    Updated: 2025/03/20 12:53:36 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,13 @@ LIBFT = ./libft/libft.a
 
 SRC = ./src/minishell.c \
       ./src/ms_signals.c \
+      ./src/commands/ms_cmd_cd.c \
+      ./src/commands/ms_cmd_echo.c \
+      ./src/commands/ms_cmd_env.c \
+      ./src/commands/ms_cmd_exit.c \
+      ./src/commands/ms_cmd_export.c \
+      ./src/commands/ms_cmd_pwd.c \
+      ./src/commands/ms_cmd_unset.c \
 
 ### Object files
 OBJ = $(SRC:.c=.o)
