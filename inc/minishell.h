@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/20 12:44:12 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/20 18:03:43 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +67,17 @@ t_command commands[] = {
 // Main structure
 typedef	struct s_shell
 {
+
 	HISTORY_STATE	hist;
 }		t_shell;
 
-/* Prototypes */ // "ms_filename.c"
+/* Prototypes */
 
 	// minishell.c
-
-	// ms_prompt.c
-
-	// ms_history.c
-
-	// ms_environment.c
+int	main();
+int     init_shell(t_shell *sh);
+char    *get_input(char *line);
+void    process_input(char *line);
 
 	// ms_signals.c
 void	init_signals(void);
@@ -88,25 +87,25 @@ void	signal_handler(int signum);
 
 /* Prototypes: commands */
 
-	// ms_cmd_pwd.c
+	// ms_cmd_pwd.c - Print name of current/working directory
 void	cmd_pwd(void);
 
-	// ms_cmd_cd.c
+	// ms_cmd_cd.c - Change the working directory
 void	cmd_cd(void);
 
-	// ms_cmd_echo.c
+	// ms_cmd_echo.c - Display a line of text
 void	cmd_echo(void);
 
-	// ms_cmd_exit.c
+	// ms_cmd_exit.c - Cause the shell to exit
 void	cmd_exit(void);
 
-	// ms_cmd_export.c
+	// ms_cmd_export.c - Set the export attribute for variables
 void	cmd_export(void);
 
-	// ms_cmd_unset.c
+	// ms_cmd_unset.c - Unset values and attributes of variables and functions
 void	cmd_unset(void);
 
-	// ms_cmd_env.c
+	// ms_cmd_env.c - Display the env variables
 void	cmd_env(void);
 
 /* Protoypes: error handling and cleaning */
