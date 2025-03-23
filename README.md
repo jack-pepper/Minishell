@@ -1,4 +1,5 @@
 ### CHAT (last first)
+[Y]: Sounds good! I'll check out the links you provided and get back to you. I'm currently still troubleshooting my PIPEX to fix all the leaks. Technically, it's part of Minishell, so once it's done, a good chunk of Minishell will be completed too.
 
 [M]: Nice! I am trying to set the global architecture atm. Found some useful doc: 
      - on readline: https://web.mit.edu/gnu/doc/html/rlman_2.html
