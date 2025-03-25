@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/25 13:48:00 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/25 19:12:38 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,8 @@ typedef	struct s_shell
 /* Prototypes */
 
 	// minishell.c
-int	main();
+int	main(void);
 int     init_shell(t_shell *sh);
-char    *get_input(char *line);
-void    process_input(char *line);
 
 	// ms_signals.c
 void	init_signals(void);
@@ -86,13 +84,21 @@ void	init_sigset(void);
 void	init_sigaction(void);
 void	signal_handler(int signum);
 
+	// ms_input_manager.c
+char    *get_input(char *line);
+void    process_input(char *line);
+
+	// ms_commands_manager.c
+int     	init_cmds(t_shell *sh);
+t_command       *register_cmd(char *name, void *func, char *doc);
+
 /* Prototypes: commands */
 
 	// ms_cmd_pwd.c - Print name of current/working directory
 void	cmd_pwd(void);
 
 	// ms_cmd_cd.c - Change the working directory
-void	cmd_cd(void);
+int	cmd_cd(char *path);
 
 	// ms_cmd_echo.c - Display a line of text
 void	cmd_echo(void);

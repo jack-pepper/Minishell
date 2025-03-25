@@ -16,7 +16,7 @@
 
 ### HISTORY (last first)
 
-25/03 [M] add cmd exit and pwd
+25/03 [M] add cmd exit and pwd. [TODO] conceive the parsing to test cmd cd
 20/03 [M] add history, init commands files in a folder, split functions in minishell and handle CTRL+D (exit) 
           [TODO] Decide if the t_command approach would fit our needs and how
 20/03 [M] add a t_shell struct, make prompt a loop) NB: readline() leak does NOT have to be handled as per the subject
