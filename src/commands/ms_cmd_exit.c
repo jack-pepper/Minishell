@@ -6,9 +6,14 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:01:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/20 13:03:32 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/25 12:54:25 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+void	cmd_exit(unsigned int status)
+{
+	printf("[cmd_exit]\n"); // DEBUG
+	exit(status);
+}

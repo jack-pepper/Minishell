@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/20 18:03:43 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/25 13:48:00 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # define PATH_TO_HEADER "../inc/minishell.h"
+# define NB_CMDS 10 // Temporary, find out dynamically. DEBUG
 
 /* Standard libraries */
 
@@ -40,14 +41,13 @@
 /* Structures */
 
 // A similar struct is suggested by documentation at https://web.mit.edu/gnu/doc/html/rlman_2.html
-/*
+
 typedef struct s_command
 {
 	char *name;			// User printable name of the function.
-	Function *func;			// Function to call to do the job: can we use a pointer to a function? (or a "t_function" struct if needed)
+	void *func;			// Pointer to the function to call to
 	char *doc;			// Documentation for this function.
 } 		t_command;
-*/
 
 // Could be initialized like this:
 /*
@@ -60,7 +60,7 @@ t_command commands[] = {
                 { "unset", cmd_unset, "Unset values and attributes of variables and functions" },
                 { "env", cmd_env, "Display the env variables" },
 		{ "help", cmd_help, "Display this text" },
-                { (char *)NULL, (Function *)NULL, (char *)NULL } /// ???
+                { (char *)NULL, (Function *)NULL, (char *)NULL } /// should allow to loop through the cmd list
         };
 */
 
@@ -69,6 +69,7 @@ typedef	struct s_shell
 {
 
 	HISTORY_STATE	hist;
+	t_command	**cmds;
 }		t_shell;
 
 /* Prototypes */
@@ -97,7 +98,7 @@ void	cmd_cd(void);
 void	cmd_echo(void);
 
 	// ms_cmd_exit.c - Cause the shell to exit
-void	cmd_exit(void);
+void	cmd_exit(unsigned int status);
 
 	// ms_cmd_export.c - Set the export attribute for variables
 void	cmd_export(void);
