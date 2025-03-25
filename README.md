@@ -1,4 +1,6 @@
 ### CHAT (last first)
+[M]: The t_command approach seems efficient enough, simple commands (exit, pwd) are working (no proccess management atm though, bonus will depend on that too).  
+
 [Y]: Sounds good! I'll check out the links you provided and get back to you. I'm currently still troubleshooting my PIPEX to fix all the leaks. Technically, it's part of Minishell, so once it's done, a good chunk of Minishell will be completed too.
 
 [M]: Nice! I am trying to set the global architecture atm. Found some useful doc: 
@@ -14,6 +16,7 @@
 
 ### HISTORY (last first)
 
+25/03 [M] add cmd exit and pwd
 20/03 [M] add history, init commands files in a folder, split functions in minishell and handle CTRL+D (exit) 
           [TODO] Decide if the t_command approach would fit our needs and how
 20/03 [M] add a t_shell struct, make prompt a loop) NB: readline() leak does NOT have to be handled as per the subject
