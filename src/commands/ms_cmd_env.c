@@ -6,13 +6,18 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:01:09 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/25 19:02:39 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/26 10:34:04 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-//void	ms_cmd_env()
-//{
-//	
-//}
+void	cmd_env(char **env)
+{
+	while (*env)
+	{
+		printf("%s\n", *env);
+		env++;
+	}
+	return ;
+}

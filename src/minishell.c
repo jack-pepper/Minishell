@@ -6,17 +6,19 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/25 18:49:43 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/26 10:31:32 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	main(void)
+int	main(int argc, char **argv, char **env)
 {
 	t_shell		sh;
 	static char	*line = (char *)NULL;
 
+	if (argc != 1 || argv[1])
+		return (-1);
 	if (init_shell(&sh) != 0)
 		return (-1);
 	while (1)
@@ -24,7 +26,7 @@ int	main(void)
 		line = get_input(line);
 		if (line == NULL) // CTRL-D sends EOF, which is handled here
 			exit(1);
-		process_input(line);
+		process_input(line, env);
 	}
 	free(line);
 	rl_clear_history(); // free memory mallocated in readline 

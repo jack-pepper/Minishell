@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/25 19:12:38 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/26 10:30:43 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ typedef	struct s_shell
 /* Prototypes */
 
 	// minishell.c
-int	main(void);
+int	main(int argc, char **argv, char **env);
 int     init_shell(t_shell *sh);
 
 	// ms_signals.c
@@ -86,7 +86,7 @@ void	signal_handler(int signum);
 
 	// ms_input_manager.c
 char    *get_input(char *line);
-void    process_input(char *line);
+void    process_input(char *line, char **env);
 
 	// ms_commands_manager.c
 int     	init_cmds(t_shell *sh);
@@ -113,7 +113,7 @@ void	cmd_export(void);
 void	cmd_unset(void);
 
 	// ms_cmd_env.c - Display the env variables
-void	cmd_env(void);
+void	cmd_env(char **env);
 
 /* Protoypes: error handling and cleaning */
 

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/25 20:58:04 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/26 10:24:10 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char    *get_input(char *line)
         return (line);
 }
 
-void    process_input(char *line)
+void    process_input(char *line, char **env)
 {
         // parsing
         
@@ -48,4 +48,7 @@ void    process_input(char *line)
 		if (cmd_cd("/home") != 0)
 			return ;
 	}
+	
+	else if (ft_strncmp(line, "env", ft_strlen("env")) == 0)
+		cmd_env(env);
 }

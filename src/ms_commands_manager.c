@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:25:28 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/25 19:08:33 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/26 10:27:41 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@ int     init_cmds(t_shell *sh)
         if (sh->cmds[2] == NULL)
                 return (-1);
 
+        sh->cmds[3] = register_cmd("env", cmd_env, "Display the env variables");
+        if (sh->cmds[3] == NULL)
+                return (-1);
 
         return (0);
 }
