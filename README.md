@@ -1,5 +1,10 @@
 ### CHAT
+[Y]: Here is another option to setup the notifications:
+Go to this link: https://slack.github.com/ and click “Add to Slack”
+Go to the Github, Yel-bouk Conversation and type "/github subscribe jack-pepper/Minishell"
+When GitHub asks you to install the app, select Only select repositories and choose Minishell
 
+Complete the install
 [Y]: Morgan, could you give me admin access to the Minishell repo?
      I want to hook up the Slack integration so we both get commit notifications and stay in sync via slack. Thanks!
 You need to:
