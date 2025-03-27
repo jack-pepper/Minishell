@@ -1,6 +1,10 @@
 ### CHAT
 
-[Y]: Testing the webhook app for notifications.
+[Y]: Morgan, could you give me admin access to the Minishell repo?
+     I want to hook up the Slack integration so we both get commit notifications and stay in sync via slack. Thanks!
+You need to:
+→ Go to the repo settings → Collaborators
+→ Set my user to Admin
 
 [M]: Two approaches for handling env: global var extern char environ (man environ) or passing a third arg (env) to main that contains the list of env variables. I've settled for the second option. But we must keep in mind possible portability issues.
 
