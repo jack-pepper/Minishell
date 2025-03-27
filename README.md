@@ -1,5 +1,7 @@
 ### CHAT
 
+[Y]: Testing the webhook app for notifications.
+
 [M]: Two approaches for handling env: global var extern char environ (man environ) or passing a third arg (env) to main that contains the list of env variables. I've settled for the second option. But we must keep in mind possible portability issues.
 
 [M]: The t_command approach seems efficient enough, simple commands (exit, pwd) are working (no proccess management atm though, bonus will depend on that too).  
