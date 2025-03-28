@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:00:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/28 22:22:36 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/28 22:46:25 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	cmd_echo(char **input_args, char **env)
 		i++;
 	}
 	joined_input = ft_strdup("");
+	if (!joined_input)
+		return ;
 	while (input_args[i] != NULL)
 	{		
 		joined_input = ft_strjoin(joined_input, input_args[i]);

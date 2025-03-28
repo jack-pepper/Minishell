@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/28 22:15:11 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/28 22:52:00 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void	process_input(char **input_args, char **env)
 {
 	if (!input_args || input_args[0] == NULL)
 		return ;
-
         if (ft_strncmp(input_args[0], "exit", ft_strlen("exit")) == 0)
                 cmd_exit(0);
         else if (ft_strncmp(input_args[0], "pwd", ft_strlen("pwd")) == 0)
@@ -80,4 +79,9 @@ void	process_input(char **input_args, char **env)
 		cmd_env(env);
 	else if (ft_strncmp(input_args[0], "echo", ft_strlen("echo")) == 0)
 		cmd_echo(input_args, env);
+	else if (ft_strncmp(input_args[0], "export", ft_strlen("export")) == 0)
+		cmd_export(input_args, env);
+	else if (ft_strncmp(input_args[0], "unset", ft_strlen("unset")) == 0)
+		cmd_unset();
+	return ;
 }

@@ -6,8 +6,13 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:04:03 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/20 13:04:08 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/28 22:45:16 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+void	cmd_unset(void)
+{
+	printf("[cmd_unset]\n");
+}
