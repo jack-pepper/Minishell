@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/28 11:47:47 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/28 12:12:33 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,29 @@ char    *get_input(char *line)
 
 void    process_input(char *line, char **env)
 {
-        // parsing
-	//ft_normalize(line);
+	char	*clean_input;
         
+	clean_input = NULL;
+	// parsing
+	clean_input = ft_normalize(line);
+	if (!clean_input)
+		return ; // return NULL instead      
+	printf("clean_input: %s\n", clean_input); // DEBUG
+
 	// execution
         // Naive approach, for testing purposes. Should find a way to parse and execute cmd more efficiently
-        if (ft_strncmp(line, "exit", ft_strlen("exit")) == 0)
+        if (ft_strncmp(clean_input, "exit", ft_strlen("exit")) == 0)
                 cmd_exit(0);
-        else if (ft_strncmp(line, "pwd", ft_strlen("pwd")) == 0)
+        else if (ft_strncmp(clean_input, "pwd", ft_strlen("pwd")) == 0)
                 cmd_pwd();
 
 	// [?] Check for 'cd' -> if just 'cd': back to home/$USER, if path: call cmd_cd [?]
-	else if (ft_strncmp(line, "cd /home", ft_strlen("cd /home")) == 0)
+	else if (ft_strncmp(clean_input, "cd /home", ft_strlen("cd /home")) == 0)
 	{
 		if (cmd_cd("/home") != 0)
 			return ;
 	}
 	
-	else if (ft_strncmp(line, "env", ft_strlen("env")) == 0)
+	else if (ft_strncmp(clean_input, "env", ft_strlen("env")) == 0)
 		cmd_env(env);
 }

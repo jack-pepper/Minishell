@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/26 10:30:43 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/28 12:10:32 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,15 +78,22 @@ typedef	struct s_shell
 int	main(int argc, char **argv, char **env);
 int     init_shell(t_shell *sh);
 
+	// ms_input_manager.c
+char    *get_input(char *line);
+void    process_input(char *line, char **env);
+
+	// ms.parser.c
+char	*ft_normalize(char *line);
+char	*ft_strcollapse(char *line);
+char	*copy_collapse(char *dst, char *src, size_t src_len);
+
 	// ms_signals.c
 void	init_signals(void);
 void	init_sigset(void);
 void	init_sigaction(void);
 void	signal_handler(int signum);
 
-	// ms_input_manager.c
-char    *get_input(char *line);
-void    process_input(char *line, char **env);
+
 
 	// ms_commands_manager.c
 int     	init_cmds(t_shell *sh);
