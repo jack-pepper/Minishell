@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/28 00:01:51 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/28 11:47:47 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ char    *get_input(char *line)
 void    process_input(char *line, char **env)
 {
         // parsing
+	//ft_normalize(line);
         
 	// execution
         // Naive approach, for testing purposes. Should find a way to parse and execute cmd more efficiently
