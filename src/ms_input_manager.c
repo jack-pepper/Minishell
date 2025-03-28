@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/26 10:24:10 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/28 00:01:51 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char    *get_input(char *line)
                 free(line);
                 line = (char *)NULL;
         }
-        line = readline("> ");
+        line = readline("ms> ");
         if (line && *line) // save in history only if not empty
         {
                 add_history(line); // Should be stored on a file before quitting

@@ -1,5 +1,7 @@
 ### CHAT
 
+[M]: Doesn't seem to be possible anymore: https://github.com/orgs/community/discussions/108527
+
 [Y]: Morgan, could you give me admin access to the Minishell repo?
      I want to hook up the Slack integration so we both get commit notifications and stay in sync via slack. Thanks!
 You need to:
@@ -24,6 +26,8 @@ You need to:
 [M]: Here we can keep track of what we did and update the README later to explain how we worked
 
 ### HISTORY
+
+28/03 [M] start working on parsing
 
 26/03 [M] add env cmd and env arg to main (will be needed elsewhere)
 
