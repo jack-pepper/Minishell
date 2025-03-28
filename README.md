@@ -1,4 +1,7 @@
 ### CHAT
+
+[M]: Thanks! Testing it with a push.
+
 [Y]: Here is another option to setup the notifications:
 Go to this link: https://slack.github.com/ and click “Add to Slack”
 Go to the Github, Yel-bouk Conversation and type "/github subscribe jack-pepper/Minishell"
