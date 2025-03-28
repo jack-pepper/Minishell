@@ -6,12 +6,13 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/28 12:12:33 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/28 12:51:31 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
+// Get the initial input from user
 char    *get_input(char *line)
 {
         if (line)
@@ -31,18 +32,25 @@ char    *get_input(char *line)
         return (line);
 }
 
+// Normalize the input and store the arguments for further use
 void    process_input(char *line, char **env)
 {
 	char	*clean_input;
+	char	**input_args;
         
 	clean_input = NULL;
+	
 	// parsing
 	clean_input = ft_normalize(line);
 	if (!clean_input)
 		return ; // return NULL instead      
 	printf("clean_input: %s\n", clean_input); // DEBUG
 
-	// execution
+	// storing args and options
+
+
+
+	// execution (NB: I would export it to another manager function)
         // Naive approach, for testing purposes. Should find a way to parse and execute cmd more efficiently
         if (ft_strncmp(clean_input, "exit", ft_strlen("exit")) == 0)
                 cmd_exit(0);
