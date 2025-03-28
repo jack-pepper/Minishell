@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/28 13:36:34 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/28 17:27:39 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void	cmd_pwd(void);
 int	cmd_cd(char *path);
 
 	// ms_cmd_echo.c - Display a line of text
-void	cmd_echo(void);
+void	cmd_echo(char **input_args, char **env);
 
 	// ms_cmd_exit.c - Cause the shell to exit
 void	cmd_exit(unsigned int status);
