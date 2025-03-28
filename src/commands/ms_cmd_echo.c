@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:00:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/28 20:18:49 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/28 22:22:36 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	cmd_echo(char **input_args, char **env)
 
 	env++; //
 	env--; //
-	if (!input_args) // Does bash output a newline if no args as zsh?
+	if (!input_args || !(input_args[1])) // Does bash output a newline if no args as zsh?
 		return ;
 	i = 1;
 	opt_n = false;

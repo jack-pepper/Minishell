@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/28 17:34:51 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/28 22:15:11 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,7 @@ char	**normalize_input(char *line) // unsure whether char *env will be needed as
 	clean_input = ft_normalize(line);
 	if (!clean_input)
 		return (NULL);     
-	//printf("clean_input: %s\n", clean_input); // DEBUG
-
-	// storing args and options
+	//printf("clean_input: '%s'\n", clean_input); // DEBUG
 	input_args = ft_split(clean_input, ' ');
 	if (!input_args)
 		return (NULL);
@@ -58,16 +56,14 @@ char	**normalize_input(char *line) // unsure whether char *env will be needed as
 		printf("([input_args[%d]): %s\n", i, input_args[i]);
 		i++;
 	}
-	 ... I would leave it here for a while to report any unexpected behavior */
-	
-
+	*/
 	return (input_args);
 }
 
 // Should call the needed command and handle errors 
 void	process_input(char **input_args, char **env)
 {
-	if (!input_args || input_args[1] == NULL)
+	if (!input_args || input_args[0] == NULL)
 		return ;
 
         if (ft_strncmp(input_args[0], "exit", ft_strlen("exit")) == 0)
