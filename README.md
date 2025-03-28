@@ -1,4 +1,9 @@
 ### CHAT
+[Y]: Here is another option to setup the notifications:
+Go to this link: https://slack.github.com/ and click “Add to Slack”
+Go to the Github, Yel-bouk Conversation and type "/github subscribe jack-pepper/Minishell"
+When GitHub asks you to install the app, select Only select repositories and choose Minishell
+Complete the install
 
 [M]: Doesn't seem to be possible anymore: https://github.com/orgs/community/discussions/108527
 
