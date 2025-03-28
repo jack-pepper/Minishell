@@ -1,5 +1,8 @@
 ### CHAT
 
+[Y]: I'm currently organizing my Pipex project and uploading it to my GitHub. After that, I'll look into how we can integrate Pipex into Minishell, and then add it to the current repository.
+We should also discuss how we want to collaborate on this repo. I suggest creating separate branches so we don't interfere with each other's code. What do you think?
+
 [M]: Thanks! Testing it with a push. UPDATE: It seems to work!
 
 [Y]: Here is another option to setup the notifications:
