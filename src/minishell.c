@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/26 10:31:32 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/28 13:35:37 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int	main(int argc, char **argv, char **env)
 		line = get_input(line);
 		if (line == NULL) // CTRL-D sends EOF, which is handled here
 			exit(1);
-		process_input(line, env);
+		if (line[0] != '\0') // or if it contains only whitespace, add func
+			process_input(normalize_input(line), env);
 	}
 	free(line);
 	rl_clear_history(); // free memory mallocated in readline 

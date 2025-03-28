@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/28 12:51:31 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/28 13:40:38 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char    *get_input(char *line)
 }
 
 // Normalize the input and store the arguments for further use
-void    process_input(char *line, char **env)
+char	**normalize_input(char *line) // unsure whether char *env will be needed aswell, we'll see
 {
 	char	*clean_input;
 	char	**input_args;
@@ -43,27 +43,44 @@ void    process_input(char *line, char **env)
 	// parsing
 	clean_input = ft_normalize(line);
 	if (!clean_input)
-		return ; // return NULL instead      
+		return (NULL);     
 	printf("clean_input: %s\n", clean_input); // DEBUG
 
 	// storing args and options
+	input_args = ft_split(clean_input, ' ');
+	if (!input_args)
+		return (NULL);
 
+	// DISPLAY THE TOKENS STORED FOR DEBUGGING
+	int	i = 0;
+	while (input_args[i] != NULL)
+	{
+		printf("([input_args[%d]): %s\n", i, input_args[i]);
+		i++;
+	}
+	// ... I would leave it here for a while to report any unexpected behavior
+	
+	return (input_args);
+}
 
+// Should call the needed command and handle errors 
+void	process_input(char **input_args, char **env)
+{
+	if (!input_args)
+		return ;
 
-	// execution (NB: I would export it to another manager function)
-        // Naive approach, for testing purposes. Should find a way to parse and execute cmd more efficiently
-        if (ft_strncmp(clean_input, "exit", ft_strlen("exit")) == 0)
+        if (ft_strncmp(input_args[0], "exit", ft_strlen("exit")) == 0)
                 cmd_exit(0);
-        else if (ft_strncmp(clean_input, "pwd", ft_strlen("pwd")) == 0)
+        else if (ft_strncmp(input_args[0], "pwd", ft_strlen("pwd")) == 0)
                 cmd_pwd();
 
 	// [?] Check for 'cd' -> if just 'cd': back to home/$USER, if path: call cmd_cd [?]
-	else if (ft_strncmp(clean_input, "cd /home", ft_strlen("cd /home")) == 0)
+	else if (ft_strncmp(input_args[0], "cd", ft_strlen("cd")) == 0)
 	{
-		if (cmd_cd("/home") != 0)
+		if (cmd_cd(input_args[1]) != 0)
 			return ;
 	}
 	
-	else if (ft_strncmp(clean_input, "env", ft_strlen("env")) == 0)
+	else if (ft_strncmp(input_args[0], "env", ft_strlen("env")) == 0)
 		cmd_env(env);
 }

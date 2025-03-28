@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/28 12:10:32 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/28 13:36:34 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ int     init_shell(t_shell *sh);
 
 	// ms_input_manager.c
 char    *get_input(char *line);
-void    process_input(char *line, char **env);
+char	**normalize_input(char *line);
+void    process_input(char **input_args, char **env);
 
 	// ms.parser.c
 char	*ft_normalize(char *line);
@@ -92,8 +93,6 @@ void	init_signals(void);
 void	init_sigset(void);
 void	init_sigaction(void);
 void	signal_handler(int signum);
-
-
 
 	// ms_commands_manager.c
 int     	init_cmds(t_shell *sh);

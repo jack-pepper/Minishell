@@ -35,6 +35,8 @@ You need to:
 
 ### HISTORY
 
+28/03 [M] store args in an array of strings.
+
 28/03 [M] start working on parsing. It seems to work for most common cases (spaces at start, end and between arguments) but we will need to solve cases like: "cd  /  home" or "echo -   n" to match bash behavior. I pushed it already so we can go on developing this aspect.
 
 26/03 [M] add env cmd and env arg to main (will be needed elsewhere)
@@ -61,6 +63,8 @@ You need to:
 19/03 [M] prompt: include later the prompt symbol as an env variable at startup? It would allow to modify it easily.
 
 ### POSTPONED ISSUES (MUST CHECK BEFORE VALIDATING THE PROJECT)
+
+28/03 [M] segfault if the input is composed only of whitespace
 
 26/03 [M] check env arg to main for portability issues
 
