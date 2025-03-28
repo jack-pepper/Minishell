@@ -1,6 +1,6 @@
 ### CHAT
 
-[M]: Thanks! Testing it with a push.
+[M]: Thanks! Testing it with a push. UPDATE: It seems to work!
 
 [Y]: Here is another option to setup the notifications:
 Go to this link: https://slack.github.com/ and click “Add to Slack”
@@ -35,7 +35,7 @@ You need to:
 
 ### HISTORY
 
-28/03 [M] start working on parsing
+28/03 [M] start working on parsing. It seems to work for most common cases (spaces at start, end and between arguments) but we will need to solve cases like: "cd  /  home" or "echo -   n" to match bash behavior. I pushed it already so we can go on developing this aspect.
 
 26/03 [M] add env cmd and env arg to main (will be needed elsewhere)
 
