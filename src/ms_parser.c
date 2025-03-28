@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/28 12:16:31 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/28 16:52:04 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,6 @@ char	*ft_normalize(char *line)
 {
 	char	*trimmed_line;
 	char	*normalized_line;
-	int	i;
-
-	i = 0;
 
 	trimmed_line = NULL;
 	trimmed_line = ft_strtrim(line, " \f\n\r\t\v");
