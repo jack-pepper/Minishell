@@ -1,11 +1,12 @@
+## WEEK: 24/03 – 30/03
 ### TO DO
 
-[Y] Currently reviewing Minishell documentations to fully understand the MS project. Then, I will go through your code to understand it better and will refactor my Pipex so it works with Minishell's main.
+[Y] 🔧 Reviewing Minishell docs and adapting my Pipex
 
 [M] I am working on implementing the commands and improving the parsing for them
 
 
-### ISSUES
+### 🐞 ISSUES
 
 28/03 [M] parsing: should handle case like "cd  /  home" or "echo -   n" aswell
 
@@ -18,8 +19,11 @@
 19/03 [M] make sure readline is correctly included (an installation during compilation may be needed)
 
 
-### IDEAS FOR AN OUTSTANDING PROJECT
+### 💡 IDEAS FOR AN OUTSTANDING PROJECT
 
 20/03 [M] we could save the history to a file before exit (so it is available on next startup)
 
 19/03 [M] prompt: include later the prompt symbol as an env variable at startup? It would allow to modify it easily.
+
+### ✅ Completed Tasks
+(Nothing yet)
