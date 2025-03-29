@@ -1,6 +1,6 @@
 ### TO DO
 
-[Y] Currently going through your code to understand it better and refactoring my Pipex so it works with Minishell's main.
+[Y] Currently reviewing Minishell documentations to fully understand the MS project. Then, I will go through your code to understand it better and will refactor my Pipex so it works with Minishell's main.
 
 [M] I am working on implementing the commands and improving the parsing for them
 
