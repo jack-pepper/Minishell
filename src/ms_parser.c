@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/30 14:50:26 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/30 17:27:59 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ char	*ft_normalize(char *line)
 	char	*normalized_line;
 
 	trimmed_line = NULL;
+	normalized_line = NULL;
 	trimmed_line = ft_strtrim(line, " \f\n\r\t\v");
 	if (trimmed_line == NULL)
 	{
@@ -30,6 +31,35 @@ char	*ft_normalize(char *line)
 		return (NULL);
 	}
 	return (normalized_line);
+}
+
+// If there is more than one consecutive space, they are suppressed.
+char	*ft_strcollapse(char *line)
+{
+	char	*collapsed_line;
+	size_t	line_len;
+	int	to_collapse;
+	int	i;
+
+	collapsed_line = NULL;
+	line_len = ft_strlen(line);
+	to_collapse = 0;
+	i = 0;
+	while (line[i] != '\0')
+	{
+		if (line[i] == '\'' && ft_count_char(&line[i], '\'') > 1)
+			handle_quote(line, '\'', &i, &to_collapse);
+		else if (line[i] == '\"' && ft_count_char(&line[i], '\"') > 1)
+			handle_quote(line, '\"', &i, &to_collapse);
+		else if (ft_isspace(line[i]) && ft_isspace(line[i + 1]))
+			to_collapse++;
+		i++;
+	}
+	collapsed_line = malloc(sizeof(char) * ((line_len - to_collapse) + 1));
+	if (!collapsed_line)
+		return (NULL);
+	collapsed_line = copy_collapse(collapsed_line, line, line_len);
+	return (collapsed_line);
 }
 
 int	ft_count_char(char *str, char c)
@@ -51,52 +81,6 @@ int	ft_count_char(char *str, char c)
 	return (count);
 }
 
-// If there is more than one consecutive space, they are suppressed.
-char	*ft_strcollapse(char *line) // Need to add an option to NOT collapse between quotes! ("  abc  " or '   abc   ')
-{
-	char	*collapsed_line;
-	size_t	line_len;
-	int	to_collapse;
-	int	i;
-
-	collapsed_line = NULL;
-	line_len = ft_strlen(line);
-	to_collapse = 0;
-	i = 0;
-	while (line[i] != '\0')
-	{
-		if (line[i] == '\'' && ft_count_char(&line[i], '\'') > 1)
-		{
-			i++;
-			to_collapse++;
-			while (line[i] != '\'')
-			{
-				ft_replace_char(&line[i], '*');
-				i++;
-			}
-			to_collapse++;
-		}
-		else if (line[i] == '\"' && ft_count_char(&line[i], '\"') > 1)
-		{
-			i++;
-			to_collapse++;
-			while (line[i] != '\"')
-			{
-				ft_replace_char(&line[i], '*');
-				i++;
-			}
-			to_collapse++;
-		}
-		else if (ft_isspace(line[i]) && ft_isspace(line[i + 1]))
-			to_collapse++;
-		i++;
-	}
-	collapsed_line = malloc(sizeof(char) * ((line_len - to_collapse) + 1));
-	if (!collapsed_line)
-		return (NULL);
-	collapsed_line = copy_collapse(collapsed_line, line, line_len);
-	return (collapsed_line);
-}
 
 // Both the src and dst are expected to be non-NULL and their size is correct
 char	*copy_collapse(char *dst, char *src, size_t src_len)

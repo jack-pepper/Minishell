@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:25:28 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/26 10:27:41 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/30 17:40:53 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ t_command       *register_cmd(char *name, void *func, char *doc)
         cmd = malloc(sizeof(t_command));
         if (!cmd)
                 return (NULL);
-
 
         name_len = ft_strlen(name);
         doc_len = ft_strlen(doc);
