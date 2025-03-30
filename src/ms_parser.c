@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/28 19:47:32 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/30 11:17:08 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,34 @@ char	*copy_collapse(char *dst, char *src, size_t src_len)
 	}
 	dst[j] = '\0';
 	return (dst);
+}
+
+// input_args = pointer on the first arg (past cmd and past eventual options)
+char	*handle_quotes(char *str)
+{
+	char	*processed_str;
+	size_t	str_len;
+
+	str_len = ft_strlen(str);
+	if (str[0] == '\'' && str[str_len - 1] == '\'') // Must NOT interpret $ENV
+	{
+		printf("Closed ' quote detected\n");
+		processed_str = malloc(sizeof(char) * (str_len - 1)); // minus two quotes, plus one \0
+		if (!processed_str)
+			return (str); // or NULL with error?
+		ft_strlcpy(processed_str, ++str, str_len - 1);
+		return (processed_str);
+	}
+	else if (str[0] == '\"' && str[str_len - 1] == '\"') // Must interpret $ENV
+	{
+		printf("Closed \" quote detected\n");	
+		processed_str = malloc(sizeof(char) * (str_len - 1)); // minus two quotes, plus one \0
+		if (!processed_str)
+			return (str); // or NULL with error?
+		ft_strlcpy(processed_str, ++str, str_len - 1);
+		return (processed_str);
+	}
+	else // if no quotes or unclosed: no change
+		return (str);
+	return (str);
 }

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/28 22:52:00 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/30 11:23:45 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,9 @@ char	**normalize_input(char *line) // unsure whether char *env will be needed as
 		i++;
 	}
 	*/
+
+	// HANDLE QUOTES! (interpret the $ENV if needed)
+
 	return (input_args);
 }
 
@@ -65,6 +68,7 @@ void	process_input(char **input_args, char **env)
 {
 	if (!input_args || input_args[0] == NULL)
 		return ;
+
         if (ft_strncmp(input_args[0], "exit", ft_strlen("exit")) == 0)
                 cmd_exit(0);
         else if (ft_strncmp(input_args[0], "pwd", ft_strlen("pwd")) == 0)
