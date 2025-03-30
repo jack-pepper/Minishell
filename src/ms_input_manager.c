@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/30 11:23:45 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/30 14:48:24 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,28 +37,26 @@ char	**normalize_input(char *line) // unsure whether char *env will be needed as
 {
 	char	*clean_input;
 	char	**input_args;
-        
+
 	clean_input = NULL;
 	
 	// parsing
-	clean_input = ft_normalize(line);
+	clean_input = ft_normalize(line); // Careful: should NOT delete spaces between quotes ("  abc   ")...
 	if (!clean_input)
 		return (NULL);     
-	//printf("clean_input: '%s'\n", clean_input); // DEBUG
+	printf("[DEBUG] normalized input: ~%s~\n", clean_input); // DEBUG
 	input_args = ft_split(clean_input, ' ');
 	if (!input_args)
 		return (NULL);
 
-	/* DISPLAY THE TOKENS STORED FOR DEBUGGING
+	// DISPLAY THE TOKENS STORED FOR DEBUGGING
 	int	i = 0;
 	while (input_args[i] != NULL)
 	{
-		printf("([input_args[%d]): %s\n", i, input_args[i]);
+		printf("[DEBUG] input_args[%d]): %s\n", i, input_args[i]);
 		i++;
 	}
-	*/
-
-	// HANDLE QUOTES! (interpret the $ENV if needed)
+	// DEBUG
 
 	return (input_args);
 }

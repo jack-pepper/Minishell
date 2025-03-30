@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/30 11:17:08 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/30 14:50:26 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,27 @@ char	*ft_normalize(char *line)
 	return (normalized_line);
 }
 
+int	ft_count_char(char *str, char c)
+{
+	size_t	str_len;
+	size_t	i;
+	int	count;
+
+	str_len = ft_strlen(str);
+	i = 0;
+	count = 0;
+	while (i < str_len)
+	{
+		if (str[i] == c)
+			count++;	
+		i++;
+	}
+	printf("[DEBUG] ~%c~ found %u times in ~%s~\n", c, count, str);
+	return (count);
+}
+
 // If there is more than one consecutive space, they are suppressed.
-char	*ft_strcollapse(char *line)
+char	*ft_strcollapse(char *line) // Need to add an option to NOT collapse between quotes! ("  abc  " or '   abc   ')
 {
 	char	*collapsed_line;
 	size_t	line_len;
@@ -46,7 +65,29 @@ char	*ft_strcollapse(char *line)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if (ft_isspace(line[i]) && ft_isspace(line[i + 1]))
+		if (line[i] == '\'' && ft_count_char(&line[i], '\'') > 1)
+		{
+			i++;
+			to_collapse++;
+			while (line[i] != '\'')
+			{
+				ft_replace_char(&line[i], '*');
+				i++;
+			}
+			to_collapse++;
+		}
+		else if (line[i] == '\"' && ft_count_char(&line[i], '\"') > 1)
+		{
+			i++;
+			to_collapse++;
+			while (line[i] != '\"')
+			{
+				ft_replace_char(&line[i], '*');
+				i++;
+			}
+			to_collapse++;
+		}
+		else if (ft_isspace(line[i]) && ft_isspace(line[i + 1]))
 			to_collapse++;
 		i++;
 	}
@@ -68,8 +109,31 @@ char	*copy_collapse(char *dst, char *src, size_t src_len)
 	i = 0;
 	j = 0;
 	while (i < src_len)
-	{
-		if (ft_isspace(src[i]) && ft_isspace(src[i + 1]))
+	{	
+		if (src[i] == '\'' && ft_count_char(&src[i], '\'') > 1)
+		{
+			i++;
+			while (src[i] != '\'')
+			{
+				dst[j] = src[i];
+				j++;
+				i++;
+			}
+			i++;
+		}
+		else if (src[i] == '\"' && ft_count_char(&src[i], '\"') > 1)
+		{
+			i++;
+			while (src[i] != '\"')
+			{
+				dst[j] = src[i];
+				//printf("copied: [%c]\n", src[i]);
+				j++;
+				i++;
+			}
+			i++;
+		}
+		else if (ft_isspace(src[i]) && ft_isspace(src[i + 1]))
 			i++;
 		else
 		{
@@ -80,34 +144,4 @@ char	*copy_collapse(char *dst, char *src, size_t src_len)
 	}
 	dst[j] = '\0';
 	return (dst);
-}
-
-// input_args = pointer on the first arg (past cmd and past eventual options)
-char	*handle_quotes(char *str)
-{
-	char	*processed_str;
-	size_t	str_len;
-
-	str_len = ft_strlen(str);
-	if (str[0] == '\'' && str[str_len - 1] == '\'') // Must NOT interpret $ENV
-	{
-		printf("Closed ' quote detected\n");
-		processed_str = malloc(sizeof(char) * (str_len - 1)); // minus two quotes, plus one \0
-		if (!processed_str)
-			return (str); // or NULL with error?
-		ft_strlcpy(processed_str, ++str, str_len - 1);
-		return (processed_str);
-	}
-	else if (str[0] == '\"' && str[str_len - 1] == '\"') // Must interpret $ENV
-	{
-		printf("Closed \" quote detected\n");	
-		processed_str = malloc(sizeof(char) * (str_len - 1)); // minus two quotes, plus one \0
-		if (!processed_str)
-			return (str); // or NULL with error?
-		ft_strlcpy(processed_str, ++str, str_len - 1);
-		return (processed_str);
-	}
-	else // if no quotes or unclosed: no change
-		return (str);
-	return (str);
 }

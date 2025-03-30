@@ -6,7 +6,7 @@
 #    By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/11 13:50:01 by mmalie            #+#    #+#              #
-#    Updated: 2025/03/28 12:07:16 by mmalie           ###   ########.fr        #
+#    Updated: 2025/03/30 14:26:41 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,7 @@ SRC = ./src/minishell.c \
       ./src/ms_signals.c \
       ./src/ms_input_manager.c \
       ./src/ms_parser.c \
+      ./src/ms_quotes_handler.c \
       ./src/ms_commands_manager.c \
       ./src/commands/ms_cmd_cd.c \
       ./src/commands/ms_cmd_echo.c \

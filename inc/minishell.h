@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/30 11:15:09 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/30 14:28:35 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,14 @@ char    *get_input(char *line);
 char	**normalize_input(char *line);
 void    process_input(char **input_args, char **env);
 
-	// ms.parser.c
+	// ms_parser.c
 char	*ft_normalize(char *line);
 char	*ft_strcollapse(char *line);
 char	*copy_collapse(char *dst, char *src, size_t src_len);
 char	*handle_quotes(char *src);
+
+	// ms_quotes_handler.c
+void	ft_replace_char(char *cur_c, char new_c);
 
 	// ms_signals.c
 void	init_signals(void);
