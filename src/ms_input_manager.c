@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/30 16:38:51 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/31 13:48:27 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,18 @@ char	**normalize_input(char *line) // unsure whether char *env will be needed as
 	clean_input = ft_normalize(line);
 	if (!clean_input)
 		return (NULL);
-	printf("[DEBUG] normalized input: ~%s~\n", clean_input);
+	//printf("[DEBUG] normalized input: ~%s~\n", clean_input);
 	input_args = ft_split(clean_input, ' ');
 	if (!input_args)
 		return (NULL);
 
 	// DISPLAY THE TOKENS STORED FOR DEBUGGING
-	int	i = 0;
-	while (input_args[i] != NULL)
-	{
-		printf("[DEBUG] input_args[%d]): %s\n", i, input_args[i]);
-		i++;
-	}
+	//int	i = 0;
+	//while (input_args[i] != NULL)
+	//{
+	//	printf("[DEBUG] input_args[%d]): %s\n", i, input_args[i]);
+	//	i++;
+	//}
 	// DEBUG
 	
 	return (input_args);
@@ -64,6 +64,9 @@ void	process_input(char **input_args, char **env)
 {
 	if (!input_args || input_args[0] == NULL)
 		return ;
+
+	// check for '|' first
+	// process_pipe(); 
 
         if (ft_strncmp(input_args[0], "exit", ft_strlen("exit")) == 0)
                 cmd_exit(0);
