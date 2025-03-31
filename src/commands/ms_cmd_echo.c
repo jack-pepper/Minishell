@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:00:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/28 22:22:36 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/30 14:40:58 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	cmd_echo(char **input_args, char **env)
 		i++;
 	}
 	joined_input = ft_strdup("");
+	if (!joined_input)
+		return ;
 	while (input_args[i] != NULL)
 	{		
 		joined_input = ft_strjoin(joined_input, input_args[i]);
@@ -43,6 +45,7 @@ void	cmd_echo(char **input_args, char **env)
 				return ;
 		}
 	}
+//	joined_input = handle_quotes(joined_input); // Should probably be handled in normalize_input instead
 	printf("%s", joined_input);
 	if (opt_n == false) // My guess here... is that this behavior matches bash's.
 		printf("\n"); // It might be worth (for bonus) using the "%" method as zsh?

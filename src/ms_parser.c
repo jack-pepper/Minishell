@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/28 19:47:32 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/03/30 17:27:59 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ char	*ft_normalize(char *line)
 	char	*normalized_line;
 
 	trimmed_line = NULL;
+	normalized_line = NULL;
 	trimmed_line = ft_strtrim(line, " \f\n\r\t\v");
 	if (trimmed_line == NULL)
 	{
@@ -46,7 +47,11 @@ char	*ft_strcollapse(char *line)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if (ft_isspace(line[i]) && ft_isspace(line[i + 1]))
+		if (line[i] == '\'' && ft_count_char(&line[i], '\'') > 1)
+			handle_quote(line, '\'', &i, &to_collapse);
+		else if (line[i] == '\"' && ft_count_char(&line[i], '\"') > 1)
+			handle_quote(line, '\"', &i, &to_collapse);
+		else if (ft_isspace(line[i]) && ft_isspace(line[i + 1]))
 			to_collapse++;
 		i++;
 	}
@@ -56,6 +61,26 @@ char	*ft_strcollapse(char *line)
 	collapsed_line = copy_collapse(collapsed_line, line, line_len);
 	return (collapsed_line);
 }
+
+int	ft_count_char(char *str, char c)
+{
+	size_t	str_len;
+	size_t	i;
+	int	count;
+
+	str_len = ft_strlen(str);
+	i = 0;
+	count = 0;
+	while (i < str_len)
+	{
+		if (str[i] == c)
+			count++;	
+		i++;
+	}
+	printf("[DEBUG] ~%c~ found %u times in ~%s~\n", c, count, str);
+	return (count);
+}
+
 
 // Both the src and dst are expected to be non-NULL and their size is correct
 char	*copy_collapse(char *dst, char *src, size_t src_len)
@@ -68,8 +93,31 @@ char	*copy_collapse(char *dst, char *src, size_t src_len)
 	i = 0;
 	j = 0;
 	while (i < src_len)
-	{
-		if (ft_isspace(src[i]) && ft_isspace(src[i + 1]))
+	{	
+		if (src[i] == '\'' && ft_count_char(&src[i], '\'') > 1)
+		{
+			i++;
+			while (src[i] != '\'')
+			{
+				dst[j] = src[i];
+				j++;
+				i++;
+			}
+			i++;
+		}
+		else if (src[i] == '\"' && ft_count_char(&src[i], '\"') > 1)
+		{
+			i++;
+			while (src[i] != '\"')
+			{
+				dst[j] = src[i];
+				//printf("copied: [%c]\n", src[i]);
+				j++;
+				i++;
+			}
+			i++;
+		}
+		else if (ft_isspace(src[i]) && ft_isspace(src[i + 1]))
 			i++;
 		else
 		{
