@@ -86,17 +86,6 @@ void    process_input(char **input_args, char **env);
 	// ms.parser.c
 char	*ft_normalize(char *line);
 char	*ft_strcollapse(char *line);
-char	*copy_collapse(char *dst, char *src, size_t src_len);
-
-	// ms_signals.c
-void	init_signals(void);
-void	init_sigset(void);
-void	init_sigaction(void);
-void	signal_handler(int signum);
-
-	// ms_commands_manager.c
-int     	init_cmds(t_shell *sh);
-t_command       *register_cmd(char *name, void *func, char *doc);
 
 /* Prototypes: commands */
 
