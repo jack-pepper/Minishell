@@ -6,29 +6,42 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/01 11:23:11 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/01 13:42:06 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	cmd_export(char **input_args, char **env)
+void	cmd_export(char **input_args, char **this_env)
 {
 	//char	*equal_sign;
+	char	**new_env;
 
 	printf("[cmd_export]\n");
+	new_env = NULL;
 	if (!input_args)
 		return ;
 	if (!(input_args[1])) // if no args, man says result is unspecified
 	{
-		cmd_env(env); // ... we may just display the env variables
+		cmd_env(this_env); // ... we may just display the env variables
 		return ;
 	}
 	
 	// TEST
 	else
 	{
-		size_t nb = ft_strslen(env);
+		size_t i = ft_strslen(this_env);
+		new_env = malloc(sizeof(char *) * (i + 2)); // replace the number by the number of env var to add + 1
+		if (!new_env)
+			return ;
+		ft_memmove(new_env, this_env, sizeof(char *) * i);
+	
+		new_env[i] = ft_strdup("ZZZ=aaa");
+		if (!new_env[i])
+			return ;
+		new_env[i + 1] = NULL;
+		this_env = new_env;
+
 	}
 
 	/*

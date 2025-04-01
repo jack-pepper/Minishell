@@ -6,18 +6,18 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:01:09 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/26 10:34:04 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/01 13:40:10 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	cmd_env(char **env)
+void	cmd_env(char **this_env)
 {
-	while (*env)
+	while (*this_env)
 	{
-		printf("%s\n", *env);
-		env++;
+		printf("%s\n", *this_env);
+		this_env++;
 	}
 	return ;
 }

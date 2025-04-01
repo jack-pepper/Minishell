@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/31 13:48:27 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/01 13:46:47 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	**normalize_input(char *line) // unsure whether char *env will be needed as
 }
 
 // Should call the needed command and handle errors 
-void	process_input(char **input_args, char **env)
+void	process_input(char **input_args, char **this_env)
 {
 	if (!input_args || input_args[0] == NULL)
 		return ;
@@ -78,11 +78,11 @@ void	process_input(char **input_args, char **env)
 			return ;
 	}
 	else if (ft_strncmp(input_args[0], "env", ft_strlen("env")) == 0)
-		cmd_env(env);
+		cmd_env(this_env);
 	else if (ft_strncmp(input_args[0], "echo", ft_strlen("echo")) == 0)
-		cmd_echo(input_args, env);
+		cmd_echo(input_args, this_env);
 	else if (ft_strncmp(input_args[0], "export", ft_strlen("export")) == 0)
-		cmd_export(input_args, env);
+		cmd_export(input_args, this_env);
 	else if (ft_strncmp(input_args[0], "unset", ft_strlen("unset")) == 0)
 		cmd_unset();
 	return ;
