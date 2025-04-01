@@ -1,7 +1,7 @@
 ## WEEK: 24/03 – 30/03
 ### 🔧 TO DO
 
-[Y]  Reviewing Minishell docs and adapting my Pipex
+[Y] I'm currently adding some parsing logic to my pipex to handle redirection '>>' '<' '>' and pipes '|'.
 
 [M] I am working on implementing the commands and improving the parsing for them
 
