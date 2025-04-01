@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/31 13:52:01 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/01 11:23:11 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 void	cmd_export(char **input_args, char **env)
 {
-	char	*equal_sign;
-
+	//char	*equal_sign;
 
 	printf("[cmd_export]\n");
 	if (!input_args)
@@ -25,6 +24,14 @@ void	cmd_export(char **input_args, char **env)
 		cmd_env(env); // ... we may just display the env variables
 		return ;
 	}
+	
+	// TEST
+	else
+	{
+		size_t nb = ft_strslen(env);
+	}
+
+	/*
 	else
 	{
 		equal_sign = ft_strchr(input_args[1], '=');
@@ -34,4 +41,5 @@ void	cmd_export(char **input_args, char **env)
 		}
 	}
 	// ...
+	*/
 }
