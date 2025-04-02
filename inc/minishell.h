@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/01 13:45:36 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/02 11:05:19 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,14 +68,15 @@ typedef	struct s_shell
 
 	HISTORY_STATE	hist;
 	t_command	**cmds;
-	char		**this_env;
+	t_list		*this_env;
 }		t_shell;
 
 /* Prototypes */
 
 	// minishell.c
 int	main(int argc, char **argv, char **env);
-int     init_shell(t_shell *sh, char **env);
+int	init_shell(t_shell *sh, char **env);
+int	init_env(t_shell *sh, char **env);
 
 	// ms_signals.c
 void	init_signals(void);
@@ -86,7 +87,7 @@ void	signal_handler(int signum);
 	// ms_input_manager.c
 char    *get_input(char *line);
 char	**normalize_input(char *line);
-void    process_input(char **input_args, char **this_env);
+void    process_input(char **input_args, t_list **this_env);
 
 	// ms_parser.c
 char	*ft_normalize(char *line);
@@ -112,15 +113,15 @@ void	cmd_pwd(void);
 	// ms_cmd_cd.c - Change the working directory
 int	cmd_cd(char *path);
 	// ms_cmd_echo.c - Display a line of text
-void	cmd_echo(char **input_args, char **env);
+void	cmd_echo(char **input_args, t_list **env);
 	// ms_cmd_exit.c - Cause the shell to exit
 void	cmd_exit(unsigned int status);
 	// ms_cmd_export.c - Set the export attribute for variables
-void	cmd_export(char **input_args, char **this_env);
+void	cmd_export(char **input_args, t_list **this_env);
 	// ms_cmd_unset.c - Unset values and attributes of variables and functions
 void	cmd_unset(void);
 	// ms_cmd_env.c - Display the env variables
-void	cmd_env(char **this_env);
+void	cmd_env(t_list **this_env);
 
 /* Protoypes: error handling and cleaning */
 

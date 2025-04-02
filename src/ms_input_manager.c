@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/01 13:46:47 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/02 11:09:02 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	**normalize_input(char *line) // unsure whether char *env will be needed as
 }
 
 // Should call the needed command and handle errors 
-void	process_input(char **input_args, char **this_env)
+void	process_input(char **input_args, t_list **this_env)
 {
 	if (!input_args || input_args[0] == NULL)
 		return ;

@@ -6,13 +6,13 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:00:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/30 14:40:58 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/02 11:10:01 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	cmd_echo(char **input_args, char **env)
+void	cmd_echo(char **input_args, t_list **env)
 {
 	char	*joined_input;
 	bool	opt_n;
