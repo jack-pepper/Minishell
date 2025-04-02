@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/02 11:13:43 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/02 22:53:53 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	cmd_export(char **input_args, t_list **this_env)
 		return ;
 	if (!(input_args[1])) // if no args, man says result is unspecified
 	{
-		cmd_env(this_env); // ... we may just display the env variables
+		cmd_env((*this_env)); // ... we may just display the env variables
 		return ;
 	}
 	

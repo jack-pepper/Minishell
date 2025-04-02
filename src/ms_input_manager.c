@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/02 11:09:02 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/02 22:52:45 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	process_input(char **input_args, t_list **this_env)
 			return ;
 	}
 	else if (ft_strncmp(input_args[0], "env", ft_strlen("env")) == 0)
-		cmd_env(this_env);
+		cmd_env((*this_env));
 	else if (ft_strncmp(input_args[0], "echo", ft_strlen("echo")) == 0)
 		cmd_echo(input_args, this_env);
 	else if (ft_strncmp(input_args[0], "export", ft_strlen("export")) == 0)

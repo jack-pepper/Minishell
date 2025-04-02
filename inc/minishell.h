@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/02 11:05:19 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/02 23:14:06 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ void	ft_replace_char(char *cur_c, char new_c);
 
 	// ms_env_utils.c
 size_t	ft_strslen(char **strs);
+int	ft_copy_strs_to_list(t_list **list, char **strs, size_t nb_of_strings);
 
 	// ms_commands_manager.c
 int     	init_cmds(t_shell *sh);
@@ -121,7 +122,7 @@ void	cmd_export(char **input_args, t_list **this_env);
 	// ms_cmd_unset.c - Unset values and attributes of variables and functions
 void	cmd_unset(void);
 	// ms_cmd_env.c - Display the env variables
-void	cmd_env(t_list **this_env);
+void	cmd_env(t_list *this_env);
 
 /* Protoypes: error handling and cleaning */
 
