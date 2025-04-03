@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/03 13:54:00 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/03 19:32:26 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	init_env(t_shell *sh, char **env)
 	if (!sh->this_env)
 		return (-1);
 	sh->this_env = NULL;
-	if (ft_copy_strs_to_list(&sh->this_env, env, nb_vars) != 0)
+	if (ft_copy_strs_to_list(&sh->this_env, env, nb_vars, '=') != 0)
 		return (-1);
 	return (0);
 }
