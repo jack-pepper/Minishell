@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/02 22:52:45 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/03 13:44:38 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,9 @@ void	process_input(char **input_args, t_list **this_env)
 		return ;
 
 	// check for '|' first
-	// process_pipe(); 
+	// output = process_pipe();
+
+	// "<" or "infile.txt >" (check) && NO PIPES
 
         if (ft_strncmp(input_args[0], "exit", ft_strlen("exit")) == 0)
                 cmd_exit(0);
@@ -84,6 +86,6 @@ void	process_input(char **input_args, t_list **this_env)
 	else if (ft_strncmp(input_args[0], "export", ft_strlen("export")) == 0)
 		cmd_export(input_args, this_env);
 	else if (ft_strncmp(input_args[0], "unset", ft_strlen("unset")) == 0)
-		cmd_unset();
+		cmd_unset(input_args, this_env);
 	return ;
 }

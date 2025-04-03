@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/02 23:15:33 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/03 13:54:00 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	init_shell(t_shell *sh, char **env)
 	init_signals();
 	if (init_env(sh, env) != 0)
 		return (-1);
+	// init_pipex (make a pointer to this_env)
 	if (init_cmds(sh) != 0)
 		return (-1);	
 	return (0);

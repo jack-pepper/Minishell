@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/02 23:14:06 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/03 13:04:42 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void	cmd_exit(unsigned int status);
 	// ms_cmd_export.c - Set the export attribute for variables
 void	cmd_export(char **input_args, t_list **this_env);
 	// ms_cmd_unset.c - Unset values and attributes of variables and functions
-void	cmd_unset(void);
+void	cmd_unset(char **input_args, t_list **this_env);
 	// ms_cmd_env.c - Display the env variables
 void	cmd_env(t_list *this_env);
 
