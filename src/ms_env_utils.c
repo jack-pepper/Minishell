@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/03 19:37:24 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/03 22:21:50 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,22 @@ int	ft_copy_strs_to_list(t_list **list, char **strs, size_t nb_of_strings, char 
 		i++;
 	}
 	return (0);
+}
+
+t_list  *ft_getenv(char *var_name, t_list **this_env)
+{
+	t_list	*cur_node;
+	int	res;
+
+	cur_node = *this_env;
+	while (cur_node != NULL)
+	{
+		res = ft_strncmp(var_name, ((char **)cur_node->content)[0], ft_strlen(((char **)cur_node->content)[0]));
+		if (res == 0)
+			return (cur_node);
+		cur_node = cur_node->next;
+	}
+	return (NULL);
 }
 
 /*int	ft_copy_strs_to_list(t_list **list, char **strs, size_t nb_of_strings)
