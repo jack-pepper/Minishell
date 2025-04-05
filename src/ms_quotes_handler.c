@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:16:00 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/05 13:48:29 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/05 16:58:08 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	handle_quote(char *line, char quote_type, int *i, int *to_collapse)
 		printf("[DEBUG] quote_type: single ($ IS NOT interpreted)\n");
 		while (line[(*i)] != '\'')
 		{
-			ft_replace_space(&line[(*i)], '*');
+			ft_replace_space(&line[(*i)], CTRL_CHAR_SPACE_IN_QUOTE);
 			(*i)++;
 		}
 	}
@@ -36,7 +36,7 @@ void	handle_quote(char *line, char quote_type, int *i, int *to_collapse)
 				(*i)++;
 				//ft_interpret_env(&line[(*i)], i);
 			}
-			ft_replace_space(&line[(*i)], '*');
+			ft_replace_space(&line[(*i)], CTRL_CHAR_SPACE_IN_QUOTE);
 			(*i)++;
 		}
 	}

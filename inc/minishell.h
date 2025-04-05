@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/05 16:13:30 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/05 16:57:13 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 # define PATH_TO_HEADER "../inc/minishell.h"
 # define NB_CMDS 10 // Temporary, find out dynamically. DEBUG
+
+# define CTRL_CHAR_SPACE_IN_QUOTE 29
+# define CTRL_CHAR_VAR_TO_INTERPRET 30
 
 /* Standard libraries */
 

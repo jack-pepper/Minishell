@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/05 16:21:40 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/05 16:58:22 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,26 @@ void	ft_interpret_env(char **input_args, t_list **this_env)
 		cur_node = cur_node->next;
 	}
 */
+}
 
+void	ft_replace_char(char **input_args, char old, char new)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (input_args[i])
+	{
+		j = 0;
+		while (input_args[i][j])
+		{
+			if (input_args[i][j] == old)
+				input_args[i][j] = new;
+			j++;
+		}
+		i++;
+	}
 }
 
 // Normalize the input and store the arguments for further use
@@ -82,7 +101,8 @@ char	**normalize_input(char *line, t_list **this_env) // unsure whether char *en
 	input_args = ft_split(clean_input, ' ');
 	if (!input_args)
 		return (NULL);
-	
+
+	ft_replace_char(input_args, CTRL_CHAR_SPACE_IN_QUOTE, ' ');
 	ft_interpret_env(input_args, this_env);
 	
 	// DISPLAY THE TOKENS STORED FOR DEBUGGING
