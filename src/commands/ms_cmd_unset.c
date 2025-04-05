@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:04:03 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/05 10:27:18 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/05 10:44:28 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	cmd_unset(char **input_args, t_list **this_env)
 		return ;
 	}
 	tgt_node = ft_getenv(input_args[1], this_env);
+
 	if (tgt_node != NULL)
 	{
 		// If a node to suppress is found, we loop through env again to find the previous one.

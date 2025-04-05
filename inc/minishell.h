@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/05 10:30:35 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/05 16:13:30 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	signal_handler(int signum);
 
 	// ms_input_manager.c
 char    *get_input(char *line);
-char	**normalize_input(char *line);
+char	**normalize_input(char *line, t_list **this_env);
 void    process_input(char **input_args, t_list **this_env);
 
 	// ms_parser.c
@@ -97,7 +97,7 @@ char	*copy_collapse(char *dst, char *src, size_t src_len);
 
 	// ms_quotes_handler.c
 void	handle_quote(char *line, char quote_type, int *i, int *to_collapse);
-void	ft_replace_char(char *cur_c, char new_c);
+void	ft_replace_space(char *cur_c, char new_c);
 
 	// ms_env_utils.c
 size_t	ft_strslen(char **strs);

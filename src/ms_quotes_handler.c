@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:16:00 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/30 17:48:54 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/05 13:48:29 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	handle_quote(char *line, char quote_type, int *i, int *to_collapse)
 		printf("[DEBUG] quote_type: single ($ IS NOT interpreted)\n");
 		while (line[(*i)] != '\'')
 		{
-			ft_replace_char(&line[(*i)], '*');
+			ft_replace_space(&line[(*i)], '*');
 			(*i)++;
 		}
 	}
@@ -34,15 +34,16 @@ void	handle_quote(char *line, char quote_type, int *i, int *to_collapse)
 			{
 				printf("$ found!\n");
 				(*i)++;
+				//ft_interpret_env(&line[(*i)], i);
 			}
-			ft_replace_char(&line[(*i)], '*');
+			ft_replace_space(&line[(*i)], '*');
 			(*i)++;
 		}
 	}
 	(*to_collapse)++;
 }
 
-void	ft_replace_char(char *cur_c, char new_c)
+void	ft_replace_space(char *cur_c, char new_c)
 {
 	if (ft_isspace(*cur_c))
 		*cur_c = new_c; // DEBUG: replace eventually by ctrl char (non-printable)

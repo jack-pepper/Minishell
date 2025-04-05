@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/30 20:23:29 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/05 15:43:56 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,13 @@ char	*ft_strcollapse(char *line)
 	while (line[i] != '\0')
 	{
 		if (line[i] == '\'' && ft_count_char(&line[i], '\'') > 1)
+		{
 			handle_quote(line, '\'', &i, &to_collapse);
+		}
 		else if (line[i] == '\"' && ft_count_char(&line[i], '\"') > 1)
+		{
 			handle_quote(line, '\"', &i, &to_collapse);
+		}
 		else if (ft_isspace(line[i]) && ft_isspace(line[i + 1]))
 			to_collapse++;
 		i++;

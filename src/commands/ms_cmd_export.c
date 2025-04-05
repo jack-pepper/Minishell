@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/05 10:29:36 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/05 13:55:26 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	cmd_export(char **input_args, t_list **this_env)
 			set_var = ft_getenv(input_args[i], this_env);
 			if (set_var != NULL)
 			{
-				if (update_env_value(set_var, split_str) != 0)
+				if (ft_update_env_value(set_var, split_str) != 0)
 					return ;
 			}
 			else
