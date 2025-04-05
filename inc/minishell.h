@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/03 22:12:32 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/05 10:30:35 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,9 @@ void	ft_replace_char(char *cur_c, char new_c);
 
 	// ms_env_utils.c
 size_t	ft_strslen(char **strs);
-//int	ft_copy_strs_to_list(t_list **list, char **strs, size_t nb_of_strings);
 int	ft_copy_strs_to_list(t_list **list, char **strs, size_t nb_of_strings, char delim);
 t_list  *ft_getenv(char *var_name, t_list **this_env);
+int	ft_update_env_value(t_list *set_var, char **split_str);
 
 	// ms_commands_manager.c
 int     	init_cmds(t_shell *sh);

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/04 13:40:27 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/05 10:29:19 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ int	ft_copy_strs_to_list(t_list **list, char **strs, size_t nb_of_strings, char 
 		else
 		{	
 			split_str = ft_split(strs[i], delim);
+			if (!split_str)
+				return (-1);
 			node = ft_lstnew((char **)split_str);
 		}
 		if (!node)
@@ -67,6 +69,17 @@ t_list  *ft_getenv(char *var_name, t_list **this_env)
 	}
 	return (NULL);
 }
+
+int	ft_update_env_value(t_list *set_var, char **split_str)
+{
+        free(set_var->content);
+        set_var->content = malloc(sizeof(split_str));
+        if (!set_var->content)
+                return (-1);
+        set_var->content = split_str;
+        return (0);
+}
+
 
 /*int	ft_copy_strs_to_list(t_list **list, char **strs, size_t nb_of_strings)
 {
