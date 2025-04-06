@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 
 #include "pipex.h"
-#include "ft_libft/libft/libft.h"
-#include "ft_libft/ft_printf/includes/ft_printf.h"
-#include "ft_libft/GNL/get_next_line.h"
 
 void	wait_for_all_children(t_pipex *pipex, int count)
 {

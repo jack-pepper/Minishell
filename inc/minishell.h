@@ -22,6 +22,8 @@
 
 /* Standard libraries */
 
+# include "../pipex_ms/pipex.h"
+
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -140,5 +142,8 @@ void	cmd_env(t_list **this_env);
 /* Protoypes: error handling and cleaning */
 
 	// ms_free.c
+
+t_pipeline *build_pipeline_from_tokens(char **tokens);
+void free_pipeline(t_pipeline *p);
 
 #endif

@@ -33,6 +33,15 @@ int	main(int argc, char **argv, char **env)
 			exit(1);
 		if (line[0] != '\0')
 			process_input(normalize_input(line), &sh.this_env); // Need to split it to free
+		if (line[0] == '<')
+		{
+			char **tokens = normalize_input(line);
+			t_pipeline *pipeline = build_pipeline_from_tokens(tokens);
+			if (pipeline)
+				run_pipex_from_minshell(pipeline, env);
+			// Memory cleanup
+		}
+
 	}
 	free(line);
 	rl_clear_history(); // we should probably save the history in a file
