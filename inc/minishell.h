@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/06 18:11:22 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/06 20:57:57 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,9 +96,9 @@ void    process_input(char **input_args, t_list **this_env);
 	// ms_normalizer.c
 char	*ft_normalize(char *line);
 char	*ft_strcollapse(char *line);
-int	ft_count_char(char *str, char c);
 char	*copy_collapse(char *dst, char *src, size_t src_len);
 
+<<<<<<< HEAD
 	// ms_quotes_handler.c
 void	handle_quote(char *line, char quote_type, int *i, int *to_collapse);
 
