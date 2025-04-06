@@ -6,13 +6,16 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/06 11:37:31 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/06 18:19:14 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-// TODO: input_manager: interpret env correctly (as input_arg or as env in a quote)
+/* TODO: env variables should be interpreted in paths too! (ex: with cmd cd) 
+ * TODO: unset cmd must handle several env var in a single command
+ * TODO: need to process lines like: $USER $VAR ABC $GHI CDE
+ */
 
 int	main(int argc, char **argv, char **env)
 {
@@ -26,16 +29,17 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		line = get_input(line);
-		if (line == NULL) // CTRL-D sends EOF, which is handled here
+		if (line == NULL) // Handles EOF (sent by CTRL-D)
 			exit(1);
-		if (line[0] != '\0') // or if it contains only whitespace, add func
-			process_input(normalize_input(line, &sh.this_env), &sh.this_env); // split it later
+		if (line[0] != '\0')
+			process_input(normalize_input(line), &sh.this_env); // Need to split it to free
 	}
 	free(line);
-	rl_clear_history(); // but we should probably keep the history in some file
+	rl_clear_history(); // we should probably save the history in a file
 	return (0);
 }
 
+// Initialize what is needed for the shell (signals, env, pipex, commands)
 int	init_shell(t_shell *sh, char **env)
 {
 	init_signals();
@@ -47,6 +51,7 @@ int	init_shell(t_shell *sh, char **env)
 	return (0);
 }
 
+// Initialize a local environment by storing the env variables to a t_list
 int	init_env(t_shell *sh, char **env)
 {
 	size_t	nb_vars;

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/06 14:39:53 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/06 18:11:22 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 # define CTRL_CHAR_SPACE_IN_QUOTE 29
 # define CTRL_CHAR_VAR_TO_INTERPRET '*' // 30
+# define CTRL_CHAR_SUBARG_DELIM '#' // 31
 
 /* Standard libraries */
 
@@ -89,7 +90,7 @@ void	signal_handler(int signum);
 
 	// ms_input_manager.c
 char    *get_input(char *line);
-char	**normalize_input(char *line, t_list **this_env);
+char	**normalize_input(char *line);
 void    process_input(char **input_args, t_list **this_env);
 
 	// ms_normalizer.c

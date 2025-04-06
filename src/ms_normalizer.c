@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/06 11:45:24 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/06 17:58:09 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	ft_count_char(char *str, char c)
 			count++;	
 		i++;
 	}
-	printf("[DEBUG] ~%c~ found %u times in ~%s~\n", c, count, str);
+//	printf("[DEBUG] ~%c~ found %u times in ~%s~\n", c, count, str);
 	return (count);
 }
 

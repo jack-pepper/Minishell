@@ -6,13 +6,13 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/06 15:35:52 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/06 18:19:39 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-// Get the initial input from user
+// Get the initial raw input from user
 char	*get_input(char *line)
 {
 	if (line)
@@ -27,13 +27,13 @@ char	*get_input(char *line)
 		if (rl_on_new_line() != -1) // How to actually handle this error?
 			return (line);
 	}
-	else if (!line) // CTRL-D sends EOF, which is handled here
+	else if (!line) // Handles EOF (sent by CTRL-D)
 		return ((char *)NULL);
 	return (line);
 }
 
 // Normalize the input and store the arguments for further use
-char	**normalize_input(char *line, t_list **this_env)
+char	**normalize_input(char *line)
 {
 	char	*clean_input;
 	char	**input_args;
@@ -46,23 +46,20 @@ char	**normalize_input(char *line, t_list **this_env)
 	input_args = ft_split(clean_input, ' ');
 	if (!input_args)
 		return (NULL);
-
 	ft_replace_all_chars(input_args, CTRL_CHAR_SPACE_IN_QUOTE, ' '); // change CTRL_CHAR in quotes back to spaces
-	
-	this_env++ ; this_env--;
-	
-	// DISPLAY THE TOKENS STORED FOR DEBUGGING
-	int	i = 0;
-	while (input_args[i] != NULL)
-	{
-		printf("[DEBUG] input_args[%d]): %s\n", i, input_args[i]);
-		i++;
-	}
+
+	// DEBUG: DISPLAY THE CONTENT OF INPUT_ARGS AFTER NORMALIZATION
+	//int	i = 0;
+	//while (input_args[i] != NULL)
+	//{
+	//	printf("[DEBUG] input_args[%d]): %s\n", i, input_args[i]);
+	//	i++;
+	//}
 	// DEBUG
-	
 	return (input_args);
 }
 
+// Interpret the env variables when needed.
 void	ft_interpret_env(char *input_arg, t_list **this_env)
 {
 	char	**split_arg;
@@ -70,11 +67,9 @@ void	ft_interpret_env(char *input_arg, t_list **this_env)
 	t_list	*set_var;
 	int	i;
 	
-	printf("[FT_INTERPRET_ENV - 1]\n");
 	// if no need to split (solo arg containing only $VAR_NAME)
 	if (input_arg[0] == CTRL_CHAR_VAR_TO_INTERPRET && ft_strpbrk(input_arg, " ") == NULL) // is checking for any space enough?
 	{
-		printf("[FT_INTERPRET_ENV - 2]\n");
 		set_var = ft_getenv(&(input_arg)[1], this_env);
 		if (set_var != NULL)
 		{
@@ -82,7 +77,6 @@ void	ft_interpret_env(char *input_arg, t_list **this_env)
 			input_arg = ft_strdup(((char **)set_var->content)[1]);
 			if (!input_arg)
 				return ;
-		//	printf("input_arg: %s\n", input_arg);
 		}
 		else // make sure to make the behavior match bash, will probably be different
 		{
@@ -90,53 +84,48 @@ void	ft_interpret_env(char *input_arg, t_list **this_env)
 		}
 		return ;
 	}
-
 	// if need to split	
-	printf("[FT_INTERPRET_ENV - 3]\n");
 	i = 0;
-	// isolate the spaces to keep it
-	while (input_arg[i])
+	while (input_arg[i]) // to retrieve the spaces
 	{
 		if (input_arg[i] == ' ' && input_arg[i + 1] != ' ')
 		{
-			input_arg[i] = '#'; // DEBUG
+			input_arg[i] = CTRL_CHAR_SUBARG_DELIM;
 			i++;
-			while (input_arg[i] == ' ' && input_arg[i + 1] == ' ')
-				i++;
-			//input_arg[i] = '#';
 		}
 		i++;
 	}
-	split_arg = ft_split(input_arg, '#');
+	split_arg = ft_split(input_arg, CTRL_CHAR_SUBARG_DELIM);
 	if (!split_arg)
 		return ;
 	i = 0;
+	rejoined_arg = "";
 	while (split_arg[i])
 	{
 		if (split_arg[i][0] == CTRL_CHAR_VAR_TO_INTERPRET)
 		{
-			set_var = ft_getenv(&split_arg[0][1], this_env);
+			set_var = ft_getenv(&split_arg[i][1], this_env);
 			if (set_var != NULL)
 			{	
-				free(input_arg);
-				input_arg = ((char **)set_var->content)[1];
+				free(split_arg[i]);
+				split_arg[i] = ft_strdup(((char **)set_var->content)[1]);
+				if (!split_arg)
+					return ;
 			}
 			else // make sure to make the behavior match bash, will probably be different
 			{
-				input_arg[0] = '$'; // wrong
+				split_arg[i][0] = '$';
 			}
 		}
-		i++;
-	}
-	i = 0;
-	rejoined_arg = NULL;
-	while (split_arg[i])
-	{
 		rejoined_arg = ft_strjoin(rejoined_arg, split_arg[i]);
-		if (!rejoined_arg)
-			return ;
+		if (split_arg[i + 1])
+			rejoined_arg = ft_strjoin(rejoined_arg, " ");
+		// printf("(%d) %s\n", i, rejoined_arg);
 		i++;
 	}
+	free(input_arg);
+	input_arg = ft_strdup(rejoined_arg);
+	free(rejoined_arg);
 	return ;
 }
 
@@ -151,7 +140,7 @@ void	process_input(char **input_args, t_list **this_env)
 	// check for '|' first
 	// output = process_pipe();
 
-	// DEBUG
+	// DEBUG - show the content of input_args
 	//int i = 0;
 	//while (input_args)
 	//{
@@ -161,10 +150,11 @@ void	process_input(char **input_args, t_list **this_env)
 	// "<" or "infile.txt >" (check) && NO PIPES
 
 	
-	// handle_no_cmd() 
-
-	if (input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET) // To be compared with bash behavior
+	// handle_no_cmd(). To be compared with bash behavior.
+	// Need to loop through all args
+	if (input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET)
 	{
+		// to be compared with bash behavior.
 		set_var = ft_getenv(&(input_args[0])[1], this_env);
 		ft_interpret_env(input_args[0], &set_var); // ...
 		printf("%s\n", input_args[0]);
