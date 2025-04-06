@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/05 18:35:45 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/06 15:04:07 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ t_list  *ft_getenv(char *var_name, t_list **this_env)
 	while (cur_node != NULL)
 	{
 		res = ft_strncmp(var_name, ((char **)cur_node->content)[0], ft_strlen(var_name));
+		//printf("var_name: %s - cur_node->content: %s - Res: %d\n",  var_name, ((char **)cur_node->content)[0], res);
 		if (res == 0)
 			return (cur_node);
 		cur_node = cur_node->next;

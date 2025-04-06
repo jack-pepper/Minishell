@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/06 14:51:47 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/06 15:35:52 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ char	**normalize_input(char *line, t_list **this_env)
 	ft_replace_all_chars(input_args, CTRL_CHAR_SPACE_IN_QUOTE, ' '); // change CTRL_CHAR in quotes back to spaces
 	
 	this_env++ ; this_env--;
-	//ft_interpret_env(input_args, this_env);
 	
 	// DISPLAY THE TOKENS STORED FOR DEBUGGING
 	int	i = 0;
@@ -64,27 +63,26 @@ char	**normalize_input(char *line, t_list **this_env)
 	return (input_args);
 }
 
-
-
-
 void	ft_interpret_env(char *input_arg, t_list **this_env)
 {
 	char	**split_arg;
 	char	*rejoined_arg;
 	t_list	*set_var;
 	int	i;
-
 	
 	printf("[FT_INTERPRET_ENV - 1]\n");
 	// if no need to split (solo arg containing only $VAR_NAME)
-	if (input_arg[0] == CTRL_CHAR_VAR_TO_INTERPRET && ft_strpbrk(input_arg, " ")) // is checking for any space enough?
+	if (input_arg[0] == CTRL_CHAR_VAR_TO_INTERPRET && ft_strpbrk(input_arg, " ") == NULL) // is checking for any space enough?
 	{
 		printf("[FT_INTERPRET_ENV - 2]\n");
-		set_var = ft_getenv(&input_arg[1], this_env);
+		set_var = ft_getenv(&(input_arg)[1], this_env);
 		if (set_var != NULL)
 		{
 			free(input_arg);
-			input_arg = ((char **)set_var->content)[1];
+			input_arg = ft_strdup(((char **)set_var->content)[1]);
+			if (!input_arg)
+				return ;
+		//	printf("input_arg: %s\n", input_arg);
 		}
 		else // make sure to make the behavior match bash, will probably be different
 		{
@@ -93,22 +91,19 @@ void	ft_interpret_env(char *input_arg, t_list **this_env)
 		return ;
 	}
 
-	// if need to split
-	
+	// if need to split	
 	printf("[FT_INTERPRET_ENV - 3]\n");
-	// replace spaces by CTRL_CHAR_SPACE_IN_QUOTE
 	i = 0;
-
 	// isolate the spaces to keep it
 	while (input_arg[i])
 	{
-		if (input_arg[i] == ' ')
+		if (input_arg[i] == ' ' && input_arg[i + 1] != ' ')
 		{
 			input_arg[i] = '#'; // DEBUG
 			i++;
 			while (input_arg[i] == ' ' && input_arg[i + 1] == ' ')
 				i++;
-			input_arg[i] = '#';
+			//input_arg[i] = '#';
 		}
 		i++;
 	}
@@ -168,12 +163,11 @@ void	process_input(char **input_args, t_list **this_env)
 	
 	// handle_no_cmd() 
 
-	printf("[process_input] input_args[0][0]: %c\n", input_args[0][0]);
-
 	if (input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET) // To be compared with bash behavior
 	{
-		set_var = ft_getenv(&(input_args[0][1]), this_env);
+		set_var = ft_getenv(&(input_args[0])[1], this_env);
 		ft_interpret_env(input_args[0], &set_var); // ...
+		printf("%s\n", input_args[0]);
 		return ;
 	}
 
