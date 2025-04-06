@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/06 18:19:14 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/06 21:17:26 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,27 @@ int	main(int argc, char **argv, char **env)
 		line = get_input(line);
 		if (line == NULL) // Handles EOF (sent by CTRL-D)
 			exit(1);
-		if (line[0] != '\0')
-			process_input(normalize_input(line), &sh.this_env); // Need to split it to free
+		if (line[0] != '\0')  // NEEDED
+			process_input(normalize_input(line), &sh.this_env); // NEEDED // Need to split it to free
+	
+	/* ADDED BY YAHYA
+	else if (line[0] == '<')
+		{
+			printf("Yahya [DEBUG] line: %s\n", line);
+			char **tokens = normalize_input(line);
+			int i = 0;
+			while(tokens[i])
+			{
+				printf("Yahya [DEBUG] token[%d]: %s\n", i, tokens[i]);
+				i++;
+			}
+			t_pipeline *pipeline = build_pipeline_from_tokens(tokens);
+			printf("Yahya [DEBUG] pipeline->cmd_count: %d\n", pipeline->cmd_count);
+			if (pipeline)
+				run_pipex_from_minshell(pipeline, env);
+			// Memory cleanup
+	*/
+
 	}
 	free(line);
 	rl_clear_history(); // we should probably save the history in a file

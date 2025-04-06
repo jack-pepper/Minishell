@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/06 21:03:04 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/06 21:29:14 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 
 /* Custom libraries */
 # include "../libft/libft.h"
+# include "../pipex_ms/pipex.h"
 
 /* Structures */
 
@@ -140,5 +141,9 @@ void	cmd_env(t_list **this_env);
 /* Protoypes: error handling and cleaning */
 
 	// ms_free.c
+
+/*Yahyas's function*/
+t_pipeline *build_pipeline_from_tokens(char **tokens);
+void free_pipeline(t_pipeline *p);
 
 #endif

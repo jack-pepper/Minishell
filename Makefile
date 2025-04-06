@@ -6,7 +6,7 @@
 #    By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/11 13:50:01 by mmalie            #+#    #+#              #
-#    Updated: 2025/04/06 12:01:23 by mmalie           ###   ########.fr        #
+#    Updated: 2025/04/06 21:27:56 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,11 +31,14 @@ DEPS = ./inc/minishell.h
 DEPS_LIBFT = ./libft/libft.h
 LIBFT = ./libft/libft.a
 
+DEPS = ./inc/minishell.h ./libft/libft.h
+LIBFT = ./libft/libft.a
+
 ####################
 ### Source files ###
 ####################
 
-SRC = ./src/minishell.c \
+MS_SRC = ./src/minishell.c \
       ./src/ms_signals.c \
       ./src/ms_env_utils.c \
       ./src/ms_input_manager.c \
@@ -51,6 +54,15 @@ SRC = ./src/minishell.c \
       ./src/commands/ms_cmd_export.c \
       ./src/commands/ms_cmd_pwd.c \
       ./src/commands/ms_cmd_unset.c \
+
+PIPEX_SRC =       ./pipex_ms/pipex.c \
+      ./pipex_ms/pipex_utils.c \
+      ./pipex_ms/pipex_bonus.c \
+      ./pipex_ms/pipex_bonus_utils.c \
+      ./pipex_ms/parsing.c \
+      ./pipex_ms/free.c \
+
+SRC = $(MS_SRC) $(PIPEX_SRC)
 
 ### Object files
 OBJ = $(SRC:.c=.o)
