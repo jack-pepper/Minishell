@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/30 17:38:09 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/06 18:11:22 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 
 # define PATH_TO_HEADER "../inc/minishell.h"
 # define NB_CMDS 10 // Temporary, find out dynamically. DEBUG
+
+# define CTRL_CHAR_SPACE_IN_QUOTE 29
+# define CTRL_CHAR_VAR_TO_INTERPRET '*' // 30
+# define CTRL_CHAR_SUBARG_DELIM '#' // 31
 
 /* Standard libraries */
 
@@ -68,13 +72,15 @@ typedef	struct s_shell
 
 	HISTORY_STATE	hist;
 	t_command	**cmds;
+	t_list		*this_env;
 }		t_shell;
 
 /* Prototypes */
 
 	// minishell.c
 int	main(int argc, char **argv, char **env);
-int     init_shell(t_shell *sh);
+int	init_shell(t_shell *sh, char **env);
+int	init_env(t_shell *sh, char **env);
 
 	// ms_signals.c
 void	init_signals(void);
@@ -85,9 +91,9 @@ void	signal_handler(int signum);
 	// ms_input_manager.c
 char    *get_input(char *line);
 char	**normalize_input(char *line);
-void    process_input(char **input_args, char **env);
+void    process_input(char **input_args, t_list **this_env);
 
-	// ms_parser.c
+	// ms_normalizer.c
 char	*ft_normalize(char *line);
 char	*ft_strcollapse(char *line);
 int	ft_count_char(char *str, char c);
@@ -95,7 +101,20 @@ char	*copy_collapse(char *dst, char *src, size_t src_len);
 
 	// ms_quotes_handler.c
 void	handle_quote(char *line, char quote_type, int *i, int *to_collapse);
+
+	// ms_redirections_manager.c
+//
+
+	// ms_replace_utils.c
+void	ft_replace_if_space(char *cur_c, char new_c);
 void	ft_replace_char(char *cur_c, char new_c);
+void    ft_replace_all_chars(char **input_args, char old_c, char new_c);
+
+	// ms_env_utils.c
+size_t	ft_strslen(char **strs);
+int	ft_copy_strs_to_list(t_list **list, char **strs, size_t nb_of_strings, char delim);
+t_list  *ft_getenv(char *var_name, t_list **this_env);
+int	ft_update_env_value(t_list *set_var, char **split_str);
 
 	// ms_commands_manager.c
 int     	init_cmds(t_shell *sh);
@@ -108,15 +127,15 @@ void	cmd_pwd(void);
 	// ms_cmd_cd.c - Change the working directory
 int	cmd_cd(char *path);
 	// ms_cmd_echo.c - Display a line of text
-void	cmd_echo(char **input_args, char **env);
+void	cmd_echo(char **input_args, t_list **env);
 	// ms_cmd_exit.c - Cause the shell to exit
 void	cmd_exit(unsigned int status);
 	// ms_cmd_export.c - Set the export attribute for variables
-void	cmd_export(char **input_args, char **env);
+void	cmd_export(char **input_args, t_list **this_env);
 	// ms_cmd_unset.c - Unset values and attributes of variables and functions
-void	cmd_unset(void);
+void	cmd_unset(char **input_args, t_list **this_env);
 	// ms_cmd_env.c - Display the env variables
-void	cmd_env(char **env);
+void	cmd_env(t_list **this_env);
 
 /* Protoypes: error handling and cleaning */
 

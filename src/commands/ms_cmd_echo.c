@@ -6,13 +6,13 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:00:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/30 14:40:58 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/05 16:46:45 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	cmd_echo(char **input_args, char **env)
+void	cmd_echo(char **input_args, t_list **env)
 {
 	char	*joined_input;
 	bool	opt_n;
@@ -45,34 +45,8 @@ void	cmd_echo(char **input_args, char **env)
 				return ;
 		}
 	}
-//	joined_input = handle_quotes(joined_input); // Should probably be handled in normalize_input instead
 	printf("%s", joined_input);
 	if (opt_n == false) // My guess here... is that this behavior matches bash's.
 		printf("\n"); // It might be worth (for bonus) using the "%" method as zsh?
 	free(joined_input);
 }
-
-/* Function written before I started using my brain to solve the trailing
- * newline issue with -n. Keeping for sensible use somewhere else.
-char	*ft_remove_newline(char *str)
-{
-	char	*trimmed_str;
-	size_t	str_len;
-
-	if (!str)
-		return (NULL);
-	str_len = ft_strlen(str);
-	printf("str_len: %lu", str_len);
-	if (str[str_len] == '\n')
-	{
-		trimmed_str = malloc(sizeof(char) * (str_len + 1));
-		if (!trimmed_str)
-			return (str);
-		ft_strlcpy(trimmed_str, str, str_len);
-		free(str);
-		return (trimmed_str);
-	}
-	else
-		return (str);
-}
-*/

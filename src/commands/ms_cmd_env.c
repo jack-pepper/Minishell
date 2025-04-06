@@ -6,18 +6,23 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:01:09 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/26 10:34:04 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/05 18:21:03 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	cmd_env(char **env)
+void	cmd_env(t_list **this_env)
 {
-	while (*env)
+	t_list	*cur_node;
+
+	cur_node = *this_env;
+	while (cur_node != NULL)
 	{
-		printf("%s\n", *env);
-		env++;
+		printf("%s=%s\n",
+			((char **)cur_node->content)[0],
+			((char **)cur_node->content)[1]);
+		cur_node = cur_node->next;
 	}
 	return ;
 }

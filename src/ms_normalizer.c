@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ms_parser.c                                        :+:      :+:    :+:   */
+/*   ms_normalizer.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/30 17:27:59 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/06 17:58:09 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,18 @@ char	*ft_strcollapse(char *line)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if (line[i] == '\'' && ft_count_char(&line[i], '\'') > 1)
+		if (line[i] == '$')
+		{
+			ft_replace_char(&line[i], CTRL_CHAR_VAR_TO_INTERPRET);
+		}
+		else if (line[i] == '\'' && ft_count_char(&line[i], '\'') > 1)
+		{
 			handle_quote(line, '\'', &i, &to_collapse);
+		}
 		else if (line[i] == '\"' && ft_count_char(&line[i], '\"') > 1)
+		{
 			handle_quote(line, '\"', &i, &to_collapse);
+		}
 		else if (ft_isspace(line[i]) && ft_isspace(line[i + 1]))
 			to_collapse++;
 		i++;
@@ -77,7 +85,7 @@ int	ft_count_char(char *str, char c)
 			count++;	
 		i++;
 	}
-	printf("[DEBUG] ~%c~ found %u times in ~%s~\n", c, count, str);
+//	printf("[DEBUG] ~%c~ found %u times in ~%s~\n", c, count, str);
 	return (count);
 }
 
