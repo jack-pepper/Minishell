@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/05 10:29:19 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/05 18:35:45 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ size_t	ft_strslen(char **strs)
 	return (i);
 }
 
-// Copy the content of strs (in Minishell: env) to a list.
+// Copy the content of strs (here: env) to a t_list.
 int	ft_copy_strs_to_list(t_list **list, char **strs, size_t nb_of_strings, char delim)
-{
+{	
+	char	**split_str;
 	t_list	*node;
-        char	**split_str;
 	size_t	i;
 	
 	i = 0;
@@ -36,11 +36,10 @@ int	ft_copy_strs_to_list(t_list **list, char **strs, size_t nb_of_strings, char 
 	while (i < nb_of_strings)
 	{
 		//printf("env[%ld]: %s\n", i, env[i]);
-		
 		if (!delim)
 			node = ft_lstnew((char *)strs[i]);
 		else
-		{	
+		{
 			split_str = ft_split(strs[i], delim);
 			if (!split_str)
 				return (-1);
@@ -54,6 +53,7 @@ int	ft_copy_strs_to_list(t_list **list, char **strs, size_t nb_of_strings, char 
 	return (0);
 }
 
+// Custom implementation of getenv to return a t_list
 t_list  *ft_getenv(char *var_name, t_list **this_env)
 {
 	t_list	*cur_node;
@@ -62,7 +62,7 @@ t_list  *ft_getenv(char *var_name, t_list **this_env)
 	cur_node = *this_env;
 	while (cur_node != NULL)
 	{
-		res = ft_strncmp(var_name, ((char **)cur_node->content)[0], ft_strlen(((char **)cur_node->content)[0]));
+		res = ft_strncmp(var_name, ((char **)cur_node->content)[0], ft_strlen(var_name));
 		if (res == 0)
 			return (cur_node);
 		cur_node = cur_node->next;
@@ -70,6 +70,7 @@ t_list  *ft_getenv(char *var_name, t_list **this_env)
 	return (NULL);
 }
 
+// Update set_var with the name and value pointed by split_str
 int	ft_update_env_value(t_list *set_var, char **split_str)
 {
         free(set_var->content);
@@ -79,23 +80,3 @@ int	ft_update_env_value(t_list *set_var, char **split_str)
         set_var->content = split_str;
         return (0);
 }
-
-
-/*int	ft_copy_strs_to_list(t_list **list, char **strs, size_t nb_of_strings)
-{
-	t_list	*node;
-	size_t	i;
-        
-	i = 0;
-	node = NULL;
-	while (i < nb_of_strings)
-	{
-		//printf("env[%ld]: %s\n", i, env[i]);
-		node = ft_lstnew((char *)strs[i]);
-		if (!node)
-			return (-1);
-		ft_lstadd_back(list, node);
-		i++;
-	}
-	return (0);
-}*/

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 14:16:00 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/05 16:58:08 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/06 11:43:48 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@ void	handle_quote(char *line, char quote_type, int *i, int *to_collapse)
 {
 	(*i)++;
 	(*to_collapse)++;
+
 	if (quote_type == '\'')
 	{
 		printf("[DEBUG] quote_type: single ($ IS NOT interpreted)\n");
 		while (line[(*i)] != '\'')
 		{
-			ft_replace_space(&line[(*i)], CTRL_CHAR_SPACE_IN_QUOTE);
+			ft_replace_if_space(&line[(*i)], CTRL_CHAR_SPACE_IN_QUOTE);
 			(*i)++;
 		}
 	}
@@ -30,21 +31,15 @@ void	handle_quote(char *line, char quote_type, int *i, int *to_collapse)
 		printf("[DEBUG] quote_type: double ($ IS interpreted)\n");
 		while (line[(*i)] != '\"')
 		{
-			if (line[(*i)] == '$') // Should expand to the env
+			if (line[(*i)] == '$')
 			{
-				printf("$ found!\n");
+				ft_replace_char(&line[(*i)], CTRL_CHAR_VAR_TO_INTERPRET);
 				(*i)++;
-				//ft_interpret_env(&line[(*i)], i);
+				
 			}
-			ft_replace_space(&line[(*i)], CTRL_CHAR_SPACE_IN_QUOTE);
+			ft_replace_if_space(&line[(*i)], CTRL_CHAR_SPACE_IN_QUOTE);
 			(*i)++;
 		}
 	}
 	(*to_collapse)++;
-}
-
-void	ft_replace_space(char *cur_c, char new_c)
-{
-	if (ft_isspace(*cur_c))
-		*cur_c = new_c; // DEBUG: replace eventually by ctrl char (non-printable)
 }

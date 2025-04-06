@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/05 13:55:26 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/05 19:00:20 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 
 void	cmd_export(char **input_args, t_list **this_env)
 {
+
+	// ERROR: if passed AAA, then AAA=bbb, two variables are added when it
+	//  should be updated instead. Need to take it into account by
+	// first parsing it properly
+
 	t_list	*last_node;
 	t_list	*set_var;
 	char	**split_str;
@@ -22,7 +27,7 @@ void	cmd_export(char **input_args, t_list **this_env)
 	if (!input_args)
 		return ;
 	if (!(input_args[1])) // if no args, man says result is unspecified
-		cmd_env((*this_env)); // ... we may just display the env variables
+		cmd_env((this_env)); // ... we may just display the env variables
 	else
 	{
 		i = 1;

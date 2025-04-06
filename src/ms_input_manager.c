@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/05 16:58:22 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/06 14:51:47 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,63 +32,8 @@ char	*get_input(char *line)
 	return (line);
 }
 
-
-void	ft_interpret_env(char **input_args, t_list **this_env)
-{
-	t_list	*cur_node;
-	int	i;
-
-	i = 0;
-	cur_node = *this_env;
-
-	while (input_args[i])
-	{
-		if (input_args[i][0] == '$' && input_args[i][1])
-		{
-			cur_node = ft_getenv((&input_args[i][1]), this_env);
-			if (cur_node != NULL)
-			{
-				free(input_args[i]);
-				input_args[i] = ((char **)cur_node->content)[1];
-			}
-		}
-		i++;
-	}
-
-/*
-	while ((ft_strncmp(this_env, ((char **)cur_node->content)[1], ft_strlen(((char **)cur_node->content)[1]) != 0) || this_env != NULL))
-	{
-		free(input_args[i]);
-		input_args[i] = malloc(sizeof(cur_node->content[1]));
-		if (!input_args[i])
-			return ;
-		cur_node = cur_node->next;
-	}
-*/
-}
-
-void	ft_replace_char(char **input_args, char old, char new)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (input_args[i])
-	{
-		j = 0;
-		while (input_args[i][j])
-		{
-			if (input_args[i][j] == old)
-				input_args[i][j] = new;
-			j++;
-		}
-		i++;
-	}
-}
-
 // Normalize the input and store the arguments for further use
-char	**normalize_input(char *line, t_list **this_env) // unsure whether char *env will be needed aswell, we'll see
+char	**normalize_input(char *line, t_list **this_env)
 {
 	char	*clean_input;
 	char	**input_args;
@@ -102,8 +47,10 @@ char	**normalize_input(char *line, t_list **this_env) // unsure whether char *en
 	if (!input_args)
 		return (NULL);
 
-	ft_replace_char(input_args, CTRL_CHAR_SPACE_IN_QUOTE, ' ');
-	ft_interpret_env(input_args, this_env);
+	ft_replace_all_chars(input_args, CTRL_CHAR_SPACE_IN_QUOTE, ' '); // change CTRL_CHAR in quotes back to spaces
+	
+	this_env++ ; this_env--;
+	//ft_interpret_env(input_args, this_env);
 	
 	// DISPLAY THE TOKENS STORED FOR DEBUGGING
 	int	i = 0;
@@ -117,35 +64,92 @@ char	**normalize_input(char *line, t_list **this_env) // unsure whether char *en
 	return (input_args);
 }
 
-/*
-void	set_redirection(char **input_args)
+
+
+
+void	ft_interpret_env(char *input_arg, t_list **this_env)
 {
-	// redirect output to a file (overwrite) .followed by filename or fd
-	if (input_args[i], ">", ft_strlen("<") == 0)
+	char	**split_arg;
+	char	*rejoined_arg;
+	t_list	*set_var;
+	int	i;
+
+	
+	printf("[FT_INTERPRET_ENV - 1]\n");
+	// if no need to split (solo arg containing only $VAR_NAME)
+	if (input_arg[0] == CTRL_CHAR_VAR_TO_INTERPRET && ft_strpbrk(input_arg, " ")) // is checking for any space enough?
 	{
+		printf("[FT_INTERPRET_ENV - 2]\n");
+		set_var = ft_getenv(&input_arg[1], this_env);
+		if (set_var != NULL)
+		{
+			free(input_arg);
+			input_arg = ((char **)set_var->content)[1];
+		}
+		else // make sure to make the behavior match bash, will probably be different
+		{
+			input_arg[0] = '$';
+		}
+		return ;
 	}
 
-	// redirect output to a file (append). followed by filename or fd
-	else if (input_args[i], ">>", ft_strlen("<") == 0)
-	{
-	}
+	// if need to split
+	
+	printf("[FT_INTERPRET_ENV - 3]\n");
+	// replace spaces by CTRL_CHAR_SPACE_IN_QUOTE
+	i = 0;
 
-	// redirect input FROM a file
-	else if (input_args[i], "<", ft_strlen("<") == 0)
+	// isolate the spaces to keep it
+	while (input_arg[i])
 	{
+		if (input_arg[i] == ' ')
+		{
+			input_arg[i] = '#'; // DEBUG
+			i++;
+			while (input_arg[i] == ' ' && input_arg[i + 1] == ' ')
+				i++;
+			input_arg[i] = '#';
+		}
+		i++;
 	}
-
-	// followed by a delim (can be EOF). Then read input until a line containing the
-	// delim is seen. Does NOT have to update the history!
-	else if (input_args[i], "<<", ft_strlen("<") == 0)
+	split_arg = ft_split(input_arg, '#');
+	if (!split_arg)
+		return ;
+	i = 0;
+	while (split_arg[i])
 	{
+		if (split_arg[i][0] == CTRL_CHAR_VAR_TO_INTERPRET)
+		{
+			set_var = ft_getenv(&split_arg[0][1], this_env);
+			if (set_var != NULL)
+			{	
+				free(input_arg);
+				input_arg = ((char **)set_var->content)[1];
+			}
+			else // make sure to make the behavior match bash, will probably be different
+			{
+				input_arg[0] = '$'; // wrong
+			}
+		}
+		i++;
 	}
-}*/
-
+	i = 0;
+	rejoined_arg = NULL;
+	while (split_arg[i])
+	{
+		rejoined_arg = ft_strjoin(rejoined_arg, split_arg[i]);
+		if (!rejoined_arg)
+			return ;
+		i++;
+	}
+	return ;
+}
 
 // Should call the needed command and handle errors 
 void	process_input(char **input_args, t_list **this_env)
 {
+	t_list	*set_var;
+
 	if (!input_args || input_args[0] == NULL)
 		return ;
 
@@ -161,6 +165,25 @@ void	process_input(char **input_args, t_list **this_env)
 	//}
 	// "<" or "infile.txt >" (check) && NO PIPES
 
+	
+	// handle_no_cmd() 
+
+	printf("[process_input] input_args[0][0]: %c\n", input_args[0][0]);
+
+	if (input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET) // To be compared with bash behavior
+	{
+		set_var = ft_getenv(&(input_args[0][1]), this_env);
+		ft_interpret_env(input_args[0], &set_var); // ...
+		return ;
+	}
+
+	// for other cases, convert the env
+	int i = 0;
+	while (input_args[i])
+	{
+		ft_interpret_env(input_args[i], this_env);
+		i++;
+	}
 
         if (ft_strncmp(input_args[0], "exit", ft_strlen("exit")) == 0)
                 cmd_exit(0);
@@ -172,7 +195,7 @@ void	process_input(char **input_args, t_list **this_env)
 			return ;
 	}
 	else if (ft_strncmp(input_args[0], "env", ft_strlen("env")) == 0)
-		cmd_env((*this_env));
+		cmd_env((this_env));
 	else if (ft_strncmp(input_args[0], "echo", ft_strlen("echo")) == 0)
 		cmd_echo(input_args, this_env);
 	else if (ft_strncmp(input_args[0], "export", ft_strlen("export")) == 0)
@@ -180,6 +203,6 @@ void	process_input(char **input_args, t_list **this_env)
 	else if (ft_strncmp(input_args[0], "unset", ft_strlen("unset")) == 0)
 		cmd_unset(input_args, this_env);
 	else
-		return ;
+		printf("minishell: %s: command not found\n", input_args[0]);
 	return ;
 }

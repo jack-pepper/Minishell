@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/05 16:57:13 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/06 14:39:53 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # define NB_CMDS 10 // Temporary, find out dynamically. DEBUG
 
 # define CTRL_CHAR_SPACE_IN_QUOTE 29
-# define CTRL_CHAR_VAR_TO_INTERPRET 30
+# define CTRL_CHAR_VAR_TO_INTERPRET '*' // 30
 
 /* Standard libraries */
 
@@ -92,7 +92,7 @@ char    *get_input(char *line);
 char	**normalize_input(char *line, t_list **this_env);
 void    process_input(char **input_args, t_list **this_env);
 
-	// ms_parser.c
+	// ms_normalizer.c
 char	*ft_normalize(char *line);
 char	*ft_strcollapse(char *line);
 int	ft_count_char(char *str, char c);
@@ -100,7 +100,14 @@ char	*copy_collapse(char *dst, char *src, size_t src_len);
 
 	// ms_quotes_handler.c
 void	handle_quote(char *line, char quote_type, int *i, int *to_collapse);
-void	ft_replace_space(char *cur_c, char new_c);
+
+	// ms_redirections_manager.c
+//
+
+	// ms_replace_utils.c
+void	ft_replace_if_space(char *cur_c, char new_c);
+void	ft_replace_char(char *cur_c, char new_c);
+void    ft_replace_all_chars(char **input_args, char old_c, char new_c);
 
 	// ms_env_utils.c
 size_t	ft_strslen(char **strs);
@@ -127,7 +134,7 @@ void	cmd_export(char **input_args, t_list **this_env);
 	// ms_cmd_unset.c - Unset values and attributes of variables and functions
 void	cmd_unset(char **input_args, t_list **this_env);
 	// ms_cmd_env.c - Display the env variables
-void	cmd_env(t_list *this_env);
+void	cmd_env(t_list **this_env);
 
 /* Protoypes: error handling and cleaning */
 

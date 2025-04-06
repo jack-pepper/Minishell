@@ -6,11 +6,13 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/05 16:12:48 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/06 11:37:31 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+// TODO: input_manager: interpret env correctly (as input_arg or as env in a quote)
 
 int	main(int argc, char **argv, char **env)
 {
@@ -27,10 +29,10 @@ int	main(int argc, char **argv, char **env)
 		if (line == NULL) // CTRL-D sends EOF, which is handled here
 			exit(1);
 		if (line[0] != '\0') // or if it contains only whitespace, add func
-			process_input(normalize_input(line, &sh.this_env), &sh.this_env);
+			process_input(normalize_input(line, &sh.this_env), &sh.this_env); // split it later
 	}
 	free(line);
-	rl_clear_history(); // free memory mallocated in readline 
+	rl_clear_history(); // but we should probably keep the history in some file
 	return (0);
 }
 

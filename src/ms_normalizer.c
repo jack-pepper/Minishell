@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ms_parser.c                                        :+:      :+:    :+:   */
+/*   ms_normalizer.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/05 15:43:56 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/06 11:45:24 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,11 @@ char	*ft_strcollapse(char *line)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if (line[i] == '\'' && ft_count_char(&line[i], '\'') > 1)
+		if (line[i] == '$')
+		{
+			ft_replace_char(&line[i], CTRL_CHAR_VAR_TO_INTERPRET);
+		}
+		else if (line[i] == '\'' && ft_count_char(&line[i], '\'') > 1)
 		{
 			handle_quote(line, '\'', &i, &to_collapse);
 		}
