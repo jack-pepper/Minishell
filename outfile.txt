@@ -1,0 +1,10 @@
+total 116$
+drwxrwxr-x  2 yaya yaya   4096 Apr  6 21:15 inc$
+-rw-rw-r--  1 yaya yaya      0 Apr  6 21:21 infile.txt$
+drwxrwxr-x 11 yaya yaya   4096 Apr  6 21:21 libft$
+-rw-rw-r--  1 yaya yaya   3000 Apr  6 21:12 Makefile$
+-rwxrwxr-x  1 yaya yaya 115576 Apr  6 21:23 minishell$
+-rw-rw-r--  1 yaya yaya      0 Apr  6 21:23 outfile.txt$
+drwxrwxr-x  2 yaya yaya   4096 Apr  6 21:23 pipex_ms$
+-rw-rw-r--  1 yaya yaya   1089 Apr  6 21:06 README.md$
+drwxrwxr-x  3 yaya yaya   4096 Apr  6 21:23 src$

@@ -27,8 +27,7 @@ CFLAGS=-g -Wall -Wextra -Werror
 ### Dependencies ###
 ####################
 
-DEPS = ./inc/minishell.h
-DEPS_LIBFT = ./libft/libft.h
+DEPS = ./inc/minishell.h ./libft/libft.h
 LIBFT = ./libft/libft.a
 
 DEPS = ./inc/minishell.h ./libft/libft.h
@@ -54,6 +53,16 @@ MS_SRC = ./src/minishell.c \
       ./src/commands/ms_cmd_export.c \
       ./src/commands/ms_cmd_pwd.c \
       ./src/commands/ms_cmd_unset.c \
+      ./src/yahya_ms_to_pipex.c \
+
+PIPEX_SRC =       ./pipex_ms/pipex.c \
+      ./pipex_ms/pipex_utils.c \
+      ./pipex_ms/pipex_bonus.c \
+      ./pipex_ms/pipex_bonus_utils.c \
+      ./pipex_ms/parsing.c \
+      ./pipex_ms/free.c \
+
+SRC = $(MS_SRC) $(PIPEX_SRC)
 
 PIPEX_SRC =       ./pipex_ms/pipex.c \
       ./pipex_ms/pipex_utils.c \

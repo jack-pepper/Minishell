@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/06 21:29:14 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/06 22:19:30 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # define CTRL_CHAR_SUBARG_DELIM '#' // 31
 
 /* Standard libraries */
+
+# include "../pipex_ms/pipex.h"
 
 # include <stdio.h>
 # include <readline/readline.h>

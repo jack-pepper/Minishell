@@ -11,9 +11,7 @@
 /* ************************************************************************** */
 
 #include "pipex.h"
-#include "ft_libft/libft/libft.h"
-#include "ft_libft/ft_printf/includes/ft_printf.h"
-#include "ft_libft/GNL/get_next_line.h"
+
 
 void	read_heredoc_input(t_pipex *pipex, char *limiter)
 {
@@ -26,7 +24,7 @@ void	read_heredoc_input(t_pipex *pipex, char *limiter)
 	while (1)
 	{
 		write(1, "> ", 2);
-		line = get_next_line(STDIN_FILENO);
+		line = ft_gnl(STDIN_FILENO);
 		if (!line)
 			break ;
 		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0
