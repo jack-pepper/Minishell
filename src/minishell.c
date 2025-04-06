@@ -26,8 +26,24 @@ int	main(int argc, char **argv, char **env)
 		line = get_input(line);
 		if (line == NULL) // CTRL-D sends EOF, which is handled here
 			exit(1);
-		if (line[0] != '\0') // or if it contains only whitespace, add func
-			process_input(normalize_input(line), env);
+		// if (line[0] != '\0') // or if it contains only whitespace, add func
+		// 	process_input(normalize_input(line), env);
+		else if (line[0] == '<')
+		{
+			printf("Yahya [DEBUG] line: %s\n", line);
+			char **tokens = normalize_input(line);
+			int i = 0;
+			while(tokens[i])
+			{
+				printf("Yahya [DEBUG] token[%d]: %s\n", i, tokens[i]);
+				i++;
+			}
+			t_pipeline *pipeline = build_pipeline_from_tokens(tokens);
+			printf("Yahya [DEBUG] pipeline->cmd_count: %d\n", pipeline->cmd_count);
+			if (pipeline)
+				run_pipex_from_minshell(pipeline, env);
+			// Memory cleanup
+		}
 	}
 	free(line);
 	rl_clear_history(); // free memory mallocated in readline 

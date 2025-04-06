@@ -16,6 +16,9 @@
 # define PATH_TO_HEADER "../inc/minishell.h"
 # define NB_CMDS 10 // Temporary, find out dynamically. DEBUG
 
+# include "../pipex_ms/pipex.h"
+
+
 /* Standard libraries */
 
 # include <stdio.h>
@@ -90,13 +93,12 @@ void    process_input(char **input_args, char **env);
 	// ms_parser.c
 char	*ft_normalize(char *line);
 char	*ft_strcollapse(char *line);
+int	ft_count_char(char *str, char c);
 char	*copy_collapse(char *dst, char *src, size_t src_len);
 
-	// ms_signals.c
-void	init_signals(void);
-void	init_sigset(void);
-void	init_sigaction(void);
-void	signal_handler(int signum);
+	// ms_quotes_handler.c
+void	handle_quote(char *line, char quote_type, int *i, int *to_collapse);
+void	ft_replace_char(char *cur_c, char new_c);
 
 	// ms_commands_manager.c
 int     	init_cmds(t_shell *sh);
@@ -123,4 +125,7 @@ void	cmd_env(char **env);
 
 	// ms_free.c
 
+/*Yahyas's function*/
+t_pipeline *build_pipeline_from_tokens(char **tokens);
+void free_pipeline(t_pipeline *p);
 #endif

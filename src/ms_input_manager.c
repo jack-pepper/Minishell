@@ -55,7 +55,7 @@ char	**normalize_input(char *line) // unsure whether char *env will be needed as
 		i++;
 	}
 	// DEBUG
-	
+	free(clean_input);
 	return (input_args);
 }
 
@@ -65,10 +65,10 @@ void	process_input(char **input_args, char **env)
 	if (!input_args || input_args[0] == NULL)
 		return ;
 
-        if (ft_strncmp(input_args[0], "exit", ft_strlen("exit")) == 0)
-                cmd_exit(0);
-        else if (ft_strncmp(input_args[0], "pwd", ft_strlen("pwd")) == 0)
-                cmd_pwd();
+    if (ft_strncmp(input_args[0], "exit", ft_strlen("exit")) == 0)
+        cmd_exit(0);
+    else if (ft_strncmp(input_args[0], "pwd", ft_strlen("pwd")) == 0)
+        cmd_pwd();
 	else if (ft_strncmp(input_args[0], "cd", ft_strlen("cd")) == 0)
 	{
 		if (cmd_cd(input_args[1]) != 0)

@@ -11,9 +11,7 @@
 /* ************************************************************************** */
 
 #include "pipex.h"
-#include "ft_libft/libft/libft.h"
-#include "ft_libft/ft_printf/includes/ft_printf.h"
-#include "ft_libft/GNL/get_next_line.h"
+
 
 void	handle_here_doc(t_pipex *pipex, int argc, char **argv)
 {

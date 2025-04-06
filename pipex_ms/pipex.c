@@ -11,9 +11,7 @@
 /* ************************************************************************** */
 
 #include "pipex.h"
-#include "ft_libft/libft/libft.h"
-#include "ft_libft/ft_printf/includes/ft_printf.h"
-#include "ft_libft/GNL/get_next_line.h"
+
 
 void	ft_init_pipex(t_pipex *pipex, char *infile, char *outfile)
 {
@@ -82,25 +80,133 @@ void	handle_mandatory(t_pipex *pipex, char **argv, int argc)
 	ft_execute_pipex(pipex);
 	free_pipex(pipex);
 }
-
-int	main(int argc, char **argv, char **envp)
+static char *join_args(char **args)
 {
-	t_pipex	pipex;
+	int i;
+	size_t total_len = 0;
+	char *result;
+	
+	i = 0;
+	// First calculate total length
+	while(args[i])
+	{
+		total_len += strlen(args[i]) + 1; // +1 for space or '\0'
+		i++;
+	}
+
+	if (total_len == 0)
+		return (strdup(""));
+
+	result = malloc(total_len);
+	if (!result)
+		return (NULL);
+
+	result[0] = '\0';
+	i = 0;
+	while (args[i]) 
+	{
+		strcat(result, args[i]);
+		if (args[i + 1])
+			strcat(result, " ");
+		i++;
+	}
+	return result;
+}
+
+int run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
+{
+	t_pipex pipex;
+	char **argv;
+	int argc;
+	int i;
+	int k = 0;
+
+	if (!pipeline->infile || !pipeline->outfile)
+	{
+		ft_printf("Error: missing infile or outfile\n");
+		return (1);
+	}
 
 	pipex = (t_pipex){0};
 	pipex.envp = envp;
-	if (argc >= 6 && ft_strcmp(argv[1], "here_doc") == 0)
-		handle_here_doc(&pipex, argc, argv);
-	else if (argc == 5)
-		handle_mandatory(&pipex, argv, argc);
-	else if (argc > 5)
-		handle_bonus(&pipex, argc, argv);
-	else
+
+	argc = 3 + pipeline->cmd_count; // pipex + infile + N cmds + outfile
+	printf("[DEBUG] argc: %d\n", argc);
+
+	argv = malloc(sizeof(char *) * (argc + 1));
+	if (!argv)
 	{
-		ft_printf("Usage:\n");
-		ft_printf("./pipex infile cmd1 cmd2 outfile\n");
-		ft_printf("./pipex here_doc LIMITER cmd1 ... outfile\n");
+		perror("malloc failed");
 		return (1);
 	}
-	return (pipex.exit_status);
+
+	argv[k++] = strdup("pipex");                // argv[0]
+	argv[k++] = strdup(pipeline->infile);       // argv[1]
+
+	i = 0;
+	// Join all commands into a single string
+	while (i < pipeline->cmd_count)
+	{
+		argv[k++] = join_args(pipeline->cmds[i].argv); // argv[2] to argv[n]
+		i++;
+	}
+
+	argv[k++] = strdup(pipeline->outfile);      // argv[n+1]
+	argv[k] = NULL;
+
+	// Dispatch to the correct pipex handler
+	if (argc >= 6 && ft_strncmp(argv[1], "here_doc", 8) == 0)
+	{
+		printf("here_doc\n");
+		handle_here_doc(&pipex, argc, argv);
+	}
+	else if (argc == 5)
+	{
+		printf("mandatory\n");
+		handle_mandatory(&pipex, argv, argc);
+	}
+	else if (argc > 5)
+	{
+		printf("bonus\n");
+		handle_bonus(&pipex, argc, argv);
+	}
+	else
+	{
+		ft_printf("Invalid input to pipex\n");
+		// free argv
+		i = 0;
+		while (i < argc)
+			free(argv[i++]);
+		free(argv);
+		return (1);
+	}
+
+	// Cleanup
+	i = 0;
+	while (i < argc)
+		free(argv[i++]);
+	free(argv);
+
+	return pipex.exit_status;
 }
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	t_pipex	pipex;
+
+// 	pipex = (t_pipex){0};
+// 	pipex.envp = envp;
+// 	if (argc >= 6 && ft_strcmp(argv[1], "here_doc") == 0)
+// 		handle_here_doc(&pipex, argc, argv);
+// 	else if (argc == 5)
+// 		handle_mandatory(&pipex, argv, argc);
+// 	else if (argc > 5)
+// 		handle_bonus(&pipex, argc, argv);
+// 	else
+// 	{
+// 		ft_printf("Usage:\n");
+// 		ft_printf("./pipex infile cmd1 cmd2 outfile\n");
+// 		ft_printf("./pipex here_doc LIMITER cmd1 ... outfile\n");
+// 		return (1);
+// 	}
+// 	return (pipex.exit_status);
+// }

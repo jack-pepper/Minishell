@@ -20,6 +20,10 @@
 # include <unistd.h>
 # include <sys/wait.h>
 # include <errno.h>
+# include <stdio.h>
+# include <string.h>
+# include "../libft/libft.h"
+
 
 typedef enum e_bool
 {
@@ -38,6 +42,19 @@ typedef struct s_pipex
 	char		**envp;
 	int			exit_status;
 }	t_pipex;
+
+typedef struct s_commands {
+    char **argv; // NULL-terminated array
+} t_commands;
+
+typedef struct s_pipeline {
+    char *infile;
+    char *outfile;
+    t_bool append;
+    t_commands *cmds;
+    int cmd_count;
+} t_pipeline;
+
 void	ft_exit_error(t_pipex *pipex, const char *msg);
 void	ft_free_array(char **arr, int count);
 void	ft_free_2d_array(char ***arr, int count);
@@ -69,5 +86,5 @@ void	read_heredoc_input(t_pipex *pipex, char *limiter);
 void	setup_here_doc_fds(t_pipex *pipex, char *outfile);
 void	parse_here_doc_commands(t_pipex *pipex, int argc, char **argv);
 void	fork_and_run(t_pipex *pipex, int i, int prev_fd, int *pipefd);
-
+int run_pipex_from_minshell(t_pipeline *pipeline, char **envp);
 #endif
