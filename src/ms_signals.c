@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:49:10 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/06 11:38:47 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/07 09:26:02 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ void	init_signals(void)
 	init_sigaction();
 }
 
-void	init_sigset(void) // define which signals are handled
+void	init_sigset(void) // define which signals will be blocked
 {
 	sigset_t	sigset;
 
-	sigemptyset(&sigset); // necessary for init
-	sigaddset(&sigset, SIGINT);
-	sigaddset(&sigset, SIGQUIT);
+	sigemptyset(&sigset); // necessary for init with sigset. But we can just use signal()...
+	//sigaddset(&sigset, SIGQUIT); // 
+	signal(SIGQUIT, SIG_IGN); // ctrl+\ do nothing instead of interrupting
 }
 
 void	init_sigaction(void) // define how signals are handled
@@ -40,18 +40,16 @@ void	init_sigaction(void) // define how signals are handled
 	struct sigaction	act;
 
 	ft_memset(&act, 0, sizeof(act));
-	act.sa_handler = signal_handler;
+	act.sa_handler = &signal_handler;
 	act.sa_flags = 0;
+	sigaction(SIGINT, &act, NULL);
 }
 
 void	signal_handler(int signum)
 {
 	if (signum == SIGINT) // ctrl+c: should display a new prompt on new line instead of quitting
 	{
+		printf("ctrl-c\n"); // DEBUG
 		// should free memory as well
-	}
-	else if (signum == SIGQUIT) // ctrl+\: should do nothing instead of interrupting
-	{
-		//
 	}
 }
