@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/06 22:20:39 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/07 08:49:03 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	main(int argc, char **argv, char **env)
 	{
 		line = get_input(line);
 		if (line == NULL) // Handles EOF (sent by CTRL-D)
-			exit(1);
+			cmd_exit(1);
 		if (line[0] != '\0')
 			process_input(normalize_input(line), &sh.this_env); // Need to split it to free
 		if (line[0] == '<')
