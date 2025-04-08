@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/06 22:19:30 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/08 17:37:47 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ typedef	struct s_shell
 	HISTORY_STATE	hist;
 	t_command	**cmds;
 	t_list		*this_env;
+	//char		**input_args;
+	char		**normalized_line;
 }		t_shell;
 
 /* Prototypes */
@@ -94,7 +96,8 @@ void	signal_handler(int signum);
 	// ms_input_manager.c
 char    *get_input(char *line);
 char	**normalize_input(char *line);
-void    process_input(char **input_args, t_list **this_env);
+char	**ft_interpret_env(char **input_arg, t_list **this_env);
+void	process_input(char **input_args, t_shell *sh);
 
 	// ms_normalizer.c
 char	*ft_normalize(char *line);
@@ -132,7 +135,7 @@ int	cmd_cd(char *path);
 	// ms_cmd_echo.c - Display a line of text
 void	cmd_echo(char **input_args, t_list **env);
 	// ms_cmd_exit.c - Cause the shell to exit
-void	cmd_exit(unsigned int status);
+void	cmd_exit(char **input_args, t_shell *sh, unsigned int status);
 	// ms_cmd_export.c - Set the export attribute for variables
 void	cmd_export(char **input_args, t_list **this_env);
 	// ms_cmd_unset.c - Unset values and attributes of variables and functions
@@ -143,6 +146,9 @@ void	cmd_env(t_list **this_env);
 /* Protoypes: error handling and cleaning */
 
 	// ms_free.c
+void	free_memory(t_shell *sh, char **input_args);
+void	free_env(t_list **this_env);
+void	free_commands(t_command **cmds);
 
 /*Yahyas's function*/
 t_pipeline *build_pipeline_from_tokens(char **tokens);

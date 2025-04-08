@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/06 17:58:09 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/08 16:16:24 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ char	*ft_normalize(char *line)
 		return (NULL);
 	}
 	normalized_line = ft_strcollapse(trimmed_line);
+	free(trimmed_line);
 	if (normalized_line == NULL)
 	{
 		return (NULL);

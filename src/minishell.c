@@ -6,14 +6,13 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/07 08:49:03 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/08 17:38:09 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 /* TODO: env variables should be interpreted in paths too! (ex: with cmd cd) 
- * TODO: unset cmd must handle several env var in a single command
  * TODO: need to process lines like: $USER $VAR ABC $GHI CDE
  */
 
@@ -30,9 +29,14 @@ int	main(int argc, char **argv, char **env)
 	{
 		line = get_input(line);
 		if (line == NULL) // Handles EOF (sent by CTRL-D)
-			cmd_exit(1);
+			cmd_exit(NULL, &sh, 1);
 		if (line[0] != '\0')
-			process_input(normalize_input(line), &sh.this_env); // Need to split it to free
+		{
+			sh.normalized_line = normalize_input(line);
+			if (!sh.normalized_line)
+				return (-1);
+			process_input(sh.normalized_line, &sh);
+		}
 		if (line[0] == '<')
 		{
 			char **tokens = normalize_input(line);
@@ -50,6 +54,8 @@ int	main(int argc, char **argv, char **env)
 // Initialize what is needed for the shell (signals, env, pipex, commands)
 int	init_shell(t_shell *sh, char **env)
 {
+//	sh->input_args = NULL;
+	sh->normalized_line = NULL;
 	init_signals();
 	if (init_env(sh, env) != 0)
 		return (-1);

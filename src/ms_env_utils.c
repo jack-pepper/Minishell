@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/06 15:04:07 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/08 17:48:39 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,9 @@ int	ft_copy_strs_to_list(t_list **list, char **strs, size_t nb_of_strings, char 
 			if (!split_str)
 				return (-1);
 			node = ft_lstnew((char **)split_str);
+		//	free(split_str[0]);
+		//	free(split_str[1]);
+		//	free(split_str);
 		}
 		if (!node)
 			return (-1);

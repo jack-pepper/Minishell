@@ -6,7 +6,7 @@
 #    By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/11 13:50:01 by mmalie            #+#    #+#              #
-#    Updated: 2025/04/06 21:27:56 by mmalie           ###   ########.fr        #
+#    Updated: 2025/04/08 14:32:06 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,6 +53,7 @@ MS_SRC = ./src/minishell.c \
       ./src/commands/ms_cmd_export.c \
       ./src/commands/ms_cmd_pwd.c \
       ./src/commands/ms_cmd_unset.c \
+      ./src/ms_free.c \
       ./src/yahya_ms_to_pipex.c \
 
 PIPEX_SRC =       ./pipex_ms/pipex.c \
