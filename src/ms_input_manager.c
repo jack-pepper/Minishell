@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/06 18:19:39 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/08 13:14:49 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,6 @@ void	ft_interpret_env(char *input_arg, t_list **this_env)
 		// printf("(%d) %s\n", i, rejoined_arg);
 		i++;
 	}
-	free(input_arg);
 	input_arg = ft_strdup(rejoined_arg);
 	free(rejoined_arg);
 	return ;

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/05 19:00:20 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/08 13:06:14 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void	cmd_export(char **input_args, t_list **this_env)
 {
-
 	// ERROR: if passed AAA, then AAA=bbb, two variables are added when it
 	//  should be updated instead. Need to take it into account by
 	// first parsing it properly
+	// BASH: would NOT accept "export AAA" (only: export AAA=").
 
 	t_list	*last_node;
 	t_list	*set_var;
