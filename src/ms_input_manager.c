@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/08 19:29:58 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/08 21:04:30 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,57 +56,39 @@ int	normalize_input(char *line, t_shell *sh)
 }
 
 // Interpret the env variables when needed.
-char	**ft_interpret_env(char **input_arg, t_list **this_env)
+int	ft_interpret_env(t_shell *sh)
 {
 	char	**split_arg;
 	char	*rejoined_arg;
 	t_list	*set_var;
 	int	i;
-	
-	// if no need to split (solo arg containing only $VAR_NAME)
-	if ((*input_arg)[0] == CTRL_CHAR_VAR_TO_INTERPRET && ft_strpbrk((*input_arg), " ") == NULL) // is checking for any space enough?
-	{
-		set_var = ft_getenv(&(*input_arg)[1], this_env);
-		if (set_var != NULL)
-		{
-			//free(input_arg);
-			(*input_arg) = ft_strdup(((char **)set_var->content)[1]);
-			if (!(*input_arg))
-				return (NULL) ;
-		}
-		else // make sure to make the behavior match bash, will probably be different
-		{
-			(*input_arg)[0] = '$';
-		}
-		return (input_arg);
-	}
-	// if need to split	
+
 	i = 0;
-	while ((*input_arg)[i]) // to retrieve the spaces
+	while ((*sh->input_args)[i]) // to retrieve the spaces
 	{
-		if ((*input_arg)[i] == ' ' && (*input_arg)[i + 1] != ' ')
+		if ((*sh->input_args)[i] == ' ' && (*sh->input_args)[i + 1] != ' ')
 		{
-			(*input_arg)[i] = CTRL_CHAR_SUBARG_DELIM;
+			(*sh->input_args)[i] = CTRL_CHAR_SUBARG_DELIM;
 			i++;
 		}
 		i++;
 	}
-	split_arg = ft_split((*input_arg), CTRL_CHAR_SUBARG_DELIM);
+	split_arg = ft_split((*sh->input_args), CTRL_CHAR_SUBARG_DELIM);
 	if (!split_arg)
-		return (input_arg);
+		return (-1);
 	i = 0;
 	rejoined_arg = "";
 	while (split_arg[i])
 	{
 		if (split_arg[i][0] == CTRL_CHAR_VAR_TO_INTERPRET)
 		{
-			set_var = ft_getenv(&split_arg[i][1], this_env);
+			set_var = ft_getenv(&split_arg[i][1], &sh->this_env);
 			if (set_var != NULL)
 			{	
 			//	free(split_arg[i]);
 				split_arg[i] = ft_strdup(((char **)set_var->content)[1]);
 				if (!split_arg)
-					return (input_arg) ;
+					return (-1) ;
 			}
 			else // make sure to make the behavior match bash, will probably be different
 			{
@@ -119,15 +101,15 @@ char	**ft_interpret_env(char **input_arg, t_list **this_env)
 		// printf("(%d) %s\n", i, rejoined_arg);
 		i++;
 	}
-	(*input_arg) = ft_strdup(rejoined_arg);
+	(*sh->input_args) = ft_strdup(rejoined_arg);
 	free(rejoined_arg);
-	return (input_arg);
+	return (0);
 }
 
 // Should call the needed command and handle errors 
 void	process_input(t_shell *sh)
 {
-	t_list	*set_var;
+//	t_list	*set_var;
 
 	if (!sh->input_args || sh->input_args[0] == NULL)
 		return ;
@@ -144,25 +126,8 @@ void	process_input(t_shell *sh)
 	//}
 	// "<" or "infile.txt >" (check) && NO PIPES
 
-	
-	// handle_no_cmd(). To be compared with bash behavior.
-	// Need to loop through all args
-	if (sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET)
-	{
-		// to be compared with bash behavior.
-		set_var = ft_getenv(&(sh->input_args[0])[1], &sh->this_env);
-		ft_interpret_env(&(sh->input_args[0]), &set_var); // ...
-		printf("%s\n", sh->input_args[0]);
-		return ;
-	}
 
-	// for other cases, convert the env
-	int i = 0;
-	while (sh->input_args[i])
-	{
-		ft_interpret_env(&(sh->input_args[i]), &sh->this_env);
-		i++;
-	}
+	ft_interpret_env(sh);
 
         if (ft_strncmp(sh->input_args[0], "exit", ft_strlen("exit")) == 0)
                 cmd_exit(sh, 0);
