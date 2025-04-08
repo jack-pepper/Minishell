@@ -6,21 +6,23 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:53:00 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/08 17:51:26 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/08 19:09:17 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	free_memory(t_shell *sh, char **input_args)
+void	free_memory(t_shell *sh)
 {
-	if (input_args != NULL)
-		free(input_args);
-	free_env(&sh->this_env);
-//	free(sh->normalized_line);
-	free_commands(sh->cmds);
+	if (sh->normalized_line != NULL)
+		free(sh->normalized_line);
+	if (sh->input_args != NULL)
+		free(sh->input_args);
+	if (sh->this_env != NULL)
+		free_env(&sh->this_env);
+	if (sh->cmds != NULL)
+		free_commands(sh->cmds);
 
-	// line
 	// history
 }
 

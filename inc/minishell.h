@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/08 17:37:47 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/08 19:42:21 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # define PATH_TO_HEADER "../inc/minishell.h"
 # define NB_CMDS 10 // Temporary, find out dynamically. DEBUG
 
+# define PROMPT_STYLE "ms> "
 # define CTRL_CHAR_SPACE_IN_QUOTE 29
 # define CTRL_CHAR_VAR_TO_INTERPRET '*' // 30
 # define CTRL_CHAR_SUBARG_DELIM '#' // 31
@@ -76,8 +77,9 @@ typedef	struct s_shell
 	HISTORY_STATE	hist;
 	t_command	**cmds;
 	t_list		*this_env;
-	//char		**input_args;
-	char		**normalized_line;
+	char		*normalized_line;
+	char		**input_args;
+	char		**tokens;
 }		t_shell;
 
 /* Prototypes */
@@ -95,9 +97,9 @@ void	signal_handler(int signum);
 
 	// ms_input_manager.c
 char    *get_input(char *line);
-char	**normalize_input(char *line);
+int	normalize_input(char *line, t_shell *sh);
 char	**ft_interpret_env(char **input_arg, t_list **this_env);
-void	process_input(char **input_args, t_shell *sh);
+void	process_input(t_shell *sh);
 
 	// ms_normalizer.c
 char	*ft_normalize(char *line);
@@ -131,22 +133,22 @@ t_command       *register_cmd(char *name, void *func, char *doc);
 	// ms_cmd_pwd.c - Print name of current/working directory
 void	cmd_pwd(void);
 	// ms_cmd_cd.c - Change the working directory
-int	cmd_cd(char *path);
+int	cmd_cd(t_shell *sh);
 	// ms_cmd_echo.c - Display a line of text
-void	cmd_echo(char **input_args, t_list **env);
+void	cmd_echo(t_shell *sh);
 	// ms_cmd_exit.c - Cause the shell to exit
-void	cmd_exit(char **input_args, t_shell *sh, unsigned int status);
+void	cmd_exit(t_shell *sh, unsigned int status);
 	// ms_cmd_export.c - Set the export attribute for variables
-void	cmd_export(char **input_args, t_list **this_env);
+void	cmd_export(t_shell *sh);
 	// ms_cmd_unset.c - Unset values and attributes of variables and functions
-void	cmd_unset(char **input_args, t_list **this_env);
+void	cmd_unset(t_shell *sh);
 	// ms_cmd_env.c - Display the env variables
-void	cmd_env(t_list **this_env);
+void	cmd_env(t_shell *sh);
 
 /* Protoypes: error handling and cleaning */
 
 	// ms_free.c
-void	free_memory(t_shell *sh, char **input_args);
+void	free_memory(t_shell *sh);
 void	free_env(t_list **this_env);
 void	free_commands(t_command **cmds);
 

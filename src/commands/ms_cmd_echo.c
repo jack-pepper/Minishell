@@ -6,25 +6,23 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:00:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/05 16:46:45 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/08 19:25:31 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	cmd_echo(char **input_args, t_list **env)
+void	cmd_echo(t_shell *sh)
 {
 	char	*joined_input;
 	bool	opt_n;
 	int	i;
 
-	env++; //
-	env--; //
-	if (!input_args || !(input_args[1])) // Does bash output a newline if no args as zsh?
+	if (!sh->input_args || !(sh->input_args[1])) // Does bash output a newline if no args as zsh?
 		return ;
 	i = 1;
 	opt_n = false;
-	if (ft_strncmp(input_args[1], "-n", ft_strlen(input_args[1])) == 0)
+	if (ft_strncmp(sh->input_args[1], "-n", ft_strlen(sh->input_args[1])) == 0)
 	{
 		opt_n = true;
 		i++;
@@ -32,13 +30,13 @@ void	cmd_echo(char **input_args, t_list **env)
 	joined_input = ft_strdup("");
 	if (!joined_input)
 		return ;
-	while (input_args[i] != NULL)
+	while (sh->input_args[i] != NULL)
 	{		
-		joined_input = ft_strjoin(joined_input, input_args[i]);
+		joined_input = ft_strjoin(joined_input, sh->input_args[i]);
 		if (!joined_input)
 			return ;
 		i++;
-		if (input_args[i] != NULL)
+		if (sh->input_args[i] != NULL)
 		{
 			joined_input = ft_strjoin(joined_input, " ");
 			if (!joined_input)

@@ -6,13 +6,13 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/08 13:06:14 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/08 19:35:27 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	cmd_export(char **input_args, t_list **this_env)
+void	cmd_export(t_shell *sh)
 {
 	// ERROR: if passed AAA, then AAA=bbb, two variables are added when it
 	//  should be updated instead. Need to take it into account by
@@ -24,19 +24,19 @@ void	cmd_export(char **input_args, t_list **this_env)
 	char	**split_str;
 	int	i;
 
-	if (!input_args)
+	if (!sh->input_args)
 		return ;
-	if (!(input_args[1])) // if no args, man says result is unspecified
-		cmd_env((this_env)); // ... we may just display the env variables
+	if (!(sh->input_args[1])) // if no args, man says result is unspecified
+		cmd_env((sh)); // ... we may just display the env variables
 	else
 	{
 		i = 1;
-		while (input_args[i])
+		while (sh->input_args[i])
 		{
-			split_str = ft_split(input_args[i], '=');
+			split_str = ft_split(sh->input_args[i], '=');
 			if (!split_str)
 				return ;
-			set_var = ft_getenv(input_args[i], this_env);
+			set_var = ft_getenv(sh->input_args[i], &sh->this_env);
 			if (set_var != NULL)
 			{
 				if (ft_update_env_value(set_var, split_str) != 0)
@@ -44,7 +44,7 @@ void	cmd_export(char **input_args, t_list **this_env)
 			}
 			else
 			{
-				last_node = ft_lstlast(*this_env);
+				last_node = ft_lstlast(sh->this_env);
 				last_node->next = ft_lstnew((char **)split_str);
 				if (!last_node->next)
 					return ;

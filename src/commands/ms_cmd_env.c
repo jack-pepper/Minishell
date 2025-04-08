@@ -6,17 +6,17 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:01:09 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/05 18:21:03 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/08 19:34:00 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	cmd_env(t_list **this_env)
+void	cmd_env(t_shell *sh)
 {
 	t_list	*cur_node;
 
-	cur_node = *this_env;
+	cur_node = sh->this_env;
 	while (cur_node != NULL)
 	{
 		printf("%s=%s\n",

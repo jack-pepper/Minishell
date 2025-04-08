@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/08 17:38:09 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/08 19:40:23 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,20 @@ int	main(int argc, char **argv, char **env)
 	{
 		line = get_input(line);
 		if (line == NULL) // Handles EOF (sent by CTRL-D)
-			cmd_exit(NULL, &sh, 1);
+			cmd_exit(&sh, 1);
 		if (line[0] != '\0')
 		{
-			sh.normalized_line = normalize_input(line);
+			if (normalize_input(line, &sh) != 0)
+				return (-1);
 			if (!sh.normalized_line)
 				return (-1);
-			process_input(sh.normalized_line, &sh);
+			process_input(&sh);
 		}
 		if (line[0] == '<')
 		{
-			char **tokens = normalize_input(line);
-			t_pipeline *pipeline = build_pipeline_from_tokens(tokens);
+			if (normalize_input(line, &sh) != 0)
+				return (-1);
+			t_pipeline *pipeline = build_pipeline_from_tokens(sh.tokens);
 			if (pipeline)
 				run_pipex_from_minshell(pipeline, env);
 			// Memory cleanup
@@ -54,8 +56,8 @@ int	main(int argc, char **argv, char **env)
 // Initialize what is needed for the shell (signals, env, pipex, commands)
 int	init_shell(t_shell *sh, char **env)
 {
-//	sh->input_args = NULL;
 	sh->normalized_line = NULL;
+	sh->input_args = NULL;
 	init_signals();
 	if (init_env(sh, env) != 0)
 		return (-1);
