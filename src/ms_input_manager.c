@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/08 21:04:30 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/09 09:28:13 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	normalize_input(char *line, t_shell *sh)
 	return (0);
 }
 
+/*
 // Interpret the env variables when needed.
 int	ft_interpret_env(t_shell *sh)
 {
@@ -105,6 +106,7 @@ int	ft_interpret_env(t_shell *sh)
 	free(rejoined_arg);
 	return (0);
 }
+*/
 
 // Should call the needed command and handle errors 
 void	process_input(t_shell *sh)
