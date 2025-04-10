@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:54:10 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/03/18 14:56:17 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/04/09 14:21:59 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,5 @@ void	setup_here_doc_fds(t_pipex *pipex, char *outfile);
 void	parse_here_doc_commands(t_pipex *pipex, int argc, char **argv);
 void	fork_and_run(t_pipex *pipex, int i, int prev_fd, int *pipefd);
 int run_pipex_from_minshell(t_pipeline *pipeline, char **envp);
+
 #endif

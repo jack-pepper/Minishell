@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/06 18:19:14 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/10 07:03:02 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,37 @@
  * TODO: unset cmd must handle several env var in a single command
  * TODO: need to process lines like: $USER $VAR ABC $GHI CDE
  */
+// void print_pipeline(t_pipeline *p)
+// {
+// 	if (!p)
+// 	{
+// 		printf("Pipeline is NULL\n");
+// 		return;
+// 	}
+// 	printf("=== PIPELINE DEBUG ===\n");
+
+// 	printf("infile: %s\n", p->infile ? p->infile : "None");
+// 	printf("outfile: %s\n", p->outfile ? p->outfile : "None");
+// 	printf("append: %s\n", p->append ? "true" : "false");
+// 	printf("cmd_count: %d\n", p->cmd_count);
+
+// 	for (int i = 0; i < p->cmd_count; i++)
+// 	{
+// 		printf("Command [%d]:\n", i);
+// 		if (!p->cmds[i].argv)
+// 			printf("  argv: NULL\n");
+// 		else
+// 		{
+// 			int j = 0;
+// 			while (p->cmds[i].argv[j])
+// 			{
+// 				printf("  argv[%d]: %s\n", j, p->cmds[i].argv[j]);
+// 				j++;
+// 			}
+// 		}
+// 	}
+// 	printf("=======================\n");
+// }
 
 int	main(int argc, char **argv, char **env)
 {
@@ -31,8 +62,26 @@ int	main(int argc, char **argv, char **env)
 		line = get_input(line);
 		if (line == NULL) // Handles EOF (sent by CTRL-D)
 			exit(1);
-		if (line[0] != '\0')
-			process_input(normalize_input(line), &sh.this_env); // Need to split it to free
+	if (line[0] != '\0')
+	{
+		char **tokens = normalize_input(line);
+		t_pipeline *pipeline = parse_redirection_only(tokens);
+		
+		// process_input(normalize_input(line), &sh.this_env); // Need to split it to free
+		if (!pipeline || pipeline->cmd_count == 0 || !pipeline->cmds[0].argv)
+		{
+			fprintf(stderr, "Invalid pipeline or command parsing failed\n");
+			continue;
+		}
+
+		// DEBUG: See what command was parsed
+		printf("Running: %s\n", pipeline->cmds[0].argv[0]);
+
+		// ONLY call exec if pipeline is valid
+		exec_with_redirection(pipeline, env);
+
+		// free pipeline
+	}
 		if (line[0] == '<')
 		{
 			char **tokens = normalize_input(line);
