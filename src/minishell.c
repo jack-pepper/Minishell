@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/10 07:03:02 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/04/10 15:05:06 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,37 +16,6 @@
  * TODO: unset cmd must handle several env var in a single command
  * TODO: need to process lines like: $USER $VAR ABC $GHI CDE
  */
-// void print_pipeline(t_pipeline *p)
-// {
-// 	if (!p)
-// 	{
-// 		printf("Pipeline is NULL\n");
-// 		return;
-// 	}
-// 	printf("=== PIPELINE DEBUG ===\n");
-
-// 	printf("infile: %s\n", p->infile ? p->infile : "None");
-// 	printf("outfile: %s\n", p->outfile ? p->outfile : "None");
-// 	printf("append: %s\n", p->append ? "true" : "false");
-// 	printf("cmd_count: %d\n", p->cmd_count);
-
-// 	for (int i = 0; i < p->cmd_count; i++)
-// 	{
-// 		printf("Command [%d]:\n", i);
-// 		if (!p->cmds[i].argv)
-// 			printf("  argv: NULL\n");
-// 		else
-// 		{
-// 			int j = 0;
-// 			while (p->cmds[i].argv[j])
-// 			{
-// 				printf("  argv[%d]: %s\n", j, p->cmds[i].argv[j]);
-// 				j++;
-// 			}
-// 		}
-// 	}
-// 	printf("=======================\n");
-// }
 
 int	main(int argc, char **argv, char **env)
 {
@@ -62,7 +31,7 @@ int	main(int argc, char **argv, char **env)
 		line = get_input(line);
 		if (line == NULL) // Handles EOF (sent by CTRL-D)
 			exit(1);
-	if (line[0] != '\0')
+	if (line[0] != '\0' && line[0] != '<')
 	{
 		char **tokens = normalize_input(line);
 		t_pipeline *pipeline = parse_redirection_only(tokens);
