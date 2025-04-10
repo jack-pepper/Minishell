@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/09 09:28:13 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/10 10:55:48 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,16 +120,22 @@ void	process_input(t_shell *sh)
 	// output = process_pipe();
 
 	// DEBUG - show the content of input_args
-	//int i = 0;
-	//while (input_args)
-	//{
-	//	printf("[%d] '%s' ", i, input_args[i]);
-	//	i++;
-	//}
+	int i = 0;
+	while (sh->input_args[i])
+	{
+		printf("BEFORE INTERPRET [%d] ~%s~ \n ", i, sh->input_args[i]);
+		i++;
+	}
 	// "<" or "infile.txt >" (check) && NO PIPES
 
-
 	ft_interpret_env(sh);
+
+	i = 0;
+	while (sh->input_args[i])
+	{
+		printf("AFTER INTERPRET [%d] ~%s~ \n ", i, sh->input_args[i]);
+		i++;
+	}
 
         if (ft_strncmp(sh->input_args[0], "exit", ft_strlen("exit")) == 0)
                 cmd_exit(sh, 0);

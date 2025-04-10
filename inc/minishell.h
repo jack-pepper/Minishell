@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/09 09:30:12 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/10 11:40:28 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,10 +115,10 @@ void	handle_quote(char *line, char quote_type, int *i, int *to_collapse);
 
 	// ms_env_interpreter.c
 int     ft_interpret_env(t_shell *sh);
-char    **ft_split_args(char **split_args, t_shell *sh);
-char    *ft_name_to_value(char **split_args, char *rejoined_arg, t_shell *sh);
+char    **ft_split_args(char **split_args, char *input_arg);
+char    *ft_name_to_value(char *rejoined_arg, char **split_args, t_list **this_env);
 char    *ft_rejoin_subarg(char **split_args, char *rejoined_arg, int i);
-char    **ft_copy_free(char *rejoined_arg, t_shell *sh);
+char    **ft_copy_free(char **input_arg, char *rejoined_arg);
 
 	// ms_env_utils.c
 size_t	ft_strslen(char **strs);
