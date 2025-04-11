@@ -6,7 +6,7 @@
 #    By: mmalie <mmalie@student.42nice.fr           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/14 09:35:38 by mmalie            #+#    #+#              #
-#    Updated: 2025/02/15 11:07:25 by mmalie           ###   ########.fr        #
+#    Updated: 2025/04/11 21:37:06 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,6 +49,7 @@ LIBSTRING = ft_bzero.c \
 	    ft_strlcat.c \
 	    ft_strlcpy.c \
 	    ft_strlen.c \
+	    ft_strcmp.c \
 	    ft_strncmp.c \
 	    ft_strnew.c \
 	    ft_strnopbrk.c \

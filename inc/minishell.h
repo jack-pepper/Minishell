@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/11 16:43:44 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/11 21:32:09 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef	struct s_shell
 	t_list		*this_env;
 	char		*normalized_line;
 	char		**input_args;
+	t_pipeline	*pipeline;
 	char		**tokens;
 }			t_shell;
 
@@ -145,7 +146,10 @@ void	free_commands(t_command **cmds);
 void    free_args(char **input_args);
 
 /*Yahyas's function*/
-t_pipeline *build_pipeline_from_tokens(char **tokens);
-void free_pipeline(t_pipeline *p);
+t_pipeline	*build_pipeline_from_tokens(char **tokens);
+void		free_pipeline(t_pipeline *p);
+void		exec_with_redirection(t_pipeline *cmd, char **env);
+t_pipeline	*parse_redirection_only(char **tokens);
+void		print_pipeline(t_pipeline *p);
 
 #endif

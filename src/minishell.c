@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/11 16:31:06 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/11 21:47:17 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,29 @@ int	main(int argc, char **argv, char **env)
 		{
 			if (normalize_input(line, &sh) != 0)
 				return (-1);
-			if (!sh.normalized_line)
-				return (-1);
+			if (!sh.normalized_line) // Needed???
+				return (-1); // ???
+			//if (!input_args) // Needed?
+			//	return (-1);
+
+			// echo abc > infile.txt
+
+			sh.pipeline = build_pipeline_from_tokens(sh.input_args);
+			if (!sh.pipeline || sh.pipeline->cmd_count == 0 || !sh.pipeline->cmds[0].argv)
+			{
+				fprintf(stderr, "Invalid pipeline or command parsing failed\n");
+				continue;
+			}
+			if (sh.pipeline)
+			{
+				run_pipex_from_minshell(sh.pipeline, env);
+				// DEBUG: See what command was parsed
+				printf("Running: %s\n", sh.pipeline->cmds[0].argv[0]);
+				// ONLY call exec if pipeline is valid
+				exec_with_redirection(sh.pipeline, env);
+				// free pipeline
+			}
 			process_input(&sh);
-		}
-		if (line[0] == '<')
-		{
-			if (normalize_input(line, &sh) != 0)
-				return (-1);
-			t_pipeline *pipeline = build_pipeline_from_tokens(sh.tokens);
-			if (pipeline)
-				run_pipex_from_minshell(pipeline, env);
-			// Memory cleanup
 		}
 	}
 	free(line);
