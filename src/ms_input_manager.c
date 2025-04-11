@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_input_manager.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/06 18:19:39 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/11 14:33:53 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,12 @@ char	**normalize_input(char *line)
 	ft_replace_all_chars(input_args, CTRL_CHAR_SPACE_IN_QUOTE, ' '); // change CTRL_CHAR in quotes back to spaces
 
 	// DEBUG: DISPLAY THE CONTENT OF INPUT_ARGS AFTER NORMALIZATION
-	//int	i = 0;
-	//while (input_args[i] != NULL)
-	//{
-	//	printf("[DEBUG] input_args[%d]): %s\n", i, input_args[i]);
-	//	i++;
-	//}
+	int	i = 0;
+	while (input_args[i] != NULL)
+	{
+		printf("[DEBUG] input_args[%d]): %s\n", i, input_args[i]);
+		i++;
+	}
 	// DEBUG
 	return (input_args);
 }
