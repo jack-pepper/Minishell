@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:49:10 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/07 09:26:02 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/11 15:52:34 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,10 @@ void	signal_handler(int signum)
 {
 	if (signum == SIGINT) // ctrl+c: should display a new prompt on new line instead of quitting
 	{
-		printf("ctrl-c\n"); // DEBUG
-		// should free memory as well
+		// should probably free memory aswell?
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
 	}
 }
