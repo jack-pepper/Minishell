@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:53:00 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/08 19:09:17 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/11 16:42:59 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,26 @@ void	free_memory(t_shell *sh)
 	if (sh->normalized_line != NULL)
 		free(sh->normalized_line);
 	if (sh->input_args != NULL)
-		free(sh->input_args);
+		free_args(sh->input_args);
 	if (sh->this_env != NULL)
 		free_env(&sh->this_env);
 	if (sh->cmds != NULL)
 		free_commands(sh->cmds);
 
 	// history
+}
+
+void	free_args(char **input_args)
+{
+	int	i;
+
+	i = 0;
+	while (input_args[i])
+	{
+		free(input_args[i]);
+		i++;
+	}
+	free(input_args);
 }
 
 void	free_env(t_list **this_env)
@@ -47,8 +60,7 @@ void	free_env(t_list **this_env)
 			cur_node = cur_node->next;
 			free(prev_node);
 		}
-		free(cur_node);	
-		//free(*this_env);
+		free(cur_node);
 		this_env = NULL;
 	}
 }

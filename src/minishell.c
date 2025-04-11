@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/11 14:52:59 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/11 16:31:06 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,6 @@ int	init_env(t_shell *sh, char **env)
 	size_t	nb_vars;
 
 	nb_vars = ft_strslen(env);
-	sh->this_env = malloc(sizeof(t_list *) * (nb_vars + 1));
-	if (!sh->this_env)
-		return (-1);
 	sh->this_env = NULL;
 	if (ft_copy_strs_to_list(&sh->this_env, env, nb_vars, '=') != 0)
 		return (-1);

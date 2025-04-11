@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/11 15:10:20 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/11 16:43:44 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,7 @@ void	cmd_env(t_shell *sh);
 void	free_memory(t_shell *sh);
 void	free_env(t_list **this_env);
 void	free_commands(t_command **cmds);
+void    free_args(char **input_args);
 
 /*Yahyas's function*/
 t_pipeline *build_pipeline_from_tokens(char **tokens);

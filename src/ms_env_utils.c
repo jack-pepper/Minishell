@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/08 17:48:39 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/11 16:38:15 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int	ft_copy_strs_to_list(t_list **list, char **strs, size_t nb_of_strings, char 
 		ft_lstadd_back(list, node);
 		i++;
 	}
+	//free(split_str);
 	return (0);
 }
 
