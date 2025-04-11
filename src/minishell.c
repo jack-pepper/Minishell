@@ -6,14 +6,14 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/08 19:40:23 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/11 14:52:59 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 /* TODO: env variables should be interpreted in paths too! (ex: with cmd cd) 
- * TODO: need to process lines like: $USER $VAR ABC $GHI CDE
+ * TODO: ctrl+c should display a new prompt
  */
 
 int	main(int argc, char **argv, char **env)

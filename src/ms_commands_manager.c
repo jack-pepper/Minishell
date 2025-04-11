@@ -6,11 +6,26 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:25:28 by mmalie            #+#    #+#             */
-/*   Updated: 2025/03/30 17:40:53 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/11 15:07:10 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+// Could be initialized like this:
+/*
+t_command commands[] = {
+                { "pwd", cmd_pwd, "Print name of current/working directory" },
+                { "cd", cmd_cd, "Change the working directory" }, 
+                { "echo", cmd_echo, "Display a line of text" }, 
+                { "exit", cmd_exit, "Cause the shell to exit" },
+                { "export", cmd_export, "Set the export attribute for variables" },
+                { "unset", cmd_unset, "Unset values and attributes of variables and functions" },
+                { "env", cmd_env, "Display the env variables" },
+                { "help", cmd_help, "Display this text" },
+                { (char *)NULL, (Function *)NULL, (char *)NULL } /// should allow to loop through the cmd list
+        };
+*/
 
 int     init_cmds(t_shell *sh)
 {

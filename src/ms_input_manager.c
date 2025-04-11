@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/10 10:55:48 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/11 14:58:57 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,87 +55,31 @@ int	normalize_input(char *line, t_shell *sh)
 	return (0);
 }
 
-/*
-// Interpret the env variables when needed.
-int	ft_interpret_env(t_shell *sh)
-{
-	char	**split_arg;
-	char	*rejoined_arg;
-	t_list	*set_var;
-	int	i;
-
-	i = 0;
-	while ((*sh->input_args)[i]) // to retrieve the spaces
-	{
-		if ((*sh->input_args)[i] == ' ' && (*sh->input_args)[i + 1] != ' ')
-		{
-			(*sh->input_args)[i] = CTRL_CHAR_SUBARG_DELIM;
-			i++;
-		}
-		i++;
-	}
-	split_arg = ft_split((*sh->input_args), CTRL_CHAR_SUBARG_DELIM);
-	if (!split_arg)
-		return (-1);
-	i = 0;
-	rejoined_arg = "";
-	while (split_arg[i])
-	{
-		if (split_arg[i][0] == CTRL_CHAR_VAR_TO_INTERPRET)
-		{
-			set_var = ft_getenv(&split_arg[i][1], &sh->this_env);
-			if (set_var != NULL)
-			{	
-			//	free(split_arg[i]);
-				split_arg[i] = ft_strdup(((char **)set_var->content)[1]);
-				if (!split_arg)
-					return (-1) ;
-			}
-			else // make sure to make the behavior match bash, will probably be different
-			{
-				split_arg[i][0] = '$';
-			}
-		}
-		rejoined_arg = ft_strjoin(rejoined_arg, split_arg[i]);
-		if (split_arg[i + 1])
-			rejoined_arg = ft_strjoin(rejoined_arg, " ");
-		// printf("(%d) %s\n", i, rejoined_arg);
-		i++;
-	}
-	(*sh->input_args) = ft_strdup(rejoined_arg);
-	free(rejoined_arg);
-	return (0);
-}
-*/
-
 // Should call the needed command and handle errors 
 void	process_input(t_shell *sh)
 {
-//	t_list	*set_var;
-
 	if (!sh->input_args || sh->input_args[0] == NULL)
 		return ;
 
 	// check for '|' first
 	// output = process_pipe();
-
-	// DEBUG - show the content of input_args
-	int i = 0;
-	while (sh->input_args[i])
-	{
-		printf("BEFORE INTERPRET [%d] ~%s~ \n ", i, sh->input_args[i]);
-		i++;
-	}
 	// "<" or "infile.txt >" (check) && NO PIPES
 
+	// DEBUG
+	//int i = 0;
+	//while (sh->input_args[i])
+	//{
+	//	printf("BEFORE INTERPRET [%d] ~%s~ \n ", i, sh->input_args[i]);
+	//	i++;
+	//}
 	ft_interpret_env(sh);
-
-	i = 0;
-	while (sh->input_args[i])
-	{
-		printf("AFTER INTERPRET [%d] ~%s~ \n ", i, sh->input_args[i]);
-		i++;
-	}
+	// DEBUG
+	//i = 0;
+	//while (sh->input_args[i])
+	//{
+	//	printf("AFTER INTERPRET [%d] ~%s~ \n ", i, sh->input_args[i]);
+	//	i++;
+	//}
 
         if (ft_strncmp(sh->input_args[0], "exit", ft_strlen("exit")) == 0)
                 cmd_exit(sh, 0);

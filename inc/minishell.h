@@ -6,45 +6,45 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/10 11:40:28 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/11 15:10:20 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define PATH_TO_HEADER "../inc/minishell.h"
 # define NB_CMDS 10 // Temporary, find out dynamically. DEBUG
 
 # define PROMPT_STYLE "ms> "
 # define CTRL_CHAR_SPACE_IN_QUOTE 29
-# define CTRL_CHAR_VAR_TO_INTERPRET '*' // 30
-# define CTRL_CHAR_SUBARG_DELIM '#' // 31
+# define CTRL_CHAR_VAR_TO_INTERPRET 30
+# define CTRL_CHAR_SUBARG_DELIM 31
 
-/* Standard libraries */
+/* Libraries */
 
+	// Pipex
 # include "../pipex_ms/pipex.h"
 
-# include <stdio.h>
+	// Standard libraries
+# include <curses.h>
+# include <dirent.h>
+# include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <unistd.h>
-# include <fcntl.h>
+# include <signal.h>
+# include <stdio.h>
+# include <stdlib.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <sys/time.h>
 # include <sys/resource.h>
-# include <signal.h>
 # include <sys/stat.h>
-# include <dirent.h>
 # include <sys/ioctl.h>
-# include <stdlib.h>
-# include <curses.h>
 # include <term.h>
+# include <unistd.h>
 
-/* Custom libraries */
+	// Libft
 # include "../libft/libft.h"
-# include "../pipex_ms/pipex.h"
 
 /* Structures */
 
@@ -55,32 +55,16 @@ typedef struct s_command
 	char *doc;
 } 		t_command;
 
-// Could be initialized like this:
-/*
-t_command commands[] = {
-                { "pwd", cmd_pwd, "Print name of current/working directory" },
-                { "cd", cmd_cd, "Change the working directory" }, 
-  		{ "echo", cmd_echo, "Display a line of text" }, 
-                { "exit", cmd_exit, "Cause the shell to exit" },
-                { "export", cmd_export, "Set the export attribute for variables" },
-                { "unset", cmd_unset, "Unset values and attributes of variables and functions" },
-                { "env", cmd_env, "Display the env variables" },
-		{ "help", cmd_help, "Display this text" },
-                { (char *)NULL, (Function *)NULL, (char *)NULL } /// should allow to loop through the cmd list
-        };
-*/
-
 // Main structure
 typedef	struct s_shell
 {
-
 	HISTORY_STATE	hist;
 	t_command	**cmds;
 	t_list		*this_env;
 	char		*normalized_line;
 	char		**input_args;
 	char		**tokens;
-}		t_shell;
+}			t_shell;
 
 /* Prototypes */
 
