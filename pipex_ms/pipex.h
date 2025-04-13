@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:54:10 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/03/18 14:56:17 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/04/13 14:06:12 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_pipeline {
     t_bool append;
     t_commands *cmds;
     int cmd_count;
+    t_pipex	*pipex; // Added by [m]
 } t_pipeline;
 
 void	ft_exit_error(t_pipex *pipex, const char *msg);

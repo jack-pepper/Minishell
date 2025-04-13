@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/21 10:01:37 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/04/13 14:43:24 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,12 +123,19 @@ int run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 
 	if (!pipeline->infile || !pipeline->outfile)
 	{
-		ft_printf("Error: missing infile or outfile\n");
+//		ft_printf("Error: missing infile or outfile\n");
 		return (1);
 	}
 
 	pipex = (t_pipex){0};
 	pipex.envp = envp;
+
+	// Added by [m] for $? support
+	pipeline->pipex = malloc(sizeof(pipex));
+	if (!pipeline->pipex)
+		return (-1);
+	pipeline->pipex = &pipex;
+	// End added by [m]
 
 	argc = 3 + pipeline->cmd_count; // pipex + infile + N cmds + outfile
 
@@ -185,6 +192,8 @@ int run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 	while (i < argc)
 		free(argv[i++]);
 	free(argv);
+
+	printf("[DEBUG - runpipexfromminshell()] PIPEX EXIT STATUS: %d\n", pipex.exit_status);
 
 	return pipex.exit_status;
 }

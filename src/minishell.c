@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/11 21:47:17 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/13 14:51:19 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ int	main(int argc, char **argv, char **env)
 			{
 				run_pipex_from_minshell(sh.pipeline, env);
 				// DEBUG: See what command was parsed
-				printf("Running: %s\n", sh.pipeline->cmds[0].argv[0]);
+		//		printf("Running: %s\n", sh.pipeline->cmds[0].argv[0]);
 				// ONLY call exec if pipeline is valid
-				exec_with_redirection(sh.pipeline, env);
+		//		exec_with_redirection(sh.pipeline, env);
 				// free pipeline
 			}
 			process_input(&sh);
@@ -69,6 +69,7 @@ int	init_shell(t_shell *sh, char **env)
 {
 	sh->normalized_line = NULL;
 	sh->input_args = NULL;
+	sh->last_exit_status = 0;
 	init_signals();
 	if (init_env(sh, env) != 0)
 		return (-1);

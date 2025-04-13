@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/11 21:32:09 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/13 14:48:44 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef	struct s_shell
 	char		*normalized_line;
 	char		**input_args;
 	t_pipeline	*pipeline;
+	int		last_exit_status;
 	char		**tokens;
 }			t_shell;
 
