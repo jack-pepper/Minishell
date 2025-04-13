@@ -1,5 +1,98 @@
 #include "../inc/minishell.h"
 
+char *shell_find_cmd_path(char *cmd, char **paths)
+{
+	int i = 0;
+	char *temp;
+	char *full;
+
+	while (paths[i])
+	{
+		temp = ft_strjoin(paths[i], "/");
+		if (!temp)
+			return NULL;
+		full = ft_strjoin(temp, cmd);
+		free(temp);
+		if (!full)
+			return NULL;
+		if (access(full, X_OK) == 0)
+			return full;
+		free(full);
+		i++;
+	}
+	return NULL;
+}
+char *get_cmd_path(char *cmd, char **envp)
+{
+	char *path_str = get_path_from_env(envp);
+	if (!path_str)
+		return NULL;
+
+	char **paths = ft_split(path_str, ':');
+	if (!paths)
+		return NULL;
+
+	char *full_path = shell_find_cmd_path(cmd, paths);
+	ft_free_array(paths, -1);
+	return full_path;
+}
+
+int command_has_pipe(char ** tokens)
+{
+	int i = 0;
+	while(tokens[i])
+	{
+		if (ft_strcmp(tokens[i], "|") == 0)
+			return 1;
+		i++;
+	}
+	return 0;
+}
+void exec_pipeline(t_pipeline *p, char **env)
+{
+	int i;
+	int pipefd[2];
+	int prev_fd = -1;
+
+	for (i = 0; i < p->cmd_count; i++)
+	{
+		if (i < p->cmd_count - 1)
+			pipe(pipefd);
+
+		pid_t pid = fork();
+		if (pid == 0)
+		{
+			if (prev_fd != -1)
+			{
+				dup2(prev_fd, STDIN_FILENO);
+				close(prev_fd);
+			}
+			if (i < p->cmd_count - 1)
+			{
+				dup2(pipefd[1], STDOUT_FILENO);
+				close(pipefd[0]);
+				close(pipefd[1]);
+			}
+
+			char **argv = p->cmds[i].argv;
+			execve(get_cmd_path(argv[0], env), argv, env);
+			perror("execve failed");
+			exit(EXIT_FAILURE);
+		}
+
+		if (prev_fd != -1)
+			close(prev_fd);
+		if (i < p->cmd_count - 1)
+		{
+			close(pipefd[1]);
+			prev_fd = pipefd[0];
+		}
+	}
+
+	for (int j = 0; j < p->cmd_count; j++)
+		wait(NULL);
+}
+
 int count_command_tokens(char **tokens, int start) {
 	int count = 0;
 	while (tokens[start] &&
@@ -209,41 +302,41 @@ void free_pipeline(t_pipeline *p)
 	free(p->outfile);
 	free(p);
 }
-char *shell_find_cmd_path(char *cmd, char **paths)
+static bool handle_redirection_tokens(char **tokens, int *i, t_pipeline *p, int cmd_i)
 {
-	int i = 0;
-	char *temp;
-	char *full;
-
-	while (paths[i])
+	if (strcmp(tokens[*i], "<") == 0)
 	{
-		temp = ft_strjoin(paths[i], "/");
-		if (!temp)
-			return NULL;
-		full = ft_strjoin(temp, cmd);
-		free(temp);
-		if (!full)
-			return NULL;
-		if (access(full, X_OK) == 0)
-			return full;
-		free(full);
-		i++;
+		if (tokens[*i + 1])
+		{
+			p->cmds[cmd_i].infile = ft_strdup(tokens[++(*i)]);
+			(*i)++;
+			return true;
+		}
+		return false;
 	}
-	return NULL;
-}
-char *get_cmd_path(char *cmd, char **envp)
-{
-	char *path_str = get_path_from_env(envp);
-	if (!path_str)
-		return NULL;
-
-	char **paths = ft_split(path_str, ':');
-	if (!paths)
-		return NULL;
-
-	char *full_path = shell_find_cmd_path(cmd, paths);
-	ft_free_array(paths, -1);
-	return full_path;
+	if (strcmp(tokens[*i], ">") == 0)
+	{
+		if (tokens[*i + 1])
+		{
+			p->cmds[cmd_i].outfile = ft_strdup(tokens[++(*i)]);
+			p->cmds[cmd_i].append = false;
+			(*i)++;
+			return true;
+		}
+		return false;
+	}
+	if (strcmp(tokens[*i], ">>") == 0)
+	{
+		if (tokens[*i + 1])
+		{
+			p->cmds[cmd_i].outfile = ft_strdup(tokens[++(*i)]);
+			p->cmds[cmd_i].append = true;
+			(*i)++;
+			return true;
+		}
+		return false;
+	}
+	return false;
 }
 
 

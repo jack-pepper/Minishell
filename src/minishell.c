@@ -6,14 +6,14 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/10 15:05:06 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/04/13 14:00:02 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 /* TODO: env variables should be interpreted in paths too! (ex: with cmd cd) 
- * TODO: unset cmd must handle several env var in a single command
+ * TODO: unset cmd must -e several env var in a single command
  * TODO: need to process lines like: $USER $VAR ABC $GHI CDE
  */
 
@@ -34,21 +34,19 @@ int	main(int argc, char **argv, char **env)
 	if (line[0] != '\0' && line[0] != '<')
 	{
 		char **tokens = normalize_input(line);
-		t_pipeline *pipeline = parse_redirection_only(tokens);
-		
-		// process_input(normalize_input(line), &sh.this_env); // Need to split it to free
-		if (!pipeline || pipeline->cmd_count == 0 || !pipeline->cmds[0].argv)
+
+		if (command_has_pipe(tokens))
 		{
-			fprintf(stderr, "Invalid pipeline or command parsing failed\n");
-			continue;
+			t_pipeline *p = build_pipeline_from_tokens(tokens);
+			exec_pipeline(p, env);
+			free_pipeline(p);
 		}
-
-		// DEBUG: See what command was parsed
-		printf("Running: %s\n", pipeline->cmds[0].argv[0]);
-
-		// ONLY call exec if pipeline is valid
-		exec_with_redirection(pipeline, env);
-
+		else
+		{
+			t_pipeline *p = parse_redirection_only(tokens);
+			exec_with_redirection(p, env);
+			free_pipeline(p);
+		}
 		// free pipeline
 	}
 		if (line[0] == '<')

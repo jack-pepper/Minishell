@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/09 14:31:39 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/04/13 13:38:09 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,4 +149,5 @@ void free_pipeline(t_pipeline *p);
 void exec_with_redirection(t_pipeline *cmd, char **env);
 t_pipeline *parse_redirection_only(char **tokens);
 void print_pipeline(t_pipeline *p);
+void exec_pipeline(t_pipeline *p, char **env);
 #endif

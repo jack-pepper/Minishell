@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:54:10 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/04/09 14:21:59 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/04/13 13:42:15 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,12 @@ typedef struct s_pipex
 }	t_pipex;
 
 typedef struct s_commands {
-    char **argv; // NULL-terminated array
+    char **argv;       // Command + args
+    char *infile;      // Optional input redirection
+    char *outfile;     // Optional output redirection
+    t_bool append;     // True if using >>
 } t_commands;
+
 
 typedef struct s_pipeline {
     char *infile;
@@ -86,6 +90,6 @@ void	read_heredoc_input(t_pipex *pipex, char *limiter);
 void	setup_here_doc_fds(t_pipex *pipex, char *outfile);
 void	parse_here_doc_commands(t_pipex *pipex, int argc, char **argv);
 void	fork_and_run(t_pipex *pipex, int i, int prev_fd, int *pipefd);
-int run_pipex_from_minshell(t_pipeline *pipeline, char **envp);
-
+int		run_pipex_from_minshell(t_pipeline *pipeline, char **envp);
+int		command_has_pipe(char ** tokens);
 #endif
