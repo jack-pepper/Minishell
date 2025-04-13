@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/10 11:57:48 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/14 01:08:21 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,20 @@ int     ft_interpret_env(t_shell *sh)
 			return (-1);
 		rejoined_arg = ft_name_to_value(rejoined_arg, split_args, &sh->this_env);
 		if (!rejoined_arg)
-			return (-1);
-		free(split_args);
+			return (-1);	
+
 		ft_copy_free(&sh->input_args[i], rejoined_arg);
 		if (!sh->input_args[i])
 			return (-1);
+		// solve leaks on exit, but creates issues with other cmds 
+		int j = 0;
+ 		while (split_args[j] != NULL)
+		{
+			free(split_args[j]);
+			j++;
+		}
+		free(split_args);
+		//
 		free(rejoined_arg);
 		i++;
 	}

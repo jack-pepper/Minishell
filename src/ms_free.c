@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:53:00 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/11 16:42:59 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/14 01:06:14 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	free_args(char **input_args)
 	int	i;
 
 	i = 0;
-	while (input_args[i])
+	while (input_args[i] != NULL)
 	{
 		free(input_args[i]);
 		i++;
