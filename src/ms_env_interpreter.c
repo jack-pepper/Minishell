@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/14 01:08:21 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/14 17:41:39 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,8 @@ char	*ft_rejoin_subarg(char **split_args, char *rejoined_arg, int i)
 
 char	**ft_copy_free(char **input_arg, char *rejoined_arg)
 {
-        (*input_arg) = ft_strdup(rejoined_arg);
+        free(*input_arg);
+	(*input_arg) = ft_strdup(rejoined_arg);
 	if (!(*input_arg))
 		return (NULL);
 	return (input_arg);

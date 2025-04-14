@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/14 15:45:04 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/14 17:48:38 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ char	**normalize_input(char *line, t_shell *sh)
 	if (!sh->normalized_line)
 		return (NULL);
 	sh->input_args = ft_split(sh->normalized_line, ' ');
+	free(sh->normalized_line);
+	sh->normalized_line = NULL;
 	if (!sh->input_args)
 		return (NULL);
 	ft_replace_all_chars(sh->input_args, CTRL_CHAR_SPACE_IN_QUOTE, ' '); // change CTRL_CHAR in quotes back to spaces

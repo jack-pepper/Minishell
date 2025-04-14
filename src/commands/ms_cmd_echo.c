@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:00:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/08 19:25:31 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/14 18:03:03 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	cmd_echo(t_shell *sh)
 		}
 	}
 	printf("%s", joined_input);
-	if (opt_n == false) // My guess here... is that this behavior matches bash's.
-		printf("\n"); // It might be worth (for bonus) using the "%" method as zsh?
+	if (opt_n == false)
+		printf("\n");
 	free(joined_input);
 }

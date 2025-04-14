@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:53:00 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/14 15:29:42 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/14 17:46:43 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	free_memory(t_shell *sh)
 {
-	if (sh->normalized_line != NULL)
-		free(sh->normalized_line);
+	//if (sh->normalized_line != NULL)
+	//	free(sh->normalized_line);
 	if (sh->input_args != NULL)
 		free_args(sh->input_args);
 	if (sh->this_env != NULL)

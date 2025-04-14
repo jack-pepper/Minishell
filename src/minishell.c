@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/14 14:59:58 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/14 17:50:56 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int	main(int argc, char **argv, char **env)
 		return (-1);
 	while (1)
 	{
+		if (sh.input_args != NULL)
+			free_args(sh.input_args);
 		line = get_input(line);
 		if (line == NULL) // Handles EOF (sent by CTRL-D)
 			cmd_exit(&sh, 1);
