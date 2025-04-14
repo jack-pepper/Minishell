@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/14 15:05:36 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/14 21:09:52 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,13 +102,13 @@ void	handle_quote(char *line, char quote_type, int *i, int *to_collapse);
 	// ms_env_interpreter.c
 int     ft_interpret_env(t_shell *sh);
 char    **ft_split_args(char **split_args, char *input_arg);
-char    *ft_name_to_value(char *rejoined_arg, char **split_args, t_list **this_env);
+char    *ft_nametoval(char *rejoined_arg, char **split_args, t_list **this_env);
 char    *ft_rejoin_subarg(char **split_args, char *rejoined_arg, int i);
 char    **ft_copy_free(char **input_arg, char *rejoined_arg);
 
 	// ms_env_utils.c
 size_t	ft_strslen(char **strs);
-int	ft_copy_strs_to_list(t_list **list, char **strs, size_t nb_of_strings, char delim);
+int	ft_strstolist(t_list **list, char **strs, size_t nb_strs, char delim);
 t_list  *ft_getenv(char *var_name, t_list **this_env);
 int	ft_update_env_value(t_list *set_var, char **split_str);
 

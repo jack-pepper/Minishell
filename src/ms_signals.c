@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:49:10 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/14 14:40:30 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/14 20:13:35 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,12 @@ void	init_signals(void)
 	init_sigaction();
 }
 
-void	init_sigset(void) // define which signals will be blocked
+void	init_sigset(void)
 {
-	sigset_t	sigset;
-
-	sigemptyset(&sigset); // necessary for init with sigset. But we can just use signal()...
-	//sigaddset(&sigset, SIGQUIT); // 
-	signal(SIGQUIT, SIG_IGN); // ctrl+\ do nothing instead of interrupting
+	signal(SIGQUIT, SIG_IGN);
 }
 
-void	init_sigaction(void) // define how signals are handled
+void	init_sigaction(void)
 {
 	struct sigaction	act;
 
@@ -46,9 +42,8 @@ void	init_sigaction(void) // define how signals are handled
 
 void	signal_handler(int signum)
 {
-	if (signum == SIGINT) // ctrl+c: should display a new prompt on new line instead of quitting
+	if (signum == SIGINT)
 	{
-		// should probably free memory aswell?
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);

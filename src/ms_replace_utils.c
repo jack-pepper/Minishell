@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 11:40:44 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/06 11:57:46 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/14 20:14:49 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	ft_replace_char(char *cur_c, char new_c)
 	*cur_c = new_c;
 }
 
-// Replace all chars old to new in all the strings pointed by input_args
 void	ft_replace_all_chars(char **input_args, char old, char new)
 {
 	int	i;
