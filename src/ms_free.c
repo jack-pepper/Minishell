@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:53:00 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/14 13:29:49 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/14 15:29:42 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	free_args(char **input_args)
 	int	i;
 
 	i = 0;
-	while (input_args[i] != NULL)
+	while (input_args[i])
 	{
 		free(input_args[i]);
 		i++;
@@ -43,16 +43,21 @@ void	free_env(t_list **this_env)
 {	
 	t_list	*cur_node;
 	t_list	*prev_node;
+	int	i;
 
 	if (this_env != NULL)
 	{
 		cur_node = *this_env;
 		while (cur_node != NULL)
-		{		
+		{	
 			if (cur_node->content != NULL)
 			{
-				free(((char **)cur_node->content)[0]);
-				free(((char **)cur_node->content)[1]);
+				i = 0;
+				while (((char **)cur_node->content)[i])
+				{
+					free(((char **)cur_node->content)[i]);
+					i++;
+				}
 				free(((char **)cur_node->content));
 				cur_node->content = NULL;
 			}

@@ -6,14 +6,14 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/13 14:51:19 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/14 14:59:58 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 /* TODO: env variables should be interpreted in paths too! (ex: with cmd cd) 
- * TODO: ctrl+c should display a new prompt
+ *
  */
 
 int	main(int argc, char **argv, char **env)
@@ -32,12 +32,9 @@ int	main(int argc, char **argv, char **env)
 			cmd_exit(&sh, 1);
 		if (line[0] != '\0')
 		{
-			if (normalize_input(line, &sh) != 0)
+			sh.input_args = normalize_input(line, &sh);
+			if (!sh.input_args)
 				return (-1);
-			if (!sh.normalized_line) // Needed???
-				return (-1); // ???
-			//if (!input_args) // Needed?
-			//	return (-1);
 
 			// echo abc > infile.txt
 

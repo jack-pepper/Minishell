@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 14:49:10 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/11 15:52:34 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/14 14:40:30 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 /* Define which signals are caught and how they are handled.
  * 
- * - SIGINT (ctrl + c): display a new prompt on new line
- * - [TODO] Not sure about SICQUIT. ctrl + \ may need to be handled in a different way
- * - NB: ctrl + d sends NO signal, but an EOF to the main function reading from stdin
+ * - SIGINT (ctrl + c): display a new prompt on new line.
+ * - SICQUIT (ctrl + \): does nothing.
  *
  */
 

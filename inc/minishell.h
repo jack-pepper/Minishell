@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/13 14:48:44 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/14 15:05:36 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	signal_handler(int signum);
 
 	// ms_input_manager.c
 char    *get_input(char *line);
-int	normalize_input(char *line, t_shell *sh);
+char	**normalize_input(char *line, t_shell *sh);
 int	ft_interpret_env(t_shell *sh);
 void	process_input(t_shell *sh);
 

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/14 12:55:20 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/14 15:45:04 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,14 @@ char	*get_input(char *line)
 }
 
 // Normalize the input and store the arguments for further use
-int	normalize_input(char *line, t_shell *sh)
+char	**normalize_input(char *line, t_shell *sh)
 {
 	sh->normalized_line = ft_normalize(line);
 	if (!sh->normalized_line)
-		return (-1);
-	//printf("[DEBUG] normalized input: ~%s~\n", clean_input);
+		return (NULL);
 	sh->input_args = ft_split(sh->normalized_line, ' ');
 	if (!sh->input_args)
-		return (-1);
+		return (NULL);
 	ft_replace_all_chars(sh->input_args, CTRL_CHAR_SPACE_IN_QUOTE, ' '); // change CTRL_CHAR in quotes back to spaces
 
 	// DEBUG: DISPLAY THE CONTENT OF INPUT_ARGS AFTER NORMALIZATION
@@ -52,7 +51,7 @@ int	normalize_input(char *line, t_shell *sh)
 	//	i++;
 	//}
 	// DEBUG
-	return (0);
+	return (sh->input_args);
 }
 
 // Should call the needed command and handle errors 
