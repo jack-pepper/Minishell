@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/14 21:09:52 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/14 22:22:09 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,13 @@
 
 typedef struct s_command
 {
-	char *name;
-	void *func;
-	char *doc;
-} 		t_command;
+	char	*name;
+	void	*func;
+	char	*doc;
+}		t_command;
 
 // Main structure
-typedef	struct s_shell
+typedef struct s_shell
 {
 	HISTORY_STATE	hist;
 	t_command	**cmds;
@@ -64,7 +64,7 @@ typedef	struct s_shell
 	char		*normalized_line;
 	char		**input_args;
 	t_pipeline	*pipeline;
-	int		last_exit_status;
+	int			last_exit_status;
 	char		**tokens;
 }			t_shell;
 
@@ -129,6 +129,7 @@ void	cmd_pwd(void);
 int	cmd_cd(t_shell *sh);
 	// ms_cmd_echo.c - Display a line of text
 void	cmd_echo(t_shell *sh);
+void	echo_set_n(char **input_args, bool *opt_n, int *i);
 	// ms_cmd_exit.c - Cause the shell to exit
 void	cmd_exit(t_shell *sh, unsigned int status);
 	// ms_cmd_export.c - Set the export attribute for variables

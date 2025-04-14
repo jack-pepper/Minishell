@@ -6,45 +6,66 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:00:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/14 18:03:03 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/15 00:22:55 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+char	*echo_join_input(char *joined_input, char **input_args, int *i)
+{
+	char	*temp;
+
+	temp = ft_strjoin(joined_input, input_args[(*i)]);
+	if (!temp)
+		return (NULL);
+	if (joined_input && joined_input[0] != '\0')
+		free(joined_input);
+	joined_input = temp;
+	(*i)++;
+	if (input_args[(*i)] != NULL)
+	{
+		temp = ft_strjoin(joined_input, " ");
+		if (!temp)
+			return (NULL);
+		free(joined_input);
+		joined_input = temp;
+	}
+	return (joined_input);
+}
+
 void	cmd_echo(t_shell *sh)
 {
 	char	*joined_input;
+	char	head[1];
 	bool	opt_n;
 	int	i;
 
-	if (!sh->input_args || !(sh->input_args[1])) // Does bash output a newline if no args as zsh?
+	if (!sh->input_args || !(sh->input_args[1]))
 		return ;
 	i = 1;
-	opt_n = false;
-	if (ft_strncmp(sh->input_args[1], "-n", ft_strlen(sh->input_args[1])) == 0)
-	{
-		opt_n = true;
-		i++;
-	}
-	joined_input = ft_strdup("");
-	if (!joined_input)
-		return ;
+	echo_set_n(sh->input_args, &opt_n, &i);
+	head[0] = 0;
+	joined_input = &head[0];
 	while (sh->input_args[i] != NULL)
-	{		
-		joined_input = ft_strjoin(joined_input, sh->input_args[i]);
+	{
+		joined_input = echo_join_input(joined_input, sh->input_args, &i);
 		if (!joined_input)
 			return ;
-		i++;
-		if (sh->input_args[i] != NULL)
-		{
-			joined_input = ft_strjoin(joined_input, " ");
-			if (!joined_input)
-				return ;
-		}
 	}
 	printf("%s", joined_input);
 	if (opt_n == false)
 		printf("\n");
-	free(joined_input);
+	free(joined_input);	
+}
+
+void	echo_set_n(char **input_args, bool *opt_n, int *i)
+{
+	if (ft_strncmp(input_args[1], "-n", ft_strlen(input_args[1])) == 0)
+	{
+		*opt_n = true;
+		(*i)++;
+	}
+	else
+		*opt_n = false;
 }
