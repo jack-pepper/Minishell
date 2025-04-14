@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/13 14:54:31 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/14 12:55:20 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,13 @@ void	process_input(t_shell *sh)
 	//}
 
         if (ft_strncmp(sh->input_args[0], "exit", ft_strlen("exit")) == 0)
-                cmd_exit(sh, 0);
-        else if (ft_strncmp(sh->input_args[0], "pwd", ft_strlen("pwd")) == 0)
+	{
+		if (sh->input_args[1])
+                	cmd_exit(sh, (unsigned int)(ft_atoi(sh->input_args[1])));
+		else
+			cmd_exit(sh, 0);
+        }
+	else if (ft_strncmp(sh->input_args[0], "pwd", ft_strlen("pwd")) == 0)
                 cmd_pwd();
 	else if (ft_strncmp(sh->input_args[0], "cd", ft_strlen("cd")) == 0)
 	{
