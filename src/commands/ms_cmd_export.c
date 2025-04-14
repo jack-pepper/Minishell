@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/08 19:35:27 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/14 14:32:44 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 void	cmd_export(t_shell *sh)
 {
-	// ERROR: if passed AAA, then AAA=bbb, two variables are added when it
-	//  should be updated instead. Need to take it into account by
-	// first parsing it properly
 	// BASH: would NOT accept "export AAA" (only: export AAA=").
 
 	t_list	*last_node;
@@ -36,7 +33,7 @@ void	cmd_export(t_shell *sh)
 			split_str = ft_split(sh->input_args[i], '=');
 			if (!split_str)
 				return ;
-			set_var = ft_getenv(sh->input_args[i], &sh->this_env);
+			set_var = ft_getenv(split_str[0], &sh->this_env);
 			if (set_var != NULL)
 			{
 				if (ft_update_env_value(set_var, split_str) != 0)

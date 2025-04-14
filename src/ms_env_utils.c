@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/14 01:01:50 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/14 13:42:14 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,12 @@ int	ft_copy_strs_to_list(t_list **list, char **strs, size_t nb_of_strings, char 
 			node = ft_lstnew((char **)split_str);
 		
 			// solves leaks on exit... but creates issues with other cmds	
-			//int j = 0;
-			//while (split_str[j] != NULL)
-			//{
-			//	free(split_str[j]);
-			//	j++;
-			//}
+	//		int j = 0;
+	//		while (split_str[j] != NULL)
+	//		{
+	//			free(split_str[j]);
+	//			j++;
+	//		}
 	//		free(split_str[0]);
 	//		free(split_str[1]);
 	//		free(split_str);
@@ -74,8 +74,8 @@ t_list  *ft_getenv(char *var_name, t_list **this_env)
 	cur_node = *this_env;
 	while (cur_node != NULL)
 	{
-		res = ft_strncmp(var_name, ((char **)cur_node->content)[0], ft_strlen(var_name));
-		//printf("var_name: %s - cur_node->content: %s - Res: %d\n",  var_name, ((char **)cur_node->content)[0], res);
+		res = ft_strncmp(var_name, (((char **)cur_node->content)[0]), ft_strlen(var_name));
+//		printf("var_name: %s - cur_node->content: %s - Res: %d\n",  var_name, ((char **)cur_node->content)[0], res);
 		if (res == 0)
 			return (cur_node);
 		cur_node = cur_node->next;
