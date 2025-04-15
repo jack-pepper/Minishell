@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/15 13:46:09 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/15 15:07:26 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ int	ft_interpret_env(t_shell *sh)
 	while (sh->input_args[i])
 	{
 		split_args = NULL;
-		rejoined_arg = "";
+		rejoined_arg = ft_strdup("");
 		split_args = ft_split_args(split_args, sh->input_args[i]);
 		if (!split_args)
 			return (-1);
 		rejoined_arg = ft_nametoval(rejoined_arg, split_args,
-				&sh->this_env);	
+				&sh->this_env);
 		free_args(split_args);
 		if (!rejoined_arg)
 			return (-1);
@@ -94,15 +94,27 @@ char	*ft_nametoval(char *rejoined_arg, char **split_args, t_list **this_env)
 
 char	*ft_rejoin_subarg(char **split_args, char *rejoined_arg, int i)
 {
-	rejoined_arg = ft_strjoin(rejoined_arg, split_args[i]);
-	if (!rejoined_arg)
+	char	*temp;
+	char	*temp_with_space;
+
+	temp = ft_strjoin(rejoined_arg, split_args[i]);
+	free(rejoined_arg);
+	if (!temp)
 		return (NULL);
 	if (split_args[i + 1])
 	{
-		rejoined_arg = ft_strjoin(rejoined_arg, " ");
+		temp_with_space = ft_strjoin(temp, " ");
+		free(temp);
+		if (!temp_with_space)
+			return (NULL);
+		rejoined_arg = ft_strdup(temp_with_space);
+		free(temp_with_space);
 		if (!rejoined_arg)
 			return (NULL);
+		return (rejoined_arg);
 	}
+	rejoined_arg = ft_strdup(temp);
+	free(temp);
 	return (rejoined_arg);
 }
 
