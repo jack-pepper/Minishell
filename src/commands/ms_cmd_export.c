@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/15 13:55:04 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/15 16:02:23 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@ void	cmd_export(t_shell *sh)
 		i = 1;
 		while (sh->input_args[i])
 		{
+			// 1-check (ft_strchr) if the arg contains a "=" and it's not first)
+			// 2- if no "=": check the env STASH
+			// 3- if there is a "=": check if VAR_NAME already exists and updates it, or creates new one if not
+
 			split_str = NULL;
 			split_str = ft_split(sh->input_args[i], '=');
 			if (!split_str)
@@ -56,4 +60,9 @@ void	cmd_export(t_shell *sh)
 			i++;
 		}
 	}
+}
+
+void	export_stash_var(t_shell *sh)
+{
+	printf("stashing var: %s\n", sh->input_args[0]);
 }
