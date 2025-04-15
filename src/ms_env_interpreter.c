@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/14 20:58:46 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/15 13:46:09 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ int	ft_interpret_env(t_shell *sh)
 		if (!split_args)
 			return (-1);
 		rejoined_arg = ft_nametoval(rejoined_arg, split_args,
-				&sh->this_env);
+				&sh->this_env);	
+		free_args(split_args);
 		if (!rejoined_arg)
 			return (-1);
 		ft_copy_free(&sh->input_args[i], rejoined_arg);
+		free(rejoined_arg);
 		if (!sh->input_args[i])
 			return (-1);
-		free_args(split_args);
-		free(rejoined_arg);
 		i++;
 	}
 	return (0);
@@ -78,7 +78,7 @@ char	*ft_nametoval(char *rejoined_arg, char **split_args, t_list **this_env)
 			set_var = ft_getenv(&split_args[i][1], this_env);
 			if (set_var != NULL)
 			{
-				//      free(split_args[i]);
+				free(split_args[i]);
 				split_args[i] = ft_strdup(((char **)set_var->content)[1]);
 				if (!split_args[i])
 					return (NULL);

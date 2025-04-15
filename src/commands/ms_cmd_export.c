@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/14 14:32:44 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/15 13:55:04 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	cmd_export(t_shell *sh)
 		i = 1;
 		while (sh->input_args[i])
 		{
+			split_str = NULL;
 			split_str = ft_split(sh->input_args[i], '=');
 			if (!split_str)
 				return ;
@@ -37,17 +38,22 @@ void	cmd_export(t_shell *sh)
 			if (set_var != NULL)
 			{
 				if (ft_update_env_value(set_var, split_str) != 0)
+				{
+					free_args(split_str);
 					return ;
+				}
 			}
 			else
 			{
 				last_node = ft_lstlast(sh->this_env);
 				last_node->next = ft_lstnew((char **)split_str);
 				if (!last_node->next)
+				{
+					free_args(split_str);
 					return ;
+				}
 			}
 			i++;
 		}
 	}
-	return ;
 }

@@ -6,11 +6,12 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:04:03 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/08 19:36:20 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/15 14:03:32 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
 
 void	cmd_unset(t_shell *sh)
 {
@@ -33,10 +34,10 @@ void	cmd_unset(t_shell *sh)
 		// Not very elegant, but works. t_list could be replaced to allow to go back more easily
 		// with a prev pointer (just as next). But LIBLIST has to be completed accordingly.
 			prev_node = sh->this_env;
-			while (ft_strncmp(((char **)prev_node->next->content)[0], sh->input_args[i], ft_strlen(sh->input_args[i])) != 0)
+			while (ft_strcmp(((char **)prev_node->next->content)[0], sh->input_args[i]) != 0)
 				prev_node = prev_node->next;
 			prev_node->next = tgt_node->next;
-			free(tgt_node->content);
+			free_args(tgt_node->content);
 			free(tgt_node);
 		}
 		else
