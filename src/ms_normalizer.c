@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/14 20:36:26 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/16 19:02:20 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,20 +94,9 @@ char	*copy_collapse(char *dst, char *src, size_t src_len)
 	ft_init_two_size_t(0, &i, &j);
 	while (i < src_len)
 	{
-		if (src[i] == '\'' && ft_count_char(&src[i], '\'') > 1)
-		{
-			i++;
-			while (src[i] != '\'')
-				dst[j++] = src[i++];
-			i++;
-		}
-		else if (src[i] == '\"' && ft_count_char(&src[i], '\"') > 1)
-		{
-			i++;
-			while (src[i] != '\"')
-				dst[j++] = src[i++];
-			i++;
-		}
+		if ((src[i] == '\'' && ft_count_char(&src[i], '\'') > 1)
+			|| (src[i] == '\"' && ft_count_char(&src[i], '\"') > 1))
+			pass_quotes(dst, src, &i, &j);
 		else if (ft_isspace(src[i]) && ft_isspace(src[i + 1]))
 			i++;
 		else
@@ -115,4 +104,22 @@ char	*copy_collapse(char *dst, char *src, size_t src_len)
 	}
 	dst[j] = '\0';
 	return (dst);
+}
+
+void	pass_quotes(char *dst, char *src, size_t *i, size_t *j)
+{
+	if (src[(*i)] == '\'' && ft_count_char(&src[(*i)], '\'') > 1)
+	{
+		(*i)++;
+		while (src[(*i)] != '\'')
+			dst[(*j)++] = src[(*i)++];
+		(*i)++;
+	}
+	else if (src[(*i)] == '\"' && ft_count_char(&src[(*i)], '\"') > 1)
+	{
+		(*i)++;
+		while (src[(*i)] != '\"')
+			dst[(*j)++] = src[(*i)++];
+		(*i)++;
+	}
 }
