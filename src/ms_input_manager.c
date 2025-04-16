@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/15 15:48:39 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/17 00:07:52 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ void	process_input(t_shell *sh)
 	//	i++;
 	//}
 
+
+
         if (ft_strncmp(sh->input_args[0], "exit", ft_strlen("exit")) == 0)
 	{
 		if (sh->input_args[1])
@@ -115,17 +117,21 @@ void	process_input(t_shell *sh)
 		cmd_export(sh);
 	else if (ft_strncmp(sh->input_args[0], "unset", ft_strlen("unset")) == 0)
 		cmd_unset(sh);
-	
-	// Stash a var if input "VAR_NAME=" or "VAR_NAME=VALUE". It will be fetched later
-	// if export is called with this specific VAR_NAME
-	else if (ft_strchr(sh->input_args[0], '=') != NULL && sh->input_args[0][0] != '=') 
-		export_stash_var(sh);
-	// if first arg contains a "=" (not first char), store a hidden var.
-	// it should not be added to env list, but the export cmd should check it
-	// for a hidden variable when called
-	//
-
 	else
-		printf("minishell: %s: command not found\n", sh->input_args[0]);
+		stash_var_or_invalidate(sh);
 	return ;
+}
+
+void	stash_var_or_invalidate(t_shell *sh)
+{	
+	char	**invalid_cmd;
+
+	invalid_cmd = ft_strschr(sh->input_args, '=', 0);
+	if (invalid_cmd == NULL)
+	{
+		printf("All args are valid: all contain = not at index [0]");
+	//	export_stash_var(sh);
+	}
+	else
+		printf("minishell: %s: command not found\n", *invalid_cmd);
 }

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/16 19:01:57 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/17 00:03:46 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,11 @@ typedef struct s_shell
 {
 	HISTORY_STATE	hist;
 	t_command		**cmds;
+	t_pipeline		*pipeline;
 	t_list			*this_env;
+	t_list			*env_stash;
 	char			*normalized_line;
 	char			**input_args;
-	t_pipeline		*pipeline;
 	int				last_exit_status;
 	char			**tokens;
 }					t_shell;
@@ -74,6 +75,7 @@ typedef struct s_shell
 int			main(int argc, char **argv, char **env);
 int			init_shell(t_shell *sh, char **env);
 int			init_env(t_shell *sh, char **env);
+void    		stash_var_or_invalidate(t_shell *sh);
 
 	// ms_signals.c
 void		init_signals(void);
@@ -112,6 +114,7 @@ size_t		ft_strslen(char **strs);
 int			ft_strstolist(t_list **list, char **strs, size_t nb_strs, char delim);
 t_list		*ft_getenv(char *var_name, t_list **this_env);
 int			ft_update_env_value(t_list *set_var, char **split_str);
+char		**ft_strschr(char **strs, char c, int forbidden_pos);
 
 	// ms_replace_utils.c
 void		ft_replace_if_space(char *cur_c, char new_c);

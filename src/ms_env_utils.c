@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/15 13:34:12 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/16 23:46:54 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,36 @@ int	ft_update_env_value(t_list *set_var, char **split_str)
 		return (-1);
 	set_var->content = split_str;
 	return (0);
+}
+
+// Return the first str in strs that either contains no c or at forbidden_pos
+char	**ft_strschr(char **strs, char c, int forbidden_pos)
+{
+	int	i;
+
+	i = 0;
+	if (forbidden_pos >= 0)
+	{
+		while (strs[i] != NULL)
+		{
+			if (((int)ft_strlen(strs[i]) >= forbidden_pos)
+				&& (strs[i][forbidden_pos] == c))
+			{
+				printf("Found %c at forbidden pos strs[%d][%d]\n", c, i, forbidden_pos);
+				return (&(strs[i]));
+			}
+			i++;
+		}
+	}
+	i = 0;
+	while (strs[i] != NULL)
+	{
+		if (ft_strchr(strs[i], c) == NULL)
+		{
+			printf("Char not found at strs[%d]\n", i);
+			return (&(strs[i]));
+		}
+		i++;
+	}
+	return (NULL);
 }

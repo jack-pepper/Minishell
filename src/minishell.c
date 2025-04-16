@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/14 21:10:22 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/16 21:10:21 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ int	init_env(t_shell *sh, char **env)
 
 	nb_vars = ft_strslen(env);
 	sh->this_env = NULL;
+	sh->env_stash = NULL;
 	if (ft_strstolist(&sh->this_env, env, nb_vars, '=') != 0)
 		return (-1);
 	return (0);
