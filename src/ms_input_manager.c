@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/17 00:07:52 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/17 00:12:32 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,27 +95,27 @@ void	process_input(t_shell *sh)
 
 
 
-        if (ft_strncmp(sh->input_args[0], "exit", ft_strlen("exit")) == 0)
+        if (ft_strcmp(sh->input_args[0], "exit") == 0)
 	{
 		if (sh->input_args[1])
                 	cmd_exit(sh, (unsigned int)(ft_atoi(sh->input_args[1])));
 		else
 			cmd_exit(sh, 0);
         }
-	else if (ft_strncmp(sh->input_args[0], "pwd", ft_strlen("pwd")) == 0)
+	else if (ft_strcmp(sh->input_args[0], "pwd") == 0)
                 cmd_pwd();
-	else if (ft_strncmp(sh->input_args[0], "cd", ft_strlen("cd")) == 0)
+	else if (ft_strcmp(sh->input_args[0], "cd") == 0)
 	{
 		if (cmd_cd(sh) != 0)
 			return ;
 	}
-	else if (ft_strncmp(sh->input_args[0], "env", ft_strlen("env")) == 0)
+	else if (ft_strcmp(sh->input_args[0], "env") == 0)
 		cmd_env(sh);
-	else if (ft_strncmp(sh->input_args[0], "echo", ft_strlen("echo")) == 0)
+	else if (ft_strcmp(sh->input_args[0], "echo") == 0)
 		cmd_echo(sh);
-	else if (ft_strncmp(sh->input_args[0], "export", ft_strlen("export")) == 0)
+	else if (ft_strcmp(sh->input_args[0], "export") == 0)
 		cmd_export(sh);
-	else if (ft_strncmp(sh->input_args[0], "unset", ft_strlen("unset")) == 0)
+	else if (ft_strcmp(sh->input_args[0], "unset") == 0)
 		cmd_unset(sh);
 	else
 		stash_var_or_invalidate(sh);
