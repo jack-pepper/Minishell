@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:23:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/17 19:43:44 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/17 22:00:58 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,11 @@ void	process_input(t_shell *sh)
 	// Added by [m] for $? implementation	
 	//printf("~%s~\n", sh->input_args[0]);
 	//printf("Res: %d\n", ft_strncmp(sh->input_args[0], "?", ft_strlen("?")) == 0);
-//	if (sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET && sh->input_args[0][1] == '?') // need to add more safety for next char
-//	{
-		//printf("%d\n", sh->pipeline->pipex->exit_status);
-//		printf("%d\n", sh->last_exit_status);
-//		return ;
-//	}
+	if (sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET && sh->input_args[0][1] == '?') // need to add more safety for next char
+	{
+		printf("%d\n", sh->last_exit_status);
+		return ;
+	}
 	// End
 
 	// check for '|' first
