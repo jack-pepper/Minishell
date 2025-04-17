@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_cmd_echo.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:00:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/15 00:22:55 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/16 16:31:51 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,30 +34,63 @@ char	*echo_join_input(char *joined_input, char **input_args, int *i)
 	return (joined_input);
 }
 
-void	cmd_echo(t_shell *sh)
+// void	cmd_echo(t_shell *sh)
+// {
+// 	char	*joined_input;
+// 	char	head[1];
+// 	bool	opt_n;
+// 	int	i;
+
+// 	if (!sh->input_args || !(sh->input_args[1]))
+// 		return ;
+// 	i = 1;
+// 	echo_set_n(sh->input_args, &opt_n, &i);
+// 	head[0] = 0;
+// 	joined_input = &head[0];
+// 	while (sh->input_args[i] != NULL)
+// 	{
+// 		joined_input = echo_join_input(joined_input, sh->input_args, &i);
+// 		if (!joined_input)
+// 			return ;
+// 	}
+// 	printf("%s", joined_input);
+// 	if (opt_n == false)
+// 		printf("\n");
+// 	free(joined_input);	
+// }
+int	cmd_echo(t_shell *sh)
 {
 	char	*joined_input;
-	char	head[1];
 	bool	opt_n;
-	int	i;
+	int		i;
 
-	if (!sh->input_args || !(sh->input_args[1]))
-		return ;
+	if (!sh->input_args || !sh->input_args[1])
+	{
+		printf("\n");
+		return 0;
+	}
 	i = 1;
 	echo_set_n(sh->input_args, &opt_n, &i);
-	head[0] = 0;
-	joined_input = &head[0];
-	while (sh->input_args[i] != NULL)
+	joined_input = ft_strdup("");
+	if (!joined_input)
+		return 1;
+
+	while (sh->input_args[i])
 	{
-		joined_input = echo_join_input(joined_input, sh->input_args, &i);
-		if (!joined_input)
-			return ;
+		char *tmp = echo_join_input(joined_input, sh->input_args, &i);
+		if (!tmp)
+		{
+			free(joined_input);
+			return 1;
+		}
+		joined_input = tmp;
 	}
 	printf("%s", joined_input);
-	if (opt_n == false)
+	if (!opt_n)
 		printf("\n");
-	free(joined_input);	
+	return 0;
 }
+
 
 void	echo_set_n(char **input_args, bool *opt_n, int *i)
 {
