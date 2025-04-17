@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/17 18:21:44 by mmalie           ###   ########.fr       */
+/*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
+/*   Updated: 2025/04/17 19:18:10 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,8 +132,13 @@ void		cmd_pwd(void);
 	// ms_cmd_cd.c - Change the working directory
 int			cmd_cd(t_shell *sh);
 	// ms_cmd_echo.c - Display a line of text
+<<<<<<< HEAD
 void		cmd_echo(t_shell *sh);
 void		echo_set_n(char **input_args, bool *opt_n, int *i);
+=======
+int	cmd_echo(t_shell *sh);
+void	echo_set_n(char **input_args, bool *opt_n, int *i);
+>>>>>>> future_v3
 	// ms_cmd_exit.c - Cause the shell to exit
 void		cmd_exit(t_shell *sh, unsigned int status);
 	// ms_cmd_export.c - Set the export attribute for variables
@@ -160,5 +165,13 @@ void		free_pipeline(t_pipeline *p);
 void		exec_with_redirection(t_pipeline *cmd, char **env);
 t_pipeline	*parse_redirection_only(char **tokens);
 void		print_pipeline(t_pipeline *p);
-
+void run_pipeline_from_minshell(t_pipeline *p, char **env);
+typedef enum e_cmd_type {
+	BASIC,
+	REDIR_ONLY,  
+	PIPELINE,   
+	MIXED_INVALID
+}	t_cmd_type;
+bool is_builtin(const char *cmd);
+t_cmd_type classify_command(char **tokens);
 #endif

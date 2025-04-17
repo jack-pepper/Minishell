@@ -1,5 +1,20 @@
 #include "../inc/minishell.h"
 
+bool is_builtin(const char *cmd)
+{
+	return (
+		ft_strcmp(cmd, "cd") == 0 ||
+		ft_strcmp(cmd, "echo") == 0 ||
+		ft_strcmp(cmd, "env") == 0 ||
+		ft_strcmp(cmd, "pwd") == 0 ||
+		ft_strcmp(cmd, "export") == 0 ||
+		ft_strcmp(cmd, "unset") == 0 ||
+		ft_strcmp(cmd, "exit") == 0 ||
+		ft_strcmp(cmd, "$?") == 0
+	);
+}
+
+
 int count_command_tokens(char **tokens, int start) {
 	int count = 0;
 	while (tokens[start] &&
@@ -140,10 +155,10 @@ t_pipeline *parse_redirection_only(char **tokens)
 {
 	t_pipeline *p = ft_calloc(1, sizeof(t_pipeline));
 	t_commands *cmd = ft_calloc(1, sizeof(t_commands));
-	char **argv = ft_calloc(128, sizeof(char *)); // Max 128 args for now
+	char **argv = ft_calloc(128, sizeof(char *));
 
 	if (!p || !cmd || !argv)
-		return (NULL); // Handle allocation failure
+		return NULL;
 
 	int i = 0;
 	int arg_i = 0;
@@ -155,30 +170,49 @@ t_pipeline *parse_redirection_only(char **tokens)
 			if (tokens[i + 1])
 				p->infile = ft_strdup(tokens[++i]);
 			else
-				return (NULL); // Error: missing filename
+			{
+				fprintf(stderr, "Error: missing infile\n");
+				free(cmd); free(argv); free(p);
+				return NULL;
+			}
 		}
 		else if (ft_strcmp(tokens[i], ">>") == 0)
 		{
 			if (tokens[i + 1])
 				p->outfile = ft_strdup(tokens[++i]), p->append = true;
 			else
-				return (NULL);
+			{
+				fprintf(stderr, "Error: missing outfile\n");
+				free(cmd); free(argv); free(p);
+				return NULL;
+			}
 		}
-		else if (strcmp(tokens[i], ">") == 0)
+		else if (ft_strcmp(tokens[i], ">") == 0)
 		{
 			if (tokens[i + 1])
 				p->outfile = ft_strdup(tokens[++i]), p->append = false;
 			else
-				return (NULL);
+			{
+				fprintf(stderr, "Error: missing outfile\n");
+				free(cmd); free(argv); free(p);
+				return NULL;
+			}
 		}
 		else
 		{
-			argv[arg_i++] = ft_strdup(tokens[i]); // Command or argument
+			argv[arg_i++] = ft_strdup(tokens[i]);
 		}
 		i++;
 	}
-	argv[arg_i] = NULL;
 
+	if (arg_i == 0)
+	{
+		fprintf(stderr, "Error: no command found\n");
+		free(cmd); free(argv); free(p);
+		return NULL;
+	}
+
+	argv[arg_i] = NULL;
 	cmd->argv = argv;
 	p->cmds = cmd;
 	p->cmd_count = 1;
@@ -297,7 +331,7 @@ void exec_with_redirection(t_pipeline *cmd, char **env) {
 
 		char **argv = cmd->cmds[0].argv;
 		execve(get_cmd_path(argv[0], env), argv, env);
-		perror("execve failed");
+		perror("execve failedx");
 		exit(EXIT_FAILURE);
 	}
 
@@ -308,5 +342,101 @@ void exec_with_redirection(t_pipeline *cmd, char **env) {
 		close(out_fd);
 }
 
+t_cmd_type classify_command(char **tokens)
+{
+	int i = 0;
+	int has_pipe = 0;
+	int has_redir = 0;
+	int seen_pipe = 0;
+
+	while (tokens[i])
+	{
+		if (ft_strcmp(tokens[i], "|") == 0)
+		{
+			has_pipe = 1;
+			seen_pipe = 1;
+			i++;
+			continue;
+		}
+		else if (ft_strcmp(tokens[i], "<") == 0 || ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0)
+		{
+			has_redir = 1;
+			if (!tokens[i + 1])
+				return MIXED_INVALID;
+
+			// If redirection appears in the middle of the pipeline
+			if (seen_pipe && tokens[i + 2] && ft_strcmp(tokens[i + 2], "|") != 0)
+				return MIXED_INVALID;
+
+			i += 2;
+			continue;
+		}
+		else
+		{
+			i++;
+		}
+	}
+	if (has_pipe)
+		return PIPELINE;
+	if (has_redir)
+		return REDIR_ONLY;
+	return BASIC;
+}
+
+// Wrapper that dispatches between full pipex and simple pipeline
+void run_pipeline_from_minshell(t_pipeline *p, char **env) {
+	if (p->infile && p->outfile) {
+		run_pipex_from_minshell(p, env); // assumes pipex-style interface
+	} else {
+		// When only pipes (no infile/outfile), fall back to simple execution
+		int i;
+		int prev_fd = -1;
+		int pipe_fd[2];
+
+		i = 0; 
+		while (i < p->cmd_count) {
+			if (i < p->cmd_count - 1 && pipe(pipe_fd) < 0) {
+				perror("pipe");
+				exit(EXIT_FAILURE);
+			}
+
+			pid_t pid = fork();
+			if (pid == 0) {
+				if (prev_fd != -1) {
+					dup2(prev_fd, STDIN_FILENO);
+					close(prev_fd);
+				}
+				if (i < p->cmd_count - 1) {
+					close(pipe_fd[0]);
+					dup2(pipe_fd[1], STDOUT_FILENO);
+					close(pipe_fd[1]);
+				}
+
+				char *cmd_path = get_cmd_path(p->cmds[i].argv[0], env);
+				if (!cmd_path) {
+					fprintf(stderr, "%s: command not found\n", p->cmds[i].argv[0]);
+					exit(127); // Standard shell "command not found" exit code
+				}				
+				execve(cmd_path, p->cmds[i].argv, env);
+				perror("execve failed");
+				exit(EXIT_FAILURE);
+			}
+
+			if (prev_fd != -1)
+				close(prev_fd);
+			if (i < p->cmd_count - 1) {
+				close(pipe_fd[1]);
+				prev_fd = pipe_fd[0];
+			}
+			i++;
+		}
+		i = 0; 
+		while( i < p->cmd_count)
+		{
+			wait(NULL);
+			i++;
+		}
+	}
+}
 
 

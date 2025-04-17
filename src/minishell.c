@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/11 13:59:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/16 21:10:21 by mmalie           ###   ########.fr       */
+/*   Created: 2025/04/17 19:18:28 by mmalie            #+#    #+#             */
+/*   Updated: 2025/04/17 19:19:44 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,52 +16,114 @@
  *
  */
 
-int	main(int argc, char **argv, char **env)
+// int	main(int argc, char **argv, char **env)
+// {
+// 	t_shell		sh;
+// 	static char	*line = (char *)NULL;
+
+// 	if (argc != 1 || argv[1])
+// 		return (-1);
+// 	if (init_shell(&sh, env) != 0)
+// 		return (-1);
+// 	while (1)
+// 	{
+// 		if (sh.input_args != NULL)
+// 			free_args(sh.input_args);
+// 		line = get_input(line);
+// 		if (line == NULL) // Handles EOF (sent by CTRL-D)
+// 			cmd_exit(&sh, 1);
+// 		if (line[0] != '\0')
+// 		{
+// 			sh.input_args = normalize_input(line, &sh);
+// 			if (!sh.input_args)
+// 				return (-1);
+
+// 			// echo abc > infile.txt
+
+// 			sh.pipeline = build_pipeline_from_tokens(sh.input_args);
+// 			if (!sh.pipeline || sh.pipeline->cmd_count == 0 || !sh.pipeline->cmds[0].argv)
+// 			{
+// 				fprintf(stderr, "Invalid pipeline or command parsing failed\n");
+// 				continue;
+// 			}
+// 			if (sh.pipeline)
+// 			{
+// 				run_pipex_from_minshell(sh.pipeline, env);
+// 				// DEBUG: See what command was parsed
+// 		//		printf("Running: %s\n", sh.pipeline->cmds[0].argv[0]);
+// 				// ONLY call exec if pipeline is valid
+// 		//		exec_with_redirection(sh.pipeline, env);
+// 				// free pipeline
+// 			}
+// 			process_input(&sh);
+// 		}
+// 	}
+// 	free(line);
+// 	rl_clear_history(); // we should probably save the history in a file
+// 	return (0);
+// }
+
+int main(int argc, char **argv, char **env)
 {
-	t_shell		sh;
-	static char	*line = (char *)NULL;
+	t_shell sh;
+	static char *line = NULL;
 
 	if (argc != 1 || argv[1])
 		return (-1);
 	if (init_shell(&sh, env) != 0)
 		return (-1);
+
 	while (1)
 	{
-		if (sh.input_args != NULL)
-			free_args(sh.input_args);
+		// if (sh.input_args != NULL)
+		// 	free_args(sh.input_args);
 		line = get_input(line);
-		if (line == NULL) // Handles EOF (sent by CTRL-D)
+		if (line == NULL)
 			cmd_exit(&sh, 1);
 		if (line[0] != '\0')
 		{
 			sh.input_args = normalize_input(line, &sh);
 			if (!sh.input_args)
 				return (-1);
-
-			// echo abc > infile.txt
-
-			sh.pipeline = build_pipeline_from_tokens(sh.input_args);
-			if (!sh.pipeline || sh.pipeline->cmd_count == 0 || !sh.pipeline->cmds[0].argv)
+			t_cmd_type type = classify_command(sh.input_args);
+			if (type == REDIR_ONLY || type == BASIC)
 			{
-				fprintf(stderr, "Invalid pipeline or command parsing failed\n");
-				continue;
+				if (is_builtin(sh.input_args[0])) 
+					process_input(&sh);
+				else
+				{	
+					t_pipeline *pipeline = parse_redirection_only(sh.input_args);
+					if (pipeline && pipeline->cmds && pipeline->cmds[0].argv)
+						exec_with_redirection(pipeline, env);
+					else
+					{
+						fprintf(stderr, "Invalid redirection command\n");
+					}
+					free_pipeline(pipeline);
+				}
 			}
-			if (sh.pipeline)
+			else if (type == PIPELINE)
 			{
-				run_pipex_from_minshell(sh.pipeline, env);
-				// DEBUG: See what command was parsed
-		//		printf("Running: %s\n", sh.pipeline->cmds[0].argv[0]);
-				// ONLY call exec if pipeline is valid
-		//		exec_with_redirection(sh.pipeline, env);
-				// free pipeline
+				t_pipeline *pipeline = build_pipeline_from_tokens(sh.input_args);
+				if (pipeline)
+					run_pipeline_from_minshell(pipeline, env);
+				else
+					fprintf(stderr, "Invalid pipeline\n");
+				free_pipeline(pipeline);
 			}
-			process_input(&sh);
+
+			
+			else if (type == MIXED_INVALID)
+				fprintf(stderr, "❌ Error: Unsupported combination of pipes and redirections\n");
+			ft_free_array(sh.input_args, -1); // Make sure you free your token array
 		}
 	}
+
 	free(line);
-	rl_clear_history(); // we should probably save the history in a file
+	rl_clear_history();
 	return (0);
 }
+
 
 // Initialize what is needed for the shell (signals, env, pipex, commands)
 int	init_shell(t_shell *sh, char **env)

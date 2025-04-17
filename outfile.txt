@@ -1,11 +1,1 @@
-total 128
--rw-rw-r--  1 pepper pepper      4 avril 11 20:29 append.txt
-drwxrwxr-x  2 pepper pepper   4096 avril 11 21:47 inc
--rw-rw-r--  1 pepper pepper      0 avril  6 22:18 infile.txt
-drwxrwxr-x 11 pepper pepper   4096 avril 11 21:38 libft
--rw-rw-r--  1 pepper pepper   3355 avril 10 11:59 Makefile
--rwxrwxr-x  1 pepper pepper 100680 avril 11 21:47 minishell
--rw-rw-r--  1 pepper pepper      0 avril 11 21:51 outfile.txt
-drwxrwxr-x  2 pepper pepper   4096 avril 11 21:50 pipex_ms
--rw-rw-r--  1 pepper pepper   1089 avril  6 22:11 README.md
-drwxrwxr-x  3 pepper pepper   4096 avril 11 21:49 src
+1
