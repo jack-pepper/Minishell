@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/17 13:20:58 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/17 14:38:16 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	cmd_export(t_shell *sh)
 	t_list	*set_var;
 	char	**split_str;
 	int	i;
-	t_list	*stashed_var;
 
 	if (!sh->input_args)
 		return ;
@@ -34,52 +33,42 @@ void	cmd_export(t_shell *sh)
 			// if arg without = ...
 			if (ft_strchr(sh->input_args[i], '=') == NULL)
 			{
-				stashed_var = NULL;
-				stashed_var = ft_getenv(sh->input_args[i], &env_stash);
-				if (stashed_var != NULL) // if this arg is in env_stash...
-					// update env value
-				else // if it is not: INVALID, stop and cmd not found 
-					// cmd not found
+				export_from_stash(sh);
 			}
-
 			else // if the arg contains a '=', not at first index
-
+			{
 			// 1-check (ft_strchr) if the arg contains a "=" and it's not first)
 			// 2- if no "=": check the env STASH
 			// 3- if there is a "=": check if VAR_NAME already exists and updates it, or creates new one if not
-
-			split_str = NULL;
-			split_str = ft_split(sh->input_args[i], '=');
-			if (!split_str)
-				return ;
-
-			// export_update_var
-
-			set_var = ft_getenv(split_str[0], &sh->this_env);
-			if (set_var != NULL)
-			{
-				if (ft_update_env_value(set_var, split_str) != 0)
-				{
-					free_args(split_str);
+				split_str = NULL;
+				split_str = ft_split(sh->input_args[i], '=');
+				if (!split_str)
 					return ;
-				}
-			}
-			else
-			{
-				last_node = ft_lstlast(sh->this_env);
-				last_node->next = ft_lstnew((char **)split_str);
-				if (!last_node->next)
+				set_var = ft_getenv(split_str[0], &sh->this_env);
+				if (set_var != NULL)
 				{
-					free_args(split_str);
-					return ;
+					if (ft_update_env_value(set_var, split_str) != 0)
+					{
+						free_args(split_str);
+						return ;
+					}
 				}
+				else
+				{
+					last_node = ft_lstlast(sh->this_env);
+					last_node->next = ft_lstnew((char **)split_str);
+					if (!last_node->next)
+					{
+						free_args(split_str);
+						return ;
+					}
+				}
+				i++;
 			}
-			i++;
 		}
 	}
-}
 
-void	export_stash_var(t_shell *sh)
+void	stash_var(t_shell *sh)
 {
 	t_list	*node;
 	char    **split_str;
@@ -104,6 +93,26 @@ void	export_stash_var(t_shell *sh)
         }
         return ;
 }
+
+void	export_from_stash(t_shell *sh)
+{
+	t_list	*stashed_var;	
+
+	stashed_var = NULL;
+	stashed_var = ft_getenv(sh->input_args[i], &env_stash);
+	if (stashed_var != NULL) // if this arg is in env_stash...
+	{
+		// update env value
+		if (ft_update_env_value(stashed_var, &env_stash) != 0)
+		{
+			free_args(split_str);
+			return ;
+		}
+	}
+		else // if it is not: INVALID, stop and cmd not found 
+			// cmd not found
+}
+
 
 /*	size_t	i;
 	size_t	arg_len;

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 22:35:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/17 00:03:46 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/17 14:30:28 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void		echo_set_n(char **input_args, bool *opt_n, int *i);
 void		cmd_exit(t_shell *sh, unsigned int status);
 	// ms_cmd_export.c - Set the export attribute for variables
 void		cmd_export(t_shell *sh);
-void		export_stash_var(t_shell *sh);
+void		stash_var(t_shell *sh);
 	// ms_cmd_unset.c - Unset values and attributes of variables and functions
 void		cmd_unset(t_shell *sh);
 	// ms_cmd_env.c - Display the env variables

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/17 12:14:57 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/17 14:29:39 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void	stash_var_or_invalidate(t_shell *sh)
 	if (invalid_cmd == NULL)
 	{
 		printf("All args are valid: all contain = not at index [0]\n");
-		export_stash_var(sh);
+		stash_var(sh);
 		
 		// DEBUG
 		t_list *cur_node = sh->env_stash;
