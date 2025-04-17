@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/17 19:18:10 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/17 19:32:42 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,13 +132,8 @@ void		cmd_pwd(void);
 	// ms_cmd_cd.c - Change the working directory
 int			cmd_cd(t_shell *sh);
 	// ms_cmd_echo.c - Display a line of text
-<<<<<<< HEAD
 void		cmd_echo(t_shell *sh);
 void		echo_set_n(char **input_args, bool *opt_n, int *i);
-=======
-int	cmd_echo(t_shell *sh);
-void	echo_set_n(char **input_args, bool *opt_n, int *i);
->>>>>>> future_v3
 	// ms_cmd_exit.c - Cause the shell to exit
 void		cmd_exit(t_shell *sh, unsigned int status);
 	// ms_cmd_export.c - Set the export attribute for variables

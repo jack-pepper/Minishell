@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:23:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/17 19:23:53 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/17 19:43:44 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,12 @@ void	process_input(t_shell *sh)
 	// Added by [m] for $? implementation	
 	//printf("~%s~\n", sh->input_args[0]);
 	//printf("Res: %d\n", ft_strncmp(sh->input_args[0], "?", ft_strlen("?")) == 0);
-	if (sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET && sh->input_args[0][1] == '?') // need to add more safety for next char
-	{
+//	if (sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET && sh->input_args[0][1] == '?') // need to add more safety for next char
+//	{
 		//printf("%d\n", sh->pipeline->pipex->exit_status);
-		printf("%d\n", sh->last_exit_status);
-		return ;
-	}
+//		printf("%d\n", sh->last_exit_status);
+//		return ;
+//	}
 	// End
 
 	// check for '|' first
@@ -129,10 +129,10 @@ void	stash_var_or_invalidate(t_shell *sh)
 	invalid_cmd = ft_strschr(sh->input_args, '=', 0);
 	if (invalid_cmd == NULL)
 	{
-		printf("All args are valid: all contain = not at index [0]\n");
+//		printf("All args are valid: all contain = not at index [0]\n");
 		stash_var(sh);
 		
-		// DEBUG
+		/* DEBUG
 		t_list *cur_node = sh->env_stash;
 		while (cur_node != NULL)
         	{
@@ -142,7 +142,7 @@ void	stash_var_or_invalidate(t_shell *sh)
                 	cur_node = cur_node->next;
         	}
         	return ;
-		//
+		*/
 	}
 	else
 		printf("minishell: %s: command not found\n", *invalid_cmd);
