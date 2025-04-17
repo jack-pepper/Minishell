@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:30:42 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/17 00:12:32 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/17 12:14:57 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,8 +129,20 @@ void	stash_var_or_invalidate(t_shell *sh)
 	invalid_cmd = ft_strschr(sh->input_args, '=', 0);
 	if (invalid_cmd == NULL)
 	{
-		printf("All args are valid: all contain = not at index [0]");
-	//	export_stash_var(sh);
+		printf("All args are valid: all contain = not at index [0]\n");
+		export_stash_var(sh);
+		
+		// DEBUG
+		t_list *cur_node = sh->env_stash;
+		while (cur_node != NULL)
+        	{
+                	printf("%s=%s\n",
+                        	((char **)cur_node->content)[0],
+                        	((char **)cur_node->content)[1]);
+                	cur_node = cur_node->next;
+        	}
+        	return ;
+		//
 	}
 	else
 		printf("minishell: %s: command not found\n", *invalid_cmd);

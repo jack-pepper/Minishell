@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/16 23:30:48 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/17 11:30:09 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,35 +64,35 @@ void	cmd_export(t_shell *sh)
 
 // TODO: do a t_list instead. If none yet, initiate. Else, add node.
 // Bash note: if ANY arg does NOT have any =, not even one is stored 
-/*void	export_stash_var(t_shell *sh)
+
+// 1-if t_list is not init: init
+// in every case: split and alloc a new node. Content = 
+
+void	export_stash_var(t_shell *sh)
 {
 	t_list	*node;
 	char    **split_str;
         size_t  i;
+	size_t	nb_args;
 
         i = 0;
         node = NULL;
         split_str = NULL;
-        while (i < nb_strs)
+	nb_args = ft_strslen(sh->input_args);
+	printf("[export_stash_var] nb_args: %ld", nb_args); // DEBUG
+        while (i < nb_args)
         {
-                //printf("env[%ld]: %s\n", i, env[i]);
-                if (!delim)
-                        node = ft_lstnew((char *)strs[i]);
-                else
-                {
-                        split_str = ft_split(strs[i], delim);
-                        if (!split_str)
-                                return (-1);
-                        node = ft_lstnew((char **)split_str);
-                }
-                if (!node)
-                        return (-1);
-                ft_lstadd_back(list, node);
+		split_str = ft_split(sh->input_args[i], '=');
+                if (!split_str)
+			return ;
+		node = ft_lstnew((char **)split_str);
+		if (!node)
+			return ;
+		ft_lstadd_back(&sh->env_stash, node);
                 i++;
         }
-        return (0);
+        return ;
 }
-*/
 
 /*	size_t	i;
 	size_t	arg_len;

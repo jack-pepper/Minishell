@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/17 00:14:24 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/17 11:25:00 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	ft_update_env_value(t_list *set_var, char **split_str)
 char	**ft_strschr(char **strs, char c, int forbidden_pos)
 {
 	int	i;
-	int	j;
+//	int	j;
 
 	i = 0;
 	if (forbidden_pos >= 0)
