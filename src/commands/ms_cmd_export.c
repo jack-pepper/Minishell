@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/17 11:30:09 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/17 13:20:58 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	cmd_export(t_shell *sh)
 	t_list	*set_var;
 	char	**split_str;
 	int	i;
+	t_list	*stashed_var;
 
 	if (!sh->input_args)
 		return ;
@@ -30,6 +31,19 @@ void	cmd_export(t_shell *sh)
 		i = 1;
 		while (sh->input_args[i])
 		{
+			// if arg without = ...
+			if (ft_strchr(sh->input_args[i], '=') == NULL)
+			{
+				stashed_var = NULL;
+				stashed_var = ft_getenv(sh->input_args[i], &env_stash);
+				if (stashed_var != NULL) // if this arg is in env_stash...
+					// update env value
+				else // if it is not: INVALID, stop and cmd not found 
+					// cmd not found
+			}
+
+			else // if the arg contains a '=', not at first index
+
 			// 1-check (ft_strchr) if the arg contains a "=" and it's not first)
 			// 2- if no "=": check the env STASH
 			// 3- if there is a "=": check if VAR_NAME already exists and updates it, or creates new one if not
@@ -38,6 +52,9 @@ void	cmd_export(t_shell *sh)
 			split_str = ft_split(sh->input_args[i], '=');
 			if (!split_str)
 				return ;
+
+			// export_update_var
+
 			set_var = ft_getenv(split_str[0], &sh->this_env);
 			if (set_var != NULL)
 			{
@@ -61,12 +78,6 @@ void	cmd_export(t_shell *sh)
 		}
 	}
 }
-
-// TODO: do a t_list instead. If none yet, initiate. Else, add node.
-// Bash note: if ANY arg does NOT have any =, not even one is stored 
-
-// 1-if t_list is not init: init
-// in every case: split and alloc a new node. Content = 
 
 void	export_stash_var(t_shell *sh)
 {
