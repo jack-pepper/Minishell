@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/17 14:38:16 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/17 18:23:48 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,10 @@
 
 void	cmd_export(t_shell *sh)
 {
-	// BASH: would NOT accept "export AAA" (only: export AAA=").
-
-	t_list	*last_node;
 	t_list	*set_var;
+	t_list	*stashed_var;
 	char	**split_str;
-	int	i;
+	size_t	i;
 
 	if (!sh->input_args)
 		return ;
@@ -28,18 +26,19 @@ void	cmd_export(t_shell *sh)
 	else
 	{
 		i = 1;
-		while (sh->input_args[i])
+		while (sh->input_args[i] != NULL)
 		{
 			// if arg without = ...
 			if (ft_strchr(sh->input_args[i], '=') == NULL)
 			{
-				export_from_stash(sh);
+				stashed_var = ft_getenv(sh->input_args[i], &sh->env_stash);
+				if (stashed_var != NULL)
+					export_from_stash(sh, stashed_var);
+				else
+					return ;
 			}
-			else // if the arg contains a '=', not at first index
+			else // classic export
 			{
-			// 1-check (ft_strchr) if the arg contains a "=" and it's not first)
-			// 2- if no "=": check the env STASH
-			// 3- if there is a "=": check if VAR_NAME already exists and updates it, or creates new one if not
 				split_str = NULL;
 				split_str = ft_split(sh->input_args[i], '=');
 				if (!split_str)
@@ -55,18 +54,14 @@ void	cmd_export(t_shell *sh)
 				}
 				else
 				{
-					last_node = ft_lstlast(sh->this_env);
-					last_node->next = ft_lstnew((char **)split_str);
-					if (!last_node->next)
-					{
-						free_args(split_str);
-						return ;
-					}
+					add_new_env_var(sh, split_str);
+
 				}
 				i++;
 			}
 		}
 	}
+}
 
 void	stash_var(t_shell *sh)
 {
@@ -94,46 +89,34 @@ void	stash_var(t_shell *sh)
         return ;
 }
 
-void	export_from_stash(t_shell *sh)
+void	export_from_stash(t_shell *sh, t_list *stashed_var)
 {
-	t_list	*stashed_var;	
+	t_list	*set_var;
 
-	stashed_var = NULL;
-	stashed_var = ft_getenv(sh->input_args[i], &env_stash);
-	if (stashed_var != NULL) // if this arg is in env_stash...
+	set_var = ft_getenv(stashed_var->content, &sh->this_env);
+	if (set_var != NULL)
 	{
-		// update env value
-		if (ft_update_env_value(stashed_var, &env_stash) != 0)
+		if (ft_update_env_value(set_var, stashed_var->content) != 0)
 		{
-			free_args(split_str);
+			free_args(stashed_var->content);
 			return ;
 		}
 	}
-		else // if it is not: INVALID, stop and cmd not found 
-			// cmd not found
+	else
+	{
+		add_new_env_var(sh, stashed_var->content);
+	}
 }
 
+void	add_new_env_var(t_shell *sh, char **split_str)
+{
+	t_list	*last_node;
 
-/*	size_t	i;
-	size_t	arg_len;
-
-	if (sh->env_stash == NULL)
+	last_node = ft_lstlast(sh->this_env);
+	last_node->next = ft_lstnew((char **)split_str);
+	if (!last_node->next)
 	{
-		sh->env_stash = (char **)malloc(sizeof(char **));
-		if (!sh->env_stash)
-			return ;
-		i = 0;
-	}
-	else
-		i = ft_strslen(sh->env_stash);
-	printf("stashing var: %s\n", sh->input_args[0]);
-	arg_len = ft_strlen(sh->input_args[0]);
-	sh->env_stash[i] = malloc(sizeof(char) * (arg_len + 1));
-	if (!sh->env_stash[i])
+		free_args(split_str);
 		return ;
-	ft_strlcpy(sh->env_stash[i], sh->input_args[0], arg_len);
-	//sh->env_stash[arg_len] = '\0';
-	printf("Stashed: ~%s~\n", sh->env_stash[i]);
-	printf("Nb of strs in stash: %ld\n", ft_strslen(sh->env_stash));
-
-}*/
+	}
+}
