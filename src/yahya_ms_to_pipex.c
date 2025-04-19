@@ -333,8 +333,8 @@ void exec_with_redirection(t_pipeline *cmd, char **env) {
 
 		char **argv = cmd->cmds[0].argv;
 		execve(get_cmd_path(argv[0], env), argv, env);
-		perror("execve failedx");
-		exit(EXIT_FAILURE);
+	//	perror("execve failedx");
+	//	exit(EXIT_FAILURE);
 	}
 
 	waitpid(pid, NULL, 0);

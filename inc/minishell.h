@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/17 21:49:39 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/18 23:13:55 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,23 +128,23 @@ t_command	*register_cmd(char *name, void *func, char *doc);
 /* Prototypes: commands */
 
 	// ms_cmd_pwd.c - Print name of current/working directory
-void		cmd_pwd(void);
+int		cmd_pwd(void);
 	// ms_cmd_cd.c - Change the working directory
 int			cmd_cd(t_shell *sh);
 	// ms_cmd_echo.c - Display a line of text
-void		cmd_echo(t_shell *sh);
+int		cmd_echo(t_shell *sh);
 void		echo_set_n(char **input_args, bool *opt_n, int *i);
 	// ms_cmd_exit.c - Cause the shell to exit
-void		cmd_exit(t_shell *sh, unsigned int status);
+int		cmd_exit(t_shell *sh, unsigned int status);
 	// ms_cmd_export.c - Set the export attribute for variables
-void		cmd_export(t_shell *sh);
+int		cmd_export(t_shell *sh);
 void		stash_var(t_shell *sh);
 void		export_from_stash(t_shell *sh, t_list *stashed_var);
 void		add_new_env_var(t_shell *sh, char **split_str);
 	// ms_cmd_unset.c - Unset values and attributes of variables and functions
-void		cmd_unset(t_shell *sh);
+int		cmd_unset(t_shell *sh);
 	// ms_cmd_env.c - Display the env variables
-void		cmd_env(t_shell *sh);
+int		cmd_env(t_shell *sh);
 
 /* Protoypes: error handling and cleaning */
 

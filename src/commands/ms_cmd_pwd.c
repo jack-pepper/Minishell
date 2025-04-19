@@ -6,13 +6,13 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:51 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/11 16:39:16 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/18 22:58:45 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	cmd_pwd(void)
+int	cmd_pwd(void)
 {
 	char	buf[4096]; // Allegedly max path in Linux. Should excess be handled in another way (see man)?
 	char	*cwd;	
@@ -21,10 +21,10 @@ void	cmd_pwd(void)
 
 	cwd = malloc(sizeof(char) * (ft_strlen(getcwd(buf, 4096)) + 1));
 	if (!cwd)
-		return ;
+		return (-1);
 
 	ft_strlcpy(cwd, buf, ft_strlen(buf) + 1);
 	printf("%s\n", cwd);
 	free(cwd);
-	return ;
+	return (0);
 }

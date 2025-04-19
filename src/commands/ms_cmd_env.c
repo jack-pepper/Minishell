@@ -6,13 +6,13 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:01:09 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/11 16:27:49 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/18 22:56:32 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	cmd_env(t_shell *sh)
+int	cmd_env(t_shell *sh)
 {
 	t_list	*cur_node;
 
@@ -24,5 +24,5 @@ void	cmd_env(t_shell *sh)
 			((char **)cur_node->content)[1]);
 		cur_node = cur_node->next;
 	}
-	return ;
+	return (0);
 }

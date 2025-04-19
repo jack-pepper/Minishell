@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/17 11:25:00 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/19 11:44:46 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ t_list	*ft_getenv(char *var_name, t_list **this_env)
 
 int	ft_update_env_value(t_list *set_var, char **split_str)
 {
-	free(set_var->content);
+//	free(set_var->content);
 	set_var->content = malloc(sizeof(split_str));
 	if (!set_var->content)
 		return (-1);

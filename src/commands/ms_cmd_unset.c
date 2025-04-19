@@ -6,14 +6,14 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:04:03 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/15 14:03:32 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/18 22:59:10 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
 
-void	cmd_unset(t_shell *sh)
+int	cmd_unset(t_shell *sh)
 {
 	t_list	*tgt_node;
 	t_list	*prev_node;
@@ -22,7 +22,7 @@ void	cmd_unset(t_shell *sh)
 	if (!sh->input_args[1])
 	{
 		printf("input: not enough arguments\n");
-		return ;
+		return (-1);
 	}
 	i = 1;
 	while (sh->input_args[i])
@@ -44,5 +44,5 @@ void	cmd_unset(t_shell *sh)
 			printf("No such env var found\n");
 		i++;
 	}
-		return;
+		return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:18:28 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/17 19:19:44 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/18 23:34:50 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,19 +88,19 @@ int main(int argc, char **argv, char **env)
 			t_cmd_type type = classify_command(sh.input_args);
 			if (type == REDIR_ONLY || type == BASIC)
 			{
-				if (is_builtin(sh.input_args[0])) 
+				//if (is_builtin(sh.input_args[0]))
 					process_input(&sh);
-				else
-				{	
-					t_pipeline *pipeline = parse_redirection_only(sh.input_args);
-					if (pipeline && pipeline->cmds && pipeline->cmds[0].argv)
-						exec_with_redirection(pipeline, env);
-					else
-					{
-						fprintf(stderr, "Invalid redirection command\n");
-					}
-					free_pipeline(pipeline);
-				}
+				//else
+				//{	
+				//	t_pipeline *pipeline = parse_redirection_only(sh.input_args);
+				//	if (pipeline && pipeline->cmds && pipeline->cmds[0].argv)
+				//		exec_with_redirection(pipeline, env);
+				//	else
+				//	{
+				//		fprintf(stderr, "Invalid redirection command\n");
+				//	}
+				//	free_pipeline(pipeline);
+				//}
 			}
 			else if (type == PIPELINE)
 			{
