@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:53:00 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/14 17:46:43 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/20 16:08:51 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	free_env(t_list **this_env)
 			cur_node = cur_node->next;
 			free(prev_node);
 		}
+		
 		free(cur_node);
 		this_env = NULL;
 	}

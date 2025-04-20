@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/19 11:57:27 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/20 16:16:50 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	cmd_export(t_shell *sh)
 		i = 1;
 		while (sh->input_args[i] != NULL)
 		{
-			// if arg without = ...
 			if (ft_strchr(sh->input_args[i], '=') == NULL)
 			{
 				stashed_var = ft_getenv(sh->input_args[i], &sh->env_stash);
@@ -38,26 +37,20 @@ int	cmd_export(t_shell *sh)
 					return (-1);
 				i++;
 			}
-			else // classic export
+			else
 			{
 				split_str = NULL;
-				split_str = ft_split(sh->input_args[i], '=');
+				split_str = ft_split(sh->input_args[i], '='); // leak
 				if (!split_str)
 					return (-1);
 				set_var = ft_getenv(split_str[0], &sh->this_env);
 				if (set_var != NULL)
 				{
-					if (ft_update_env_value(set_var, split_str) != 0)
-					{
-						free_args(split_str);
+					if (ft_update_env_value(set_var, split_str) != 0) // leak
 						return (0) ;
-					}
 				}
 				else
-				{
 					add_new_env_var(sh, split_str);
-
-				}
 				i++;
 			}
 		}

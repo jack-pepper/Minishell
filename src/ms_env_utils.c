@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/19 11:44:46 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/20 16:45:38 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,32 @@ t_list	*ft_getenv(char *var_name, t_list **this_env)
 
 int	ft_update_env_value(t_list *set_var, char **split_str)
 {
-//	free(set_var->content);
-	set_var->content = malloc(sizeof(split_str));
+	size_t	len;
+	int		i;
+
+	free_args(set_var->content);
+
+	set_var->content = malloc(sizeof(char *) * (ft_strslen(split_str) + 1));
 	if (!set_var->content)
+	{
+		free_args(split_str);
 		return (-1);
-	set_var->content = split_str;
+	}
+
+	i = 0;
+	len = 0;
+	while (split_str[i] != NULL)
+	{
+		len = ft_strlen(split_str[i]);
+		((char **)set_var->content)[i] = malloc(sizeof(char) * (len + 1));
+		if (!((char **)set_var->content)[i])
+		// should I clean up partially allocated here?
+			return (-1);
+		ft_strlcpy(((char **)set_var->content)[i], split_str[i], len + 1);
+		i++;
+	}
+	((char **)set_var->content)[i] = NULL;
+	free_args(split_str);
 	return (0);
 }
 
