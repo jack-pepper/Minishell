@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/18 23:13:55 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/20 22:42:45 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ char		**ft_copy_free(char **input_arg, char *rejoined_arg);
 size_t		ft_strslen(char **strs);
 int			ft_strstolist(t_list **list, char **strs, size_t nb_strs, char delim);
 t_list		*ft_getenv(char *var_name, t_list **this_env);
-int			ft_update_env_value(t_list *set_var, char **split_str);
+void		stash_var(t_shell *sh);
 char		**ft_strschr(char **strs, char c, int forbidden_pos);
 
 	// ms_replace_utils.c
@@ -138,9 +138,10 @@ void		echo_set_n(char **input_args, bool *opt_n, int *i);
 int		cmd_exit(t_shell *sh, unsigned int status);
 	// ms_cmd_export.c - Set the export attribute for variables
 int		cmd_export(t_shell *sh);
-void		stash_var(t_shell *sh);
+void		export_from_term(t_shell *sh, size_t *i);
 void		export_from_stash(t_shell *sh, t_list *stashed_var);
 void		add_new_env_var(t_shell *sh, char **split_str);
+int			ft_update_env_value(t_list *set_var, char **split_str);
 	// ms_cmd_unset.c - Unset values and attributes of variables and functions
 int		cmd_unset(t_shell *sh);
 	// ms_cmd_env.c - Display the env variables
@@ -150,7 +151,7 @@ int		cmd_env(t_shell *sh);
 
 	// ms_free.c
 void		free_memory(t_shell *sh);
-void		free_env(t_list **this_env);
+void		free_list(t_list **list);
 void		free_commands(t_command **cmds);
 void		free_args(char **input_args);
 

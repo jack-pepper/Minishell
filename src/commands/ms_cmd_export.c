@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/20 16:16:50 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/20 23:52:13 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 int	cmd_export(t_shell *sh)
 {
-	t_list	*set_var;
 	t_list	*stashed_var;
-	char	**split_str;
 	size_t	i;
 
 	if (!sh->input_args)
@@ -39,18 +37,7 @@ int	cmd_export(t_shell *sh)
 			}
 			else
 			{
-				split_str = NULL;
-				split_str = ft_split(sh->input_args[i], '='); // leak
-				if (!split_str)
-					return (-1);
-				set_var = ft_getenv(split_str[0], &sh->this_env);
-				if (set_var != NULL)
-				{
-					if (ft_update_env_value(set_var, split_str) != 0) // leak
-						return (0) ;
-				}
-				else
-					add_new_env_var(sh, split_str);
+				export_from_term(sh, &i);
 				i++;
 			}
 		}
@@ -58,44 +45,23 @@ int	cmd_export(t_shell *sh)
 	return (0);
 }
 
-void	stash_var(t_shell *sh)
-{
-	t_list	*stashed_var;
-	t_list	*node;
-	char    **split_str;
-        size_t  i;
-	size_t	nb_args;
+void	export_from_term(t_shell *sh, size_t *i)
+{	
+	t_list	*set_var;
+	char	**split_str;
 
-        i = 0;
-        node = NULL;
-        split_str = NULL;
-	nb_args = ft_strslen(sh->input_args);
-	//printf("[export_stash_var] nb_args: %ld", nb_args); // DEBUG
-        while (i < nb_args)
-        {
-		split_str = ft_split(sh->input_args[i], '=');
-                if (!split_str)
+	split_str = NULL;
+	split_str = ft_split(sh->input_args[(*i)], '=');
+	if (!split_str)
+		return ;
+	set_var = ft_getenv(split_str[0], &sh->this_env);
+	if (set_var != NULL)
+	{
+		if (ft_update_env_value(set_var, split_str) != 0)
 			return ;
-		stashed_var = ft_getenv(split_str[0], &sh->env_stash);
-		if (stashed_var != NULL)
-		{
-			//printf("%s=%s\n", ((char **)stashed_var->content)[0], ((char **)stashed_var->content)[1]);
-			if (ft_update_env_value(stashed_var, split_str) != 0)
-			{
-				free_args(split_str);
-				return ;
-			}
-		}
-		else
-		{
-			node = ft_lstnew((char **)split_str);
-			if (!node)
-				return ;
-			ft_lstadd_back(&sh->env_stash, node);
-		}
-		i++;
-        }
-        return ;
+	}
+	else
+		add_new_env_var(sh, split_str);
 }
 
 void	export_from_stash(t_shell *sh, t_list *stashed_var)
@@ -107,15 +73,23 @@ void	export_from_stash(t_shell *sh, t_list *stashed_var)
 	if (set_var != NULL)
 	{
 		if (ft_update_env_value(set_var, (char **)stashed_var->content) != 0)
-			free_args((char **)stashed_var->content);
+			free_memory(sh);
 	}
 	else
 		add_new_env_var(sh, (char **)stashed_var->content);
-	if (sh->env_stash == stashed_var)	
-		sh->env_stash = stashed_var->next;
+	
+
+	prev_node = sh->env_stash;
+	if (stashed_var == sh->env_stash)
+	{
+		sh->env_stash = &(*stashed_var->next);
+		free(stashed_var); //
+		//free_args((char **)prev_node->content);
+		//free(prev_node);
+	}
 	else
 	{
-		prev_node = sh->env_stash;
+		//prev_node = sh->env_stash;
 		if (prev_node != NULL && prev_node->next != NULL)
 		{
 			while (ft_strcmp(((char **)prev_node->next->content)[0],
@@ -138,4 +112,32 @@ void	add_new_env_var(t_shell *sh, char **split_str)
 		return ;
 	}
 	ft_lstadd_back(&sh->this_env, new_node);
+}
+
+int     ft_update_env_value(t_list *set_var, char **split_str)
+{
+        size_t  len;
+        int             i;
+
+        free_args(set_var->content);
+        set_var->content = malloc(sizeof(char *) * (ft_strslen(split_str) + 1));
+        if (!set_var->content)
+        {
+                free_args(split_str);
+                return (-1);
+        }
+        i = 0;
+        len = 0;
+        while (split_str[i] != NULL)
+        {
+                len = ft_strlen(split_str[i]);
+                ((char **)set_var->content)[i] = malloc(len + 1);
+                if (!((char **)set_var->content)[i]) // should I clean already mallocated?
+                        return (-1);
+                ft_strlcpy(((char **)set_var->content)[i], split_str[i], len + 1);
+                i++;
+        }
+        ((char **)set_var->content)[i] = NULL;
+        free_args(split_str);
+        return (0);
 }

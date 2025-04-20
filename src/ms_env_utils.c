@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/20 16:45:38 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/20 21:50:01 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,37 +69,6 @@ t_list	*ft_getenv(char *var_name, t_list **this_env)
 	return (NULL);
 }
 
-int	ft_update_env_value(t_list *set_var, char **split_str)
-{
-	size_t	len;
-	int		i;
-
-	free_args(set_var->content);
-
-	set_var->content = malloc(sizeof(char *) * (ft_strslen(split_str) + 1));
-	if (!set_var->content)
-	{
-		free_args(split_str);
-		return (-1);
-	}
-
-	i = 0;
-	len = 0;
-	while (split_str[i] != NULL)
-	{
-		len = ft_strlen(split_str[i]);
-		((char **)set_var->content)[i] = malloc(sizeof(char) * (len + 1));
-		if (!((char **)set_var->content)[i])
-		// should I clean up partially allocated here?
-			return (-1);
-		ft_strlcpy(((char **)set_var->content)[i], split_str[i], len + 1);
-		i++;
-	}
-	((char **)set_var->content)[i] = NULL;
-	free_args(split_str);
-	return (0);
-}
-
 // Return the first str in strs that either contains no c or at forbidden_pos
 char	**ft_strschr(char **strs, char c, int forbidden_pos)
 {
@@ -131,4 +100,44 @@ char	**ft_strschr(char **strs, char c, int forbidden_pos)
 		i++;
 	}
 	return (NULL);
+}
+
+void    stash_var(t_shell *sh)
+{
+        t_list  *stashed_var;
+        t_list  *node;
+        char    **split_str;
+        size_t  i;
+        size_t  nb_args;
+
+        i = 0;
+        node = NULL;
+        split_str = NULL;
+        nb_args = ft_strslen(sh->input_args);
+        //printf("[export_stash_var] nb_args: %ld", nb_args); // DEBUG
+        while (i < nb_args)
+        {
+                split_str = ft_split(sh->input_args[i], '=');
+                if (!split_str)
+                        return ;
+                stashed_var = ft_getenv(split_str[0], &sh->env_stash);
+                if (stashed_var != NULL)
+                {
+                        //printf("%s=%s\n", ((char **)stashed_var->content)[0], ((char **)stashed_var->content)[1]);
+                        if (ft_update_env_value(stashed_var, split_str) != 0)
+                        {
+                                free_args(split_str);
+                                return ;
+                        }
+                }
+                else
+                {
+                        node = ft_lstnew((char **)split_str); // leak...
+                        if (!node)
+                                return ;
+                        ft_lstadd_back(&sh->env_stash, node);
+                }
+                i++;
+        }
+        return ;
 }

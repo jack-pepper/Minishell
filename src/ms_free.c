@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:53:00 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/20 16:08:51 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/20 19:16:06 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ void	free_memory(t_shell *sh)
 	if (sh->input_args != NULL)
 		free_args(sh->input_args);
 	if (sh->this_env != NULL)
-		free_env(&sh->this_env);
+		free_list(&sh->this_env);
+	if (sh->env_stash != NULL)
+		free_list(&sh->env_stash);
 	if (sh->cmds != NULL)
 		free_commands(sh->cmds);
 
@@ -39,15 +41,15 @@ void	free_args(char **input_args)
 	free(input_args);
 }
 
-void	free_env(t_list **this_env)
+void	free_list(t_list **list)
 {	
 	t_list	*cur_node;
 	t_list	*prev_node;
 	int	i;
 
-	if (this_env != NULL)
+	if (list != NULL)
 	{
-		cur_node = *this_env;
+		cur_node = *list;
 		while (cur_node != NULL)
 		{	
 			if (cur_node->content != NULL)
@@ -65,9 +67,8 @@ void	free_env(t_list **this_env)
 			cur_node = cur_node->next;
 			free(prev_node);
 		}
-		
 		free(cur_node);
-		this_env = NULL;
+		list = NULL;
 	}
 }
 
