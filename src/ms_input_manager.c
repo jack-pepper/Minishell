@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:23:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/19 10:43:04 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/21 13:56:04 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	process_input(t_shell *sh)
         }
 	else if (ft_strcmp(sh->input_args[0], "pwd") == 0)
                 sh->last_exit_status = cmd_pwd();
-	else if (ft_strcmp(sh->input_args[0], "cd") == 0)
+	else if (ft_strcmp(sh->input_args[0], "cd") == 0) // need to handle input starting with '/' too...
 	{
 		sh->last_exit_status = cmd_cd(sh);
 		if (sh->last_exit_status != 0)
