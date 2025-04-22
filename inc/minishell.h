@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/21 18:27:58 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/22 12:01:50 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,10 +129,13 @@ t_command	*register_cmd(char *name, void *func, char *doc);
 
 	// ms_cmd_pwd.c - Print name of current/working directory
 int		cmd_pwd(void);
+char	*store_cwd(char *cwd);
 	// ms_cmd_cd.c - Change the working directory
 int			cmd_cd(t_shell *sh);
-int			change_directory(t_shell *sh, char *path);
-void		update_pwds(t_shell *sh, char *new_pwd);
+int			change_directory(t_shell *sh, char *cwd, char *path);
+void		update_pwds_vars(t_shell *sh, char *prev_cwd, char *new_pwd);
+void		update_pwd_var(t_shell *sh, char **split_pwd);
+void		update_old_pwd_var(t_shell *sh, char **split_old_pwd);
 	// ms_cmd_echo.c - Display a line of text
 int		cmd_echo(t_shell *sh);
 void		echo_set_n(char **input_args, bool *opt_n, int *i);
