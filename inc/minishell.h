@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/22 12:01:50 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/24 21:10:33 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # define CTRL_CHAR_SPACE_IN_QUOTE 29
 # define CTRL_CHAR_VAR_TO_INTERPRET 30
 # define CTRL_CHAR_SUBARG_DELIM 31
+# define CTRL_CHAR_TO_BE_DELETED 29
 
 /* Libraries */
 
@@ -133,6 +134,7 @@ char	*store_cwd(char *cwd);
 	// ms_cmd_cd.c - Change the working directory
 int			cmd_cd(t_shell *sh);
 int			change_directory(t_shell *sh, char *cwd, char *path);
+char		*handle_dotted_path(t_shell *sh, char *cwd, char *path);
 void		update_pwds_vars(t_shell *sh, char *prev_cwd, char *new_pwd);
 void		update_pwd_var(t_shell *sh, char **split_pwd);
 void		update_old_pwd_var(t_shell *sh, char **split_old_pwd);

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 12:59:33 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/25 00:34:49 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/23 23:30:57 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	cmd_cd(t_shell *sh)
 {
 	char	*cwd;
 	char	*path;
-	char	*cur_path;
+	//char	*cur_path;
 	//char	**split_path;
 	t_list	*home_var;
 	
@@ -30,17 +30,20 @@ int	cmd_cd(t_shell *sh)
 	else if (!sh->input_args[1] && home_var && ((char **)home_var->content)[1])
 		path = ((char **)home_var->content)[1];
 	else
-		path = sh->input_args[1];
+		path = sh->input_args[1];	
 	cwd = store_cwd(cwd);
-	if (path[0] == '.')
-	{
-		cur_path = handle_dotted_path(sh, cwd, path);
-		printf("[cmd_cd / cur_path] %s\n", cur_path);
-		change_directory(sh, cwd, cur_path);
-		free(cur_path);
-	}
-	else
+	if (path[0] == '/')
 		change_directory(sh, cwd, path);
+	else if (path[0] == '.')
+	//	{
+	//		path = handle_dotted_path(sh, cwd, path);
+			//cur_path = set_cur_path();
+	//		change_directory(sh, cur_path);
+	//	}
+
+	// - begins with slash => set curpath to the operand, then step 7
+	// - first component is dot or dot-dot: step 6
+	// else
 	free(cwd);
 	return (0);
 }
@@ -51,68 +54,57 @@ char	*handle_dotted_path(t_shell *sh, char *cwd, char *path)
 	char	*rejoined_path;
 	char	*temp;
 	int		i;
-	char	*joined_path;
-	int		j;
+	size_t		new_path_len;
 
-	cwd++; cwd--; sh++; sh--; // DEBUG
-
-	// normalize path by adding '\' if not
-	temp = ft_strjoin("/", path);
-	if (!temp)
-		return (NULL);
-	joined_path = ft_strjoin(cwd, temp);
-	if (!joined_path)
-		return (NULL);
-	printf("[DEBUG] joined_path: %s\n", joined_path);
-	split_path = ft_split(joined_path, '/');
+	new_path_len = ft_strlen(path);
+	split_path = ft_split(path, '/');
 	if (!split_path)
 		return (NULL);
 	i = 0;
 	while (split_path[i] != NULL)
 	{
-		printf("[DEBUG] split_path[%d]: %s\n", i, split_path[i]);
-		if (ft_strcmp(split_path[i], ".") == 0)
-			split_path[i][0] = CTRL_CHAR_TO_BE_DELETED;
-		else if (ft_strcmp(split_path[i], "..") == 0)
+		if (ft_strcmp(split_path[0], ".") == 0)
+		{//Dot components and any slashes that separate them from the next component shall be deleted
+			split_path[0][0] = CTRL_CHAR_TO_BE_DELETED;
+			new_path_len--;
+			i++;
+		}
+		if (ft_strcmp(split_path[i], "..") == 0)
 		{
-			j = i;
-			while (split_path[j] && ft_strcmp(split_path[j], "..") == 0)
-			{	
-				i--;
-				if (i >= 0 && split_path[i] != NULL)
-					split_path[i][0] = CTRL_CHAR_TO_BE_DELETED;
-				split_path[j][0] = CTRL_CHAR_TO_BE_DELETED;	
-				j++;
+			if (split_path[i - 1] != NULL) //&& split_path[i - 1]) // add conditions
+			{
+				split_path[i - 1][0] = CTRL_CHAR_TO_BE_DELETED;
+				split_path[i][0] = CTRL_CHAR_TO_BE_DELETED;
+				new_path_len - 2;
+				i++;
 			}
-			i = j - 1;
+	// For each dot-dot component, if there is a preceding component and it is neither root nor dot-dot, the preceding component, all slashes separating the preceding component from dot-dot, dot-dot and all slashes separating dot-dot from the following component shall be deleted.
 		}
 		i++;
 	}
-	rejoined_path = ft_strdup("");
-	if (!rejoined_path)
-		return (NULL);
+
+	// rejoin
+	rejoined_path = malloc(new_path_len + 1);
 	i = 0;
 	j = 0;
 	while (split_path[i])
 	{
 		if (split_path[i][0] != CTRL_CHAR_TO_BE_DELETED)
 		{
-			temp = ft_strjoin("/", split_path[i]);
-			rejoined_path = ft_strjoin(rejoined_path, temp);
-			printf("[DEBUG] rejoined_path: %s\n", rejoined_path);
-			free(temp);
+			rejoined_path[j] = ft_strjoin("/", split_path[i]);
+			printf("rejoined_path[%d]: ~%s~", j, rejoined_path[j]); // DEBUG
 			j++;
 		}
 		i++;
 	}
-	return (rejoined_path);
+	return ();
 }
 
 int	change_directory(t_shell *sh, char *cwd, char *path)
 {
 	if (chdir(path) != 0)
 	{
-		printf("%s: No such file or directory!\n", path);
+		printf("Error on chdir!\n");
 		return (-1);
 	}
 	update_pwds_vars(sh, cwd, path);
