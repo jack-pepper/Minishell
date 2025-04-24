@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_input_manager.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:23:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/17 22:00:58 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/22 13:18:40 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	**normalize_input(char *line, t_shell *sh)
 	if (!sh->input_args)
 		return (NULL);
 	ft_replace_all_chars(sh->input_args, CTRL_CHAR_SPACE_IN_QUOTE, ' '); // change CTRL_CHAR in quotes back to spaces
-
+	ft_replace_all_chars(sh->input_args, CTRL_CHAR_PIPE, '|');
 	// DEBUG: DISPLAY THE CONTENT OF INPUT_ARGS AFTER NORMALIZATION
 	//int	i = 0;
 	//while (sh->input_args[i] != NULL)

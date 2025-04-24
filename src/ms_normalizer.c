@@ -3,36 +3,145 @@
 /*                                                        :::      ::::::::   */
 /*   ms_normalizer.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/16 19:22:02 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/22 13:33:11 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+ #include "../inc/minishell.h"
+char *ft_add_spaces_around(char *str, char special)
+{
+	int i = 0;
+	int len = ft_strlen(str);
+	int extra = 0;
 
-// Whitespace trim and collapse
+	// Count how many extra spaces we need
+	for (i = 0; str[i]; i++)
+		if (str[i] == special)
+			extra += 2;
+
+	char *new_str = malloc(len + extra + 1);
+	if (!new_str) return NULL;
+
+	int j = 0;
+	for (i = 0; str[i]; i++)
+	{
+		if (str[i] == special)
+		{
+			new_str[j++] = ' ';
+			new_str[j++] = special;
+			new_str[j++] = ' ';
+		}
+		else
+			new_str[j++] = str[i];
+	}
+	new_str[j] = '\0';
+	return new_str;
+}
+
+// char	*ft_normalize(char *line)
+// {
+// 	char	*trimmed_line;
+// 	char	*normalized_line;
+// 	char	*spaced;
+
+// 	trimmed_line = ft_strtrim(line, " \f\n\r\t\v");
+// 	if (trimmed_line == NULL)
+// 		return (NULL);
+
+// 	normalized_line = ft_strcollapse(trimmed_line);
+// 	free(trimmed_line);
+// 	if (normalized_line == NULL)
+// 		return (NULL);
+
+// 	spaced = ft_add_spaces_around(normalized_line, CTRL_CHAR_PIPE);
+// 	free(normalized_line);
+// 	if (!spaced)
+// 		return (NULL);
+// 	char *tmp = spaced;
+// 	spaced = ft_add_spaces_around(tmp, '<');
+// 	free(tmp);
+// 	tmp = spaced;
+// 	spaced = ft_add_spaces_around(tmp, '>');
+// 	free(tmp);
+// 	return spaced;
+// }
+char *ft_add_spaces_around_str(char *str, const char *seq)
+{
+	int i = 0, j = 0;
+	int seq_len = ft_strlen(seq);
+	int len = ft_strlen(str);
+	int extra = 0;
+
+	while (str[i])
+	{
+		if (strncmp(&str[i], seq, seq_len) == 0)
+			extra += 2;
+		i++;
+	}
+
+	char *new_str = malloc(len + extra + 1);
+	if (!new_str) return NULL;
+
+	i = 0;
+	while (str[i])
+	{
+		if (strncmp(&str[i], seq, seq_len) == 0)
+		{
+			new_str[j++] = ' ';
+			for (int k = 0; k < seq_len; k++)
+				new_str[j++] = seq[k];
+			new_str[j++] = ' ';
+			i += seq_len;
+		}
+		else
+		{
+			new_str[j++] = str[i++];
+		}
+	}
+	new_str[j] = '\0';
+	return new_str;
+}
 char	*ft_normalize(char *line)
 {
 	char	*trimmed_line;
 	char	*normalized_line;
+	char	*spaced;
+	char	*tmp;
 
-	trimmed_line = NULL;
-	normalized_line = NULL;
 	trimmed_line = ft_strtrim(line, " \f\n\r\t\v");
 	if (trimmed_line == NULL)
-	{
 		return (NULL);
-	}
+
 	normalized_line = ft_strcollapse(trimmed_line);
 	free(trimmed_line);
 	if (normalized_line == NULL)
-	{
 		return (NULL);
-	}
-	return (normalized_line);
+
+	spaced = ft_add_spaces_around(normalized_line, CTRL_CHAR_PIPE);
+	free(normalized_line);
+	if (!spaced)
+		return (NULL);
+
+	// Add spaces around <, >, <<, >>
+	tmp = spaced;
+	spaced = ft_add_spaces_around(tmp, '<');
+	free(tmp);
+	tmp = spaced;
+	spaced = ft_add_spaces_around(spaced, '>');
+	free(tmp);
+	tmp = spaced;
+	spaced = ft_add_spaces_around_str(spaced, "<<");
+	free(tmp);
+	tmp = spaced;
+	spaced = ft_add_spaces_around_str(spaced, ">>");
+	free(tmp);
+
+	return spaced;
 }
+
 
 // If there is more than one consecutive space, they are suppressed.
 char	*ft_strcollapse(char *line)
@@ -49,6 +158,8 @@ char	*ft_strcollapse(char *line)
 	{
 		if (line[i] == '$')
 			ft_replace_char(&line[i], CTRL_CHAR_VAR_TO_INTERPRET);
+		else if (line[i] == '|')
+			ft_replace_char(&line[i], CTRL_CHAR_PIPE);
 		else if (line[i] == '\'' && ft_count_char(&line[i], '\'') > 1)
 			handle_quote(line, '\'', &i, &to_collapse);
 		else if (line[i] == '\"' && ft_count_char(&line[i], '\"') > 1)

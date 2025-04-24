@@ -20,16 +20,23 @@ bool is_builtin(const char *cmd)
 int count_command_tokens(char **tokens, int start) {
 	int count = 0;
 	while (tokens[start] &&
-		ft_strcmp(tokens[start], "|") != 0 &&
-		ft_strcmp(tokens[start], "<") != 0 &&
-		ft_strcmp(tokens[start], ">") != 0 &&
-		ft_strcmp(tokens[start], ">>") != 0)
+	       ft_strcmp(tokens[start], "|") != 0)
 	{
+		// skip redirection tokens AND their target
+		if ((ft_strcmp(tokens[start], "<") == 0 ||
+		     ft_strcmp(tokens[start], ">") == 0 ||
+		     ft_strcmp(tokens[start], ">>") == 0) &&
+		    tokens[start + 1])
+		{
+			start += 2;
+			continue;
+		}
 		count++;
 		start++;
 	}
 	return count;
 }
+
 
 char **extract_command_args(char **tokens, int *i, int count) {
 	char **argv = malloc(sizeof(char *) * (count + 1));
@@ -44,6 +51,13 @@ char **extract_command_args(char **tokens, int *i, int count) {
 		ft_strcmp(tokens[*i], ">") != 0 &&
 		ft_strcmp(tokens[*i], ">>") != 0)
 	{
+					// If it's a redirection token, skip its target
+		if ((ft_strcmp(tokens[*i], "<") == 0 || ft_strcmp(tokens[*i], ">") == 0 || ft_strcmp(tokens[*i], ">>") == 0) && tokens[*i + 1])
+		{
+			*i += 2;
+			continue;
+		}
+
 		argv[j++] = ft_strdup(tokens[*i]);
 		(*i)++;
 	}
@@ -111,6 +125,17 @@ static t_pipeline *init_pipeline(char **tokens) {
 }
 
 static bool handle_redirection_tokens(char **tokens, int *i, t_pipeline *p) {
+	if (strcmp(tokens[*i], "<<") == 0) {
+		if (tokens[*i + 1]) {
+			p->infile = ft_strdup("here_doc"); // This is the key translation
+			p->limiter = ft_strdup(tokens[++(*i)]); // Store the LIMITER
+			p->append = false;
+			(*i)++;
+			return true;
+		}
+		return false;
+	}
+	
 	if (strcmp(tokens[*i], "<") == 0) {
 		if (tokens[*i + 1]) {
 			p->infile = ft_strdup(tokens[++(*i)]);
@@ -145,13 +170,20 @@ t_pipeline *build_pipeline_from_tokens(char **tokens) {
 	t_pipeline *p = init_pipeline(tokens);
 	if (!p)
 		return NULL;
-
+	printf("after initilizing pipeline\n");
 	while (tokens[i]) {
-		if (!handle_redirection_tokens(tokens, &i, p))
-			parse_next_command(tokens, &i, p, &cmd_i);
+		printf("[token loop] i = %d -> '%s'\n", i, tokens[i]);
+	
+		if (handle_redirection_tokens(tokens, &i, p)) {
+			continue;
+		}
+		parse_next_command(tokens, &i, p, &cmd_i);
 	}
+	
 	return p;
 }
+
+
 
 t_pipeline *parse_redirection_only(char **tokens)
 {
@@ -343,7 +375,6 @@ void exec_with_redirection(t_pipeline *cmd, char **env) {
 	if (out_fd != -1)
 		close(out_fd);
 }
-
 t_cmd_type classify_command(char **tokens)
 {
 	int i = 0;
@@ -387,14 +418,21 @@ t_cmd_type classify_command(char **tokens)
 
 // Wrapper that dispatches between full pipex and simple pipeline
 void run_pipeline_from_minshell(t_pipeline *p, char **env) {
-	if (p->infile && p->outfile) {
+	if ((p->infile && p->outfile) || (p->infile && ft_strcmp(p->infile, "here_doc") == 0 && p->outfile)) {
+		printf("run_pipex_from_minishell\n");
 		run_pipex_from_minshell(p, env); // assumes pipex-style interface
 	} else {
+		printf("no pipex\n");
 		// When only pipes (no infile/outfile), fall back to simple execution
 		int i;
 		int prev_fd = -1;
 		int pipe_fd[2];
-
+		for (int i = 0; i < p->cmd_count; i++) {
+			printf("cmd[%d]:\n", i);
+			for (int j = 0; p->cmds[i].argv[j]; j++) {
+				printf("  argv[%d] = %s\n", j, p->cmds[i].argv[j]);
+			}
+		}
 		i = 0; 
 		while (i < p->cmd_count) {
 			if (i < p->cmd_count - 1 && pipe(pipe_fd) < 0) {
@@ -404,6 +442,32 @@ void run_pipeline_from_minshell(t_pipeline *p, char **env) {
 
 			pid_t pid = fork();
 			if (pid == 0) {
+				bool is_piped_forward = (i < p->cmd_count - 1);
+			
+				if (!is_piped_forward && p->outfile) {
+					int fd;
+					if (p->append)
+						fd = open(p->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+					else
+						fd = open(p->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+					if (fd < 0) {
+						perror(p->outfile);
+						exit(EXIT_FAILURE);
+					}
+					dup2(fd, STDOUT_FILENO);
+					close(fd);
+				}
+			
+				if (i == 0 && p->infile) {
+					int fd = open(p->infile, O_RDONLY);
+					if (fd < 0) {
+						perror(p->infile);
+						exit(EXIT_FAILURE);
+					}
+					dup2(fd, STDIN_FILENO);
+					close(fd);
+				}
+			
 				if (prev_fd != -1) {
 					dup2(prev_fd, STDIN_FILENO);
 					close(prev_fd);
@@ -413,17 +477,16 @@ void run_pipeline_from_minshell(t_pipeline *p, char **env) {
 					dup2(pipe_fd[1], STDOUT_FILENO);
 					close(pipe_fd[1]);
 				}
-
+			
 				char *cmd_path = get_cmd_path(p->cmds[i].argv[0], env);
 				if (!cmd_path) {
 					fprintf(stderr, "%s: command not found\n", p->cmds[i].argv[0]);
-					exit(127); // Standard shell "command not found" exit code
-				}				
+					exit(127);
+				}
 				execve(cmd_path, p->cmds[i].argv, env);
 				perror("execve failed");
 				exit(EXIT_FAILURE);
 			}
-
 			if (prev_fd != -1)
 				close(prev_fd);
 			if (i < p->cmd_count - 1) {

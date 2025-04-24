@@ -1,0 +1,18 @@
+total 172
+-rw-rw-r--  1 lepokile lepokile   3355 Apr 20 10:01 Makefile
+-rw-rw-r--  1 lepokile lepokile   1089 Apr 20 10:01 README.md
+-rw-r--r--  1 lepokile lepokile      0 Apr 20 12:32 XD.txt
+-rw-rw-r--  1 lepokile lepokile   2721 Apr 20 10:01 \
+-rw-rw-r--  1 lepokile lepokile     37 Apr 20 15:44 append.txt
+-rw-rw-r--  1 lepokile lepokile     12 Apr 20 15:33 errors_sorted.txt
+-rw-rw-r--  1 lepokile lepokile      0 Apr 21 09:40 file
+drwxrwxr-x  2 lepokile lepokile   4096 Apr 20 10:01 inc
+-rw-rw-r--  1 lepokile lepokile      6 Apr 21 07:11 infile.txt
+drwxrwxr-x 11 lepokile lepokile   4096 Apr 20 10:01 libft
+-rwxrwxr-x  1 lepokile lepokile 136624 Apr 20 15:47 minishell
+drwxrwxr-x  6 lepokile lepokile   4096 Apr 21 07:10 minishell_tester
+-rw-r--r--  1 lepokile lepokile      0 Apr 20 15:39 out
+drwxrwxr-x  2 lepokile lepokile   4096 Apr 20 10:01 pipex_ms
+drwxrwxr-x  3 lepokile lepokile   4096 Apr 20 15:47 src
+-rw-r--r--  1 lepokile lepokile      6 Apr 20 15:41 xd.txt
+-rw-rw-r--  1 lepokile lepokile     12 Apr 20 15:33 yo.txt

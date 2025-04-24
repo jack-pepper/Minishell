@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:18:28 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/17 19:19:44 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/24 11:01:11 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,16 +85,41 @@ int main(int argc, char **argv, char **env)
 			sh.input_args = normalize_input(line, &sh);
 			if (!sh.input_args)
 				return (-1);
+			int i = 0;
+			while(sh.input_args[i])
+			{
+				printf("[DEBUG]input_arg[i] = %s\n", sh.input_args[i]);
+				i++;
+			}
 			t_cmd_type type = classify_command(sh.input_args);
 			if (type == REDIR_ONLY || type == BASIC)
 			{
-				if (is_builtin(sh.input_args[0])) 
+				if (strcmp(sh.input_args[0], ">") == 0)
+				{
+					printf("[DEBUG]REDIR_ONLY\n");
+					int new_file = open(sh.input_args[1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+					if (new_file == -1)
+						perror("open");
+				}
+				else if (is_builtin(sh.input_args[0]) && type == BASIC) 
+				{
+					printf("[DEBUG] process_input\n");	
 					process_input(&sh);
+				}
 				else
 				{	
 					t_pipeline *pipeline = parse_redirection_only(sh.input_args);
 					if (pipeline && pipeline->cmds && pipeline->cmds[0].argv)
-						exec_with_redirection(pipeline, env);
+					{
+						printf("[DEBUG]exec_with_red\n");
+						if(strcmp(sh.input_args[0], "cd") == 0)
+							printf(" ");
+						else
+						{
+							printf("exec_with_redirection\n");
+							exec_with_redirection(pipeline, env);
+						}
+					}	
 					else
 					{
 						fprintf(stderr, "Invalid redirection command\n");
@@ -104,9 +129,14 @@ int main(int argc, char **argv, char **env)
 			}
 			else if (type == PIPELINE)
 			{
+				printf("[DEBUG]PIPELINE\n");
 				t_pipeline *pipeline = build_pipeline_from_tokens(sh.input_args);
+				printf("Pipeline Created\n");
 				if (pipeline)
+				{
+					printf("[DEBUG]run pipeline_from minishell\n");	
 					run_pipeline_from_minshell(pipeline, env);
+				}
 				else
 					fprintf(stderr, "Invalid pipeline\n");
 				free_pipeline(pipeline);
@@ -114,7 +144,7 @@ int main(int argc, char **argv, char **env)
 
 			
 			else if (type == MIXED_INVALID)
-				fprintf(stderr, "❌ Error: Unsupported combination of pipes and redirections\n");
+				fprintf(stderr, "Error: Unsupported combination of pipes and redirections\n");
 			ft_free_array(sh.input_args, -1); // Make sure you free your token array
 		}
 	}
