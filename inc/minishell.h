@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/25 12:46:14 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/25 14:34:36 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,9 @@ char	*rejoin_abs_path(char *rejoined_path, char **split_path);
 void		ft_replace_if_space(char *cur_c, char new_c);
 void		ft_replace_char(char *cur_c, char new_c);
 void		ft_replace_all_chars(char **input_args, char old_c, char new_c);
+
+	// ms_debug_utils.c
+void	ft_show_strs(char **strs, char *debug_msg);
 
 	// ms_commands_manager.c
 int			init_cmds(t_shell *sh);

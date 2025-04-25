@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/20 21:50:01 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/25 14:07:21 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char	**ft_strschr(char **strs, char c, int forbidden_pos)
 			if (((int)ft_strlen(strs[i]) >= forbidden_pos)
 				&& (strs[i][forbidden_pos] == c))
 			{
-				printf("Found %c at forbidden pos strs[%d][%d]\n", c, i, forbidden_pos);
+			//	printf("Found %c at forbidden pos strs[%d][%d]\n", c, i, forbidden_pos);
 				return (&(strs[i]));
 			}
 			i++;
@@ -94,7 +94,7 @@ char	**ft_strschr(char **strs, char c, int forbidden_pos)
 	{
 		if (ft_strchr(strs[i], c) == NULL)
 		{
-			printf("Char not found at strs[%d]\n", i);
+		//	printf("Char not found at strs[%d]\n", i);
 			return (&(strs[i]));
 		}
 		i++;

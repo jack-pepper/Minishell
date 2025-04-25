@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 12:59:33 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/25 13:16:34 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/25 14:17:55 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	cmd_cd(t_shell *sh)
 	char	*cwd;
 	char	*path;
 	char	*cur_path;
-	//char	**split_path;
 	t_list	*home_var;
 	
 	cwd = NULL;
@@ -32,15 +31,30 @@ int	cmd_cd(t_shell *sh)
 	else
 		path = sh->input_args[1];
 	cwd = store_cwd(cwd);
+
+	// cd_process_path
 	if (path[0] == '.')
 	{
 		cur_path = handle_dotted_path(sh, cwd, path);
-		printf("[cmd_cd / cur_path] %s\n", cur_path);
-		change_directory(sh, cwd, cur_path);
+		printf("[DEBUG] [cmd_cd / cur_path] %s\n", cur_path);
+		if (change_directory(sh, cwd, cur_path) != 0)
+		{
+			free(cur_path);
+			free(cwd);
+			return (-1);
+		}
 		free(cur_path);
 	}
 	else
-		change_directory(sh, cwd, path);
+	{
+		if (ft_strcmp(path, "-") == 0)
+			path = ((char **)(ft_getenv("OLDPWD", &sh->this_env))->content)[1];
+		if (change_directory(sh, cwd, path) != 0)
+		{
+			free(cwd);
+			return (-1);
+		}
+	}
 	free(cwd);
 	return (0);
 }
@@ -59,18 +73,14 @@ char	*handle_dotted_path(t_shell *sh, char *cwd, char *path)
 	joined_path = get_abs_path(joined_path, cwd, path);
 	if (!joined_path)
 		return (NULL);
-
 	split_path = split_abs_path(split_path, joined_path);
 	if (!split_path)
 		return (NULL);
-
 	flag_dotted_path(split_path, CTRL_CHAR_TO_BE_DELETED);
-	
 	rejoined_path = rejoin_abs_path(rejoined_path, split_path);
 	free_args(split_path);
 	if (!rejoined_path)
 		return (NULL);
-
 	return (rejoined_path);
 }
 
@@ -85,7 +95,7 @@ int	change_directory(t_shell *sh, char *cwd, char *path)
 	return (0);
 }
 
-void	update_pwds_vars(t_shell *sh, char *prev_cwd, char *new_pwd) // or pass just the new path and join it inside this function?
+void	update_pwds_vars(t_shell *sh, char *prev_cwd, char *new_pwd)
 {
 	char	*joined_pwd;
 	char	*joined_old_pwd;
@@ -100,7 +110,7 @@ void	update_pwds_vars(t_shell *sh, char *prev_cwd, char *new_pwd) // or pass jus
 	if (!split_pwd)
 		return ;
 	update_pwd_var(sh, split_pwd);
-	joined_old_pwd = ft_strjoin("OLDPWD=", prev_cwd); // MODIFY TO CUR PWD!
+	joined_old_pwd = ft_strjoin("OLDPWD=", prev_cwd);
 	if (!joined_old_pwd)
 		return ;
 	split_old_pwd = ft_split(joined_old_pwd, '=');
@@ -110,7 +120,7 @@ void	update_pwds_vars(t_shell *sh, char *prev_cwd, char *new_pwd) // or pass jus
 	update_old_pwd_var(sh, split_old_pwd);
 }
 
-void	update_pwd_var(t_shell *sh, char **split_pwd) // or pass just the new path and join it inside this function?
+void	update_pwd_var(t_shell *sh, char **split_pwd)
 {
 	t_list	*pwd_var;
 

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/21 00:15:03 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/25 14:12:39 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,6 @@ int	ft_update_env_value(t_list *set_var, char **split_str)
 		i++;
 	}
 	((char **)set_var->content)[i] = NULL;
-	free_args(split_str);
+	//free_args(split_str); // cause invalid read error?
 	return (0);
 }
