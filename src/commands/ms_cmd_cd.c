@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 12:59:33 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/25 00:34:49 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/25 13:16:34 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,64 +47,30 @@ int	cmd_cd(t_shell *sh)
 
 char	*handle_dotted_path(t_shell *sh, char *cwd, char *path)
 {
+	char	*joined_path;
 	char	**split_path;
 	char	*rejoined_path;
-	char	*temp;
-	int		i;
-	char	*joined_path;
-	int		j;
 
 	cwd++; cwd--; sh++; sh--; // DEBUG
 
-	// normalize path by adding '\' if not
-	temp = ft_strjoin("/", path);
-	if (!temp)
-		return (NULL);
-	joined_path = ft_strjoin(cwd, temp);
+	joined_path = NULL;
+	split_path = NULL;
+	rejoined_path = NULL;
+	joined_path = get_abs_path(joined_path, cwd, path);
 	if (!joined_path)
 		return (NULL);
-	printf("[DEBUG] joined_path: %s\n", joined_path);
-	split_path = ft_split(joined_path, '/');
+
+	split_path = split_abs_path(split_path, joined_path);
 	if (!split_path)
 		return (NULL);
-	i = 0;
-	while (split_path[i] != NULL)
-	{
-		printf("[DEBUG] split_path[%d]: %s\n", i, split_path[i]);
-		if (ft_strcmp(split_path[i], ".") == 0)
-			split_path[i][0] = CTRL_CHAR_TO_BE_DELETED;
-		else if (ft_strcmp(split_path[i], "..") == 0)
-		{
-			j = i;
-			while (split_path[j] && ft_strcmp(split_path[j], "..") == 0)
-			{	
-				i--;
-				if (i >= 0 && split_path[i] != NULL)
-					split_path[i][0] = CTRL_CHAR_TO_BE_DELETED;
-				split_path[j][0] = CTRL_CHAR_TO_BE_DELETED;	
-				j++;
-			}
-			i = j - 1;
-		}
-		i++;
-	}
-	rejoined_path = ft_strdup("");
+
+	flag_dotted_path(split_path, CTRL_CHAR_TO_BE_DELETED);
+	
+	rejoined_path = rejoin_abs_path(rejoined_path, split_path);
+	free_args(split_path);
 	if (!rejoined_path)
 		return (NULL);
-	i = 0;
-	j = 0;
-	while (split_path[i])
-	{
-		if (split_path[i][0] != CTRL_CHAR_TO_BE_DELETED)
-		{
-			temp = ft_strjoin("/", split_path[i]);
-			rejoined_path = ft_strjoin(rejoined_path, temp);
-			printf("[DEBUG] rejoined_path: %s\n", rejoined_path);
-			free(temp);
-			j++;
-		}
-		i++;
-	}
+
 	return (rejoined_path);
 }
 

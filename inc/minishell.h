@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/24 21:10:33 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/25 12:46:14 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,12 @@ int			ft_strstolist(t_list **list, char **strs, size_t nb_strs, char delim);
 t_list		*ft_getenv(char *var_name, t_list **this_env);
 void		stash_var(t_shell *sh);
 char		**ft_strschr(char **strs, char c, int forbidden_pos);
+
+	// ms_cd_path_utils.c
+char	*get_abs_path(char *joined_path, char *cwd, char *path);
+char	**split_abs_path(char **split_path, char *joined_path);
+void	flag_dotted_path(char **split_path, char ctrl_char);
+char	*rejoin_abs_path(char *rejoined_path, char **split_path);
 
 	// ms_replace_utils.c
 void		ft_replace_if_space(char *cur_c, char new_c);

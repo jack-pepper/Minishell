@@ -6,7 +6,7 @@
 #    By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/11 13:50:01 by mmalie            #+#    #+#              #
-#    Updated: 2025/04/09 09:30:43 by mmalie           ###   ########.fr        #
+#    Updated: 2025/04/25 12:24:14 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,7 @@ MS_SRC = ./src/minishell.c \
       ./src/ms_env_utils.c \
       ./src/ms_input_manager.c \
       ./src/ms_normalizer.c \
+      ./src/ms_cd_path_utils.c \
       ./src/ms_redirections_manager.c \
       ./src/ms_quotes_handler.c \
       ./src/ms_replace_utils.c \
