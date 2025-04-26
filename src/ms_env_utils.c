@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/25 14:07:21 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/26 17:45:38 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,38 @@ char	**ft_strschr(char **strs, char c, int forbidden_pos)
 	return (NULL);
 }
 
+char	**ft_strsdup(char **strs)
+{
+	char	**dup_strs;
+	size_t	nb_strs;
+	size_t	i;
+	size_t	j;
+
+	nb_strs = ft_strslen(strs);
+	dup_strs = malloc(sizeof(char *) * (nb_strs + 1));
+	if (!dup_strs)
+		return (NULL);
+	i = 0;
+	while (i < nb_strs)
+	{
+		dup_strs[i] = ft_strdup(strs[i]);
+		if (!dup_strs[i])
+		{
+			j = 0;
+			while (j < i)
+			{
+				free(dup_strs[j]);
+				j++;
+			}
+			free(dup_strs);
+			return (NULL);
+		}
+		i++;
+	}
+	dup_strs[i] = NULL;
+	return (dup_strs);
+}
+
 void    stash_var(t_shell *sh)
 {
         t_list  *stashed_var;
@@ -129,14 +161,24 @@ void    stash_var(t_shell *sh)
                                 free_args(split_str);
                                 return ;
                         }
+			//free_args(split_str);
                 }
                 else
                 {
-                        node = ft_lstnew((char **)split_str); // leak...
+		//	char **node_content = NULL;
+		//	node_content = ft_strsdup(split_str);
+                        node = ft_lstnew((char **)split_str);
+			ft_show_strs((char **)node->content, "[DEBUG] node_content -");
+			//printf("[DEBUG] node content: %s\n", (char **)node->content);
+			//node = ft_lstnew((char **)split_str); // leak...
                         if (!node)
+			{
+				free_args(split_str);
                                 return ;
+			}
                         ft_lstadd_back(&sh->env_stash, node);
                 }
+		//free_args(split_str);
                 i++;
         }
         return ;

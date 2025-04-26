@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:53:00 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/20 19:16:06 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/26 17:33:18 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	free_list(t_list **list)
 	t_list	*prev_node;
 	int	i;
 
-	if (list != NULL)
+	if (list != NULL && *list != NULL)
 	{
 		cur_node = *list;
 		while (cur_node != NULL)
@@ -67,8 +67,8 @@ void	free_list(t_list **list)
 			cur_node = cur_node->next;
 			free(prev_node);
 		}
-		free(cur_node);
-		list = NULL;
+		//free(cur_node);
+		*list = NULL;
 	}
 }
 

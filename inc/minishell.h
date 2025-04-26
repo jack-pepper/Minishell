@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/25 14:34:36 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/26 17:40:24 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ int			ft_strstolist(t_list **list, char **strs, size_t nb_strs, char delim);
 t_list		*ft_getenv(char *var_name, t_list **this_env);
 void		stash_var(t_shell *sh);
 char		**ft_strschr(char **strs, char c, int forbidden_pos);
+char		**ft_strsdup(char **strs);
 
 	// ms_cd_path_utils.c
 char	*get_abs_path(char *joined_path, char *cwd, char *path);
