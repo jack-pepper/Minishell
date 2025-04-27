@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/27 14:00:00 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/27 14:17:40 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,7 @@ void    		stash_var_or_invalidate(t_shell *sh);
 	// ms_initer.c
 int			init_shell(t_shell *sh, char **env);
 int			init_env(t_shell *sh, char **env);
-
-	// ms_signals.c
 void		init_signals(void);
-void		init_sigset(void);
-void		init_sigaction(void);
 void		signal_handler(int signum);
 
 	// ms_input_manager.c
