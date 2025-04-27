@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/27 14:01:46 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/27 14:45:39 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,48 +28,47 @@ t_list	*ft_getenv(char *var_name, t_list **this_env)
 	return (NULL);
 }
 
-void    stash_var(t_shell *sh)
+void	stash_var(t_shell *sh)
 {
-        t_list  *stashed_var;
-        t_list  *node;
-        char    **split_str;
-        size_t  i;
-        size_t  nb_args;
+	t_list	*stashed_var;
+	t_list	*node;
+	char	**split_str;
+	size_t	i;
+	size_t	nb_args;
 
-        i = 0;
-        node = NULL;
-        split_str = NULL;
-        nb_args = ft_strslen(sh->input_args);
-        //printf("[export_stash_var] nb_args: %ld", nb_args); // DEBUG
-        while (i < nb_args)
-        {
-                split_str = ft_split(sh->input_args[i], '=');
-                if (!split_str)
-                        return ;
-                stashed_var = ft_getenv(split_str[0], &sh->env_stash);
-                if (stashed_var != NULL)
-                {
-                        //printf("%s=%s\n", ((char **)stashed_var->content)[0], ((char **)stashed_var->content)[1]);
-                        if (ft_update_env_value(stashed_var, split_str) != 0)
-                        {
-                                free_args(split_str);
-                                return ;
-                        }
-                }
-                else
-                {
-                        node = ft_lstnew((char **)split_str);
-			ft_show_strs((char **)node->content, "[DEBUG] node_content -");
-                        if (!node)
+	i = 0;
+	node = NULL;
+	split_str = NULL;
+	nb_args = ft_strslen(sh->input_args);
+	while (i < nb_args)
+	{
+		split_str = ft_split(sh->input_args[i], '=');
+		if (!split_str)
+			return ;
+		stashed_var = ft_getenv(split_str[0], &sh->env_stash);
+		if (stashed_var != NULL)
+		{
+			//printf("%s=%s\n", ((char **)stashed_var->content)[0], ((char **)stashed_var->content)[1]);
+			if (ft_update_env_value(stashed_var, split_str) != 0)
 			{
 				free_args(split_str);
-                                return ;
+				return ;
 			}
-                        ft_lstadd_back(&sh->env_stash, node);
-                }
-                i++;
-        }
-        return ;
+		}
+		else
+		{
+			node = ft_lstnew((char **)split_str);
+			ft_show_strs((char **)node->content, "[DEBUG] node_content -");
+			if (!node)
+			{
+				free_args(split_str);
+				return ;
+			}
+			ft_lstadd_back(&sh->env_stash, node);
+		}
+		i++;
+	}
+	return ;
 }
 
 // add a new node with split_str content to the end of the list

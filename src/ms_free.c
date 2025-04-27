@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:53:00 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/27 11:13:01 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/27 15:04:37 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ void	free_memory(t_shell *sh)
 		free_list(&sh->env_stash);
 	if (sh->cmds != NULL)
 		free_commands(sh->cmds);
-
-	// history
+	rl_clear_history();
 }
 
 void	free_args(char **input_args)
@@ -42,7 +41,7 @@ void	free_args(char **input_args)
 }
 
 void	free_list(t_list **list)
-{	
+{
 	t_list	*cur_node;
 	t_list	*prev_node;
 	int	i;
@@ -56,10 +55,7 @@ void	free_list(t_list **list)
 			{
 				i = 0;
 				while (((char **)cur_node->content)[i])
-				{
-					free(((char **)cur_node->content)[i]);
-					i++;
-				}
+					free(((char **)cur_node->content)[i++]);
 				free(((char **)cur_node->content));
 				cur_node->content = NULL;
 			}
@@ -67,7 +63,6 @@ void	free_list(t_list **list)
 			cur_node = cur_node->next;
 			free(prev_node);
 		}
-		//free(cur_node);
 		*list = NULL;
 	}
 }

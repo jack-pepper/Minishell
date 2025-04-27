@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:51 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/22 11:55:54 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/27 15:14:21 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,8 @@ int	cmd_pwd(void)
 
 char	*store_cwd(char *cwd)
 {
-	char	buf[4096]; // Allegedly max path in Linux. Should excess be handled in another way (see man)?
-	
-	ft_memset(buf, 0, 4097);
-	cwd = malloc(sizeof(char) * (ft_strlen(getcwd(buf, 4096)) + 1));
+	cwd = getcwd(NULL, 0); // Better than buf[4096]: malloc directly the needed size (see man getcwd)!
 	if (!cwd)
 		return (NULL);
-	ft_strlcpy(cwd, buf, ft_strlen(buf) + 1);
 	return (cwd);
 }

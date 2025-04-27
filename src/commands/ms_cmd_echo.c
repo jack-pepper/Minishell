@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:00:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/18 22:55:51 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/27 14:50:30 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,27 +36,27 @@ char	*echo_join_input(char *joined_input, char **input_args, int *i)
 
 int	cmd_echo(t_shell *sh)
 {
- 	char	*joined_input;
- 	char	head[1];
- 	bool	opt_n;
- 	int	i;
+	char	*joined_input;
+	char	head[1];
+	bool	opt_n;
+	int		i;
 
- 	if (!sh->input_args || !(sh->input_args[1]))
- 		return (-1);
- 	i = 1;
- 	echo_set_n(sh->input_args, &opt_n, &i);
- 	head[0] = 0;
- 	joined_input = &head[0];
- 	while (sh->input_args[i] != NULL)
- 	{
- 		joined_input = echo_join_input(joined_input, sh->input_args, &i);
- 		if (!joined_input)
- 			return (-1);
- 	}
- 	printf("%s", joined_input);
- 	if (opt_n == false)
- 		printf("\n");
- 	free(joined_input);
+	if (!sh->input_args || !(sh->input_args[1]))
+		return (-1);
+	i = 1;
+	echo_set_n(sh->input_args, &opt_n, &i);
+	head[0] = 0;
+	joined_input = &head[0];
+	while (sh->input_args[i] != NULL)
+	{
+		joined_input = echo_join_input(joined_input, sh->input_args, &i);
+		if (!joined_input)
+			return (-1);
+	}
+	printf("%s", joined_input);
+	if (opt_n == false)
+		printf("\n");
+	free(joined_input);
 	return (0);
 }
 

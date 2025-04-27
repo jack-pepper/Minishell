@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:56:45 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/27 14:16:42 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/27 14:42:07 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,12 @@ void	init_signals(void)
 {
 	struct sigaction	act_sigint;
 	struct sigaction	act_sigquit;
-        
+
 	ft_memset(&act_sigquit, 0, sizeof(act_sigquit));
 	act_sigquit.sa_handler = SIG_IGN;
 	act_sigquit.sa_flags = 0;
 	sigaction(SIGQUIT, &act_sigquit, NULL);
-        ft_memset(&act_sigint, 0, sizeof(act_sigint));
+	ft_memset(&act_sigint, 0, sizeof(act_sigint));
 	act_sigint.sa_handler = &signal_handler;
 	act_sigint.sa_flags = 0;
 	sigaction(SIGINT, &act_sigint, NULL);

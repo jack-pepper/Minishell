@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:18:28 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/27 11:58:33 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/27 15:29:21 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,5 +121,5 @@ int main(int argc, char **argv, char **env)
 
 	free(line);
 	rl_clear_history();
-	return (0);
+	return (sh.last_exit_status); // ???
 }

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 12:59:33 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/25 14:17:55 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/27 14:36:55 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	cmd_cd(t_shell *sh)
 	// cd_process_path
 	if (path[0] == '.')
 	{
-		cur_path = handle_dotted_path(sh, cwd, path);
+		cur_path = handle_dotted_path(cwd, path);
 		printf("[DEBUG] [cmd_cd / cur_path] %s\n", cur_path);
 		if (change_directory(sh, cwd, cur_path) != 0)
 		{
@@ -57,31 +57,6 @@ int	cmd_cd(t_shell *sh)
 	}
 	free(cwd);
 	return (0);
-}
-
-char	*handle_dotted_path(t_shell *sh, char *cwd, char *path)
-{
-	char	*joined_path;
-	char	**split_path;
-	char	*rejoined_path;
-
-	cwd++; cwd--; sh++; sh--; // DEBUG
-
-	joined_path = NULL;
-	split_path = NULL;
-	rejoined_path = NULL;
-	joined_path = get_abs_path(joined_path, cwd, path);
-	if (!joined_path)
-		return (NULL);
-	split_path = split_abs_path(split_path, joined_path);
-	if (!split_path)
-		return (NULL);
-	flag_dotted_path(split_path, CTRL_CHAR_TO_BE_DELETED);
-	rejoined_path = rejoin_abs_path(rejoined_path, split_path);
-	free_args(split_path);
-	if (!rejoined_path)
-		return (NULL);
-	return (rejoined_path);
 }
 
 int	change_directory(t_shell *sh, char *cwd, char *path)

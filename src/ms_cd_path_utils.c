@@ -6,11 +6,34 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 11:48:09 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/25 13:18:50 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/27 14:35:57 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+char	*handle_dotted_path(char *cwd, char *path)
+{
+	char	*joined_path;
+	char	**split_path;
+	char	*rejoined_path;
+
+	joined_path = NULL;
+	split_path = NULL;
+	rejoined_path = NULL;
+	joined_path = get_abs_path(joined_path, cwd, path);
+	if (!joined_path)
+		return (NULL);
+	split_path = split_abs_path(split_path, joined_path);
+	if (!split_path)
+		return (NULL);
+	flag_dotted_path(split_path, CTRL_CHAR_TO_BE_DELETED);
+	rejoined_path = rejoin_abs_path(rejoined_path, split_path);
+	free_args(split_path);
+	if (!rejoined_path)
+		return (NULL);
+	return (rejoined_path);
+}
 
 // Form absolute path from cwd and path and store to joined_path
 char	*get_abs_path(char *joined_path, char *cwd, char *path)

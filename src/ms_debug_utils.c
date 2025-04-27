@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:29:10 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/27 14:05:00 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/27 14:41:02 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ void	ft_show_strs(char **strs, char *debug_msg)
 	int	i;
 
 	i = 0;
-        while (strs[i] != NULL)
-        {
-              printf("%s: strs[%d]: %s\n", debug_msg, i, strs[i]);
-              i++;
-        }
+	while (strs[i] != NULL)
+	{
+		printf("%s: strs[%d]: %s\n", debug_msg, i, strs[i]);
+		i++;
+	}
 }

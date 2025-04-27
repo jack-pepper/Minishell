@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/27 14:17:40 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/27 15:26:10 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ typedef struct s_shell
 
 	// minishell.c
 int			main(int argc, char **argv, char **env);
-void    		stash_var_or_invalidate(t_shell *sh);
+void		stash_var_or_invalidate(t_shell *sh);
 
 	// ms_initer.c
 int			init_shell(t_shell *sh, char **env);
@@ -85,7 +85,7 @@ void		signal_handler(int signum);
 	// ms_input_manager.c
 char		*get_input(char *line);
 char		**normalize_input(char *line, t_shell *sh);
-void		process_input(t_shell *sh);
+int			process_input(t_shell *sh);
 
 	// ms_normalizer.c
 char		*ft_normalize(char *line);
@@ -108,10 +108,11 @@ void		add_new_env_var(t_shell *sh, char **split_str);
 int			ft_update_env_value(t_list *set_var, char **split_str);
 
 	// ms_cd_path_utils.c
-char	*get_abs_path(char *joined_path, char *cwd, char *path);
-char	**split_abs_path(char **split_path, char *joined_path);
-void	flag_dotted_path(char **split_path, char ctrl_char);
-char	*rejoin_abs_path(char *rejoined_path, char **split_path);
+char		*handle_dotted_path(char *cwd, char *path);
+char		*get_abs_path(char *joined_path, char *cwd, char *path);
+char		**split_abs_path(char **split_path, char *joined_path);
+void		flag_dotted_path(char **split_path, char ctrl_char);
+char		*rejoin_abs_path(char *rejoined_path, char **split_path);
 
 	// ms_replace_utils.c
 void		ft_replace_if_space(char *cur_c, char new_c);
@@ -125,7 +126,7 @@ char		**ft_strschr(char **strs, char c, int forbidden_pos);
 char		**ft_strsdup(char **strs);
 
 	// ms_debug_utils.c
-void	ft_show_strs(char **strs, char *debug_msg);
+void		ft_show_strs(char **strs, char *debug_msg);
 
 	// ms_commands_manager.c
 int			init_cmds(t_shell *sh);
@@ -134,34 +135,33 @@ t_command	*register_cmd(char *name, void *func, char *doc);
 /* Prototypes: commands */
 
 	// ms_cmd_pwd.c - Print name of current/working directory
-int		cmd_pwd(void);
-char	*store_cwd(char *cwd);
+int			cmd_pwd(void);
+char		*store_cwd(char *cwd);
 
 	// ms_cmd_cd.c - Change the working directory
 int			cmd_cd(t_shell *sh);
 int			change_directory(t_shell *sh, char *cwd, char *path);
-char		*handle_dotted_path(t_shell *sh, char *cwd, char *path);
 void		update_pwds_vars(t_shell *sh, char *prev_cwd, char *new_pwd);
 void		update_pwd_var(t_shell *sh, char **split_pwd);
 void		update_old_pwd_var(t_shell *sh, char **split_old_pwd);
 
 	// ms_cmd_echo.c - Display a line of text
-int		cmd_echo(t_shell *sh);
+int			cmd_echo(t_shell *sh);
 void		echo_set_n(char **input_args, bool *opt_n, int *i);
 
 	// ms_cmd_exit.c - Cause the shell to exit
-int		cmd_exit(t_shell *sh, unsigned int status);
+int			cmd_exit(t_shell *sh, unsigned int status);
 
 	// ms_cmd_export.c - Set the export attribute for variables
-int		cmd_export(t_shell *sh);
+int			cmd_export(t_shell *sh);
 void		export_from_term(t_shell *sh, size_t *i);
 void		export_from_stash(t_shell *sh, t_list *stashed_var);
 
 	// ms_cmd_unset.c - Unset values and attributes of variables and functions
-int		cmd_unset(t_shell *sh);
+int			cmd_unset(t_shell *sh);
 
 	// ms_cmd_env.c - Display the env variables
-int		cmd_env(t_shell *sh);
+int			cmd_env(t_shell *sh);
 
 /* Protoypes: error handling and cleaning */
 
@@ -177,13 +177,13 @@ void		free_pipeline(t_pipeline *p);
 void		exec_with_redirection(t_pipeline *cmd, char **env);
 t_pipeline	*parse_redirection_only(char **tokens);
 void		print_pipeline(t_pipeline *p);
-void run_pipeline_from_minshell(t_pipeline *p, char **env);
+void		run_pipeline_from_minshell(t_pipeline *p, char **env);
 typedef enum e_cmd_type {
 	BASIC,
 	REDIR_ONLY,  
 	PIPELINE,   
 	MIXED_INVALID
 }	t_cmd_type;
-bool is_builtin(const char *cmd);
-t_cmd_type classify_command(char **tokens);
+bool		is_builtin(const char *cmd);
+t_cmd_type	classify_command(char **tokens);
 #endif
