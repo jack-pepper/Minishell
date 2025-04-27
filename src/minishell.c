@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:18:28 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/24 11:01:11 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/04/27 08:27:17 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,18 @@
 // 	rl_clear_history(); // we should probably save the history in a file
 // 	return (0);
 // }
-
+bool validate_pipeline_files(t_pipeline *p)
+{
+	if (p->infile)
+	{
+		if (access(p->infile, F_OK) != 0)
+		{
+			perror(p->infile);
+			return false;
+		}
+	}
+	return true;
+}
 int main(int argc, char **argv, char **env)
 {
 	t_shell sh;
@@ -85,16 +96,25 @@ int main(int argc, char **argv, char **env)
 			sh.input_args = normalize_input(line, &sh);
 			if (!sh.input_args)
 				return (-1);
-			int i = 0;
-			while(sh.input_args[i])
-			{
-				printf("[DEBUG]input_arg[i] = %s\n", sh.input_args[i]);
-				i++;
-			}
+			// int x = 0;
+			// while (sh.input_args[x]) {
+			// 	printf("[DEBUG]input_argx[%d] = \"%s\"\n", x, sh.input_args[x]);
+			
+			// 	// int j = 0;
+			// 	// while (sh.input_args[x][j]) {
+			// 	// 	printf("    char[%d] = '%c' (ASCII: %d)\n",
+			// 	// 		   j,
+			// 	// 		   sh.input_args[x][j],
+			// 	// 		   (unsigned char)sh.input_args[x][j]);
+			// 	// 	j++;
+			// 	// }
+			// 	x++;
+			// }
+				
 			t_cmd_type type = classify_command(sh.input_args);
-			if (type == REDIR_ONLY || type == BASIC)
+			if ((type == REDIR_ONLY || type == BASIC) && type != PIPELINE)
 			{
-				if (strcmp(sh.input_args[0], ">") == 0)
+				if (strcmp(sh.input_args[0], (char[]){CTRL_CHAR_REDIR_IN,'\0'}) == 0)
 				{
 					printf("[DEBUG]REDIR_ONLY\n");
 					int new_file = open(sh.input_args[1], O_WRONLY | O_CREAT | O_TRUNC, 0644);

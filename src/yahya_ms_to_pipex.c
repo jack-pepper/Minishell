@@ -20,13 +20,12 @@ bool is_builtin(const char *cmd)
 int count_command_tokens(char **tokens, int start) {
 	int count = 0;
 	while (tokens[start] &&
-	       ft_strcmp(tokens[start], "|") != 0)
+	       ft_strcmp(tokens[start], (char[]){CTRL_CHAR_PIPE, '\0'}) != 0)
 	{
-		// skip redirection tokens AND their target
-		if ((ft_strcmp(tokens[start], "<") == 0 ||
-		     ft_strcmp(tokens[start], ">") == 0 ||
-		     ft_strcmp(tokens[start], ">>") == 0) &&
-		    tokens[start + 1])
+		if ((ft_strcmp(tokens[start], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0 ||
+		ft_strcmp(tokens[start], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0 ||
+		ft_strcmp(tokens[start], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0) &&
+	   tokens[start + 1])
 		{
 			start += 2;
 			continue;
@@ -46,18 +45,20 @@ char **extract_command_args(char **tokens, int *i, int count) {
 		return NULL;
 
 	while (tokens[*i] &&
-		ft_strcmp(tokens[*i], "|") != 0 &&
-		ft_strcmp(tokens[*i], "<") != 0 &&
-		ft_strcmp(tokens[*i], ">") != 0 &&
-		ft_strcmp(tokens[*i], ">>") != 0)
+		ft_strcmp(tokens[*i], (char[]){CTRL_CHAR_PIPE, '\0'}) != 0 &&
+		ft_strcmp(tokens[*i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) != 0 &&
+		ft_strcmp(tokens[*i], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) != 0 &&
+		ft_strcmp(tokens[*i], (char[]){CTRL_CHAR_APPEND, '\0'}) != 0)
 	{
 					// If it's a redirection token, skip its target
-		if ((ft_strcmp(tokens[*i], "<") == 0 || ft_strcmp(tokens[*i], ">") == 0 || ft_strcmp(tokens[*i], ">>") == 0) && tokens[*i + 1])
+		if ((ft_strcmp(tokens[*i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0 ||
+			ft_strcmp(tokens[*i], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0 ||
+			ft_strcmp(tokens[*i], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0) &&
+			tokens[*i + 1])
 		{
-			*i += 2;
-			continue;
-		}
-
+		   *i += 2;
+		   continue;
+	    }		   
 		argv[j++] = ft_strdup(tokens[*i]);
 		(*i)++;
 	}
@@ -66,8 +67,11 @@ char **extract_command_args(char **tokens, int *i, int count) {
 }
 
 void parse_next_command(char **tokens, int *i, t_pipeline *p, int *cmd_i) {
-	int count = count_command_tokens(tokens, *i);
+	// ✅ Skip leading pipes (important for double pipes or pipe at start)
+	while (tokens[*i] && ft_strcmp(tokens[*i], (char[]){CTRL_CHAR_PIPE, '\0'}) == 0)
+		(*i)++;
 
+	int count = count_command_tokens(tokens, *i);
 	if (count == 0)
 		return;
 
@@ -75,12 +79,14 @@ void parse_next_command(char **tokens, int *i, t_pipeline *p, int *cmd_i) {
 	if (!p->cmds[*cmd_i].argv)
 		return;
 
-	// Skip the pipe symbol
-	if (tokens[*i] && ft_strcmp(tokens[*i], "|") == 0)
-		(*i)++;
-
 	(*cmd_i)++;
+
+	// ✅ Skip trailing pipe, if any (in case it's still there)
+	if (tokens[*i] && ft_strcmp(tokens[*i], (char[]){CTRL_CHAR_PIPE, '\0'}) == 0
+)
+		(*i)++;
 }
+
 
 int count_cmds(char **tokens)
 {
@@ -90,11 +96,11 @@ int count_cmds(char **tokens)
 
 	while (tokens[i])
 	{
-		if (strcmp(tokens[i], "|") == 0)
+		if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_PIPE, '\0'}) == 0)
 			in_cmd = 0;
-		else if (ft_strcmp(tokens[i], "<") == 0 ||
-		         ft_strcmp(tokens[i], ">") == 0 ||
-		         ft_strcmp(tokens[i], ">>") == 0)
+		else if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0 ||
+		         ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0 ||
+		         ft_strcmp(tokens[i], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0)
 		{
 			if (tokens[i + 1])
 				i++; // skip file
@@ -125,7 +131,7 @@ static t_pipeline *init_pipeline(char **tokens) {
 }
 
 static bool handle_redirection_tokens(char **tokens, int *i, t_pipeline *p) {
-	if (strcmp(tokens[*i], "<<") == 0) {
+	if (strcmp(tokens[*i], (char[]){CTRL_CHAR_HEREDOC, '\0'}) == 0) {
 		if (tokens[*i + 1]) {
 			p->infile = ft_strdup("here_doc"); // This is the key translation
 			p->limiter = ft_strdup(tokens[++(*i)]); // Store the LIMITER
@@ -136,7 +142,7 @@ static bool handle_redirection_tokens(char **tokens, int *i, t_pipeline *p) {
 		return false;
 	}
 	
-	if (strcmp(tokens[*i], "<") == 0) {
+	if (strcmp(tokens[*i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0) {
 		if (tokens[*i + 1]) {
 			p->infile = ft_strdup(tokens[++(*i)]);
 			(*i)++;
@@ -144,7 +150,7 @@ static bool handle_redirection_tokens(char **tokens, int *i, t_pipeline *p) {
 		}
 		return false;
 	}
-	if (strcmp(tokens[*i], ">") == 0) {
+	if (strcmp(tokens[*i], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0) {
 		if (tokens[*i + 1]) {
 			p->outfile = ft_strdup(tokens[++(*i)]);
 			p->append = false;
@@ -153,7 +159,7 @@ static bool handle_redirection_tokens(char **tokens, int *i, t_pipeline *p) {
 		}
 		return false;
 	}
-	if (strcmp(tokens[*i], ">>") == 0) {
+	if (strcmp(tokens[*i], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0) {
 		if (tokens[*i + 1]) {
 			p->outfile = ft_strdup(tokens[++(*i)]);
 			p->append = true;
@@ -170,20 +176,17 @@ t_pipeline *build_pipeline_from_tokens(char **tokens) {
 	t_pipeline *p = init_pipeline(tokens);
 	if (!p)
 		return NULL;
-	printf("after initilizing pipeline\n");
+	// printf("after initilizing pipeline\n");
 	while (tokens[i]) {
-		printf("[token loop] i = %d -> '%s'\n", i, tokens[i]);
-	
+		// printf("[token loop] i = %d -> '%s'\n", i, tokens[i]);
+		
 		if (handle_redirection_tokens(tokens, &i, p)) {
 			continue;
 		}
 		parse_next_command(tokens, &i, p, &cmd_i);
 	}
-	
 	return p;
 }
-
-
 
 t_pipeline *parse_redirection_only(char **tokens)
 {
@@ -199,7 +202,7 @@ t_pipeline *parse_redirection_only(char **tokens)
 
 	while (tokens[i])
 	{
-		if (ft_strcmp(tokens[i], "<") == 0)
+		if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0)
 		{
 			if (tokens[i + 1])
 				p->infile = ft_strdup(tokens[++i]);
@@ -210,7 +213,7 @@ t_pipeline *parse_redirection_only(char **tokens)
 				return NULL;
 			}
 		}
-		else if (ft_strcmp(tokens[i], ">>") == 0)
+		else if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0)
 		{
 			if (tokens[i + 1])
 				p->outfile = ft_strdup(tokens[++i]), p->append = true;
@@ -221,7 +224,7 @@ t_pipeline *parse_redirection_only(char **tokens)
 				return NULL;
 			}
 		}
-		else if (ft_strcmp(tokens[i], ">") == 0)
+		else if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0)
 		{
 			if (tokens[i + 1])
 				p->outfile = ft_strdup(tokens[++i]), p->append = false;
@@ -250,7 +253,7 @@ t_pipeline *parse_redirection_only(char **tokens)
 	cmd->argv = argv;
 	p->cmds = cmd;
 	p->cmd_count = 1;
-
+	printf("parse redirection only\n");
 	return p;
 }
 
@@ -322,7 +325,7 @@ static int open_redirection_fds(t_pipeline *cmd, int *in_fd, int *out_fd) {
 	if (cmd->infile) {
 		*in_fd = open(cmd->infile, O_RDONLY);
 		if (*in_fd < 0) {
-			perror(cmd->infile);
+			perror(" ");
 			return -1;
 		}
 	}
@@ -331,7 +334,7 @@ static int open_redirection_fds(t_pipeline *cmd, int *in_fd, int *out_fd) {
 		int flags = O_WRONLY | O_CREAT | (cmd->append ? O_APPEND : O_TRUNC);
 		*out_fd = open(cmd->outfile, flags, 0644);
 		if (*out_fd < 0) {
-			perror(cmd->outfile);
+			perror(" ");
 			if (*in_fd != -1)
 				close(*in_fd);
 			return -1;
@@ -353,10 +356,9 @@ static void setup_redirections(int in_fd, int out_fd) {
 
 void exec_with_redirection(t_pipeline *cmd, char **env) {
 	int in_fd, out_fd;
-
 	if (open_redirection_fds(cmd, &in_fd, &out_fd) < 0)
 		return;
-
+	
 	pid_t pid = fork();
 	if (pid == 0) {
 		setup_redirections(in_fd, out_fd);
@@ -365,7 +367,7 @@ void exec_with_redirection(t_pipeline *cmd, char **env) {
 
 		char **argv = cmd->cmds[0].argv;
 		execve(get_cmd_path(argv[0], env), argv, env);
-		perror("execve failedx");
+		perror("execve failed");
 		exit(EXIT_FAILURE);
 	}
 
@@ -384,21 +386,21 @@ t_cmd_type classify_command(char **tokens)
 
 	while (tokens[i])
 	{
-		if (ft_strcmp(tokens[i], "|") == 0)
+		if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_PIPE, '\0'}) == 0)
 		{
 			has_pipe = 1;
 			seen_pipe = 1;
 			i++;
 			continue;
 		}
-		else if (ft_strcmp(tokens[i], "<") == 0 || ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0)
+		else if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0 || ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0 || ft_strcmp(tokens[i], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0)
 		{
 			has_redir = 1;
 			if (!tokens[i + 1])
 				return MIXED_INVALID;
 
 			// If redirection appears in the middle of the pipeline
-			if (seen_pipe && tokens[i + 2] && ft_strcmp(tokens[i + 2], "|") != 0)
+			if (seen_pipe && tokens[i + 2] && ft_strcmp(tokens[i + 2], (char[]){CTRL_CHAR_PIPE, '\0'}) != 0)
 				return MIXED_INVALID;
 
 			i += 2;
@@ -419,7 +421,7 @@ t_cmd_type classify_command(char **tokens)
 // Wrapper that dispatches between full pipex and simple pipeline
 void run_pipeline_from_minshell(t_pipeline *p, char **env) {
 	if ((p->infile && p->outfile) || (p->infile && ft_strcmp(p->infile, "here_doc") == 0 && p->outfile)) {
-		printf("run_pipex_from_minishell\n");
+		// printf("run_pipex_from_minishell\n");
 		run_pipex_from_minshell(p, env); // assumes pipex-style interface
 	} else {
 		printf("no pipex\n");
@@ -427,12 +429,12 @@ void run_pipeline_from_minshell(t_pipeline *p, char **env) {
 		int i;
 		int prev_fd = -1;
 		int pipe_fd[2];
-		for (int i = 0; i < p->cmd_count; i++) {
-			printf("cmd[%d]:\n", i);
-			for (int j = 0; p->cmds[i].argv[j]; j++) {
-				printf("  argv[%d] = %s\n", j, p->cmds[i].argv[j]);
-			}
-		}
+		// for (int i = 0; i < p->cmd_count; i++) {
+		// 	printf("cmd[%d]:\n", i);
+		// 	for (int j = 0; p->cmds[i].argv[j]; j++) {
+		// 		printf("  argv[%d] = %s\n", j, p->cmds[i].argv[j]);
+		// 	}
+		// }
 		i = 0; 
 		while (i < p->cmd_count) {
 			if (i < p->cmd_count - 1 && pipe(pipe_fd) < 0) {

@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:23:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/22 13:18:40 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/04/27 07:19:50 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,21 @@ char	*get_input(char *line)
 char	**normalize_input(char *line, t_shell *sh)
 {
 	sh->normalized_line = ft_normalize(line);
+	// printf("Normalized %s\n", sh->normalized_line);
 	if (!sh->normalized_line)
 		return (NULL);
 	sh->input_args = ft_split(sh->normalized_line, ' ');
+	// int i = 0;
+	// while (sh->input_args[i]) {
+	// 	printf(" normalize input argv[%d] = %s\n", i, sh->input_args[i]);
+    // i++;
+	// }
 	free(sh->normalized_line);
 	sh->normalized_line = NULL;
 	if (!sh->input_args)
 		return (NULL);
 	ft_replace_all_chars(sh->input_args, CTRL_CHAR_SPACE_IN_QUOTE, ' '); // change CTRL_CHAR in quotes back to spaces
-	ft_replace_all_chars(sh->input_args, CTRL_CHAR_PIPE, '|');
+	ft_replace_all_chars(sh->input_args, '|', CTRL_CHAR_PIPE);
 	// DEBUG: DISPLAY THE CONTENT OF INPUT_ARGS AFTER NORMALIZATION
 	//int	i = 0;
 	//while (sh->input_args[i] != NULL)
@@ -53,6 +59,12 @@ char	**normalize_input(char *line, t_shell *sh)
 	//	i++;
 	//}
 	// DEBUG
+// 	int i = 0;
+// 	while (sh->input_args[i]) {
+// 		printf(" normalize input argv[%d] = %s\n", i, sh->input_args[i]);
+//     i++;
+// }
+
 	return (sh->input_args);
 }
 

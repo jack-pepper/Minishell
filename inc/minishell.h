@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/22 12:28:55 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:54:34 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,11 @@
 # define NB_CMDS 10 // Temporary, find out dynamically. DEBUG
 
 # define PROMPT_STYLE "ms> "
-# define CTRL_CHAR_PIPE 28
+# define CTRL_CHAR_REDIR_IN  24  // "<"
+# define CTRL_CHAR_REDIR_OUT 25 // ">"
+# define CTRL_CHAR_APPEND    26  // ">>"
+# define CTRL_CHAR_HEREDOC   27 // "<<"
+# define CTRL_CHAR_PIPE 28 // "|"
 # define CTRL_CHAR_SPACE_IN_QUOTE 29
 # define CTRL_CHAR_VAR_TO_INTERPRET 30
 # define CTRL_CHAR_SUBARG_DELIM 31

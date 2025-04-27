@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/04/24 09:53:57 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/04/27 07:21:40 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,7 @@ int run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 		free(argv[i++]);
 	free(argv);
 
-	printf("[DEBUG - runpipexfromminshell()] PIPEX EXIT STATUS: %d\n", pipex.exit_status);
+	// printf("[DEBUG - runpipexfromminshell()] PIPEX EXIT STATUS: %d\n", pipex.exit_status);
 
 	return pipex.exit_status;
 }

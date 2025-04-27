@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:54:10 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/04/24 10:22:14 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/04/27 08:28:57 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,9 @@ typedef struct s_pipex
 }	t_pipex;
 
 typedef struct s_commands {
-    char **argv; // NULL-terminated array
+	char **argv;
 } t_commands;
+
 
 typedef struct s_pipeline {
     char **tokens;
