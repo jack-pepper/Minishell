@@ -6,7 +6,7 @@
 #    By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/14 09:35:38 by mmalie            #+#    #+#              #
-#    Updated: 2025/04/14 20:30:29 by mmalie           ###   ########.fr        #
+#    Updated: 2025/04/27 13:27:04 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,7 @@ LIBUTILS = ft_itoa.c \
 	   ft_init_two_ints.c \
            ft_init_three_ints.c \
 	   ft_init_two_size_t.c \
+	   ft_count_char.c \
 
 SRC = ${LIBUTILS}
 

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:23:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/25 14:39:45 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/27 13:27:33 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,11 @@ void	process_input(t_shell *sh)
 	// "<" or "infile.txt >" (check) && NO PIPES
 
 
-	ft_show_strs(sh->input_args, "[DEBUG] input_args BEFORE env interpret"); // DEBUG
+//	ft_show_strs(sh->input_args, "[DEBUG] input_args BEFORE env interpret"); // DEBUG
 	
 	ft_interpret_env(sh);
 	
-	ft_show_strs(sh->input_args, "[DEBUG] input_args AFTER env interpret"); // DEBUG
+//	ft_show_strs(sh->input_args, "[DEBUG] input_args AFTER env interpret"); // DEBUG
 
 
         if (ft_strcmp(sh->input_args[0], "exit") == 0)

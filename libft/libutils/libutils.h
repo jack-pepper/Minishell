@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 11:25:28 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/14 20:30:09 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/27 13:26:45 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,6 @@ void	ft_init_ints(int init_value, int count, ...);
 void	ft_init_two_ints(int init_value, int *int_1, int *int_2);
 void	ft_init_three_ints(int init_value, int *int_1, int *int_2, int *int_3);
 void	ft_init_two_size_t(size_t init_value, size_t *nb_1, size_t *nb_2);
+int		ft_count_char(char *str, char c);
 
 #endif

@@ -1,26 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ms_debug_utils.c                                   :+:      :+:    :+:   */
+/*   ft_count_char.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/25 14:29:10 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/27 14:05:00 by mmalie           ###   ########.fr       */
+/*   Created: 2025/04/27 13:22:38 by mmalie            #+#    #+#             */
+/*   Updated: 2025/04/27 13:25:07 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../libft.h"
 
-// Display the content of strs
-void	ft_show_strs(char **strs, char *debug_msg)
+int	ft_count_char(char *str, char c)
 {
-	int	i;
+	size_t	str_len;
+	size_t	i;
+	int		count;
 
+	str_len = ft_strlen(str);
 	i = 0;
-        while (strs[i] != NULL)
-        {
-              printf("%s: strs[%d]: %s\n", debug_msg, i, strs[i]);
-              i++;
-        }
+	count = 0;
+	while (i < str_len)
+	{
+		if (str[i] == c)
+			count++;
+		i++;
+	}
+	return (count);
 }

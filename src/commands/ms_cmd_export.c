@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/27 11:46:43 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/27 14:02:00 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,27 +92,4 @@ void	export_from_stash(t_shell *sh, t_list *stashed_var)
 	if (stashed_var->content)
 		free_args((char **)stashed_var->content);
 	free(stashed_var);
-}
-
-// add a new node with split_str content to the end of the list
-void	add_new_env_var(t_shell *sh, char **split_str)
-{
-	t_list	*new_node;
-	
-	new_node = ft_lstnew((char **)split_str);
-	if (!new_node)
-	{
-		free_args(split_str);
-		return ;
-	}
-	ft_lstadd_back(&sh->this_env, new_node);
-}
-
-// free previous content, malloc for new content and copy it from split_str
-int	ft_update_env_value(t_list *set_var, char **split_str)
-{
-	if (set_var->content)
-		free_args(set_var->content);
-	set_var->content = split_str;
-	return (0);	
 }
