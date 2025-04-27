@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/26 17:40:24 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/27 11:49:58 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,6 @@ void		pass_quotes(char *dst, char *src, size_t *i, size_t *j);
 	// ms_quotes_handler.c
 void		handle_quote(char *line, char quote_type, int *i, int *to_collapse);
 
-	// ms_redirections_manager.c
-//
-
 	// ms_env_interpreter.c
 int			ft_interpret_env(t_shell *sh);
 char		**ft_split_args(char **split_args, char *input_arg);
@@ -128,6 +125,7 @@ char	*rejoin_abs_path(char *rejoined_path, char **split_path);
 void		ft_replace_if_space(char *cur_c, char new_c);
 void		ft_replace_char(char *cur_c, char new_c);
 void		ft_replace_all_chars(char **input_args, char old_c, char new_c);
+
 
 	// ms_debug_utils.c
 void	ft_show_strs(char **strs, char *debug_msg);
