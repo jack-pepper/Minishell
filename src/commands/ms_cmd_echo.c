@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:00:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/27 14:50:30 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/27 22:33:28 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	cmd_echo(t_shell *sh)
 	int		i;
 
 	if (!sh->input_args || !(sh->input_args[1]))
-		return (-1);
+		return (0);
 	i = 1;
 	echo_set_n(sh->input_args, &opt_n, &i);
 	head[0] = 0;

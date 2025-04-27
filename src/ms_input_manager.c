@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:23:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/27 15:38:46 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/27 23:10:07 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,9 @@ int	process_input(t_shell *sh)
 {
 	if (!sh->input_args || sh->input_args[0] == NULL)
 		return (-1) ;
-	if (sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET && sh->input_args[0][1] == '?') // need to add more safety for next char
+	if ((sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET && sh->input_args[0][1] == '?')
+		|| (ft_strcmp(sh->input_args[0], "echo") == 0 && sh->input_args[1] && sh->input_args[1][0] == CTRL_CHAR_VAR_TO_INTERPRET
+		&& sh->input_args[1][1] == '?')) // need to add more safety for next char
 	{
 		printf("%d\n", sh->last_exit_status);
 		return (0);
@@ -66,7 +68,6 @@ int	process_input(t_shell *sh)
 //	ft_show_strs(sh->input_args, "[DEBUG] input_args BEFORE env interpret"); // DEBUG	
 	ft_interpret_env(sh);
 //	ft_show_strs(sh->input_args, "[DEBUG] input_args AFTER env interpret"); // DEBUG
-
 
         if (ft_strcmp(sh->input_args[0], "exit") == 0)
 	{
@@ -92,18 +93,17 @@ int	process_input(t_shell *sh)
 	else if (ft_strcmp(sh->input_args[0], "unset") == 0)
 		sh->last_exit_status = cmd_unset(sh);
 	else
-		stash_var_or_invalidate(sh); // set last exit statys to 127 (if invalid command))
+		sh->last_exit_status = stash_var_or_invalidate(sh);
 	return (sh->last_exit_status);
 }
 
-void	stash_var_or_invalidate(t_shell *sh)
+int	stash_var_or_invalidate(t_shell *sh)
 {
 	char	**invalid_cmd;
 
 	invalid_cmd = ft_strschr(sh->input_args, '=', 0);
 	if (invalid_cmd == NULL)
 	{
-		//printf("All args are valid: all contain = not at index [0]. Stash:\n");
 		stash_var(sh);
 		/*DEBUG
 		t_list *cur_node = sh->env_stash;
@@ -118,5 +118,9 @@ void	stash_var_or_invalidate(t_shell *sh)
 		*/
 	}
 	else
+	{
 		printf("minishell: %s: command not found\n", *invalid_cmd);
+		return (127);
+	}
+	return (0);
 }

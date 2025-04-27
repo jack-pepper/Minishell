@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/27 15:26:10 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/27 22:15:58 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ typedef struct s_shell
 
 	// minishell.c
 int			main(int argc, char **argv, char **env);
-void		stash_var_or_invalidate(t_shell *sh);
+int			stash_var_or_invalidate(t_shell *sh);
 
 	// ms_initer.c
 int			init_shell(t_shell *sh, char **env);
