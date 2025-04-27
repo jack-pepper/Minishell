@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/24 13:54:34 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/04/27 17:07:57 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,8 @@ void		free_pipeline(t_pipeline *p);
 void		exec_with_redirection(t_pipeline *cmd, char **env);
 t_pipeline	*parse_redirection_only(char **tokens);
 void		print_pipeline(t_pipeline *p);
-void run_pipeline_from_minshell(t_pipeline *p, char **env);
+void run_pipes_with_no_redir(t_pipeline *p, char **env);
+void run_pipeline_with_redir(t_pipeline *p, char **env);
 typedef enum e_cmd_type {
 	BASIC,
 	REDIR_ONLY,  
