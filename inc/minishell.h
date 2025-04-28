@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/27 22:15:58 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/28 09:58:27 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,15 @@
 # define NB_CMDS 10 // Temporary, find out dynamically. DEBUG
 
 # define PROMPT_STYLE "ms> "
+# define CTRL_CHAR_REDIR_IN  24  // "<"
+# define CTRL_CHAR_REDIR_OUT 25 // ">"
+# define CTRL_CHAR_APPEND    26  // ">>"
+# define CTRL_CHAR_HEREDOC   27 // "<<"
+# define CTRL_CHAR_PIPE 28 // "|"
 # define CTRL_CHAR_SPACE_IN_QUOTE 29
 # define CTRL_CHAR_VAR_TO_INTERPRET 30
 # define CTRL_CHAR_SUBARG_DELIM 31
-# define CTRL_CHAR_TO_BE_DELETED 29
+# define CTRL_CHAR_TO_BE_DELETED 23
 
 /* Libraries */
 
@@ -177,7 +182,9 @@ void		free_pipeline(t_pipeline *p);
 void		exec_with_redirection(t_pipeline *cmd, char **env);
 t_pipeline	*parse_redirection_only(char **tokens);
 void		print_pipeline(t_pipeline *p);
-void		run_pipeline_from_minshell(t_pipeline *p, char **env);
+void run_pipes_with_no_redir(t_pipeline *p, char **env);
+void run_pipeline_with_redir(t_pipeline *p, char **env);
+
 typedef enum e_cmd_type {
 	BASIC,
 	REDIR_ONLY,  
@@ -185,5 +192,5 @@ typedef enum e_cmd_type {
 	MIXED_INVALID
 }	t_cmd_type;
 bool		is_builtin(const char *cmd);
-t_cmd_type	classify_command(char **tokens);
+t_cmd_type classify_command(char **tokens);
 #endif

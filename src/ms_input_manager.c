@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_input_manager.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:23:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/27 23:10:07 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/28 09:49:05 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,34 @@ char	*get_input(char *line)
 char	**normalize_input(char *line, t_shell *sh)
 {
 	sh->normalized_line = ft_normalize(line);
+	// printf("Normalized %s\n", sh->normalized_line);
 	if (!sh->normalized_line)
 		return (NULL);
 	sh->input_args = ft_split(sh->normalized_line, ' ');
+	// int i = 0;
+	// while (sh->input_args[i]) {
+	// 	printf(" normalize input argv[%d] = %s\n", i, sh->input_args[i]);
+    // i++;
+	// }
 	free(sh->normalized_line);
 	sh->normalized_line = NULL;
 	if (!sh->input_args)
 		return (NULL);
-	ft_replace_all_chars(sh->input_args, CTRL_CHAR_SPACE_IN_QUOTE, ' ');
-//	ft_show_strs(sh->input_args, "[DEBUG] input_args after normalization"); // DEBUG
+	ft_replace_all_chars(sh->input_args, CTRL_CHAR_SPACE_IN_QUOTE, ' '); // change CTRL_CHAR in quotes back to spaces
+	ft_replace_all_chars(sh->input_args, '|', CTRL_CHAR_PIPE);
+	// DEBUG: DISPLAY THE CONTENT OF INPUT_ARGS AFTER NORMALIZATION
+	//int	i = 0;
+	//while (sh->input_args[i] != NULL)
+	//{
+	//	printf("[DEBUG] input_args[%d]): %s\n", i, sh->input_args[i]);
+	//	i++;
+	//}
+	// DEBUG
+// 	int i = 0;
+// 	while (sh->input_args[i]) {
+// 		printf(" normalize input argv[%d] = %s\n", i, sh->input_args[i]);
+//     i++;
+// }
 	return (sh->input_args);
 }
 

@@ -6,25 +6,45 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/04/13 14:43:24 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/27 07:21:40 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 
+// void	ft_init_pipex(t_pipex *pipex, char *infile, char *outfile)
+// {
+// 	pipex->in_fd = open(infile, O_RDONLY);
+// 	if (pipex->in_fd == -1)
+// 		perror(infile);
+// 	pipex->out_fd = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+// 	if (pipex->out_fd == -1)
+// 		perror(outfile);
+// 	pipex->cmd_args = NULL;
+// 	pipex->cmd_paths = NULL;
+// 	pipex->cmd_count = 0;
+// 	pipex->here_doc = false;
+// }
 void	ft_init_pipex(t_pipex *pipex, char *infile, char *outfile)
 {
-	pipex->in_fd = open(infile, O_RDONLY);
-	if (pipex->in_fd == -1)
-		perror(infile);
-	pipex->out_fd = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (!pipex->here_doc)
+	{
+		pipex->in_fd = open(infile, O_RDONLY);
+		if (pipex->in_fd == -1)
+			perror(infile);
+	}
+
+	pipex->out_fd = open(outfile,
+		O_WRONLY | O_CREAT | (pipex->here_doc ? O_APPEND : O_TRUNC),
+		0644);
+
 	if (pipex->out_fd == -1)
 		perror(outfile);
+
 	pipex->cmd_args = NULL;
 	pipex->cmd_paths = NULL;
 	pipex->cmd_count = 0;
-	pipex->here_doc = false;
 }
 
 void	ft_execute_pipex(t_pipex *pipex)
@@ -123,7 +143,7 @@ int run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 
 	if (!pipeline->infile || !pipeline->outfile)
 	{
-//		ft_printf("Error: missing infile or outfile\n");
+		ft_printf("Error: missing infile or outfile\n");
 		return (1);
 	}
 
@@ -134,10 +154,14 @@ int run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 	pipeline->pipex = malloc(sizeof(pipex));
 	if (!pipeline->pipex)
 		return (-1);
-	pipeline->pipex = &pipex;
+	// pipeline->pipex = &pipex;
 	// End added by [m]
 
-	argc = 3 + pipeline->cmd_count; // pipex + infile + N cmds + outfile
+	if (ft_strcmp(pipeline->infile, "here_doc") == 0)
+		argc = 4 + pipeline->cmd_count; // pipex + here_doc + LIMITER + N cmds + outfile
+	else
+		argc = 3 + pipeline->cmd_count; // pipex + infile + N cmds + outfile
+
 
 	argv = malloc(sizeof(char *) * (argc + 1));
 	if (!argv)
@@ -147,7 +171,17 @@ int run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 	}
 
 	argv[k++] = strdup("pipex");                // argv[0]
-	argv[k++] = strdup(pipeline->infile);       // argv[1]
+	if (ft_strcmp(pipeline->infile, "here_doc") == 0)
+	{
+		pipex.here_doc = true;
+		argv[k++] = strdup("here_doc");         // argv[1]
+		argv[k++] = strdup(pipeline->limiter);  // argv[2]
+	}
+	else
+	{
+		argv[k++] = strdup(pipeline->infile);   // argv[1]
+	}
+
 
 	i = 0;
 	// Join all commands into a single string
@@ -156,24 +190,19 @@ int run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 		argv[k++] = join_args(pipeline->cmds[i].argv); // argv[2] to argv[n]
 		i++;
 	}
-
 	argv[k++] = strdup(pipeline->outfile);      // argv[n+1]
+	// printf("I made it here");
 	argv[k] = NULL;
 
 	// Dispatch to the correct pipex handler
-	if (argc >= 6 && ft_strncmp(argv[1], "here_doc", 8) == 0)
+	if (argc == 5)
 	{
-		printf("here_doc\n");
-		handle_here_doc(&pipex, argc, argv);
-	}
-	else if (argc == 5)
-	{
-		printf("mandatory\n");
+		// printf("mandatory\n");
 		handle_mandatory(&pipex, argv, argc);
 	}
 	else if (argc > 5)
 	{
-		printf("bonus\n");
+		// printf("bonus\n");
 		handle_bonus(&pipex, argc, argv);
 	}
 	else
@@ -193,7 +222,7 @@ int run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 		free(argv[i++]);
 	free(argv);
 
-	printf("[DEBUG - runpipexfromminshell()] PIPEX EXIT STATUS: %d\n", pipex.exit_status);
+	// printf("[DEBUG - runpipexfromminshell()] PIPEX EXIT STATUS: %d\n", pipex.exit_status);
 
 	return pipex.exit_status;
 }

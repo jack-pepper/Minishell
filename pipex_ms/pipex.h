@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:54:10 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/04/13 14:06:12 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/27 08:28:57 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,19 @@ typedef struct s_pipex
 }	t_pipex;
 
 typedef struct s_commands {
-    char **argv; // NULL-terminated array
+	char **argv;
 } t_commands;
 
+
 typedef struct s_pipeline {
-    char *infile;
+    char **tokens;
+	char *infile;
     char *outfile;
     t_bool append;
     t_commands *cmds;
     int cmd_count;
-    t_pipex	*pipex; // Added by [m]
+    t_pipex	*pipex;
+	char *limiter; 
 } t_pipeline;
 
 void	ft_exit_error(t_pipex *pipex, const char *msg);
