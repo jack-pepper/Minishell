@@ -452,6 +452,10 @@ t_cmd_type classify_command(char **tokens)
 
 // // Wrapper that dispatches between full pipex and simple pipeline
 void run_pipes_with_no_redir(t_pipeline *p, char **env) {
+	if ((p->infile && p->outfile) || (p->infile && ft_strcmp(p->infile, "here_doc") == 0 && p->outfile)) {
+			printf("run_XXpipex_from_minishell\n");
+			run_pipex_from_minshell(p, env); // assumes pipex-style interface
+		} else {
 		printf("no pipex\n");
 		// When only pipes (no infile/outfile), fall back to simple execution
 		int i;
@@ -538,6 +542,7 @@ void run_pipes_with_no_redir(t_pipeline *p, char **env) {
 			wait(NULL);
 			i++;
 		}
+	}
 }
 
 void run_pipeline_with_redir(t_pipeline *p, char **env) {
@@ -645,7 +650,7 @@ void run_pipeline_with_redir(t_pipeline *p, char **env) {
 // 				int fd_in = -1;
 // 				int fd_out = -1;
 
-// 				// 🔥 Handle redirections INSIDE each command
+// 				// Handle redirections INSIDE each command
 // 				for (int j = 0; p->cmds[i].argv[j]; j++) {
 // 					if (p->cmds[i].argv[j][0] == CTRL_CHAR_REDIR_IN && p->cmds[i].argv[j + 1]) {
 // 						fd_in = open(p->cmds[i].argv[j + 1], O_RDONLY);
@@ -670,7 +675,7 @@ void run_pipeline_with_redir(t_pipeline *p, char **env) {
 // 					}
 // 				}
 
-// 				// 🔥 Apply redirections OR pipe
+// 				// Apply redirections OR pipe
 // 				if (fd_in != -1) {
 // 					dup2(fd_in, STDIN_FILENO);
 // 					close(fd_in);
@@ -688,7 +693,7 @@ void run_pipeline_with_redir(t_pipeline *p, char **env) {
 // 					close(pipe_fd[1]);
 // 				}
 
-// 				// 🔥 Exec the command
+// 				// Exec the command
 // 				char *cmd_path = get_cmd_path(p->cmds[i].argv[0], env);
 // 				if (!cmd_path) {
 // 					fprintf(stderr, "%s: command not found\n", p->cmds[i].argv[0]);
@@ -705,7 +710,7 @@ void run_pipeline_with_redir(t_pipeline *p, char **env) {
 // 				exit(EXIT_FAILURE);
 // 			}
 
-// 			// 🔥 Parent closes/updates file descriptors
+// 			// Parent closes/updates file descriptors
 // 			if (prev_fd != -1)
 // 				close(prev_fd);
 // 			if (i < p->cmd_count - 1) {

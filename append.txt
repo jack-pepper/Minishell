@@ -1,2 +1,15 @@
-sexo
-sexo
+0
+tal 168
+-rw-rw-r--  1 lepokile lepokile   3355 Apr 20 10:01 Makefile
+-rw-rw-r--  1 lepokile lepokile   1089 Apr 20 10:01 README.md
+-rw-r--r--  1 lepokile lepokile      6 Apr 27 15:42 Yahya
+-rw-rw-r--  1 lepokile lepokile      0 Apr 28 09:36 append.txt
+drwxrwxr-x  2 lepokile lepokile   4096 Apr 20 10:01 inc
+-rw-rw-r--  1 lepokile lepokile      0 Apr 27 08:25 infile.txt
+drwxrwxr-x 11 lepokile lepokile   4096 Apr 28 09:32 libft
+-rwxrwxr-x  1 lepokile lepokile 139816 Apr 28 09:32 minishell
+drwxrwxr-x  6 lepokile lepokile   4096 Apr 27 17:21 minishell_tester
+-rw-r--r--  1 lepokile lepokile     17 Apr 27 16:53 outfile.txt
+drwxrwxr-x  2 lepokile lepokile   4096 Apr 28 09:32 pipex_ms
+drwxrwxr-x  3 lepokile lepokile   4096 Apr 28 09:32 src
+-rw-r--r--  1 lepokile lepokile      6 Apr 27 07:59 testo
