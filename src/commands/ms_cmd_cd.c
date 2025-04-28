@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 12:59:33 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/27 14:36:55 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/28 23:47:15 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,10 @@ int	cmd_cd(t_shell *sh)
 	
 	cwd = NULL;
 	home_var = ft_getenv("HOME", &sh->this_env);
-	if (!sh->input_args[1] && (!home_var || !((char **)home_var->content)[1]))
-	{		
-		printf("bash: cd: HOME non set\n");
-		return (-1);
-	}
+	if (sh->input_args[2])
+		return (ft_ret(1, CD_TOO_MANY_ARGS, STDERR));
+	if (!sh->input_args[1] && (!home_var || !((char **)home_var->content)[1]))	
+		return (ft_ret(-1, CD_HOME_NON_SET, STDERR));
 	else if (!sh->input_args[1] && home_var && ((char **)home_var->content)[1])
 		path = ((char **)home_var->content)[1];
 	else
@@ -62,10 +61,7 @@ int	cmd_cd(t_shell *sh)
 int	change_directory(t_shell *sh, char *cwd, char *path)
 {
 	if (chdir(path) != 0)
-	{
-		printf("%s: No such file or directory!\n", path);
-		return (-1);
-	}
+		return (ft_ret(1, CD_NO_FILE_OR_DIR"ms: chdir: No such file or directory\n", STDERR));
 	update_pwds_vars(sh, cwd, path);
 	return (0);
 }

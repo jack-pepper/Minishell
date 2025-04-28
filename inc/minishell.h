@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/28 09:58:27 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/04/28 23:46:58 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define MINISHELL_H
 
 # define NB_CMDS 10 // Temporary, find out dynamically. DEBUG
+
+# define STDERR 2
 
 # define PROMPT_STYLE "ms> "
 # define CTRL_CHAR_REDIR_IN  24  // "<"
@@ -25,6 +27,12 @@
 # define CTRL_CHAR_VAR_TO_INTERPRET 30
 # define CTRL_CHAR_SUBARG_DELIM 31
 # define CTRL_CHAR_TO_BE_DELETED 23
+
+
+/* Return messages (ft_ret) */
+# define CD_TOO_MANY_ARGS "minishell: cd: too many arguments\n"
+# define CD_HOME_NON_SET "minishell: cd: HOME non set\n"
+# define CD_NO_FILE_OR_DIR "minishell: cd: No such file or directory\n"
 
 /* Libraries */
 
@@ -132,6 +140,7 @@ char		**ft_strsdup(char **strs);
 
 	// ms_debug_utils.c
 void		ft_show_strs(char **strs, char *debug_msg);
+int			ft_ret(int return_val, char *msg, int fd);
 
 	// ms_commands_manager.c
 int			init_cmds(t_shell *sh);

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 14:29:10 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/27 14:41:02 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/28 23:24:48 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,4 +23,11 @@ void	ft_show_strs(char **strs, char *debug_msg)
 		printf("%s: strs[%d]: %s\n", debug_msg, i, strs[i]);
 		i++;
 	}
+}
+
+// Save a line on returning by sending a message to a fd
+int	ft_ret(int return_val, char *msg, int fd)
+{
+	ft_putstr_fd(msg, fd);
+	return (return_val);
 }
