@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:23:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/27 23:10:07 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/28 12:24:35 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,10 +100,24 @@ int	process_input(t_shell *sh)
 int	stash_var_or_invalidate(t_shell *sh)
 {
 	char	**invalid_cmd;
+	int		i;
 
 	invalid_cmd = ft_strschr(sh->input_args, '=', 0);
 	if (invalid_cmd == NULL)
 	{
+		while (sh->input_args)
+		{
+			i = 0;
+			while (sh->input_args[i])
+			{
+				if (ft_strpbrk(sh->input_args[i], "-") != NULL) // but need to split fist to check only what is before = ...
+				{
+					printf("minishell: %s: command not found\n", sh->input_args[i]);
+					return (-1);
+				}
+				i++;
+			}
+		}
 		stash_var(sh);
 		/*DEBUG
 		t_list *cur_node = sh->env_stash;
