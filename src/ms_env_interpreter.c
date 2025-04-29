@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/29 19:37:41 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/29 23:03:13 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	ft_interpret_env(t_shell *sh)
 		if (!split_args)
 			return (-1);
 
-//		ft_show_strs(split_args, "[DEBUG] split_args");
+		ft_show_strs(split_args, "[DEBUG] split_args");
 
 		rejoined_arg = ft_nametoval(rejoined_arg, split_args,
 				&sh->this_env);
@@ -67,7 +67,7 @@ char	**ft_split_args(char **split_args, char *input_arg)
 
 char	*ft_nametoval(char *rejoined_arg, char **split_args, t_list **this_env)
 {
-	t_list	*set_var;
+/*	t_list	*set_var;
 	int		i;
 
 	i = 0;
@@ -90,6 +90,65 @@ char	*ft_nametoval(char *rejoined_arg, char **split_args, t_list **this_env)
 		i++;
 	}
 	return (rejoined_arg);
+*/
+	t_list	*set_var;
+	int		i;
+	int		j;
+
+	i = 0;
+	while (split_args[i])
+	{
+		j = 0;
+		while (split_args[i][j])
+		{
+			if (split_args[i][j] == CTRL_CHAR_VAR_TO_INTERPRET)
+			{
+				if (j == 0)
+				{
+					set_var = ft_getenv(&split_args[i][1], this_env);
+					if (set_var != NULL)
+					{
+						free(split_args[i]);
+						split_args[i] = ft_strdup(((char **)set_var->content)[1]);
+					}
+					else
+						split_args[i][j] = '$';
+				}
+				else if (j != 0)
+				{
+					split_subargs = ft_split(split_args[i], CTRL_CHAR_VAR_TO_INTERPRET);
+					if (!split_subargs)
+						return (NULL);
+					set_var = ft_getenv(&split_subargs[1][0], this_env);
+					if (set_var != NULL)
+					{
+						free(split_args[i]);
+						// replace the subargs with env by its value
+						split_args[i] = ft_strdup(((char **)set_var->content)[1]); // here I should rejoin with the rest of the arg
+						// rejoin the first subargs
+					}
+					else
+					{
+						split_args[i] = ft_strjoin(split_subargs[0], "$");
+						split_args[i] = ft_strjoin(split_args[i], split_subargs[1]);
+					}
+					// if there is another subarg, join it too
+					// free split_subargs
+					free_args(split_subargs);
+				}	
+				if (!split_args[i])
+					return (NULL);
+			}
+				else
+					split_args[i][j] = '$';
+			}
+			j++;
+		}
+		rejoined_arg = ft_rejoin_subarg(split_args, rejoined_arg, i);
+		i++;
+	}
+	return (rejoined_arg);
+
 }
 
 char	*ft_rejoin_subarg(char **split_args, char *rejoined_arg, int i)
