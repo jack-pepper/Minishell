@@ -338,24 +338,23 @@ char *get_cmd_path(char *cmd, char **envp)
 	char *path_str = get_path_from_env(envp);
 	if (!path_str)
 		return NULL;
-
 	char **paths = ft_split(path_str, ':');
 	if (!paths)
 		return NULL;
-
 	char *full_path = shell_find_cmd_path(cmd, paths);
 	ft_free_array(paths, -1);
 	return full_path;
 }
 
 
-static int open_redirection_fds(t_pipeline *cmd, int *in_fd, int *out_fd) {
+static int open_redirection_fds(t_pipeline *cmd, int *in_fd, int *out_fd, t_shell *sh) {
 	*in_fd = -1;
 	*out_fd = -1;
 
 	if (cmd->infile) {
 		*in_fd = open(cmd->infile, O_RDONLY);
 		if (*in_fd < 0) {
+			sh->last_exit_status = 1;
 			perror(" ");
 			return -1;
 		}
@@ -365,6 +364,7 @@ static int open_redirection_fds(t_pipeline *cmd, int *in_fd, int *out_fd) {
 		int flags = O_WRONLY | O_CREAT | (cmd->append ? O_APPEND : O_TRUNC);
 		*out_fd = open(cmd->outfile, flags, 0644);
 		if (*out_fd < 0) {
+			sh->last_exit_status = 1;
 			perror(" ");
 			if (*in_fd != -1)
 				close(*in_fd);
@@ -385,24 +385,34 @@ static void setup_redirections(int in_fd, int out_fd) {
 	}
 }
 
-void exec_with_redirection(t_pipeline *cmd, char **env) {
-	int in_fd, out_fd;
-	if (open_redirection_fds(cmd, &in_fd, &out_fd) < 0)
+void exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh) {
+	int in_fd;
+	int out_fd;
+	if (open_redirection_fds(cmd, &in_fd, &out_fd, sh) < 0)
 		return;
-	
+	// printf("I am here 1\n");
 	pid_t pid = fork();
 	if (pid == 0) {
 		setup_redirections(in_fd, out_fd);
 		if (cmd->cmd_count < 1)
 			exit(0);
-
+		// printf("I am here 2\n");
 		char **argv = cmd->cmds[0].argv;
 		execve(get_cmd_path(argv[0], env), argv, env);
+		// printf("i am here 3 \n");
 		perror("execve failed");
+		
 		exit(EXIT_FAILURE);
 }
 
-	waitpid(pid, NULL, 0);
+	int status;
+	waitpid(pid, &status, 0);
+
+	if (WIFEXITED(status))
+		sh->last_exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		sh->last_exit_status = 128 + WTERMSIG(status);
+
 	if (in_fd != -1)
 		close(in_fd);
 	if (out_fd != -1)
@@ -453,20 +463,20 @@ t_cmd_type classify_command(char **tokens)
 // // Wrapper that dispatches between full pipex and simple pipeline
 void run_pipes_with_no_redir(t_pipeline *p, char **env) {
 	if ((p->infile && p->outfile) || (p->infile && ft_strcmp(p->infile, "here_doc") == 0 && p->outfile)) {
-			printf("run_XXpipex_from_minishell\n");
+			// printf("run_XXpipex_from_minishell\n");
 			run_pipex_from_minshell(p, env); // assumes pipex-style interface
 		} else {
-		printf("no pipex\n");
+		// printf("no pipex\n");
 		// When only pipes (no infile/outfile), fall back to simple execution
 		int i;
 		int prev_fd = -1;
 		int pipe_fd[2];
-		for (int i = 0; i < p->cmd_count; i++) {
-			printf("cmd[%d]:\n", i);
-			for (int j = 0; p->cmds[i].argv[j]; j++) {
-				printf("  argv[%d] = %s\n", j, p->cmds[i].argv[j]);
-			}
-		}
+		// for (int i = 0; i < p->cmd_count; i++) {
+		// 	printf("cmd[%d]:\n", i);
+		// 	for (int j = 0; p->cmds[i].argv[j]; j++) {
+		// 		printf("  argv[%d] = %s\n", j, p->cmds[i].argv[j]);
+		// 	}
+		// }
 		i = 0; 
 		while (i < p->cmd_count) {
 			if (i < p->cmd_count - 1 && pipe(pipe_fd) < 0) {
@@ -517,15 +527,15 @@ void run_pipes_with_no_redir(t_pipeline *p, char **env) {
 					fprintf(stderr, "%s: command not found\n", p->cmds[i].argv[0]);
 					exit(127);
 				}
-				printf("Executing: %s\n", p->cmds[i].argv[0]);
-				for (int j = 0; p->cmds[i].argv[j]; j++) {
-					printf("  argv[%d] = %s\n", j, p->cmds[i].argv[j]);
-				}
+				// printf("Executing: %s\n", p->cmds[i].argv[0]);
+				// for (int j = 0; p->cmds[i].argv[j]; j++) {
+				// 	printf("  argv[%d] = %s\n", j, p->cmds[i].argv[j]);
+				// }
 
 				execve(cmd_path, p->cmds[i].argv, env);
-				printf("I am here Before Execv\n");
+				// printf("I am here Before Execv\n");
 				perror("execve failed");
-				printf("after execve fail\n");
+				// printf("after execve fail\n");
 				exit(EXIT_FAILURE);
 			}
 			if (prev_fd != -1)
@@ -545,7 +555,7 @@ void run_pipes_with_no_redir(t_pipeline *p, char **env) {
 	}
 }
 
-void run_pipeline_with_redir(t_pipeline *p, char **env) {
+void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
     // printf("[DEBUG] Starting pipeline execution\n");
     // printf("[DEBUG] Input file: %s\n", p->infile ? p->infile : "None");
     // printf("[DEBUG] Output file: %s\n", p->outfile ? p->outfile : "None");
@@ -564,7 +574,7 @@ void run_pipeline_with_redir(t_pipeline *p, char **env) {
         }
 
         int in_fd = -1, out_fd = -1;
-        open_redirection_fds(p, &in_fd, &out_fd);  // Unified redirection logic
+        open_redirection_fds(p, &in_fd, &out_fd, sh);  // Unified redirection logic
 
         pid_t pid = fork();
         if (pid == 0) {  // Child process
@@ -616,7 +626,6 @@ void run_pipeline_with_redir(t_pipeline *p, char **env) {
     for (int j = 0; j < p->cmd_count; j++) {
         wait(NULL);
     }
-
     // printf("[DEBUG] Pipeline execution completed\n");
 }
 

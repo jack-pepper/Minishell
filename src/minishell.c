@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:18:28 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/29 14:50:40 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/29 15:26:51 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,20 +97,20 @@ int main(int argc, char **argv, char **env)
 			sh.input_args = normalize_input(line, &sh);
 			if (!sh.input_args)
 				return (-1);
-//			 int x = 0;
-//			 while (sh.input_args[x]) {
-//			 	printf("[DEBUG]input_argx[%d] = \"%s\"\n", x, sh.input_args[x]);
+			//  int x = 0;
+			//  while (sh.input_args[x]) {
+			//  	printf("[DEBUG]input_argx[%d] = \"%s\"\n", x, sh.input_args[x]);
 			
-//			 	int j = 0;
-//			 	 while (sh.input_args[x][j]) {
-//			 	printf("    char[%d] = '%c' (ASCII: %d)\n",
-//			 		  j,
-//				   sh.input_args[x][j],
-//			 		   (unsigned char)sh.input_args[x][j]);
-//			 	j++;
-//			 }
-//			 	x++;
-//			 }
+			//  	int j = 0;
+			//  	 while (sh.input_args[x][j]) {
+			//  	printf("    char[%d] = '%c' (ASCII: %d)\n",
+			//  		  j,
+			// 	   sh.input_args[x][j],
+			//  		   (unsigned char)sh.input_args[x][j]);
+			//  	j++;
+			//  }
+			//  	x++;
+			//  }
 				
 			t_cmd_type type = classify_command(sh.input_args);
 			if ((type == REDIR_ONLY || type == BASIC) && type != PIPELINE)
@@ -138,7 +138,8 @@ int main(int argc, char **argv, char **env)
 						else
 						{
 							// printf("exec_with_redirection\n");
-							exec_with_redirection(pipeline, env);
+							exec_with_redirection(pipeline, env, &sh);
+							
 						}
 					}	
 					else
@@ -155,9 +156,16 @@ int main(int argc, char **argv, char **env)
 				// printf("Pipeline Created\n");
 				if (pipeline)
 				{
-					// printf("[DEBUG]run pipes_with_no_redir\n");	
-					// run_pipes_with_no_redir(pipeline, env);
-					run_pipeline_with_redir(pipeline, env);
+					if(strcmp(sh.input_args[0], (char[]){CTRL_CHAR_HEREDOC, '\0'}) == 0)
+					{
+						// printf("pipex from minishell\n");	
+						run_pipex_from_minshell(pipeline, env);
+					}
+					else
+					{
+						// printf("pipes_with redir\n");
+						run_pipeline_with_redir(pipeline, env, &sh);
+					}
 				}
 				else
 					fprintf(stderr, "Invalid pipeline\n");
@@ -170,7 +178,6 @@ int main(int argc, char **argv, char **env)
 			ft_free_array(sh.input_args, -1); // Make sure you free your token array
 		}
 	}
-
 	free(line);
 	rl_clear_history();
 	return (0);

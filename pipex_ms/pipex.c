@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/04/27 07:21:40 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:18:15 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,28 @@ static char *join_args(char **args)
 	}
 	return result;
 }
+int handle_heredoc(const char *limiter)
+{
+    char *line = NULL;
+    int fd = open(".heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd < 0)
+    {
+        perror("open .heredoc_tmp");
+        return (1);
+    }
+    while (1)
+    {
+        line = readline("> ");
+        if (!line || strcmp(line, limiter) == 0)
+            break;
+        write(fd, line, strlen(line));
+        write(fd, "\n", 1);
+        free(line);
+    }
+    free(line);
+    close(fd);
+    return (0);
+}
 
 int run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 {
@@ -156,7 +178,17 @@ int run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 		return (-1);
 	// pipeline->pipex = &pipex;
 	// End added by [m]
-
+	if (ft_strcmp(pipeline->infile, "here_doc") == 0)
+	{
+		if (handle_heredoc(pipeline->limiter) != 0)
+		{
+			fprintf(stderr, "Error: here_doc failed\n");
+			return (1);
+		}
+		free(pipeline->infile);
+		printf("HANDLING hered_doc\n");
+		pipeline->infile = strdup(".heredoc_tmp"); // Replace infile with generated file
+	}
 	if (ft_strcmp(pipeline->infile, "here_doc") == 0)
 		argc = 4 + pipeline->cmd_count; // pipex + here_doc + LIMITER + N cmds + outfile
 	else
@@ -169,7 +201,7 @@ int run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 		perror("malloc failed");
 		return (1);
 	}
-
+	printf("I am here\n");
 	argv[k++] = strdup("pipex");                // argv[0]
 	if (ft_strcmp(pipeline->infile, "here_doc") == 0)
 	{
