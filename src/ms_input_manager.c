@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 22:01:29 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/29 11:46:59 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/29 15:08:29 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*get_input(char *line)
 char	**normalize_input(char *line, t_shell *sh)
 {
 	sh->normalized_line = ft_normalize(line);
-	// printf("Normalized %s\n", sh->normalized_line);
+	//printf("Normalized %s\n", sh->normalized_line);
 	if (!sh->normalized_line)
 		return (NULL);
 	sh->input_args = ft_split(sh->normalized_line, ' ');
@@ -58,12 +58,6 @@ char	**normalize_input(char *line, t_shell *sh)
 	//	printf("[DEBUG] input_args[%d]): %s\n", i, sh->input_args[i]);
 	//	i++;
 	//}
-	// DEBUG
-// 	int i = 0;
-// 	while (sh->input_args[i]) {
-// 		printf(" normalize input argv[%d] = %s\n", i, sh->input_args[i]);
-//     i++;
-// }
 	return (sh->input_args);
 }
 
@@ -90,10 +84,11 @@ int	process_input(t_shell *sh)
 
         if (ft_strcmp(sh->input_args[0], "exit") == 0)
 	{
-		if (sh->input_args[1])
-			sh->last_exit_status = cmd_exit(sh, (unsigned int)(ft_atoi(sh->input_args[1])));
-		else
-			sh->last_exit_status = cmd_exit(sh, 0);
+		sh->last_exit_status = cmd_exit(sh, 0);
+		//if (sh->input_args[1])
+		//	sh->last_exit_status = cmd_exit(sh, (unsigned int)(ft_atoi(sh->input_args[1])));
+		//else
+		//	sh->last_exit_status = cmd_exit(sh, 0);
         }
 	else if (ft_strcmp(sh->input_args[0], "pwd") == 0)
                 sh->last_exit_status = cmd_pwd();
