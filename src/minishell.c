@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:18:28 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/29 15:26:51 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:15:13 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,14 +101,14 @@ int main(int argc, char **argv, char **env)
 			//  while (sh.input_args[x]) {
 			//  	printf("[DEBUG]input_argx[%d] = \"%s\"\n", x, sh.input_args[x]);
 			
-			//  	int j = 0;
-			//  	 while (sh.input_args[x][j]) {
-			//  	printf("    char[%d] = '%c' (ASCII: %d)\n",
-			//  		  j,
-			// 	   sh.input_args[x][j],
-			//  		   (unsigned char)sh.input_args[x][j]);
-			//  	j++;
-			//  }
+			// //  	int j = 0;
+			// //  	 while (sh.input_args[x][j]) {
+			// //  	printf("    char[%d] = '%c' (ASCII: %d)\n",
+			// //  		  j,
+			// // 	   sh.input_args[x][j],
+			// //  		   (unsigned char)sh.input_args[x][j]);
+			// //  	j++;
+			// //  }
 			//  	x++;
 			//  }
 				

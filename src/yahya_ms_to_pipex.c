@@ -355,7 +355,7 @@ static int open_redirection_fds(t_pipeline *cmd, int *in_fd, int *out_fd, t_shel
 		*in_fd = open(cmd->infile, O_RDONLY);
 		if (*in_fd < 0) {
 			sh->last_exit_status = 1;
-			perror(" ");
+			perror("X1");
 			return -1;
 		}
 	}
@@ -365,7 +365,7 @@ static int open_redirection_fds(t_pipeline *cmd, int *in_fd, int *out_fd, t_shel
 		*out_fd = open(cmd->outfile, flags, 0644);
 		if (*out_fd < 0) {
 			sh->last_exit_status = 1;
-			perror(" ");
+			perror(" X2");
 			if (*in_fd != -1)
 				close(*in_fd);
 			return -1;
@@ -401,7 +401,6 @@ void exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh) {
 		execve(get_cmd_path(argv[0], env), argv, env);
 		// printf("i am here 3 \n");
 		perror("execve failed");
-		
 		exit(EXIT_FAILURE);
 }
 
@@ -574,8 +573,11 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
         }
 
         int in_fd = -1, out_fd = -1;
-        open_redirection_fds(p, &in_fd, &out_fd, sh);  // Unified redirection logic
-
+		if (open_redirection_fds(p, &in_fd, &out_fd, sh) < 0) {
+			// Stop entire pipeline if redirection failed
+			return;
+		}
+		
         pid_t pid = fork();
         if (pid == 0) {  // Child process
             // printf("[DEBUG] Forked process %d for command: %s\n", getpid(), p->cmds[i].argv[0]);
