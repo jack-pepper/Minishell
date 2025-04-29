@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:01:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/29 15:13:01 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/29 15:57:47 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,24 @@ int	cmd_exit(t_shell *sh, unsigned int status)
 
 	nb_args = ft_strslen(sh->input_args);
 	printf("exit\n");
-	if (nb_args > 1 && ft_strnopbrk(sh->input_args[1], "0123456789") != NULL) // Hmm...
+	if (ft_strcmp(sh->input_args[0], "exit") == 0)
 	{
-		ft_putstr_fd(EXIT_NUM_ARG_REQ, STDERR);
-		free_memory(sh);	
-		exit(2);
-		return (2);
+		if (nb_args > 2)
+			return (ft_ret(1, EXIT_TOO_MANY_ARGS, STDERR));
+		else if (nb_args == 2)
+		{
+			if (ft_strnopbrk(sh->input_args[1], "0123456789-+") != NULL)
+                        {
+				ft_putstr_fd(EXIT_NUM_ARG_REQ, STDERR);
+				status = 2;
+			}
+			else
+				status = (unsigned int)(ft_atoi(sh->input_args[1]));
+		}
+			free_memory(sh);
+			exit(status);
 	}
-	if (nb_args > 2)
-		return (ft_ret(1, EXIT_TOO_MANY_ARGS, STDERR));
-	status = (unsigned int)(ft_atoi(sh->input_args[1]));
-	free_memory(sh);
-	exit(status);
 	return (0);
 }
+
+

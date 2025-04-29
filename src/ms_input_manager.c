@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 22:01:29 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/29 15:08:29 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/29 16:03:26 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,13 +83,7 @@ int	process_input(t_shell *sh)
 //	ft_show_strs(sh->input_args, "[DEBUG] input_args AFTER env interpret"); // DEBUG
 
         if (ft_strcmp(sh->input_args[0], "exit") == 0)
-	{
 		sh->last_exit_status = cmd_exit(sh, 0);
-		//if (sh->input_args[1])
-		//	sh->last_exit_status = cmd_exit(sh, (unsigned int)(ft_atoi(sh->input_args[1])));
-		//else
-		//	sh->last_exit_status = cmd_exit(sh, 0);
-        }
 	else if (ft_strcmp(sh->input_args[0], "pwd") == 0)
                 sh->last_exit_status = cmd_pwd();
 	else if (ft_strcmp(sh->input_args[0], "cd") == 0) // need to handle input starting with '/' too...
