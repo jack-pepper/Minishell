@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 22:01:29 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/29 16:03:26 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/29 17:49:28 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,24 +40,18 @@ char	**normalize_input(char *line, t_shell *sh)
 	if (!sh->normalized_line)
 		return (NULL);
 	sh->input_args = ft_split(sh->normalized_line, ' ');
-	// int i = 0;
-	// while (sh->input_args[i]) {
-	// 	printf(" normalize input argv[%d] = %s\n", i, sh->input_args[i]);
-    // i++;
-	// }
+        
+//	ft_show_strs(sh->input_args, "[DEBUG: input_args before normalization]");
+	
 	free(sh->normalized_line);
 	sh->normalized_line = NULL;
 	if (!sh->input_args)
 		return (NULL);
 	ft_replace_all_chars(sh->input_args, CTRL_CHAR_SPACE_IN_QUOTE, ' '); // change CTRL_CHAR in quotes back to spaces
 	ft_replace_all_chars(sh->input_args, '|', CTRL_CHAR_PIPE);
-	// DEBUG: DISPLAY THE CONTENT OF INPUT_ARGS AFTER NORMALIZATION
-	//int	i = 0;
-	//while (sh->input_args[i] != NULL)
-	//{
-	//	printf("[DEBUG] input_args[%d]): %s\n", i, sh->input_args[i]);
-	//	i++;
-	//}
+	
+//	ft_show_strs(sh->input_args, "[DEBUG: input_args after normalization]");
+
 	return (sh->input_args);
 }
 
@@ -78,9 +72,9 @@ int	process_input(t_shell *sh)
 	// output = process_pipe();
 	// "<" or "infile.txt >" (check) && NO PIPES
 
-//	ft_show_strs(sh->input_args, "[DEBUG] input_args BEFORE env interpret"); // DEBUG	
+//	ft_show_strs(sh->input_args, "[DEBUG] input_args BEFORE env interpret");
 	ft_interpret_env(sh);
-//	ft_show_strs(sh->input_args, "[DEBUG] input_args AFTER env interpret"); // DEBUG
+//	ft_show_strs(sh->input_args, "[DEBUG] input_args AFTER env interpret");
 
         if (ft_strcmp(sh->input_args[0], "exit") == 0)
 		sh->last_exit_status = cmd_exit(sh, 0);

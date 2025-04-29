@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/15 15:07:26 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/29 19:37:41 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@ int	ft_interpret_env(t_shell *sh)
 		split_args = ft_split_args(split_args, sh->input_args[i]);
 		if (!split_args)
 			return (-1);
+
+//		ft_show_strs(split_args, "[DEBUG] split_args");
+
 		rejoined_arg = ft_nametoval(rejoined_arg, split_args,
 				&sh->this_env);
 		free_args(split_args);
@@ -45,18 +48,15 @@ char	**ft_split_args(char **split_args, char *input_arg)
 	int	i;
 
 	i = 0;
-	while (input_arg[i] != '\0') // Might need to check it for edge cases
+	while (input_arg[i] != '\0')
 	{
-		if (i > 0 && input_arg[i] != ' ' && input_arg[i + 1] == ' ')
-		{
-			input_arg[i + 1] = CTRL_CHAR_SUBARG_DELIM;
-			i++;
-		}
-		if (input_arg[i] == ' ' && input_arg[i + 1] != ' ')
+		if (ft_isspace(input_arg[i]) && ft_isspace(input_arg[i + 1]) && ft_isspace(input_arg[i + 2]))
 		{
 			input_arg[i] = CTRL_CHAR_SUBARG_DELIM;
-			i++;
-		}
+			while (ft_isspace(input_arg[i + 1]))
+				i++;
+			input_arg[i] = CTRL_CHAR_SUBARG_DELIM;
+		}	
 		i++;
 	}
 	split_args = ft_split(input_arg, CTRL_CHAR_SUBARG_DELIM);

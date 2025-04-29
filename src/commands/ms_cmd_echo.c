@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:00:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/29 16:04:32 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/29 17:45:02 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int	cmd_echo(t_shell *sh)
 	head[0] = 0;
 	joined_input = &head[0];
         ft_replace_all_chars(sh->input_args, CTRL_CHAR_PIPE, '|'); // added to display this char correctly with echo
+	ft_replace_all_chars(sh->input_args, CTRL_CHAR_SPACE_IN_QUOTE, ' ');
 	while (sh->input_args[i] != NULL)
 	{
 		joined_input = echo_join_input(joined_input, sh->input_args, &i);
