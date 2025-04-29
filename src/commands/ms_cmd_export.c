@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/27 14:02:00 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/29 11:45:37 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,20 @@ int	cmd_export(t_shell *sh)
 		i = 1;
 		while (sh->input_args[i] != NULL)
 		{
+			if (sh->input_args[i][0] == '=' || ft_isdigit(sh->input_args[i][0]))
+			{
+				return (ft_ret(1, EXPORT_INVALID_ID, STDERR));
+			//	printf("minishell: export: %s: not a valid identifier\n", sh->input_args[i]);
+			//	return (1);
+			}
 			if (ft_strchr(sh->input_args[i], '=') == NULL) // cmd: export var_name
 			{
+				if (ft_strpbrk(sh->input_args[i], "-") != NULL)
+				{
+					return (ft_ret(1, EXPORT_INVALID_ID, STDERR));
+                			//printf("minishell: export: %s: not a valid identifier\n", sh->input_args[i]);
+					//return (1);
+				}
 				stashed_var = ft_getenv(sh->input_args[i], &sh->env_stash);
 				if (stashed_var != NULL) // if var_name found in stash
 					export_from_stash(sh, stashed_var); 
@@ -50,6 +62,12 @@ void	export_from_term(t_shell *sh, size_t *i)
 	split_str = ft_split(sh->input_args[(*i)], '='); // split the "var_name=[value]" str
 	if (!split_str)
 		return ;
+	if (ft_strpbrk(split_str[0], "-") != NULL)
+	{
+		ft_putstr_fd(EXPORT_INVALID_ID, STDERR);
+		free_args(split_str);
+		return ;
+	}
 	set_var = ft_getenv(split_str[0], &sh->this_env);
 	if (set_var != NULL) // if var_name found in this_env
 	{

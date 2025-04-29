@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 12:59:33 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/28 23:47:15 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/29 12:03:02 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	cmd_cd(t_shell *sh)
 	if (path[0] == '.')
 	{
 		cur_path = handle_dotted_path(cwd, path);
-		printf("[DEBUG] [cmd_cd / cur_path] %s\n", cur_path);
+	//	printf("[DEBUG] [cmd_cd / cur_path] %s\n", cur_path);
 		if (change_directory(sh, cwd, cur_path) != 0)
 		{
 			free(cur_path);
@@ -51,7 +51,7 @@ int	cmd_cd(t_shell *sh)
 		if (change_directory(sh, cwd, path) != 0)
 		{
 			free(cwd);
-			return (-1);
+			return (1);
 		}
 	}
 	free(cwd);
@@ -61,7 +61,7 @@ int	cmd_cd(t_shell *sh)
 int	change_directory(t_shell *sh, char *cwd, char *path)
 {
 	if (chdir(path) != 0)
-		return (ft_ret(1, CD_NO_FILE_OR_DIR"ms: chdir: No such file or directory\n", STDERR));
+		return (ft_ret(1, CD_NO_FILE_OR_DIR, STDERR));
 	update_pwds_vars(sh, cwd, path);
 	return (0);
 }

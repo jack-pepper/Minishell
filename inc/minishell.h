@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/28 23:46:58 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/04/29 11:55:10 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@
 # define CD_TOO_MANY_ARGS "minishell: cd: too many arguments\n"
 # define CD_HOME_NON_SET "minishell: cd: HOME non set\n"
 # define CD_NO_FILE_OR_DIR "minishell: cd: No such file or directory\n"
+# define EXPORT_INVALID_ID "minishell: export: not a valid identifier\n"
+# define EXIT_NUM_ARG_REQ "minishell: exit: numeric argument required\n"
+# define EXIT_TOO_MANY_ARGS "minishell: exit: too many arguments\n"
 
 /* Libraries */
 
