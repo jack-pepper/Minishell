@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/01 21:29:23 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/01 22:52:04 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void		pass_quotes(char *dst, char *src, size_t *i, size_t *j);
 	// ms_env_interpreter.c
 int			ft_interpret_env(t_shell *sh);
 char		**ft_split_args(char **split_args, char *input_arg);
-char		*ft_nametoval(char *rejoined_arg, char **split_args, t_list **this_env);
+char		*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args);
 char		*ft_rejoin_subarg(char **split_args, char *rejoined_arg, int i);
 char		**ft_copy_free(char **input_arg, char *rejoined_arg);
 

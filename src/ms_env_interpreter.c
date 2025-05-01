@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/01 21:52:41 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/01 23:48:06 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,9 @@ int	ft_interpret_env(t_shell *sh)
 		if (!split_args)
 			return (-1);
 
-	//	ft_show_strs(split_args, "[DEBUG] split_args");
+//		ft_show_strs(split_args, "[DEBUG] split_args");
 
-		rejoined_arg = ft_nametoval(rejoined_arg, split_args,
-				&sh->this_env);
+		rejoined_arg = ft_nametoval(sh, rejoined_arg, split_args);
 		free_args(split_args);
 		if (!rejoined_arg)
 			return (-1);
@@ -91,13 +90,14 @@ char	*join_all_subargs(char **args, char delim)
 	return result;
 }
 
-char	*ft_nametoval(char *rejoined_arg, char **split_args, t_list **this_env)
+char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 {
 	t_list	*set_var;
 	char	**subargs;
 	char	**subsubargs;
 	int		i;
 	int		j;
+	char	*temp;
 
 	i = 0;
 	while (split_args[i])
@@ -108,7 +108,7 @@ char	*ft_nametoval(char *rejoined_arg, char **split_args, t_list **this_env)
 			if (!subargs)
 				return (NULL);
 
-			// ft_show_strs(subargs, "[DEBUG] subargs");
+//			 ft_show_strs(subargs, "[DEBUG] subargs");
 
 			j = 0;
 			if (split_args[i][0] != CTRL_CHAR_VAR_TO_INTERPRET)
@@ -117,25 +117,62 @@ char	*ft_nametoval(char *rejoined_arg, char **split_args, t_list **this_env)
 			{
 				if (ft_strchr(subargs[j], ' ') == NULL)
 				{
-					set_var = ft_getenv(subargs[j], this_env);
-					free(subargs[j]);
-					if (set_var != NULL)
-						subargs[j] = ft_strdup(((char **)set_var->content)[1]);
+					set_var = ft_getenv(subargs[j], &sh->this_env);
+					if (subargs[j][0] == '?')
+					{
+						if (subargs[j][1])
+						{
+							temp = ft_strdup(&(subargs[j][1]));
+							free(subargs[j]);
+							subargs[j] = ft_strjoin(ft_itoa(sh->last_exit_status), temp);
+							free(temp);
+						}
+						else
+						{
+							free(subargs[j]);
+							subargs[j] = ft_strdup(ft_itoa(sh->last_exit_status));
+						}
+					}
 					else
-						subargs[j] = ft_strdup("");
+					{
+						free(subargs[j]);
+						if (set_var != NULL)
+							subargs[j] = ft_strdup(((char **)set_var->content)[1]);
+						else
+							subargs[j] = ft_strdup("");
+					}
 				}
 				else // if there is a space!
 				{
 					subsubargs = ft_split(subargs[j], ' ');
 					
-				//	ft_show_strs(subsubargs, "[DEBUG] subsubargs");
+//					ft_show_strs(subsubargs, "[DEBUG] subsubargs");
 				
-					set_var = ft_getenv(subsubargs[0], this_env);
-					free(subsubargs[0]);
-					if (set_var != NULL)	
-						subsubargs[0] = ft_strdup(((char **)set_var->content)[1]);
+					set_var = ft_getenv(subsubargs[0], &sh->this_env);
+
+					if (subsubargs[0][0] == '?')
+					{
+						if (subsubargs[0][1])
+						{
+							temp = ft_strdup(&(subsubargs[0][1]));
+							free(subsubargs[0]);
+							subsubargs[0] = ft_strjoin(ft_itoa(sh->last_exit_status), temp);
+							free(temp);
+						}
+						else
+						{	
+							free(subsubargs[0]);
+							subsubargs[0] = ft_strdup(ft_itoa(sh->last_exit_status));
+						}
+					}
 					else
-						subsubargs[0] = ft_strdup("");
+					{ 
+						free(subsubargs[0]);
+						if(set_var != NULL)	
+							subsubargs[0] = ft_strdup(((char **)set_var->content)[1]);
+						else
+							subsubargs[0] = ft_strdup("");
+					}
 					free(subargs[j]);
 					subargs[j] = ft_strdup("");
 					subargs[j] = join_all_subargs(subsubargs, ' ');
