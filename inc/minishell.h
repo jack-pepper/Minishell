@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/01 22:52:04 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/02 15:36:49 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,11 +191,11 @@ void		free_args(char **input_args);
 /*Yahyas's function*/
 t_pipeline	*build_pipeline_from_tokens(char **tokens);
 void		free_pipeline(t_pipeline *p);
-void		exec_with_redirection(t_pipeline *cmd, char **env);
+void		exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh);
 t_pipeline	*parse_redirection_only(char **tokens);
 void		print_pipeline(t_pipeline *p);
 void run_pipes_with_no_redir(t_pipeline *p, char **env);
-void run_pipeline_with_redir(t_pipeline *p, char **env);
+void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh);
 
 typedef enum e_cmd_type {
 	BASIC,

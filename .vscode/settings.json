@@ -1,6 +1,7 @@
 {
 	"files.associations": {
 		"minishell.h": "c",
-		"pipex.h": "c"
+		"pipex.h": "c",
+		"readline.h": "c"
 	}
 }

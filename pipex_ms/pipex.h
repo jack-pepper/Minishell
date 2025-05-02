@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:54:10 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/04/27 08:28:57 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:17:02 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <stdio.h>
 # include <string.h>
 # include "../libft/libft.h"
+#include <readline/readline.h>
 
 
 typedef enum e_bool
