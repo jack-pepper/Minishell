@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:17:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/29 14:43:18 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/04/30 12:49:27 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@
 # include <sys/ioctl.h>
 # include <term.h>
 # include <unistd.h>
+# include <sys/wait.h>
 
 	// Libft
 # include "../libft/libft.h"

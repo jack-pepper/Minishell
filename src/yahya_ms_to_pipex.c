@@ -335,16 +335,35 @@ char *shell_find_cmd_path(char *cmd, char **paths)
 }
 char *get_cmd_path(char *cmd, char **envp)
 {
+	// Case 1: command has a '/' (like ./echo or /bin/ls)
+	if (ft_strchr(cmd, '/'))
+	{
+		if (access(cmd, X_OK) == 0)
+			return ft_strdup(cmd); // valid path
+		else
+		{
+			// printf("YOOOOX \n");
+			return NULL; // let execve fail
+		}
+	}
+
+	// Case 2: search in PATH
 	char *path_str = get_path_from_env(envp);
 	if (!path_str)
+	{
+		// printf("yoooo\n");
 		return NULL;
+	}
+
 	char **paths = ft_split(path_str, ':');
 	if (!paths)
 		return NULL;
+
 	char *full_path = shell_find_cmd_path(cmd, paths);
 	ft_free_array(paths, -1);
 	return full_path;
 }
+
 
 
 static int open_redirection_fds(t_pipeline *cmd, int *in_fd, int *out_fd, t_shell *sh) {
@@ -355,7 +374,7 @@ static int open_redirection_fds(t_pipeline *cmd, int *in_fd, int *out_fd, t_shel
 		*in_fd = open(cmd->infile, O_RDONLY);
 		if (*in_fd < 0) {
 			sh->last_exit_status = 1;
-			perror("X1");
+			perror(cmd->infile);
 			return -1;
 		}
 	}
@@ -365,7 +384,7 @@ static int open_redirection_fds(t_pipeline *cmd, int *in_fd, int *out_fd, t_shel
 		*out_fd = open(cmd->outfile, flags, 0644);
 		if (*out_fd < 0) {
 			sh->last_exit_status = 1;
-			perror(" X2");
+			perror(cmd->outfile);
 			if (*in_fd != -1)
 				close(*in_fd);
 			return -1;
@@ -396,10 +415,8 @@ void exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh) {
 		setup_redirections(in_fd, out_fd);
 		if (cmd->cmd_count < 1)
 			exit(0);
-		// printf("I am here 2\n");
 		char **argv = cmd->cmds[0].argv;
 		execve(get_cmd_path(argv[0], env), argv, env);
-		// printf("i am here 3 \n");
 		perror("execve failed");
 		exit(EXIT_FAILURE);
 }
@@ -553,83 +570,118 @@ void run_pipes_with_no_redir(t_pipeline *p, char **env) {
 		}
 	}
 }
+char **clean_env(char **env) {
+	int count = 0;
+	for (int i = 0; env[i]; i++) {
+		if (strncmp(env[i], "SHLVL=", 6) == 0 || env[i][0] == '_')
+			continue;
+		count++;
+	}
+
+	char **filtered = malloc(sizeof(char *) * (count + 1));
+	if (!filtered)
+		return NULL;
+
+	int j = 0;
+	for (int i = 0; env[i]; i++) {
+		if (strncmp(env[i], "SHLVL=", 6) == 0 || env[i][0] == '_')
+			continue;
+		filtered[j++] = strdup(env[i]);
+	}
+	filtered[j] = NULL;
+	return filtered;
+}
+
+void print_env(t_list *env)
+{
+    while (env)
+    {
+        char *entry = (char *)env->content;
+        if (entry && ft_strchr(entry, '=') && ft_strncmp(entry, "_=", 2) != 0)
+            printf("%s\n", entry);
+        env = env->next;
+    }
+}
 
 void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
-    // printf("[DEBUG] Starting pipeline execution\n");
-    // printf("[DEBUG] Input file: %s\n", p->infile ? p->infile : "None");
-    // printf("[DEBUG] Output file: %s\n", p->outfile ? p->outfile : "None");
+	int i = 0;
+	int prev_fd = -1;
+	int pipe_fd[2];
 
-    int i = 0;
-    int prev_fd = -1;
-    int pipe_fd[2];
-
-    while (i < p->cmd_count) {
-        if (i < p->cmd_count - 1) {
-            if (pipe(pipe_fd) < 0) {
-                perror("[ERROR] Pipe creation failed");
-                exit(EXIT_FAILURE);
-            }
-            // printf("[DEBUG] Pipe created: read_fd=%d, write_fd=%d\n", pipe_fd[0], pipe_fd[1]);
-        }
-
-        int in_fd = -1, out_fd = -1;
-		if (open_redirection_fds(p, &in_fd, &out_fd, sh) < 0) {
-			// Stop entire pipeline if redirection failed
-			return;
+	while (i < p->cmd_count) {
+		if (i < p->cmd_count - 1) {
+			if (pipe(pipe_fd) < 0) {
+				perror("[ERROR] Pipe creation failed");
+				exit(EXIT_FAILURE);
+			}
 		}
-		
-        pid_t pid = fork();
-        if (pid == 0) {  // Child process
-            // printf("[DEBUG] Forked process %d for command: %s\n", getpid(), p->cmds[i].argv[0]);
 
-            // Apply input redirection if needed
-            if (in_fd != -1) {
-                dup2(in_fd, STDIN_FILENO);
-                // printf("[DEBUG] Redirected STDIN (fd=%d)\n", in_fd);
-                close(in_fd);
-            } else if (prev_fd != -1) {  // If piped, take input from previous command
-                dup2(prev_fd, STDIN_FILENO);
-                // printf("[DEBUG] Connected prev_fd=%d to STDIN\n", prev_fd);
-                close(prev_fd);
-            }
+		pid_t pid = fork();
+		if (pid == 0) {  // Child process
+			int in_fd = -1, out_fd = -1;
 
-            // Apply output redirection if needed
-            if (out_fd != -1) {
-                dup2(out_fd, STDOUT_FILENO);
-                // printf("[DEBUG] Redirected STDOUT (fd=%d)\n", out_fd);
-                close(out_fd);
-            } else if (i < p->cmd_count - 1) {  // Pipe output forward
-                close(pipe_fd[0]);
-                dup2(pipe_fd[1], STDOUT_FILENO);
-                // printf("[DEBUG] Redirecting STDOUT to pipe write_fd=%d\n", pipe_fd[1]);
-                close(pipe_fd[1]);
-            }
+			// Only open redirection for first or last command
+			if (open_redirection_fds(p, &in_fd, &out_fd, sh) < 0)
+				exit(1);
 
-            char *cmd_path = get_cmd_path(p->cmds[i].argv[0], env);
-            if (!cmd_path) {
-                // fprintf(stderr, "[ERROR] Command not found: %s\n", p->cmds[i].argv[0]);
-                exit(127);
-            }
+			// Apply input redirection or pipe
+			if (in_fd != -1)
+				dup2(in_fd, STDIN_FILENO), close(in_fd);
+			else if (prev_fd != -1)
+				dup2(prev_fd, STDIN_FILENO);
 
-            // printf("[DEBUG] Executing: %s\n", cmd_path);
-            execve(cmd_path, p->cmds[i].argv, env);
-            // perror("[ERROR] execve failed");
-            exit(EXIT_FAILURE);
-        }
+			// Apply output redirection only for last command
+			if (i == p->cmd_count - 1) {
+				if (out_fd != -1)
+					dup2(out_fd, STDOUT_FILENO), close(out_fd);
+			} else {
+				// Not last command: write to next pipe
+				close(pipe_fd[0]);
+				dup2(pipe_fd[1], STDOUT_FILENO);
+				close(pipe_fd[1]);
+			}
 
-        if (prev_fd != -1) close(prev_fd);
-        if (i < p->cmd_count - 1) {
-            close(pipe_fd[1]);
-            prev_fd = pipe_fd[0];
-        }
-        i++;
-    }
+			if (prev_fd != -1)
+				close(prev_fd);
 
-    for (int j = 0; j < p->cmd_count; j++) {
-        wait(NULL);
-    }
-    // printf("[DEBUG] Pipeline execution completed\n");
+			// Get command path
+			char *cmd_path = get_cmd_path(p->cmds[i].argv[0], env);
+			if (!cmd_path)
+				exit(127);
+
+			// Filter environment
+			char **cleaned_env = clean_env(env);
+			if (!cleaned_env)
+				exit(1);
+
+			execve(cmd_path, p->cmds[i].argv, cleaned_env);
+			perror("execve failed");
+			exit(EXIT_FAILURE);
+		}
+
+		// Parent process cleanup
+		if (prev_fd != -1)
+			close(prev_fd);
+		if (i < p->cmd_count - 1) {
+			close(pipe_fd[1]);
+			prev_fd = pipe_fd[0];
+		}
+		i++;
+	}
+
+	// Wait for all children
+	i = 0;
+	int status;
+	while (i < p->cmd_count) {
+		wait(&status);
+		if (WIFEXITED(status))
+			sh->last_exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			sh->last_exit_status = 128 + WTERMSIG(status);
+		i++;
+	}
 }
+
 
 // void run_pipeline_with_redir(t_pipeline *p, char **env) {
 // 	if ((p->infile && p->outfile) || (p->infile && ft_strcmp(p->infile, "here_doc") == 0 && p->outfile)) {

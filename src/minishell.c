@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:18:28 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/29 16:15:13 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:11:25 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,21 @@
 // 	rl_clear_history(); // we should probably save the history in a file
 // 	return (0);
 // }
+bool validate_all_redirections(char **tokens, t_shell *sh)
+{
+	for (int i = 0; tokens[i]; i++) {
+		if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0 ||
+			ft_strcmp(tokens[i], (char[]){CTRL_CHAR_HEREDOC, '\0'}) == 0) {
+			if (tokens[i + 1] && access(tokens[i + 1], R_OK) != 0) {
+				perror(tokens[i + 1]);
+				sh->last_exit_status = 1;
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
 bool validate_pipeline_files(t_pipeline *p)
 {
 	if (p->infile)
@@ -101,17 +116,17 @@ int main(int argc, char **argv, char **env)
 			//  while (sh.input_args[x]) {
 			//  	printf("[DEBUG]input_argx[%d] = \"%s\"\n", x, sh.input_args[x]);
 			
-			// //  	int j = 0;
-			// //  	 while (sh.input_args[x][j]) {
-			// //  	printf("    char[%d] = '%c' (ASCII: %d)\n",
-			// //  		  j,
-			// // 	   sh.input_args[x][j],
-			// //  		   (unsigned char)sh.input_args[x][j]);
-			// //  	j++;
-			// //  }
+			//  	int j = 0;
+			//  	 while (sh.input_args[x][j]) {
+			//  	printf("    char[%d] = '%c' (ASCII: %d)\n",
+			//  		  j,
+			// 	   sh.input_args[x][j],
+			//  		   (unsigned char)sh.input_args[x][j]);
+			//  	j++;
+			//  }
 			//  	x++;
 			//  }
-				
+			 
 			t_cmd_type type = classify_command(sh.input_args);
 			if ((type == REDIR_ONLY || type == BASIC) && type != PIPELINE)
 			{
@@ -144,6 +159,7 @@ int main(int argc, char **argv, char **env)
 					}	
 					else
 					{
+						sh.last_exit_status = 1;
 						fprintf(stderr, "Invalid redirection command\n");
 					}
 					free_pipeline(pipeline);
@@ -168,13 +184,17 @@ int main(int argc, char **argv, char **env)
 					}
 				}
 				else
+				{
+					sh.last_exit_status = 1;	
 					fprintf(stderr, "Invalid pipeline\n");
+				}
 				free_pipeline(pipeline);
 			}
-
-			
 			else if (type == MIXED_INVALID)
+			{
+				sh.last_exit_status = 1;	
 				fprintf(stderr, "Error: Unsupported combination of pipes and redirections\n");
+			}
 			ft_free_array(sh.input_args, -1); // Make sure you free your token array
 		}
 	}
