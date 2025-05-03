@@ -2,19 +2,21 @@
 
 bool is_builtin(const char *cmd)
 {
-	return (
-		ft_strcmp(cmd, "cd") == 0 ||
+	if (!cmd)
+		return false;
+
+	if (ft_strcmp(cmd, "cd") == 0 ||
 		ft_strcmp(cmd, "echo") == 0 ||
 		ft_strcmp(cmd, "env") == 0 ||
 		ft_strcmp(cmd, "pwd") == 0 ||
 		ft_strcmp(cmd, "export") == 0 ||
 		ft_strcmp(cmd, "unset") == 0 ||
-		ft_strcmp(cmd, "exit") == 0 ||
-		((cmd[0] == CTRL_CHAR_VAR_TO_INTERPRET) &&
-		(cmd[1] == '?') && (!cmd[2]))
-		//ft_strcmp(cmd, "$?") == 0
-	);
+		ft_strcmp(cmd, "exit") == 0)
+		return true;
+
+	return false;
 }
+
 
 
 int count_command_tokens(char **tokens, int start) {
@@ -366,6 +368,7 @@ char *get_cmd_path(char *cmd, char **envp)
 
 
 
+
 static int open_redirection_fds(t_pipeline *cmd, int *in_fd, int *out_fd, t_shell *sh) {
 	*in_fd = -1;
 	*out_fd = -1;
@@ -373,6 +376,7 @@ static int open_redirection_fds(t_pipeline *cmd, int *in_fd, int *out_fd, t_shel
 	if (cmd->infile) {
 		*in_fd = open(cmd->infile, O_RDONLY);
 		if (*in_fd < 0) {
+			printf("Yo\n");
 			sh->last_exit_status = 1;
 			perror(cmd->infile);
 			return -1;
@@ -408,7 +412,10 @@ void exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh) {
 	int in_fd;
 	int out_fd;
 	if (open_redirection_fds(cmd, &in_fd, &out_fd, sh) < 0)
+	{
+		printf("Invalid file\n");	
 		return;
+	}
 	// printf("I am here 1\n");
 	pid_t pid = fork();
 	if (pid == 0) {
@@ -416,10 +423,13 @@ void exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh) {
 		if (cmd->cmd_count < 1)
 			exit(0);
 		char **argv = cmd->cmds[0].argv;
+		if (validate_and_exec_command(argv, env, sh))
+			exit(sh->last_exit_status);
+		// printf("I am here1\n");
 		execve(get_cmd_path(argv[0], env), argv, env);
 		perror("execve failed");
 		exit(EXIT_FAILURE);
-}
+	}
 
 	int status;
 	waitpid(pid, &status, 0);
@@ -507,6 +517,23 @@ void print_env(t_list *env)
         env = env->next;
     }
 }
+int exec_builtin_in_child(char **argv, t_shell *sh)
+{
+    if (ft_strcmp(argv[0], "echo") == 0)
+        return cmd_echo(sh);
+    else if (ft_strcmp(argv[0], "pwd") == 0)
+        return cmd_pwd();
+    else if (ft_strcmp(argv[0], "env") == 0)
+        return cmd_env(sh);
+    else if (argv[0][0] == CTRL_CHAR_VAR_TO_INTERPRET && argv[0][1] == '?' && !argv[0][2])
+    {
+		perror(" ");
+        sh->last_exit_status = 1;
+        return 0;
+    }
+    return 1; // Not a safe builtin for child process
+}
+
 
 void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 	int i = 0;
@@ -516,15 +543,14 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 	while (i < p->cmd_count) {
 		if (i < p->cmd_count - 1) {
 			if (pipe(pipe_fd) < 0) {
-				perror("[ERROR] Pipe creation failed");
+				perror(" ");
 				exit(EXIT_FAILURE);
 			}
 		}
-
+		// printf("I am here0\n");
 		pid_t pid = fork();
 		if (pid == 0) {  // Child process
 			int in_fd = -1, out_fd = -1;
-
 			// Only open redirection for first or last command
 			if (open_redirection_fds(p, &in_fd, &out_fd, sh) < 0)
 				exit(1);
@@ -548,17 +574,16 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 
 			if (prev_fd != -1)
 				close(prev_fd);
-
 			// Get command path
 			char *cmd_path = get_cmd_path(p->cmds[i].argv[0], env);
 			if (!cmd_path)
 				exit(127);
-
 			// Filter environment
 			char **cleaned_env = clean_env(env);
 			if (!cleaned_env)
 				exit(1);
-
+			if (is_builtin(p->cmds[i].argv[0]))
+				exit(exec_builtin_in_child(p->cmds[i].argv, sh)); // you’ll need to implement this
 			execve(cmd_path, p->cmds[i].argv, cleaned_env);
 			perror("execve failed");
 			exit(EXIT_FAILURE);

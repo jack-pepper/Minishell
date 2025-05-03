@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 22:01:29 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/02 15:29:10 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/03 15:20:33 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,14 @@ int	process_input(t_shell *sh)
 //		|| (ft_strcmp(sh->input_args[0], "echo") == 0 && sh->input_args[1] && sh->input_args[1][0] == CTRL_CHAR_VAR_TO_INTERPRET
 //		&& sh->input_args[1][1] == '?')) // need to add more safety for next char
 
-	if ((sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET && sh->input_args[0][1] == '?'))
+	if (sh->input_args[0] &&
+		strcmp(sh->input_args[0], (char[]){CTRL_CHAR_VAR_TO_INTERPRET, '?', '\0'}) == 0)
 	{
 		printf("%d\n", sh->last_exit_status);
 		return (0);
 	}
+
+
 
 	// check for '|' first
 	// output = process_pipe();
@@ -80,7 +83,7 @@ int	process_input(t_shell *sh)
 	ft_interpret_env(sh);
 //	ft_show_strs(sh->input_args, "[DEBUG] input_args AFTER env interpret");
 
-        if (ft_strcmp(sh->input_args[0], "exit") == 0)
+    if (ft_strcmp(sh->input_args[0], "exit") == 0)
 		sh->last_exit_status = cmd_exit(sh, 0);
 	else if (ft_strcmp(sh->input_args[0], "pwd") == 0)
                 sh->last_exit_status = cmd_pwd();
