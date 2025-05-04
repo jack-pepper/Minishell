@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:00:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/29 17:45:02 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/04 11:32:11 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	cmd_echo(t_shell *sh)
 	printf("%s", joined_input);
 	if (opt_n == false)
 		printf("\n");
-	free(joined_input);
+//	free(joined_input);
 	return (0);
 }
 

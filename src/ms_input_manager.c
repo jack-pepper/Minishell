@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 22:01:29 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/01 23:37:26 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/04 11:38:23 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	**normalize_input(char *line, t_shell *sh)
 	sh->normalized_line = NULL;
 	if (!sh->input_args)
 		return (NULL);
-	ft_replace_all_chars(sh->input_args, CTRL_CHAR_SPACE_IN_QUOTE, ' '); // change CTRL_CHAR in quotes back to spaces
+//	ft_replace_all_chars(sh->input_args, CTRL_CHAR_SPACE_IN_QUOTE, ' '); // change CTRL_CHAR in quotes back to spaces
 	ft_replace_all_chars(sh->input_args, '|', CTRL_CHAR_PIPE);
 	
 //	ft_show_strs(sh->input_args, "[DEBUG: input_args after normalization]");
@@ -61,12 +61,8 @@ int	process_input(t_shell *sh)
 	if (!sh->input_args || sh->input_args[0] == NULL)
 		return (-1) ;
 
-
-//	if ((sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET && sh->input_args[0][1] == '?')
-//		|| (ft_strcmp(sh->input_args[0], "echo") == 0 && sh->input_args[1] && sh->input_args[1][0] == CTRL_CHAR_VAR_TO_INTERPRET
-//		&& sh->input_args[1][1] == '?')) // need to add more safety for next char
-
-	if ((sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET && sh->input_args[0][1] == '?'))
+	if ((sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET && sh->input_args[0][1] == '?')
+		|| (ft_strcmp(sh->input_args[0], "echo") == 0 && sh->input_args[1][0] == CTRL_CHAR_VAR_TO_INTERPRET && sh->input_args[1][1] == '?'))
 	{
 		printf("%d\n", sh->last_exit_status);
 		return (0);

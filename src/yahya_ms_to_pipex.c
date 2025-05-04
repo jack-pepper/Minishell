@@ -10,8 +10,7 @@ bool is_builtin(const char *cmd)
 		ft_strcmp(cmd, "export") == 0 ||
 		ft_strcmp(cmd, "unset") == 0 ||
 		ft_strcmp(cmd, "exit") == 0 ||
-		((cmd[0] == CTRL_CHAR_VAR_TO_INTERPRET) &&
-		(cmd[1] == '?') && (!cmd[2]))
+		((cmd[0] == CTRL_CHAR_VAR_TO_INTERPRET) && (cmd[1] == '?'))
 		//ft_strcmp(cmd, "$?") == 0
 	);
 }
