@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_cmd_echo.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/20 13:00:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/04 14:15:48 by mmalie           ###   ########.fr       */
+/*   Created: 2025/05/04 17:16:17 by mmalie            #+#    #+#             */
+/*   Updated: 2025/05/04 17:16:20 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	cmd_echo(t_shell *sh)
 		return (0);
 	head[0] = 0;
 	joined_input = &head[0];
-        ft_replace_all_chars(sh->input_args, CTRL_CHAR_PIPE, '|'); // added to display this char correctly with echo
+    ft_replace_all_chars(sh->input_args, CTRL_CHAR_PIPE, '|'); // added to display this char correctly with echo
 	ft_replace_all_chars(sh->input_args, CTRL_CHAR_SPACE_IN_QUOTE, ' ');
 	while (sh->input_args[i] != NULL)
 	{

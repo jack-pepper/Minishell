@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/04 11:43:00 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/04 15:14:10 by mmalie           ###   ########.fr       */
+/*   Created: 2025/05/04 17:15:16 by mmalie            #+#    #+#             */
+/*   Updated: 2025/05/04 17:15:33 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,13 +196,20 @@ t_pipeline	*parse_redirection_only(char **tokens);
 void		print_pipeline(t_pipeline *p);
 void run_pipes_with_no_redir(t_pipeline *p, char **env);
 void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh);
-
+char *get_cmd_path(char *cmd, char **envp);
+int validate_and_exec_command(char **argv, char **envp, t_shell *sh);
 typedef enum e_cmd_type {
 	BASIC,
 	REDIR_ONLY,  
 	PIPELINE,   
 	MIXED_INVALID
 }	t_cmd_type;
+typedef struct s_redir {
+	char *file;
+	t_cmd_type type; 
+	struct s_redir *next;
+}	t_redir;
+
 bool		is_builtin(const char *cmd);
 t_cmd_type classify_command(char **tokens);
 #endif

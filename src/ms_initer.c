@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_initer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:56:45 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/27 14:42:07 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/02 16:12:56 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	init_signals(void)
 	act_sigint.sa_handler = &signal_handler;
 	act_sigint.sa_flags = 0;
 	sigaction(SIGINT, &act_sigint, NULL);
+	signal(SIGPIPE, SIG_IGN);
 }
 
 void	signal_handler(int signum)
