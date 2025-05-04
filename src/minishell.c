@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:16:39 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/04 17:17:46 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/04 20:54:25 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void handle_basic(t_shell *sh, char **env)
 {
 	if (is_builtin(sh->input_args[0]))
 	{
-		process_input(sh);
+		sh->last_exit_status = process_input(sh);
 		return;
 	}
 
@@ -194,99 +194,8 @@ int main(int argc, char **argv, char **env)
 			handle_redir_only(&sh, env);
 		else if (type == BASIC)
 		{
-<<<<<<< HEAD
-			
-			sh.input_args = normalize_input(line, &sh);
-			if (!sh.input_args)
-				return (-1);
-			//  int x = 0;
-			//  while (sh.input_args[x]) {
-			//  	printf("[DEBUG]input_argx[%d] = \"%s\"\n", x, sh.input_args[x]);
-			
-			//  	int j = 0;
-			//  	 while (sh.input_args[x][j]) {
-			//  	printf("    char[%d] = '%c' (ASCII: %d)\n",
-			//  		  j,
-			// 	   sh.input_args[x][j],
-			//  		   (unsigned char)sh.input_args[x][j]);
-			//  	j++;
-			//  }
-			//  	x++;
-			//  }
-			 
-			t_cmd_type type = classify_command(sh.input_args);
-			if ((type == REDIR_ONLY || type == BASIC) && type != PIPELINE)
-			{
-				if (strcmp(sh.input_args[0], (char[]){CTRL_CHAR_REDIR_IN,'\0'}) == 0)
-				{
-					// printf("[DEBUG]REDIR_ONLY\n");
-					int new_file = open(sh.input_args[1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-					if (new_file == -1)
-						perror("open");
-				}
-				else if (is_builtin(sh.input_args[0]) && type == BASIC) 
-				{
-					//printf("[DEBUG] process_input\n");
-					process_input(&sh);
-				}
-				else
-				{	
-					t_pipeline *pipeline = parse_redirection_only(sh.input_args);
-					if (pipeline && pipeline->cmds && pipeline->cmds[0].argv)
-					{
-						// printf("[DEBUG]exec_with_red\n");
-						if(strcmp(sh.input_args[0], "cd") == 0)
-							printf(" ");
-						else
-						{
-							// printf("exec_with_redirection\n");
-							exec_with_redirection(pipeline, env, &sh);
-							
-						}
-					}	
-					else
-					{
-						sh.last_exit_status = 1;
-						fprintf(stderr, "Invalid redirection command\n");
-					}
-					free_pipeline(pipeline);
-				}
-			}
-			else if (type == PIPELINE)
-			{
-				// printf("[DEBUG]PIPELINE\n");
-				t_pipeline *pipeline = build_pipeline_from_tokens(sh.input_args);
-				// printf("Pipeline Created\n");
-				if (pipeline)
-				{
-					if(strcmp(sh.input_args[0], (char[]){CTRL_CHAR_HEREDOC, '\0'}) == 0)
-					{
-						// printf("pipex from minishell\n");	
-						run_pipex_from_minshell(pipeline, env);
-					}
-					else
-					{
-						// printf("pipes_with redir\n");
-						run_pipeline_with_redir(pipeline, env, &sh);
-					}
-				}
-				else
-				{
-					sh.last_exit_status = 1;	
-					fprintf(stderr, "Invalid pipeline\n");
-				}
-				free_pipeline(pipeline);
-			}
-			else if (type == MIXED_INVALID)
-			{
-				sh.last_exit_status = 1;	
-				fprintf(stderr, "Error: Unsupported combination of pipes and redirections\n");
-			}
-			ft_free_array(sh.input_args, -1); // Make sure you free your token array
-=======
 			// printf("basic\n");
 			handle_basic(&sh, env);
->>>>>>> 8b77d82f526f6c2392b59efcd50d99c6010ad176
 		}
 		else if (type == PIPELINE)
 			handle_pipeline(&sh, env);
@@ -300,7 +209,8 @@ int main(int argc, char **argv, char **env)
 	}
 	free(line);
 	rl_clear_history();
-	return 0;
+	//return 0;
+	return (sh.last_exit_status);
 }
 
 

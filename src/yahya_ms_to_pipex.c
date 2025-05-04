@@ -11,17 +11,12 @@ bool is_builtin(const char *cmd)
 		ft_strcmp(cmd, "pwd") == 0 ||
 		ft_strcmp(cmd, "export") == 0 ||
 		ft_strcmp(cmd, "unset") == 0 ||
-<<<<<<< HEAD
 		ft_strcmp(cmd, "exit") == 0 ||
+		(cmd[0] == CTRL_CHAR_VAR_TO_INTERPRET) ||
 		((cmd[0] == CTRL_CHAR_VAR_TO_INTERPRET) && (cmd[1] == '?'))
-		//ft_strcmp(cmd, "$?") == 0
-	);
-=======
-		ft_strcmp(cmd, "exit") == 0)
+	)
 		return true;
-
 	return false;
->>>>>>> 8b77d82f526f6c2392b59efcd50d99c6010ad176
 }
 
 

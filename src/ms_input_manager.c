@@ -5,13 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-<<<<<<< HEAD
-/*   Created: 2025/05/04 11:46:00 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/04 15:23:44 by mmalie           ###   ########.fr       */
-=======
-/*   Created: 2025/04/28 22:01:29 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/03 15:20:33 by yel-bouk         ###   ########.fr       */
->>>>>>> 8b77d82f526f6c2392b59efcd50d99c6010ad176
+/*   Created: 2025/05/04 17:23:56 by mmalie            #+#    #+#             */
+/*   Updated: 2025/05/04 20:46:38 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,29 +61,33 @@ int	process_input(t_shell *sh)
 	if (!sh->input_args || sh->input_args[0] == NULL)
 		return (-1) ;
 
-<<<<<<< HEAD
-	if ((sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET && sh->input_args[0][1] == '?')
-)	//	|| (ft_strcmp(sh->input_args[0], "echo") == 0
-	//		&& (sh->input_args[1] && sh->input_args[1][0] == CTRL_CHAR_VAR_TO_INTERPRET) && sh->input_args[1][1] == '?'))
-=======
-
 //	if ((sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET && sh->input_args[0][1] == '?')
 //		|| (ft_strcmp(sh->input_args[0], "echo") == 0 && sh->input_args[1] && sh->input_args[1][0] == CTRL_CHAR_VAR_TO_INTERPRET
 //		&& sh->input_args[1][1] == '?')) // need to add more safety for next char
 
-	if (sh->input_args[0] &&
-		strcmp(sh->input_args[0], (char[]){CTRL_CHAR_VAR_TO_INTERPRET, '?', '\0'}) == 0)
->>>>>>> 8b77d82f526f6c2392b59efcd50d99c6010ad176
+	if (sh->input_args[0] && sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET)
 	{
-		printf("%d\n", sh->last_exit_status);
-		return (0);
+		if (ft_strcmp(sh->input_args[0], (char[]){CTRL_CHAR_VAR_TO_INTERPRET, '?', '\0'}) == 0)
+		{
+			char *exit_status = ft_itoa(sh->last_exit_status);
+			return (ft_ret(127, CMD_NOT_FOUND, STDERR));
+			free(exit_status);
+			return (127);
+		}
+		else
+		{
+			t_list *set_var = ft_getenv(&(sh->input_args[0][1]), &sh->this_env);
+			if (!set_var)
+				return (0);
+			else
+			{
+				if (((char **)set_var->content)[1][0] == '/')
+					return (ft_ret(126, CMD_IS_DIR, STDERR));
+				else
+					return (ft_ret(0, CMD_NOT_FOUND, STDERR));
+			}
+		}
 	}
-
-
-
-	// check for '|' first
-	// output = process_pipe();
-	// "<" or "infile.txt >" (check) && NO PIPES
 
 //	ft_show_strs(sh->input_args, "[DEBUG] input_args BEFORE env interpret");
 	ft_interpret_env(sh);

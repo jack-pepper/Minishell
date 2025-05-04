@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:15:16 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/04 17:15:33 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/04 20:33:52 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@
 # define EXPORT_INVALID_ID "minishell: export: not a valid identifier\n"
 # define EXIT_NUM_ARG_REQ "minishell: exit: numeric argument required\n"
 # define EXIT_TOO_MANY_ARGS "minishell: exit: too many arguments\n"
+# define CMD_NOT_FOUND "minishell: command not found\n"
+# define CMD_IS_DIR "minishell: Is a directory\n"
 
 /* Libraries */
 

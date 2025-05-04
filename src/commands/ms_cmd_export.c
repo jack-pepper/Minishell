@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/29 11:45:37 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/04 21:07:31 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,7 @@ int	cmd_export(t_shell *sh)
 			if (ft_strchr(sh->input_args[i], '=') == NULL) // cmd: export var_name
 			{
 				if (ft_strpbrk(sh->input_args[i], "-") != NULL)
-				{
 					return (ft_ret(1, EXPORT_INVALID_ID, STDERR));
-                			//printf("minishell: export: %s: not a valid identifier\n", sh->input_args[i]);
-					//return (1);
-				}
 				stashed_var = ft_getenv(sh->input_args[i], &sh->env_stash);
 				if (stashed_var != NULL) // if var_name found in stash
 					export_from_stash(sh, stashed_var); 
@@ -45,6 +41,8 @@ int	cmd_export(t_shell *sh)
 			}
 			else // cmd: export var_name=[value]
 			{
+				//if (ft_strpbrk(sh->input_args[i], "-") != NULL)
+				//	return (ft_ret(1, EXPORT_INVALID_ID, STDERR));
 				export_from_term(sh, &i);
 				i++;
 			}
@@ -53,7 +51,7 @@ int	cmd_export(t_shell *sh)
 	return (0);
 }
 
-void	export_from_term(t_shell *sh, size_t *i)
+void	export_from_term(t_shell *sh, size_t *i) // Will need a return value to handle export case with invalid chars
 {
 	t_list	*set_var;
 	char	**split_str;
