@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/01 23:48:06 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/04 11:29:28 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,46 +22,38 @@ int	ft_interpret_env(t_shell *sh)
 	while (sh->input_args[i])
 	{
 		split_args = NULL;
-		rejoined_arg = ft_strdup("");
-		split_args = ft_split_args(split_args, sh->input_args[i]);
-		if (!split_args)
-			return (-1);
+		
+//		ft_show_strs(sh->input_args, "[DEBUG] sh->input_args");
+		
+		if (ft_strchr(sh->input_args[i], CTRL_CHAR_VAR_TO_INTERPRET) != NULL)
+		{
+			split_args = ft_split(sh->input_args[i], CTRL_CHAR_VAR_TO_INTERPRET);
+			if (!split_args)
+				return (-1);
 
-//		ft_show_strs(split_args, "[DEBUG] split_args");
+		//	ft_show_strs(split_args, "[DEBUG] split_args");
 
-		rejoined_arg = ft_nametoval(sh, rejoined_arg, split_args);
-		free_args(split_args);
-		if (!rejoined_arg)
-			return (-1);
-		ft_copy_free(&sh->input_args[i], rejoined_arg);
-		free(rejoined_arg);
-		if (!sh->input_args[i])
-			return (-1);
+			if (sh->input_args[i][0] == CTRL_CHAR_VAR_TO_INTERPRET)
+			{
+				rejoined_arg = ft_strdup("");
+				rejoined_arg = ft_nametoval(sh, rejoined_arg, split_args);
+			}
+			else
+			{
+				rejoined_arg = ft_strdup(split_args[0]);
+				rejoined_arg = ft_nametoval(sh, rejoined_arg, &split_args[1]);
+			}
+			free_args(split_args);
+			if (!rejoined_arg)
+				return (-1);
+			ft_copy_free(&sh->input_args[i], rejoined_arg);
+			free(rejoined_arg);
+			if (!sh->input_args[i])
+				return (-1);
+		}
 		i++;
 	}
 	return (0);
-}
-
-char	**ft_split_args(char **split_args, char *input_arg)
-{
-	int	i;
-
-	i = 0;
-	while (input_arg[i] != '\0')
-	{
-		if (ft_isspace(input_arg[i]) && ft_isspace(input_arg[i + 1]) && ft_isspace(input_arg[i + 2]))
-		{
-			input_arg[i] = CTRL_CHAR_SUBARG_DELIM;
-			while (ft_isspace(input_arg[i + 1]))
-				i++;
-			input_arg[i] = CTRL_CHAR_SUBARG_DELIM;
-		}	
-		i++;
-	}
-	split_args = ft_split(input_arg, CTRL_CHAR_SUBARG_DELIM);
-	if (!split_args)
-		return (NULL);
-	return (split_args);
 }
 
 char	*join_all_subargs(char **args, char delim)
@@ -90,101 +82,75 @@ char	*join_all_subargs(char **args, char delim)
 	return result;
 }
 
+char    *ft_strjoin_delim(char const *s1, char const *s2, char const *delim)
+{
+        char    *joined_str;
+        size_t  len;
+	size_t	s1_len;
+	size_t	s2_len;
+
+	s1_len = 0;
+	s2_len = 0;
+	if (s1 != NULL)
+		s1_len = ft_strlen(s1);
+	if (s2 != NULL)
+		s2_len = ft_strlen(s2);
+	if (s1 && s2)
+        	len = s1_len + ft_strlen(delim) + s2_len;
+	else
+		len = s1_len + s2_len;
+        joined_str = (char *)malloc(sizeof(char) * (len + 1));
+        if (joined_str == NULL)
+                return (NULL);
+	if (s1 != NULL)
+        {
+		ft_strlcpy(joined_str, s1, len + 1);
+		ft_strlcat(joined_str, delim, len + 1);
+	}
+	if (s2 != NULL)
+        	ft_strlcat(joined_str, s2, len + 1);
+        return (joined_str);
+}
+
 char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 {
 	t_list	*set_var;
 	char	**subargs;
-	char	**subsubargs;
 	int		i;
-	int		j;
-	char	*temp;
 
 	i = 0;
 	while (split_args[i])
 	{
-		if (ft_strchr(split_args[i], CTRL_CHAR_VAR_TO_INTERPRET) != NULL)
+		char *first_space = ft_strpbrk(split_args[i], "*"); // '*' ust be changed to CTRL_CHAR_SPACE_IN_QUOTE
+		if (first_space != NULL)
 		{
-			subargs = ft_split(split_args[i], CTRL_CHAR_VAR_TO_INTERPRET);
-			if (!subargs)
-				return (NULL);
-
-//			 ft_show_strs(subargs, "[DEBUG] subargs");
-
-			j = 0;
-			if (split_args[i][0] != CTRL_CHAR_VAR_TO_INTERPRET)
-				j = 1;
-			while (subargs[j])
-			{
-				if (ft_strchr(subargs[j], ' ') == NULL)
-				{
-					set_var = ft_getenv(subargs[j], &sh->this_env);
-					if (subargs[j][0] == '?')
-					{
-						if (subargs[j][1])
-						{
-							temp = ft_strdup(&(subargs[j][1]));
-							free(subargs[j]);
-							subargs[j] = ft_strjoin(ft_itoa(sh->last_exit_status), temp);
-							free(temp);
-						}
-						else
-						{
-							free(subargs[j]);
-							subargs[j] = ft_strdup(ft_itoa(sh->last_exit_status));
-						}
-					}
-					else
-					{
-						free(subargs[j]);
-						if (set_var != NULL)
-							subargs[j] = ft_strdup(((char **)set_var->content)[1]);
-						else
-							subargs[j] = ft_strdup("");
-					}
-				}
-				else // if there is a space!
-				{
-					subsubargs = ft_split(subargs[j], ' ');
-					
-//					ft_show_strs(subsubargs, "[DEBUG] subsubargs");
-				
-					set_var = ft_getenv(subsubargs[0], &sh->this_env);
-
-					if (subsubargs[0][0] == '?')
-					{
-						if (subsubargs[0][1])
-						{
-							temp = ft_strdup(&(subsubargs[0][1]));
-							free(subsubargs[0]);
-							subsubargs[0] = ft_strjoin(ft_itoa(sh->last_exit_status), temp);
-							free(temp);
-						}
-						else
-						{	
-							free(subsubargs[0]);
-							subsubargs[0] = ft_strdup(ft_itoa(sh->last_exit_status));
-						}
-					}
-					else
-					{ 
-						free(subsubargs[0]);
-						if(set_var != NULL)	
-							subsubargs[0] = ft_strdup(((char **)set_var->content)[1]);
-						else
-							subsubargs[0] = ft_strdup("");
-					}
-					free(subargs[j]);
-					subargs[j] = ft_strdup("");
-					subargs[j] = join_all_subargs(subsubargs, ' ');
-					free(subsubargs);
-				}
-				j++;
-			}
+			first_space[0] = '#'; // MODIFY TO CTRL_CHAR
+		//	printf("After first space: %s\n", split_args[i]);
+			subargs = ft_split(split_args[i], '#'); // MODIFY TO CTRL_CHAR
+		//	ft_show_strs(subargs, "[DEBUG] After split"),	
+			set_var = ft_getenv(subargs[0], &sh->this_env);
+			free(subargs[0]);
+			if (set_var != NULL)
+				subargs[0] = ft_strdup(((char **)set_var->content)[1]);
+			else
+				subargs[0] = ft_strdup("");
 			free(split_args[i]);
-			split_args[i] = join_all_subargs(subargs, 'n');
+			split_args[i] = ft_strjoin_delim(subargs[0], subargs[1], " ");
+		//	printf("[DEBUG] after join-delim: ~%s~\n", split_args[i]);
 			free_args(subargs);
 		}
+		else
+		{	
+			set_var = ft_getenv(split_args[i], &sh->this_env);
+			free(split_args[i]);
+			if (set_var != NULL)
+				split_args[i] = ft_strdup(((char **)set_var->content)[1]);
+			else
+				split_args[i] = ft_strdup("");
+		}
+		//ft_show_strs(split_args, "[DEBUG] split_args after nametoval"),
 		rejoined_arg = ft_rejoin_subarg(split_args, rejoined_arg, i);
+		//rejoined_arg = ft_strjoin_delim(rejoined_arg, split_args[i], " ");
 		i++;
 	}
 	return (rejoined_arg);
@@ -193,24 +159,12 @@ char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 char	*ft_rejoin_subarg(char **split_args, char *rejoined_arg, int i)
 {
 	char	*temp;
-	char	*temp_with_space;
+//	char	*temp_with_space;
 
 	temp = ft_strjoin(rejoined_arg, split_args[i]);
 	free(rejoined_arg);
 	if (!temp)
 		return (NULL);
-	if (split_args[i + 1])
-	{
-		temp_with_space = ft_strjoin(temp, " ");
-		free(temp);
-		if (!temp_with_space)
-			return (NULL);
-		rejoined_arg = ft_strdup(temp_with_space);
-		free(temp_with_space);
-		if (!rejoined_arg)
-			return (NULL);
-		return (rejoined_arg);
-	}
 	rejoined_arg = ft_strdup(temp);
 	free(temp);
 	return (rejoined_arg);
