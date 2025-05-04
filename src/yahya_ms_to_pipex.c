@@ -69,7 +69,7 @@ char **extract_command_args(char **tokens, int *i, int count) {
 }
 
 void parse_next_command(char **tokens, int *i, t_pipeline *p, int *cmd_i) {
-	// ✅ Skip leading pipes (important for double pipes or pipe at start)
+	// Skip leading pipes (important for double pipes or pipe at start)
 	while (tokens[*i] && ft_strcmp(tokens[*i], (char[]){CTRL_CHAR_PIPE, '\0'}) == 0)
 		(*i)++;
 
@@ -83,7 +83,7 @@ void parse_next_command(char **tokens, int *i, t_pipeline *p, int *cmd_i) {
 
 	(*cmd_i)++;
 
-	// ✅ Skip trailing pipe, if any (in case it's still there)
+	// Skip trailing pipe, if any (in case it's still there)
 	if (tokens[*i] && ft_strcmp(tokens[*i], (char[]){CTRL_CHAR_PIPE, '\0'}) == 0
 )
 		(*i)++;
@@ -117,33 +117,6 @@ int count_cmds(char **tokens) {
     return count;
 }
 
-// int count_cmds(char **tokens)
-// {
-// 	int i = 0;
-// 	int count = 0;
-// 	int in_cmd = 0;
-
-// 	while (tokens[i])
-// 	{
-// 		if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_PIPE, '\0'}) == 0)
-// 			in_cmd = 0;
-// 		else if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0 ||
-// 		         ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0 ||
-// 		         ft_strcmp(tokens[i], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0)
-// 		{
-// 			if (tokens[i + 1])
-// 				i++; // skip file
-// 			in_cmd = 0;
-// 		}
-// 		else if (!in_cmd)
-// 		{
-// 			count++;
-// 			in_cmd = 1;
-// 		}
-// 		i++;
-// 	}
-// 	return count;
-// }
 
 static t_pipeline *init_pipeline(char **tokens) {
 	t_pipeline *p = ft_calloc(1, sizeof(t_pipeline));
@@ -418,7 +391,8 @@ void exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh) {
 	}
 	// printf("I am here 1\n");
 	pid_t pid = fork();
-	if (pid == 0) {
+	if (pid == 0)
+	{
 		setup_redirections(in_fd, out_fd);
 		if (cmd->cmd_count < 1)
 			exit(0);
@@ -541,8 +515,10 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 	int pipe_fd[2];
 
 	while (i < p->cmd_count) {
-		if (i < p->cmd_count - 1) {
-			if (pipe(pipe_fd) < 0) {
+		if (i < p->cmd_count - 1)
+		{
+			if (pipe(pipe_fd) < 0)
+			{
 				perror(" ");
 				exit(EXIT_FAILURE);
 			}
@@ -592,7 +568,8 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 		// Parent process cleanup
 		if (prev_fd != -1)
 			close(prev_fd);
-		if (i < p->cmd_count - 1) {
+		if (i < p->cmd_count - 1)
+		{
 			close(pipe_fd[1]);
 			prev_fd = pipe_fd[0];
 		}
@@ -602,7 +579,8 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 	// Wait for all children
 	i = 0;
 	int status;
-	while (i < p->cmd_count) {
+	while (i < p->cmd_count)
+	{
 		wait(&status);
 		if (WIFEXITED(status))
 			sh->last_exit_status = WEXITSTATUS(status);

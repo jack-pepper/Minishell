@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:18:28 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/03 15:30:50 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/04 10:40:57 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,57 +16,10 @@
 /* TODO: env variables should be interpreted in paths too! (ex: with cmd cd) 
  *
  */
-
-// int	main(int argc, char **argv, char **env)
-// {
-// 	t_shell		sh;
-// 	static char	*line = (char *)NULL;
-
-// 	if (argc != 1 || argv[1])
-// 		return (-1);
-// 	if (init_shell(&sh, env) != 0)
-// 		return (-1);
-// 	while (1)
-// 	{
-// 		if (sh.input_args != NULL)
-// 			free_args(sh.input_args);
-// 		line = get_input(line);
-// 		if (line == NULL) // Handles EOF (sent by CTRL-D)
-// 			cmd_exit(&sh, 1);
-// 		if (line[0] != '\0')
-// 		{
-// 			sh.input_args = normalize_input(line, &sh);
-// 			if (!sh.input_args)
-// 				return (-1);
-
-// 			// echo abc > infile.txt
-
-// 			sh.pipeline = build_pipeline_from_tokens(sh.input_args);
-// 			if (!sh.pipeline || sh.pipeline->cmd_count == 0 || !sh.pipeline->cmds[0].argv)
-// 			{
-// 				fprintf(stderr, "Invalid pipeline or command parsing failed\n");
-// 				continue;
-// 			}
-// 			if (sh.pipeline)
-// 			{
-// 				run_pipex_from_minshell(sh.pipeline, env);
-// 				// DEBUG: See what command was parsed
-// 		//		printf("Running: %s\n", sh.pipeline->cmds[0].argv[0]);
-// 				// ONLY call exec if pipeline is valid
-// 		//		exec_with_redirection(sh.pipeline, env);
-// 				// free pipeline
-// 			}
-// 			process_input(&sh);
-// 		}
-// 	}
-// 	free(line);
-// 	rl_clear_history(); // we should probably save the history in a file
-// 	return (0);
-// }
 int validate_and_exec_command(char **argv, char **envp, t_shell *sh)
 {
 	if (!argv || !argv[0] || argv[0][0] == '\0')
-		return 0; // Nothing to run (e.g. $EMPTY)
+		return 0; // Nothing to run (example: $EMPTY)
 
 	if (ft_strchr(argv[0], '/'))
 	{
@@ -78,7 +31,7 @@ int validate_and_exec_command(char **argv, char **envp, t_shell *sh)
 		}
 		else if (access(argv[0], X_OK) != 0)
 		{
-			if (opendir(argv[0])) // check if it's a dir
+			if (opendir(argv[0])) // check if it's a directory
 				fprintf(stderr, "%s: Is a directory\n", argv[0]);
 			else
 				perror(argv[0]); // permission denied or other
@@ -98,15 +51,17 @@ int validate_and_exec_command(char **argv, char **envp, t_shell *sh)
 		free(cmd_path);
 	}
 
-	return 0; // Command appears valid → you can execve it
+	return 0; // if command is valid then you can execve it
 }
 
 bool validate_all_redirections(char **tokens, t_shell *sh) {
-	for (int i = 0; tokens[i]; i++) {
+	for (int i = 0; tokens[i]; i++)
+	{
 		if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0 ||
 			ft_strcmp(tokens[i], (char[]){CTRL_CHAR_HEREDOC, '\0'}) == 0)
 		{
-			if (!tokens[i + 1] || access(tokens[i + 1], R_OK) != 0) {
+			if (!tokens[i + 1] || access(tokens[i + 1], R_OK) != 0)
+			{
 				perror(tokens[i + 1]);
 				sh->last_exit_status = 1;
 				return false;
@@ -116,7 +71,8 @@ bool validate_all_redirections(char **tokens, t_shell *sh) {
 		else if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0 ||
 		         ft_strcmp(tokens[i], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0)
 		{
-			if (!tokens[i + 1]) {
+			if (!tokens[i + 1])
+			{
 				fprintf(stderr, "Error: missing redirection target\n");
 				sh->last_exit_status = 1;
 				return false;
@@ -135,20 +91,12 @@ bool validate_all_redirections(char **tokens, t_shell *sh) {
 	return true;
 }
 
-bool validate_pipeline_files(t_pipeline *p)
-{
-	if (p->infile)
-	{
-		if (access(p->infile, F_OK) != 0)
-		{
-			perror(p->infile);
-			return false;
-		}
-	}
-	return true;
-}
 void handle_redir_only(t_shell *sh, char **env)
 {
+
+	if (!validate_all_redirections(sh->input_args, sh))
+		return;
+		
 	if (strcmp(sh->input_args[0], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0)
 	{
 		int new_file = open(sh->input_args[1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -158,9 +106,6 @@ void handle_redir_only(t_shell *sh, char **env)
 			close(new_file);
 		return;
 	}
-
-	if (!validate_all_redirections(sh->input_args, sh))
-		return;
 
 	t_pipeline *pipeline = parse_redirection_only(sh->input_args);
 	if (!pipeline || !pipeline->cmds || !pipeline->cmds[0].argv)
@@ -182,7 +127,7 @@ void handle_basic(t_shell *sh, char **env)
 		return;
 	}
 
-	// Not a builtin → run normally
+	// Not a builtin, run normally
 	if (!validate_all_redirections(sh->input_args, sh))
 		return;
 
@@ -198,6 +143,7 @@ void handle_basic(t_shell *sh, char **env)
 	exec_with_redirection(pipeline, env, sh);
 	free_pipeline(pipeline);
 }
+
 void handle_pipeline(t_shell *sh, char **env)
 {
 	if (!validate_all_redirections(sh->input_args, sh))
@@ -247,7 +193,10 @@ int main(int argc, char **argv, char **env)
 		if (type == REDIR_ONLY)
 			handle_redir_only(&sh, env);
 		else if (type == BASIC)
+		{
+			// printf("basic\n");
 			handle_basic(&sh, env);
+		}
 		else if (type == PIPELINE)
 			handle_pipeline(&sh, env);
 		else if (type == MIXED_INVALID)
