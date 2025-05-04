@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/04 11:29:28 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/04 15:55:01 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	ft_interpret_env(t_shell *sh)
 			if (!split_args)
 				return (-1);
 
-		//	ft_show_strs(split_args, "[DEBUG] split_args");
+//			ft_show_strs(split_args, "[DEBUG] split_args");
 
 			if (sh->input_args[i][0] == CTRL_CHAR_VAR_TO_INTERPRET)
 			{
@@ -112,6 +112,29 @@ char    *ft_strjoin_delim(char const *s1, char const *s2, char const *delim)
         return (joined_str);
 }
 
+char	*handle_exit_status_case(t_shell *sh, char *subarg)
+{
+	char	*exit_status;
+	char	*temp;
+
+	exit_status = ft_itoa(sh->last_exit_status);
+	if (subarg[1] != '\0')
+	{
+		temp = ft_strdup(&subarg[1]);
+		free(subarg);
+		subarg = ft_strjoin(exit_status, temp);
+		free(temp);
+	}
+	else
+	{
+		free(subarg);
+		subarg = ft_strdup(exit_status);
+	}
+	free(exit_status);
+	return (subarg);
+}
+
+
 char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 {
 	t_list	*set_var;
@@ -121,34 +144,44 @@ char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 	i = 0;
 	while (split_args[i])
 	{
-		char *first_space = ft_strpbrk(split_args[i], "*"); // '*' ust be changed to CTRL_CHAR_SPACE_IN_QUOTE
+		char *first_space = ft_strpbrk(split_args[i], (char[]){CTRL_CHAR_SPACE_IN_QUOTE, '\0'});
 		if (first_space != NULL)
 		{
-			first_space[0] = '#'; // MODIFY TO CTRL_CHAR
-		//	printf("After first space: %s\n", split_args[i]);
-			subargs = ft_split(split_args[i], '#'); // MODIFY TO CTRL_CHAR
-		//	ft_show_strs(subargs, "[DEBUG] After split"),	
-			set_var = ft_getenv(subargs[0], &sh->this_env);
-			free(subargs[0]);
-			if (set_var != NULL)
-				subargs[0] = ft_strdup(((char **)set_var->content)[1]);
+			first_space[0] = CTRL_CHAR_SUBARG_DELIM; // MODIFY TO CTRL_CHAR
+//			printf("After first space: %s\n", split_args[i]);
+			subargs = ft_split(split_args[i], CTRL_CHAR_SUBARG_DELIM); // MODIFY TO CTRL_CHAR
+//			ft_show_strs(subargs, "[DEBUG] After split");
+			if (subargs[0][0] == '?')
+				subargs[0] = handle_exit_status_case(sh, subargs[0]);
 			else
-				subargs[0] = ft_strdup("");
+			{
+				set_var = ft_getenv(subargs[0], &sh->this_env);
+				free(subargs[0]);
+				if (set_var != NULL)
+					subargs[0] = ft_strdup(((char **)set_var->content)[1]);
+				else
+					subargs[0] = ft_strdup("");
+			}
 			free(split_args[i]);
 			split_args[i] = ft_strjoin_delim(subargs[0], subargs[1], " ");
-		//	printf("[DEBUG] after join-delim: ~%s~\n", split_args[i]);
+//			printf("[DEBUG] after join-delim: ~%s~\n", split_args[i]);
 			free_args(subargs);
 		}
 		else
 		{	
-			set_var = ft_getenv(split_args[i], &sh->this_env);
-			free(split_args[i]);
-			if (set_var != NULL)
-				split_args[i] = ft_strdup(((char **)set_var->content)[1]);
+			if (split_args[i][0] == '?')
+				split_args[i] = handle_exit_status_case(sh, split_args[i]);
 			else
-				split_args[i] = ft_strdup("");
+			{
+				set_var = ft_getenv(split_args[i], &sh->this_env);
+				free(split_args[i]);
+				if (set_var != NULL)
+					split_args[i] = ft_strdup(((char **)set_var->content)[1]);
+				else
+					split_args[i] = ft_strdup("");
+			}
 		}
-		//ft_show_strs(split_args, "[DEBUG] split_args after nametoval"),
+//		ft_show_strs(split_args, "[DEBUG] split_args after nametoval"),
 		rejoined_arg = ft_rejoin_subarg(split_args, rejoined_arg, i);
 		//rejoined_arg = ft_strjoin_delim(rejoined_arg, split_args[i], " ");
 		i++;

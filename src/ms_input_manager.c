@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 11:46:00 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/04 11:56:07 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/04 15:23:44 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ int	process_input(t_shell *sh)
 		return (-1) ;
 
 	if ((sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET && sh->input_args[0][1] == '?')
-		|| (ft_strcmp(sh->input_args[0], "echo") == 0
-			&& (sh->input_args[1] && sh->input_args[1][0] == CTRL_CHAR_VAR_TO_INTERPRET) && sh->input_args[1][1] == '?'))
+)	//	|| (ft_strcmp(sh->input_args[0], "echo") == 0
+	//		&& (sh->input_args[1] && sh->input_args[1][0] == CTRL_CHAR_VAR_TO_INTERPRET) && sh->input_args[1][1] == '?'))
 	{
 		printf("%d\n", sh->last_exit_status);
 		return (0);

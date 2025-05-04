@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 19:18:28 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/02 15:36:38 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/04 14:02:16 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ int main(int argc, char **argv, char **env)
 				}
 				else if (is_builtin(sh.input_args[0]) && type == BASIC) 
 				{
-					// printf("[DEBUG] process_input\n");	
+					//printf("[DEBUG] process_input\n");
 					process_input(&sh);
 				}
 				else

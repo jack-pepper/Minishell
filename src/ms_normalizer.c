@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/02 12:42:11 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/04 14:13:46 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ char	*ft_strcollapse(char *line)
 	ft_init_two_ints(0, &i, &to_collapse);
 	while (line[i] != '\0')
 	{
-		if (line[i] == '$' && line[i + 1] != ' ')
+		if (line[i] == '$' && line[i + 1] != '\0' && line[i + 1] != ' ')
 			ft_replace_char(&line[i], CTRL_CHAR_VAR_TO_INTERPRET);
 		else if (line[i] == '|')
 			ft_replace_char(&line[i], CTRL_CHAR_PIPE);
@@ -196,7 +196,7 @@ void	handle_quote(char *line, char quote_type, int *i, int *to_collapse)
 	{
 		while (line[(*i)] != '\"')
 		{
-			if (line[(*i)] == '$' && line[(*i + 1)] != ' ' && line[(*i + 1)] != '\0')
+			if (line[(*i)] == '$' && line[(*i + 1)] != '\"' && line[(*i + 1)] != ' ')
 			{
 				ft_replace_char(&line[(*i)], CTRL_CHAR_VAR_TO_INTERPRET);
 				(*i)++;
