@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:01:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/29 15:57:47 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/05 12:43:04 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,15 @@ int	cmd_exit(t_shell *sh, unsigned int status)
 		else if (nb_args == 2)
 		{
 			if (ft_strnopbrk(sh->input_args[1], "0123456789-+") != NULL)
-                        {
+			{
 				ft_putstr_fd(EXIT_NUM_ARG_REQ, STDERR);
 				status = 2;
 			}
 			else
 				status = (unsigned int)(ft_atoi(sh->input_args[1]));
 		}
-			free_memory(sh);
-			exit(status);
+		free_memory(sh);
+		exit(status);
 	}
 	return (0);
 }
-
-

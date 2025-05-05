@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:04:03 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/05 12:08:06 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/05 12:40:41 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,23 @@ int	cmd_unset(t_shell *sh)
 				sh->this_env = tgt_node->next;
 			else
 			{
-				prev_node = sh->this_env;
-				while (prev_node->next != tgt_node)
-					prev_node = prev_node->next;
+				prev_node = get_prev_node(tgt_node, sh->this_env);
 				prev_node->next = tgt_node->next;
 			}
 			free_args(tgt_node->content);
 			free(tgt_node);
 		}
 		i++;
-	}	
+	}
 	return (0);
+}
+
+t_list	*get_prev_node(t_list *cur_node, t_list *this_env)
+{
+	t_list	*prev_node;
+
+	prev_node = this_env;
+	while (prev_node->next != cur_node)
+		prev_node = prev_node->next;
+	return (prev_node);
 }

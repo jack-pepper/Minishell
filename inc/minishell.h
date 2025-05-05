@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:15:16 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/05 11:59:16 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/05 12:51:31 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,8 @@ void		update_old_pwd_var(t_shell *sh, char **split_old_pwd);
 	// ms_cmd_echo.c - Display a line of text
 int			cmd_echo(t_shell *sh);
 void		echo_set_n(char **input_args, bool *opt_n, int *i);
+char		*echo_join_input(char *joined_input, char **input_args, int *i);
+void		echo_display(char *joined_output, bool opt_n);
 
 	// ms_cmd_exit.c - Cause the shell to exit
 int			cmd_exit(t_shell *sh, unsigned int status);
@@ -179,6 +181,7 @@ int		is_valid_env_name(char *var_name);
 
 	// ms_cmd_unset.c - Unset values and attributes of variables and functions
 int			cmd_unset(t_shell *sh);
+t_list		*get_prev_node(t_list *cur_node, t_list *this_env);
 
 	// ms_cmd_env.c - Display the env variables
 int			cmd_env(t_shell *sh);

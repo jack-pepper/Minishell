@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/04 15:55:01 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/05 13:02:06 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,13 @@ int	ft_interpret_env(t_shell *sh)
 	while (sh->input_args[i])
 	{
 		split_args = NULL;
-		
 //		ft_show_strs(sh->input_args, "[DEBUG] sh->input_args");
-		
 		if (ft_strchr(sh->input_args[i], CTRL_CHAR_VAR_TO_INTERPRET) != NULL)
 		{
 			split_args = ft_split(sh->input_args[i], CTRL_CHAR_VAR_TO_INTERPRET);
 			if (!split_args)
 				return (-1);
-
 //			ft_show_strs(split_args, "[DEBUG] split_args");
-
 			if (sh->input_args[i][0] == CTRL_CHAR_VAR_TO_INTERPRET)
 			{
 				rejoined_arg = ft_strdup("");
@@ -79,7 +75,7 @@ char	*join_all_subargs(char **args, char delim)
 		}
 		i++;
 	}
-	return result;
+	return (result);
 }
 
 char    *ft_strjoin_delim(char const *s1, char const *s2, char const *delim)
@@ -192,7 +188,6 @@ char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 char	*ft_rejoin_subarg(char **split_args, char *rejoined_arg, int i)
 {
 	char	*temp;
-//	char	*temp_with_space;
 
 	temp = ft_strjoin(rejoined_arg, split_args[i]);
 	free(rejoined_arg);

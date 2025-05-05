@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:23:56 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/04 20:46:38 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/05 12:29:15 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,6 @@ int	process_input(t_shell *sh)
 	if (!sh->input_args || sh->input_args[0] == NULL)
 		return (-1) ;
 
-//	if ((sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET && sh->input_args[0][1] == '?')
-//		|| (ft_strcmp(sh->input_args[0], "echo") == 0 && sh->input_args[1] && sh->input_args[1][0] == CTRL_CHAR_VAR_TO_INTERPRET
-//		&& sh->input_args[1][1] == '?')) // need to add more safety for next char
-
 	if (sh->input_args[0] && sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET)
 	{
 		if (ft_strcmp(sh->input_args[0], (char[]){CTRL_CHAR_VAR_TO_INTERPRET, '?', '\0'}) == 0)
@@ -97,7 +93,7 @@ int	process_input(t_shell *sh)
 		sh->last_exit_status = cmd_exit(sh, 0);
 	else if (ft_strcmp(sh->input_args[0], "pwd") == 0)
                 sh->last_exit_status = cmd_pwd();
-	else if (ft_strcmp(sh->input_args[0], "cd") == 0) // need to handle input starting with '/' too...
+	else if (ft_strcmp(sh->input_args[0], "cd") == 0)
 	{
 		sh->last_exit_status = cmd_cd(sh);
 		if (sh->last_exit_status != 0)
@@ -129,7 +125,7 @@ int	stash_var_or_invalidate(t_shell *sh)
 			i = 0;
 			while (sh->input_args[i])
 			{
-				if (ft_strpbrk(sh->input_args[i], "-") != NULL) // but need to split fist to check only what is before = ...
+				if (ft_strpbrk(sh->input_args[i], "-") != NULL) // NO! rearrange logic with is_valid_env_name
 				{
 					printf("minishell: %s: command not found\n", sh->input_args[i]);
 					return (-1);

@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:56:45 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/02 16:12:56 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/05 13:03:56 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int	init_shell(t_shell *sh, char **env)
 	init_signals();
 	if (init_env(sh, env) != 0)
 		return (-1);
-        // init_pipex (make a pointer to this_env)
 	if (init_cmds(sh) != 0)
 		return (-1);
 	return (0);
