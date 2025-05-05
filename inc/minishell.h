@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:15:16 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/05 12:51:31 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/05 23:49:30 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ int			init_shell(t_shell *sh, char **env);
 int			init_env(t_shell *sh, char **env);
 void		init_signals(void);
 void		signal_handler(int signum);
+int		normalize_env(t_list *this_env);
 
 	// ms_input_manager.c
 char		*get_input(char *line);
@@ -118,6 +119,7 @@ char		**ft_split_args(char **split_args, char *input_arg);
 char		*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args);
 char		*ft_rejoin_subarg(char **split_args, char *rejoined_arg, int i);
 char		**ft_copy_free(char **input_arg, char *rejoined_arg);
+char		*ft_strjoin_delim(char const *s1, char const *s2, char const *delim);
 
 	// ms_env_utils.c
 t_list		*ft_getenv(char *var_name, t_list **this_env);

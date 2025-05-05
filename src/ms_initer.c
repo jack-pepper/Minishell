@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:56:45 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/05 13:03:56 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/05 23:58:53 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,38 @@ int	init_shell(t_shell *sh, char **env)
 	return (0);
 }
 
+// If a value from env contains more than one equal sign, it has been split.
+// 
+int	normalize_env(t_list *this_env)
+{
+	t_list	*cur_node;
+	char	*rejoined_var;
+	int		i;
+
+	cur_node = this_env;
+	{
+		while (cur_node != NULL)
+		{
+			i = 1;
+			rejoined_var = ft_strdup("");
+			if (ft_strslen((char **)cur_node->content) > 2)
+			{
+				while (((char **)cur_node->content)[i])
+				{
+					
+					rejoined_var = ft_strjoin_delim(rejoined_var, ((char **)cur_node->content)[i], "=");
+					free(((char **)cur_node->content)[i]);
+					i++;
+				}
+				((char **)cur_node->content)[1] = ft_strdup(rejoined_var);
+			}
+			//free(rejoined_var);
+			cur_node = cur_node->next;
+		}
+	}
+	return (0);
+}
+
 // Initialize a local environment by storing the env variables to a t_list
 int	init_env(t_shell *sh, char **env)
 {
@@ -35,6 +67,8 @@ int	init_env(t_shell *sh, char **env)
 	sh->this_env = NULL;
 	sh->env_stash = NULL;
 	if (ft_strstolist(&sh->this_env, env, nb_vars, '=') != 0)
+		return (-1);
+	if (normalize_env(sh->this_env) != 0)
 		return (-1);
 	return (0);
 }
