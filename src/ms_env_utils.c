@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/01 22:34:53 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/05 11:53:19 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,11 @@ void	stash_var(t_shell *sh)
 		split_str = ft_split(sh->input_args[i], '=');
 		if (!split_str)
 			return ;
+		if (!is_valid_env_name(split_str[0]))
+		{
+			free_args(split_str);
+			return ;
+		}
 		stashed_var = ft_getenv(split_str[0], &sh->env_stash);
 		if (stashed_var != NULL)
 		{

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:15:16 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/04 20:33:52 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/05 11:59:16 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,8 +173,9 @@ int			cmd_exit(t_shell *sh, unsigned int status);
 
 	// ms_cmd_export.c - Set the export attribute for variables
 int			cmd_export(t_shell *sh);
-void		export_from_term(t_shell *sh, size_t *i);
+int		export_from_term(t_shell *sh, size_t *i);
 void		export_from_stash(t_shell *sh, t_list *stashed_var);
+int		is_valid_env_name(char *var_name);
 
 	// ms_cmd_unset.c - Unset values and attributes of variables and functions
 int			cmd_unset(t_shell *sh);
