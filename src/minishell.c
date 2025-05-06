@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:16:39 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/04 20:54:25 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/06 16:14:45 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,19 @@
 /* TODO: env variables should be interpreted in paths too! (ex: with cmd cd) 
  *
  */
+void restore_special_chars(char *str)
+{
+	for (int i = 0; str && str[i]; i++)
+	{
+		if (str[i] == CTRL_CHAR_SPACE_IN_QUOTE)
+			str[i] = ' ';
+		// else if (str[i] == CTRL_CHAR_PIPE)
+		// 	str[i] = '|';
+		// else if (str[i] == CTRL_CHAR_VAR_TO_INTERPRET)
+		// 	str[i] = '$';
+	}
+}
+
 int validate_and_exec_command(char **argv, char **envp, t_shell *sh)
 {
 	if (!argv || !argv[0] || argv[0][0] == '\0')
@@ -54,14 +67,17 @@ int validate_and_exec_command(char **argv, char **envp, t_shell *sh)
 	return 0; // if command is valid then you can execve it
 }
 
-bool validate_all_redirections(char **tokens, t_shell *sh) {
+bool validate_all_redirections(char **tokens, t_shell *sh)
+{
 	for (int i = 0; tokens[i]; i++)
 	{
 		if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0 ||
 			ft_strcmp(tokens[i], (char[]){CTRL_CHAR_HEREDOC, '\0'}) == 0)
 		{
+			restore_special_chars(tokens[i + 1]);
 			if (!tokens[i + 1] || access(tokens[i + 1], R_OK) != 0)
 			{
+				// printf("fd > 0\n");
 				perror(tokens[i + 1]);
 				sh->last_exit_status = 1;
 				return false;
@@ -77,6 +93,7 @@ bool validate_all_redirections(char **tokens, t_shell *sh) {
 				sh->last_exit_status = 1;
 				return false;
 			}
+			restore_special_chars(tokens[i + 1]);
 			int flags = O_WRONLY | O_CREAT | O_APPEND;
 			int fd = open(tokens[i + 1], flags, 0644);
 			if (fd < 0) {
@@ -88,6 +105,7 @@ bool validate_all_redirections(char **tokens, t_shell *sh) {
 			i++; // Skip file name
 		}
 	}
+	// printf("TRUE\n");
 	return true;
 }
 
@@ -95,8 +113,11 @@ void handle_redir_only(t_shell *sh, char **env)
 {
 
 	if (!validate_all_redirections(sh->input_args, sh))
+	{
+		// printf("Yoo!!\n");
 		return;
-		
+	}
+	// printf("I am hooo\n");
 	if (strcmp(sh->input_args[0], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0)
 	{
 		int new_file = open(sh->input_args[1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -115,7 +136,7 @@ void handle_redir_only(t_shell *sh, char **env)
 		free_pipeline(pipeline);
 		return;
 	}
-
+	// printf("exec_with_redir\n");
 	exec_with_redirection(pipeline, env, sh);
 	free_pipeline(pipeline);
 }
@@ -148,7 +169,7 @@ void handle_pipeline(t_shell *sh, char **env)
 {
 	if (!validate_all_redirections(sh->input_args, sh))
 		return;
-
+	// printf("I am here\n");
 	t_pipeline *pipeline = build_pipeline_from_tokens(sh->input_args);
 	if (!pipeline)
 	{
@@ -191,14 +212,20 @@ int main(int argc, char **argv, char **env)
 
 		// Handle each command type
 		if (type == REDIR_ONLY)
+		{
+			// printf("handle_redir_only\n");
 			handle_redir_only(&sh, env);
+		}
 		else if (type == BASIC)
 		{
 			// printf("basic\n");
 			handle_basic(&sh, env);
 		}
 		else if (type == PIPELINE)
+		{
+			// printf("Pipeline\n");
 			handle_pipeline(&sh, env);
+		}
 		else if (type == MIXED_INVALID)
 		{
 			sh.last_exit_status = 1;

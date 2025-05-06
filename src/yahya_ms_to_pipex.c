@@ -349,9 +349,10 @@ static int open_redirection_fds(t_pipeline *cmd, int *in_fd, int *out_fd, t_shel
 	*out_fd = -1;
 
 	if (cmd->infile) {
+		restore_special_chars(cmd->infile);
 		*in_fd = open(cmd->infile, O_RDONLY);
 		if (*in_fd < 0) {
-			printf("Yo\n");
+			// printf("Yo\n");
 			sh->last_exit_status = 1;
 			perror(cmd->infile);
 			return -1;
@@ -359,6 +360,7 @@ static int open_redirection_fds(t_pipeline *cmd, int *in_fd, int *out_fd, t_shel
 	}
 
 	if (cmd->outfile) {
+		restore_special_chars(cmd->outfile);
 		int flags = O_WRONLY | O_CREAT | (cmd->append ? O_APPEND : O_TRUNC);
 		*out_fd = open(cmd->outfile, flags, 0644);
 		if (*out_fd < 0) {
@@ -402,7 +404,13 @@ void exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh) {
 		if (validate_and_exec_command(argv, env, sh))
 			exit(sh->last_exit_status);
 		// printf("I am here1\n");
-		execve(get_cmd_path(argv[0], env), argv, env);
+		if(strcmp(argv[0], "echo") == 0)
+		{
+			sh->input_args = argv;
+			exit(cmd_echo(sh));
+		}
+		else
+			execve(get_cmd_path(argv[0], env), argv, env);
 		perror("execve failed");
 		exit(EXIT_FAILURE);
 	}
