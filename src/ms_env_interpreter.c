@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/06 12:20:11 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/06 15:49:03 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,9 +144,9 @@ char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 		if (first_space != NULL)
 		{
 			first_space[0] = CTRL_CHAR_SUBARG_DELIM; // MODIFY TO CTRL_CHAR
-			printf("After first space: %s\n", split_args[i]);
+//			printf("After first space: %s\n", split_args[i]);
 			subargs = ft_split(split_args[i], CTRL_CHAR_SUBARG_DELIM); // MODIFY TO CTRL_CHAR
-			ft_show_strs(subargs, "[DEBUG] After split");
+//			ft_show_strs(subargs, "[DEBUG] After split");
 			if (subargs[0][0] == '?')
 				subargs[0] = handle_exit_status_case(sh, subargs[0]);
 			else
@@ -163,7 +163,7 @@ char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 				split_args[i] = ft_strjoin_delim(subargs[0], subargs[1], " ");
 			else
 				split_args[i] = ft_strjoin_delim(subargs[0], "", " ");
-			printf("[DEBUG] after join-delim: ~%s~\n", split_args[i]);
+//			printf("[DEBUG] after join-delim: ~%s~\n", split_args[i]);
 			free_args(subargs);
 			rejoined_arg = ft_rejoin_subarg(split_args, rejoined_arg, i);
 		}

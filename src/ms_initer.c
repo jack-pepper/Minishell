@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:56:45 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/06 12:39:01 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/06 17:20:34 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,18 @@ int	normalize_env(t_list *this_env)
 			while (((char **)cur_node->content)[i])
 			{
 				char *temp = ft_strdup(rejoined_var);
-				free(rejoined_var);	
+				free(rejoined_var);
 				rejoined_var = ft_strjoin_delim(temp, ((char **)cur_node->content)[i], "=");
 				free(temp);
 				i++;
 			}
+			//ft_unflag_delim(rejoined_var, '=', CTRL_CHAR_EXTRA_DELIM);
+			//printf("[normalize_env] %s\n", rejoined_var);
 			((char **)cur_node->content)[1] = ft_strdup(rejoined_var);
 			free(rejoined_var);
 		}
+		ft_unflag_delim(((char **)cur_node->content)[1], '=', CTRL_CHAR_EXTRA_DELIM);
+	//	printf("[normalize_env] ctt %s\n", ((char **)cur_node->content)[1]);
 		cur_node = cur_node->next;
 	}
 	return (0);
