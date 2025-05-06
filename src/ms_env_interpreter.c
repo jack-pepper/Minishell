@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/05 13:02:06 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/06 12:20:11 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,9 +144,9 @@ char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 		if (first_space != NULL)
 		{
 			first_space[0] = CTRL_CHAR_SUBARG_DELIM; // MODIFY TO CTRL_CHAR
-//			printf("After first space: %s\n", split_args[i]);
+			printf("After first space: %s\n", split_args[i]);
 			subargs = ft_split(split_args[i], CTRL_CHAR_SUBARG_DELIM); // MODIFY TO CTRL_CHAR
-//			ft_show_strs(subargs, "[DEBUG] After split");
+			ft_show_strs(subargs, "[DEBUG] After split");
 			if (subargs[0][0] == '?')
 				subargs[0] = handle_exit_status_case(sh, subargs[0]);
 			else
@@ -159,9 +159,13 @@ char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 					subargs[0] = ft_strdup("");
 			}
 			free(split_args[i]);
-			split_args[i] = ft_strjoin_delim(subargs[0], subargs[1], " ");
-//			printf("[DEBUG] after join-delim: ~%s~\n", split_args[i]);
+			if (subargs[1] != NULL)
+				split_args[i] = ft_strjoin_delim(subargs[0], subargs[1], " ");
+			else
+				split_args[i] = ft_strjoin_delim(subargs[0], "", " ");
+			printf("[DEBUG] after join-delim: ~%s~\n", split_args[i]);
 			free_args(subargs);
+			rejoined_arg = ft_rejoin_subarg(split_args, rejoined_arg, i);
 		}
 		else
 		{	
@@ -176,9 +180,10 @@ char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 				else
 					split_args[i] = ft_strdup("");
 			}
+			rejoined_arg = ft_rejoin_subarg(split_args, rejoined_arg, i);
 		}
 //		ft_show_strs(split_args, "[DEBUG] split_args after nametoval"),
-		rejoined_arg = ft_rejoin_subarg(split_args, rejoined_arg, i);
+		//rejoined_arg = ft_rejoin_subarg(split_args, rejoined_arg, i);
 		//rejoined_arg = ft_strjoin_delim(rejoined_arg, split_args[i], " ");
 		i++;
 	}
@@ -189,7 +194,10 @@ char	*ft_rejoin_subarg(char **split_args, char *rejoined_arg, int i)
 {
 	char	*temp;
 
-	temp = ft_strjoin(rejoined_arg, split_args[i]);
+//	if (ft_strpbrk(split_args[i], CTRL_CHAR_SUBARG_DELIM) != NULL)
+//		temp = ft_strjoin_delim(rejoined_arg, split_args[i], " ");
+//	else
+		temp = ft_strjoin(rejoined_arg, split_args[i]);
 	free(rejoined_arg);
 	if (!temp)
 		return (NULL);

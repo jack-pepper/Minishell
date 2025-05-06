@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/04 14:13:46 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/06 12:05:59 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,8 +144,10 @@ char	*ft_strcollapse(char *line)
 	line_len = ft_strlen(line);
 	ft_init_two_ints(0, &i, &to_collapse);
 	while (line[i] != '\0')
-	{
-		if (line[i] == '$' && line[i + 1] != '\0' && line[i + 1] != ' ')
+	{	
+		if (line[i] == '$' && (line[i + 1] == '\"' || line[i + 1] == '\''))
+			ft_replace_char(&line[i], CTRL_CHAR_TO_BE_DELETED);
+		else if (line[i] == '$' && line[i + 1] != '\0' && line[i + 1] != ' ')
 			ft_replace_char(&line[i], CTRL_CHAR_VAR_TO_INTERPRET);
 		else if (line[i] == '|')
 			ft_replace_char(&line[i], CTRL_CHAR_PIPE);

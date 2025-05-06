@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:15:16 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/05 23:49:30 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/06 12:15:45 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # define CTRL_CHAR_PIPE 28 // "|"
 # define CTRL_CHAR_SPACE_IN_QUOTE 29
 # define CTRL_CHAR_VAR_TO_INTERPRET 30
-# define CTRL_CHAR_SUBARG_DELIM 31
+# define CTRL_CHAR_SUBARG_DELIM '*' // 31
 # define CTRL_CHAR_TO_BE_DELETED 23
 
 

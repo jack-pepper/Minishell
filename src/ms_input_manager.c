@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:23:56 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/05 12:29:15 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/06 11:12:38 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ char	**normalize_input(char *line, t_shell *sh)
 	sh->normalized_line = NULL;
 	if (!sh->input_args)
 		return (NULL);
-//	ft_replace_all_chars(sh->input_args, CTRL_CHAR_SPACE_IN_QUOTE, ' '); // change CTRL_CHAR in quotes back to spaces
 	ft_replace_all_chars(sh->input_args, '|', CTRL_CHAR_PIPE);
 	
 //	ft_show_strs(sh->input_args, "[DEBUG: input_args after normalization]");
@@ -85,9 +84,9 @@ int	process_input(t_shell *sh)
 		}
 	}
 
-//	ft_show_strs(sh->input_args, "[DEBUG] input_args BEFORE env interpret");
+	ft_show_strs(sh->input_args, "[DEBUG] input_args BEFORE env interpret");
 	ft_interpret_env(sh);
-//	ft_show_strs(sh->input_args, "[DEBUG] input_args AFTER env interpret");
+	ft_show_strs(sh->input_args, "[DEBUG] input_args AFTER env interpret");
 
     if (ft_strcmp(sh->input_args[0], "exit") == 0)
 		sh->last_exit_status = cmd_exit(sh, 0);
