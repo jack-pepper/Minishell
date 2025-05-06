@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:56:45 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/05 23:58:53 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/06 11:01:16 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,25 +35,25 @@ int	normalize_env(t_list *this_env)
 	int		i;
 
 	cur_node = this_env;
+	while (cur_node != NULL)
 	{
-		while (cur_node != NULL)
+		i = 2;
+		if (ft_strslen((char **)cur_node->content) > 2)
 		{
-			i = 1;
-			rejoined_var = ft_strdup("");
-			if (ft_strslen((char **)cur_node->content) > 2)
+			rejoined_var = ft_strdup(((char **)cur_node->content)[1]);
+			free(((char **)cur_node->content)[1]);
+			while (((char **)cur_node->content)[i])
 			{
-				while (((char **)cur_node->content)[i])
-				{
-					
-					rejoined_var = ft_strjoin_delim(rejoined_var, ((char **)cur_node->content)[i], "=");
-					free(((char **)cur_node->content)[i]);
-					i++;
-				}
-				((char **)cur_node->content)[1] = ft_strdup(rejoined_var);
+				char *temp = ft_strdup(rejoined_var);
+				free(rejoined_var);	
+				rejoined_var = ft_strjoin_delim(temp, ((char **)cur_node->content)[i], "=");
+				free(temp);
+				i++;
 			}
-			//free(rejoined_var);
-			cur_node = cur_node->next;
+			((char **)cur_node->content)[1] = ft_strdup(rejoined_var);
+			free(rejoined_var);
 		}
+		cur_node = cur_node->next;
 	}
 	return (0);
 }
