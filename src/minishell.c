@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:16:39 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/04 20:54:25 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/06 12:41:44 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,33 +212,3 @@ int main(int argc, char **argv, char **env)
 	//return 0;
 	return (sh.last_exit_status);
 }
-
-
-// // Initialize a local environment by storing the env variables to a t_list
-// int	init_env(t_shell *sh, char **env)
-// {
-// 	size_t	nb_vars;
-
-// 	nb_vars = ft_strslen(env);
-// 	sh->this_env = NULL;
-// 	sh->env_stash = NULL;
-// 	if (ft_strstolist(&sh->this_env, env, nb_vars, '=') != 0)
-// 		return (-1);
-// 	return (0);
-// }
-
-// // Initialize what is needed for the shell (signals, env, pipex, commands)
-// int	init_shell(t_shell *sh, char **env)
-// {
-// 	sh->normalized_line = NULL;
-// 	sh->input_args = NULL;
-// 	sh->last_exit_status = 0;
-// 	init_signals();
-// 	if (init_env(sh, env) != 0)
-// 		return (-1);
-// 	// init_pipex (make a pointer to this_env)
-// 	if (init_cmds(sh) != 0)
-// 		return (-1);	
-// 	return (0);
-// }
-

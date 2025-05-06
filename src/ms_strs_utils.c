@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/02 13:12:32 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/06 12:33:21 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	ft_strstolist(t_list **list, char **strs, size_t nb_strs, char delim)
 	split_str = NULL;
 	while (i < nb_strs)
 	{
-		//printf("env[%ld]: %s\n", i, env[i]);
 		if (!delim)
 			node = ft_lstnew((char *)strs[i]);
 		else

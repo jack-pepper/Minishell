@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:15:16 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/06 12:15:45 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/06 13:25:05 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,19 @@
 # define CTRL_CHAR_PIPE 28 // "|"
 # define CTRL_CHAR_SPACE_IN_QUOTE 29
 # define CTRL_CHAR_VAR_TO_INTERPRET 30
-# define CTRL_CHAR_SUBARG_DELIM '*' // 31
+# define CTRL_CHAR_SUBARG_DELIM 31
 # define CTRL_CHAR_TO_BE_DELETED 23
 
 
 /* Return messages (ft_ret) */
+# define SHELL_NAME "minishell" // could be used to improve error msg
 # define CD_TOO_MANY_ARGS "minishell: cd: too many arguments\n"
 # define CD_HOME_NON_SET "minishell: cd: HOME non set\n"
 # define CD_NO_FILE_OR_DIR "minishell: cd: No such file or directory\n"
 # define EXPORT_INVALID_ID "minishell: export: not a valid identifier\n"
 # define EXIT_NUM_ARG_REQ "minishell: exit: numeric argument required\n"
 # define EXIT_TOO_MANY_ARGS "minishell: exit: too many arguments\n"
-# define CMD_NOT_FOUND "minishell: command not found\n"
+# define CMD_NOT_FOUND ": command not found\n"
 # define CMD_IS_DIR "minishell: Is a directory\n"
 
 /* Libraries */
@@ -109,8 +110,10 @@ int			process_input(t_shell *sh);
 	// ms_normalizer.c
 char		*ft_normalize(char *line);
 char		*ft_strcollapse(char *line);
-void		handle_quote(char *line, char quote_type, int *i, int *to_collapse);
 char		*copy_collapse(char *dst, char *src, size_t src_len);
+
+	// ms_quotes_handler.c
+void		handle_quote(char *line, char quote_type, int *i, int *to_collapse);
 void		pass_quotes(char *dst, char *src, size_t *i, size_t *j);
 
 	// ms_env_interpreter.c
