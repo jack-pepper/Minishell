@@ -6,7 +6,7 @@
 #    By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/14 09:35:38 by mmalie            #+#    #+#              #
-#    Updated: 2025/02/15 11:08:40 by mmalie           ###   ########.fr        #
+#    Updated: 2025/05/07 13:21:10 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,7 @@ DEPS = libstdlib.h
 
 LIBSTDLIB = ft_atoi.c \
 	    ft_atol.c\
+	    ft_atoll.c \
 	    ft_calloc.c \
 	    ft_memdel.c \
 

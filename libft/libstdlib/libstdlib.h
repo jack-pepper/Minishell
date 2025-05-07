@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 11:25:28 by mmalie            #+#    #+#             */
-/*   Updated: 2024/12/10 14:18:47 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/07 14:23:32 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,10 @@
 # include <stdio.h>
 
 /* LIBSTDLIB */
-void	*ft_calloc(size_t nmemb, size_t size);
-void	ft_memdel(void **ap);
-int		ft_atoi(const char *nptr);
-long	ft_atol(const char *nptr);
+void		*ft_calloc(size_t nmemb, size_t size);
+void		ft_memdel(void **ap);
+int			ft_atoi(const char *nptr);
+long		ft_atol(const char *nptr);
+long long	ft_atoll(const char *nptr);
 
 #endif
