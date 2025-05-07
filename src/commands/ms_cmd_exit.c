@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:01:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/07 23:14:14 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 00:22:26 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,9 @@ int	cmd_exit(t_shell *sh, unsigned int status)
 			;
 		else if (nb_args > 2)
 			return (ft_ret(1, EXIT_TOO_MANY_ARGS, STDERR));
-		else if (nb_args == 2 && 
-			(ft_isnum(sh->input_args[1]) != 0 || ft_overflow(sh->input_args[1], "ll") != 0))
+		else if (nb_args == 2
+			&& (ft_isnum(sh->input_args[1]) != 0
+				|| ft_overflow(sh->input_args[1], "ll") != 0))
 		{
 			ft_putstr_fd(EXIT_NUM_ARG_REQ, STDERR);
 			status = 2;
@@ -47,7 +48,7 @@ int	ft_isnum(char *str)
 	if (!ft_isdigit(str[i]))
 	{
 		if (str[i] != '+' && str[i] != '-' && str[i + 1] != '\0')
-		return (1);
+			return (1);
 	}
 	i++;
 	while (str[i] != '\0')
@@ -90,32 +91,30 @@ char	*ms_trim(char *trimmed_arg, char *arg, int len, int start_i)
 }
 
 // Check overflow. str must be strictly a decimal number (signed or unsigned)
-int	ft_overflow(char *str, char *type)
+int	exit_arg_overflow(char *str)
 {
-	long long	num;
 	size_t		str_len;
 	char		*llong_min;
 	char		*llong_max;
+	char		*trimmed_str;
+	int			res;
 
-	str = ms_trim(str, str, ft_strlen(str), 0);
-	num = ft_atoll(str);
-	if (ft_strcmp(type, "int") == 0)
-		return (num < INT_MIN || num > INT_MAX);
-	else if (ft_strcmp(type, "ll") == 0)
+	trimmed_str = NULL;
+	res = 0;
+	trimmed_str = ms_trim(trimmed_str, str, ft_strlen(str), 0);
+	str_len = ft_strlen(trimmed_str);
+	if ((ft_isdigit(trimmed_str[0]) && str_len > 19)
+		|| (trimmed_str[0] == '-' && str_len > 20))
+		res = 1;
+	else if (str_len == 19 || str_len == 20)
 	{
-		str_len = ft_strlen(str);
-		if ((ft_isdigit(str[0]) && str_len > 19)
-			|| (str[0] == '-' && str_len > 20))
-			return (1);
-		if (str_len == 19 || str_len == 20)
-		{
-			llong_min = "-9223372036854775808";
-			llong_max = "9223372036854775807";
-			if (str[0] == '-')
-				return (ft_strcmp(str, llong_min) < 0);
-			else
-				return (ft_strcmp(str, llong_max) > 0);
-		}
+		llong_min = "-9223372036854775808";
+		llong_max = "9223372036854775807";
+		if (trimmed_str[0] == '-')
+			res = (ft_strcmp(trimmed_str, llong_min) < 0);
+		else
+			res = (ft_strcmp(trimmed_str, llong_max) > 0);
 	}
-	return (0);
+	free(trimmed_str);
+	return (res);
 }
