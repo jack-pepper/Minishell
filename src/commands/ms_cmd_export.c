@@ -6,17 +6,18 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/05 12:19:04 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 01:36:45 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+// Handle "export var_name" (from stash) & "export var_name=[value]"
 int	cmd_export(t_shell *sh)
 {
 	t_list	*stashed_var;
 	size_t	i;
-	int	res;
+	int		res;
 
 	if (!(sh->input_args[1]))
 		cmd_env((sh));
@@ -25,18 +26,18 @@ int	cmd_export(t_shell *sh)
 		i = 1;
 		while (sh->input_args[i] != NULL)
 		{
-			if (sh->input_args[i][0] == '=' || ft_isdigit(sh->input_args[i][0]))
+			if (sh->input_args[i][0] == '=' || ft_isdigit(sh->input_args[i][0])) // is_valid_env_name
 				return (ft_ret(1, EXPORT_INVALID_ID, STDERR));
-			if (ft_strchr(sh->input_args[i], '=') == NULL) // cmd: export var_name
+			if (ft_strchr(sh->input_args[i], '=') == NULL)
 			{
-				if (ft_strpbrk(sh->input_args[i], "-") != NULL)
+				if (ft_strpbrk(sh->input_args[i], "-") != NULL) // should check better
 					return (ft_ret(1, EXPORT_INVALID_ID, STDERR));
 				stashed_var = ft_getenv(sh->input_args[i], &sh->env_stash);
-				if (stashed_var != NULL) // if var_name found in stash
-					export_from_stash(sh, stashed_var); 
+				if (stashed_var != NULL)
+					export_from_stash(sh, stashed_var);
 				i++;
 			}
-			else // cmd: export var_name=[value]
+			else
 			{
 				res = export_from_term(sh, &i);
 				if (res != 0)
@@ -54,7 +55,7 @@ int	export_from_term(t_shell *sh, size_t *i)
 	char	**split_str;
 
 	split_str = NULL;
-	split_str = ft_split(sh->input_args[(*i)], '='); // split the "var_name=[value]" str
+	split_str = ft_split(sh->input_args[(*i)], '=');
 	if (!split_str)
 		return (1);
 	if (!is_valid_env_name(split_str[0]))
@@ -63,15 +64,15 @@ int	export_from_term(t_shell *sh, size_t *i)
 		return (ft_ret(1, EXPORT_INVALID_ID, STDERR));
 	}
 	set_var = ft_getenv(split_str[0], &sh->this_env);
-	if (set_var != NULL) // if var_name found in this_env
+	if (set_var != NULL)
 	{
 		if (ft_update_env_value(set_var, split_str) != 0)
 		{
 			free_args(split_str);
-			return (1) ;
+			return (1);
 		}
 	}
-	else // if var_name not found in this_env
+	else
 		add_new_env_var(sh, split_str);
 	return (0);
 }
@@ -86,16 +87,14 @@ void	export_from_stash(t_shell *sh, t_list *stashed_var)
 	new_content = ft_strsdup((char **)stashed_var->content);
 	if (!new_content)
 		return ;
-	if (set_var != NULL) // if stashed_var_name found in this_env
+	if (set_var != NULL)
 		ft_update_env_value(set_var, new_content);
-	else // if not
+	else
 		add_new_env_var(sh, new_content);
 	prev_node = sh->env_stash;
-
-	// if the stashed var is the first of the list, move the head to next node 
 	if (stashed_var == sh->env_stash)
 		sh->env_stash = stashed_var->next;
-	else // if not, find the node before stashed var and move next to stashed var next
+	else
 	{
 		while (prev_node && prev_node->next != stashed_var)
 			prev_node = prev_node->next;

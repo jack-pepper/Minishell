@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:01:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 00:22:26 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 00:28:25 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	cmd_exit(t_shell *sh, unsigned int status)
 			return (ft_ret(1, EXIT_TOO_MANY_ARGS, STDERR));
 		else if (nb_args == 2
 			&& (ft_isnum(sh->input_args[1]) != 0
-				|| ft_overflow(sh->input_args[1], "ll") != 0))
+				|| exit_arg_overflow(sh->input_args[1]) != 0))
 		{
 			ft_putstr_fd(EXIT_NUM_ARG_REQ, STDERR);
 			status = 2;

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:15:16 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/07 22:43:07 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 00:29:06 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ void		echo_display(char *joined_output, bool opt_n);
 int			cmd_exit(t_shell *sh, unsigned int status);
 int     	ft_isnum(char *str);
 char		*ms_trim(char *trimmed_arg, char *arg, int len, int k);
-int		ft_overflow(char *str, char *type);
+int		exit_arg_overflow(char *str);
 
 	// ms_cmd_export.c - Set the export attribute for variables
 int			cmd_export(t_shell *sh);

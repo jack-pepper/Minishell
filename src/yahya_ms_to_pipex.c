@@ -408,6 +408,7 @@ void exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh) {
 	}
 
 	int status;
+	status = 0;
 	waitpid(pid, &status, 0);
 
 	if (WIFEXITED(status))
