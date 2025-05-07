@@ -6,77 +6,15 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:01:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/07 14:50:20 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/07 23:14:14 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-// Check if all str chars are a digit while accepting + or - at first pos
-int	ft_isnum(char *str)
-{
-	size_t	i;
-
-	i = 0;
-	if (!ft_isdigit(str[i]))
-	{
-		if (str[i] != '+' && str[i] != '-'
-			&& str[i + 1] != '\0')
-		return (1);
-	}
-	i++;
-	while (str[i] != '\0')
-	{
-		if (!ft_isdigit(str[i]))
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-// Check overflow. str must be strictly a decimal number (signed or unsigned)
-int	ft_overflow(char *str, char *type)
-{
-	long long	num;
-	size_t		str_len;
-	char		*llong_min;
-	char		*llong_max;
-
-	// first strip the leading white spaces and leading zeros (see pushswap)
-	num = ft_atoll(str);
-	if (ft_strcmp(type, "int") == 0)
-		return (num < INT_MIN || num > INT_MAX);
-	else if (ft_strcmp(type, "ll") == 0)
-	{
-		str_len = ft_strlen(str);
-
-		if ((ft_isdigit(str[0]) && str_len > 19)
-			|| (str[0] == '+' && str_len > 20)
-			|| (str[0] == '-' && str_len > 20))
-			return (1);
-		if (str_len == 19 || str_len == 20)
-		{
-			llong_min = "-9223372036854775808";
-			llong_max = "9223372036854775807";
-			if (str[0] == '-')
-				return (ft_strcmp(str, llong_min) < 0);
-			else if (str[0] == '+')
-				return (ft_strcmp(&str[1], llong_max) > 0);
-			else
-				return (ft_strcmp(str, llong_max) > 0);
-		}
-		else
-			return (0);
-	}
-	return (0);
-}
-
 int	cmd_exit(t_shell *sh, unsigned int status)
 {
-	// [TODO]: should show the NUM_ARG_REQ error on overflow (and status to 2)
-
 	size_t	nb_args;
-	//long long	num;
 
 	nb_args = ft_strslen(sh->input_args);
 	printf("exit\n");
@@ -93,12 +31,91 @@ int	cmd_exit(t_shell *sh, unsigned int status)
 			status = 2;
 		}
 		else
-		{	
-			//num = ft_atoll(sh->input_args[1]);
-			status = (unsigned int)(ft_atoll(sh->input_args[1]));
-		}
+			status = (unsigned char)(ft_atoll(sh->input_args[1]));
 		free_memory(sh);
 		exit(status);
+	}
+	return (0);
+}
+
+// Check if all str chars are a digit while accepting + or - at first pos
+int	ft_isnum(char *str)
+{
+	size_t	i;
+
+	i = 0;
+	if (!ft_isdigit(str[i]))
+	{
+		if (str[i] != '+' && str[i] != '-' && str[i + 1] != '\0')
+		return (1);
+	}
+	i++;
+	while (str[i] != '\0')
+	{
+		if (!ft_isdigit(str[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+// Trim each arg (remove + sign and leading zeros)
+char	*ms_trim(char *trimmed_arg, char *arg, int len, int start_i)
+{
+	int	i;
+
+	i = 0;
+	if (ft_strnopbrk(arg, "0") == NULL || ft_strnopbrk(arg, "-0") == NULL
+		|| ft_strnopbrk(arg, "+0") == NULL)
+	{
+		trimmed_arg = (char *)malloc(1 + 1);
+		if (!trimmed_arg)
+			return (NULL);
+		ft_strlcpy(trimmed_arg, "0", 1);
+		return (trimmed_arg);
+	}
+	if (arg[i] == '+' || arg[i] == '-')
+		i++;
+	while (arg[i] == '0')
+		i++;
+	trimmed_arg = (char *)malloc((len - i + (arg[0] == '-') + 1));
+	if (!trimmed_arg)
+		return (NULL);
+	if (arg[0] == '-')
+		trimmed_arg[start_i++] = '-';
+	while (i < len)
+		trimmed_arg[start_i++] = arg[i++];
+	trimmed_arg[start_i] = '\0';
+	return (trimmed_arg);
+}
+
+// Check overflow. str must be strictly a decimal number (signed or unsigned)
+int	ft_overflow(char *str, char *type)
+{
+	long long	num;
+	size_t		str_len;
+	char		*llong_min;
+	char		*llong_max;
+
+	str = ms_trim(str, str, ft_strlen(str), 0);
+	num = ft_atoll(str);
+	if (ft_strcmp(type, "int") == 0)
+		return (num < INT_MIN || num > INT_MAX);
+	else if (ft_strcmp(type, "ll") == 0)
+	{
+		str_len = ft_strlen(str);
+		if ((ft_isdigit(str[0]) && str_len > 19)
+			|| (str[0] == '-' && str_len > 20))
+			return (1);
+		if (str_len == 19 || str_len == 20)
+		{
+			llong_min = "-9223372036854775808";
+			llong_max = "9223372036854775807";
+			if (str[0] == '-')
+				return (ft_strcmp(str, llong_min) < 0);
+			else
+				return (ft_strcmp(str, llong_max) > 0);
+		}
 	}
 	return (0);
 }
