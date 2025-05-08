@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_input_manager.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:23:56 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/04 20:46:38 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 12:39:18 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ char	*get_input(char *line)
 	line = readline(PROMPT_STYLE);
 	if (line && *line)
 	{
+		add_history(line); // Could be stored o
 		add_history(line); // Could be stored on a file before quitting
 		if (rl_on_new_line() != -1) // How to handle this error?
 			return (line);
@@ -36,12 +37,18 @@ char	*get_input(char *line)
 char	**normalize_input(char *line, t_shell *sh)
 {
 	sh->normalized_line = ft_normalize(line);
-	//printf("Normalized %s\n", sh->normalized_line);
+	// printf("Normalized %s\n", sh->normalized_line);
 	if (!sh->normalized_line)
 		return (NULL);
 	sh->input_args = ft_split(sh->normalized_line, ' ');
-        
-//	ft_show_strs(sh->input_args, "[DEBUG: input_args before normalization]");
+	
+	// int i = 0;
+	// while(sh->input_args[i])
+	// {
+	// 	printf("normalize_input_arg[i] = %s\n", sh->input_args[i]);
+	// 	i++;
+	// }
+	// ft_show_strs(sh->input_args, "[DEBUG: input_args befo  normalization]");
 	
 	free(sh->normalized_line);
 	sh->normalized_line = NULL;
@@ -70,25 +77,34 @@ int	process_input(t_shell *sh)
 		if (ft_strcmp(sh->input_args[0], (char[]){CTRL_CHAR_VAR_TO_INTERPRET, '?', '\0'}) == 0)
 		{
 			char *exit_status = ft_itoa(sh->last_exit_status);
-			return (ft_ret(127, CMD_NOT_FOUND, STDERR));
 			free(exit_status);
-			return (127);
+			return (ft_ret(127, CMD_NOT_FOUND, STDERR));
+
+			// printf("i am here 127\n");
+			// return (127);
 		}
 		else
 		{
+			// printf("I am here 312\n");
 			t_list *set_var = ft_getenv(&(sh->input_args[0][1]), &sh->this_env);
 			if (!set_var)
+			{
+				// printf("I am here 416\n");
 				return (0);
+			}
 			else
 			{
 				if (((char **)set_var->content)[1][0] == '/')
 					return (ft_ret(126, CMD_IS_DIR, STDERR));
 				else
+				{
+					// printf("I am here 200\n");
 					return (ft_ret(0, CMD_NOT_FOUND, STDERR));
+				}
 			}
 		}
 	}
-
+	// printf("I am here 231\n");
 //	ft_show_strs(sh->input_args, "[DEBUG] input_args BEFORE env interpret");
 	ft_interpret_env(sh);
 //	ft_show_strs(sh->input_args, "[DEBUG] input_args AFTER env interpret");
@@ -112,7 +128,10 @@ int	process_input(t_shell *sh)
 	else if (ft_strcmp(sh->input_args[0], "unset") == 0)
 		sh->last_exit_status = cmd_unset(sh);
 	else
+	{
+		printf("I am here 2000\n");
 		sh->last_exit_status = stash_var_or_invalidate(sh);
+	}
 	return (sh->last_exit_status);
 }
 

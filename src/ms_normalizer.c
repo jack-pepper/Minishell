@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/04 14:13:46 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/05 15:25:00 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ char	*ft_normalize(char *line)
 	trimmed_line = ft_strtrim(line, " \f\n\r\t\v");
 	if (trimmed_line == NULL)
 		return (NULL);
-
 	normalized_line = ft_strcollapse(trimmed_line);
 	free(trimmed_line);
 	if (normalized_line == NULL)
@@ -143,20 +142,26 @@ char	*ft_strcollapse(char *line)
 	collapsed_line = NULL;
 	line_len = ft_strlen(line);
 	ft_init_two_ints(0, &i, &to_collapse);
+
 	while (line[i] != '\0')
 	{
 		if (line[i] == '$' && line[i + 1] != '\0' && line[i + 1] != ' ')
 			ft_replace_char(&line[i], CTRL_CHAR_VAR_TO_INTERPRET);
 		else if (line[i] == '|')
+		{
 			ft_replace_char(&line[i], CTRL_CHAR_PIPE);
+		}
 		else if (line[i] == '<' && line[i + 1] == '<')
 		{
+
 			ft_replace_char(&line[i], CTRL_CHAR_HEREDOC);
 			ft_replace_char(&line[i + 1], ' ');
 			i++; 
+
 		}
 		else if (line[i] == '>' && line[i + 1] == '>')
 		{
+
 			ft_replace_char(&line[i], CTRL_CHAR_APPEND);
 			ft_replace_char(&line[i + 1], ' ');
 			i++;
@@ -168,7 +173,9 @@ char	*ft_strcollapse(char *line)
 		else if (line[i] == '\'' && ft_count_char(&line[i], '\'') > 1)
 			handle_quote(line, '\'', &i, &to_collapse);
 		else if (line[i] == '\"' && ft_count_char(&line[i], '\"') > 1)
+		{
 			handle_quote(line, '\"', &i, &to_collapse);
+		}
 		else if (ft_isspace(line[i]) && ft_isspace(line[i + 1]))
 			to_collapse++;
 		i++;

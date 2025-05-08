@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:16:39 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/04 20:54:25 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 12:39:34 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,16 @@
 
 /* TODO: env variables should be interpreted in paths too! (ex: with cmd cd) 
  *
+ *
  */
+
 int validate_and_exec_command(char **argv, char **envp, t_shell *sh)
 {
 	if (!argv || !argv[0] || argv[0][0] == '\0')
+	{
 		return 0; // Nothing to run (example: $EMPTY)
-
+	}
+	
 	if (ft_strchr(argv[0], '/'))
 	{
 		if (access(argv[0], F_OK) != 0)
@@ -29,14 +33,33 @@ int validate_and_exec_command(char **argv, char **envp, t_shell *sh)
 			sh->last_exit_status = 127;
 			return 1;
 		}
-		else if (access(argv[0], X_OK) != 0)
+		else
 		{
-			if (opendir(argv[0])) // check if it's a directory
+			struct stat st;
+
+			// if the path exists
+			if (stat(argv[0], &st) != 0)
+			{
+				perror(argv[0]);
+				sh->last_exit_status = 127; // no such file or dir
+				return 1;
+			}
+			// is it a valid directory
+			if (S_ISDIR(st.st_mode))
+			{
 				fprintf(stderr, "%s: Is a directory\n", argv[0]);
-			else
-				perror(argv[0]); // permission denied or other
-			sh->last_exit_status = 126;
-			return 1;
+				sh->last_exit_status = 126;
+				return 1;
+			}
+		
+			// check execute permissions
+			if (access(argv[0], X_OK) != 0)
+			{
+				perror(argv[0]); // ermission denied
+				sh->last_exit_status = 126;
+				return 1;
+			}
+
 		}
 	}
 	else
@@ -50,16 +73,24 @@ int validate_and_exec_command(char **argv, char **envp, t_shell *sh)
 		}
 		free(cmd_path);
 	}
-
 	return 0; // if command is valid then you can execve it
 }
-
-bool validate_all_redirections(char **tokens, t_shell *sh) {
+void restore_quoted_spaces(char *str)
+{
+	for (int i = 0; str && str[i]; i++)
+	{
+		if (str[i] == CTRL_CHAR_SPACE_IN_QUOTE)
+			str[i] = ' ';
+	}
+}
+bool validate_all_redirections(char **tokens, t_shell *sh)
+{
 	for (int i = 0; tokens[i]; i++)
 	{
 		if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0 ||
 			ft_strcmp(tokens[i], (char[]){CTRL_CHAR_HEREDOC, '\0'}) == 0)
 		{
+			restore_quoted_spaces(tokens[i+1]);
 			if (!tokens[i + 1] || access(tokens[i + 1], R_OK) != 0)
 			{
 				perror(tokens[i + 1]);
@@ -77,6 +108,7 @@ bool validate_all_redirections(char **tokens, t_shell *sh) {
 				sh->last_exit_status = 1;
 				return false;
 			}
+			restore_quoted_spaces(tokens[i+1]);
 			int flags = O_WRONLY | O_CREAT | O_APPEND;
 			int fd = open(tokens[i + 1], flags, 0644);
 			if (fd < 0) {
@@ -88,6 +120,7 @@ bool validate_all_redirections(char **tokens, t_shell *sh) {
 			i++; // Skip file name
 		}
 	}
+	// printf("TUREE!");
 	return true;
 }
 
@@ -123,23 +156,24 @@ void handle_basic(t_shell *sh, char **env)
 {
 	if (is_builtin(sh->input_args[0]))
 	{
+		// printf("heey\n");
 		sh->last_exit_status = process_input(sh);
 		return;
 	}
-
 	// Not a builtin, run normally
 	if (!validate_all_redirections(sh->input_args, sh))
 		return;
-
+	// printf("here again\n");
 	t_pipeline *pipeline = parse_redirection_only(sh->input_args);
 	if (!pipeline || !pipeline->cmds || !pipeline->cmds[0].argv)
 	{
+		// printf("I am here2939\n");
 		sh->last_exit_status = 127;
 		fprintf(stderr, "%s: command not found\n", sh->input_args[0]);
 		free_pipeline(pipeline);
 		return;
 	}
-
+	// printf("here??\n");
 	exec_with_redirection(pipeline, env, sh);
 	free_pipeline(pipeline);
 }
@@ -148,7 +182,7 @@ void handle_pipeline(t_shell *sh, char **env)
 {
 	if (!validate_all_redirections(sh->input_args, sh))
 		return;
-
+	// printf("I am here \n ");
 	t_pipeline *pipeline = build_pipeline_from_tokens(sh->input_args);
 	if (!pipeline)
 	{
@@ -182,23 +216,35 @@ int main(int argc, char **argv, char **env)
 
 		if (line[0] == '\0')
 			continue;
-
+		// printf("line = %s\n", line);
 		sh.input_args = normalize_input(line, &sh);
 		if (!sh.input_args)
 			continue;
-
+		// int i = 0;
+		// while(sh.input_args[i])
+		// {
+		// 	printf("input_arg[i] = %s\n", sh.input_args[i]);
+		// 	i++;
+		// }
 		t_cmd_type type = classify_command(sh.input_args);
 
 		// Handle each command type
 		if (type == REDIR_ONLY)
+		{
+			// printf("handle redirection\n");
 			handle_redir_only(&sh, env);
+		}
 		else if (type == BASIC)
 		{
 			// printf("basic\n");
+			validate_and_exec_command(sh.tokens, sh.input_args, &sh);
 			handle_basic(&sh, env);
 		}
 		else if (type == PIPELINE)
+		{
+			// printf("handle pipeline\n");
 			handle_pipeline(&sh, env);
+		}
 		else if (type == MIXED_INVALID)
 		{
 			sh.last_exit_status = 1;
