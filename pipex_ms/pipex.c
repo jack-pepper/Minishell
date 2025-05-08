@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/04/29 14:18:15 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/06 14:49:00 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ int run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 		perror("malloc failed");
 		return (1);
 	}
-	printf("I am here\n");
+	// printf("I am here\n");
 	argv[k++] = strdup("pipex");                // argv[0]
 	if (ft_strcmp(pipeline->infile, "here_doc") == 0)
 	{
