@@ -6,7 +6,7 @@
 #    By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/11 13:50:01 by mmalie            #+#    #+#              #
-#    Updated: 2025/05/06 13:03:59 by mmalie           ###   ########.fr        #
+#    Updated: 2025/05/08 13:38:02 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,7 @@ MS_SRC = ./src/minishell.c \
       ./src/ms_redirections_manager.c \
       ./src/ms_strs_utils.c \
       ./src/ms_replace_utils.c \
+      ./src/ms_flags_utils.c \
       ./src/ms_debug_utils.c \
       ./src/ms_commands_manager.c \
       ./src/commands/ms_cmd_cd.c \

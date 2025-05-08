@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:15:16 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 00:29:06 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 13:48:16 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # define CTRL_CHAR_VAR_TO_INTERPRET 30
 # define CTRL_CHAR_SUBARG_DELIM 31
 # define CTRL_CHAR_TO_BE_DELETED 23
-# define CTRL_CHAR_EXTRA_DELIM 31
+# define CTRL_CHAR_EXTRA_DELIM '*' // 31
 
 /* Return messages (ft_ret) */
 # define SHELL_NAME "minishell" // could be used to improve error msg
@@ -142,7 +142,10 @@ char		*rejoin_abs_path(char *rejoined_path, char **split_path);
 void		ft_replace_if_space(char *cur_c, char new_c);
 void		ft_replace_char(char *cur_c, char new_c);
 void		ft_replace_all_chars(char **input_args, char old_c, char new_c);
-void		ft_flag_delim(char *str, char delim, char flag);
+
+	// ms_flags_utils.c
+void		ft_flag_delim(char *str, char delim, char flag, char *mode);
+void		ft_flag_all_but_first(char *str, char delim, char flag);
 void            ft_unflag_delim(char *str, char delim, char flag);
 
 	// ms_strs_utils.c

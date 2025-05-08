@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 01:36:45 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 13:28:51 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	cmd_export(t_shell *sh)
 		i = 1;
 		while (sh->input_args[i] != NULL)
 		{
-			if (sh->input_args[i][0] == '=' || ft_isdigit(sh->input_args[i][0])) // is_valid_env_name
+			if (sh->input_args[i][0] == '=' || ft_isdigit(sh->input_args[i][0]))
 				return (ft_ret(1, EXPORT_INVALID_ID, STDERR));
 			if (ft_strchr(sh->input_args[i], '=') == NULL)
 			{
@@ -55,7 +55,13 @@ int	export_from_term(t_shell *sh, size_t *i)
 	char	**split_str;
 
 	split_str = NULL;
+	printf("before flag: %s\n", sh->input_args[(*i)]);
+	ft_flag_delim(sh->input_args[(*i)], '=', CTRL_CHAR_EXTRA_DELIM, "f");	
+	printf("after flag: %s\n", sh->input_args[(*i)]);
 	split_str = ft_split(sh->input_args[(*i)], '=');
+	printf("after split: %s\n", sh->input_args[(*i)]);
+	ft_unflag_delim(split_str[1], '=', CTRL_CHAR_EXTRA_DELIM);
+	printf("after unflag: %s\n", sh->input_args[(*i)]);
 	if (!split_str)
 		return (1);
 	if (!is_valid_env_name(split_str[0]))
