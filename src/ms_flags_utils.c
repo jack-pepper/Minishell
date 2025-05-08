@@ -6,19 +6,19 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 13:36:08 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 13:49:13 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 18:51:49 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-// If delim is repeated or met at end or start, flag it so it can be converted back later
+// If delim is repeated or met at end or start, flag for future reconversion.
 // mode: [s]tart, [m]iddle, [e]nd, keep [f]irst only
-void    ft_flag_delim(char *str, char delim, char flag, char *mode)
+void	ft_flag_delim(char *str, char delim, char flag, char *mode)
 {
-        size_t  i;
+	size_t	i;
 
-        i = 0;
+	i = 0;
 	if (ft_strchr(mode, 'f') != NULL)
 	{
 		ft_flag_all_but_first(str, delim, flag);
@@ -29,12 +29,12 @@ void    ft_flag_delim(char *str, char delim, char flag, char *mode)
 	while (str[i + 1] != '\0')
 	{
 		if (ft_strchr(mode, 'm') != NULL
-                        && str[i] == delim && str[i + 1] == delim)
-                        str[i] = flag;
-                i++;
-        }
-        if (ft_strchr(mode, 'e') != NULL && str[i] == delim)
-                str[i] = flag;
+			&& str[i] == delim && str[i + 1] == delim)
+		str[i] = flag;
+		i++;
+	}
+	if (ft_strchr(mode, 'e') != NULL && str[i] == delim)
+		str[i] = flag;
 }
 
 void	ft_flag_all_but_first(char *str, char delim, char flag)
@@ -55,17 +55,17 @@ void	ft_flag_all_but_first(char *str, char delim, char flag)
 	return;
 }
 
-void    ft_unflag_delim(char *str, char delim, char flag)
+void	ft_unflag_delim(char *str, char delim, char flag)
 {
-        size_t  i;
+	size_t	i;
 
-        i = 0;
-        if (!str || str[i] == '\0')
-                return;
-        while (str[i] != '\0')
-        {
-                if (str[i] == flag)
-                        str[i] = delim;
-                i++;
-        }
+	i = 0;
+	if (!str || str[i] == '\0')
+		return;
+	while (str[i] != '\0')
+	{
+		if (str[i] == flag)
+			str[i] = delim;
+		i++;
+	}
 }

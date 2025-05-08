@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 17:53:19 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 18:43:23 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_list	*ft_getenv(char *var_name, t_list **this_env)
 
 int	is_valid_env_name(char *var_name)
 {
-	size_t  i;
+	size_t	i;
 
 	i = 0;
 	if (!var_name || var_name[0] == '\0'
