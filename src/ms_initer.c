@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:56:45 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/06 17:20:34 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 19:25:15 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	init_shell(t_shell *sh, char **env)
 {
 	sh->normalized_line = NULL;
 	sh->input_args = NULL;
+	sh->tokens = NULL;
 	sh->last_exit_status = 0;
 	init_signals();
 	if (init_env(sh, env) != 0)
