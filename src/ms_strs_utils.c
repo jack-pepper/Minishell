@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 12:56:04 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 16:29:43 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char	**ft_strschr(char **strs, char c, int forbidden_pos)
 	i = 0;
 	while (strs[i] != NULL)
 	{
-		if (ft_strchr(strs[i], c) != NULL)
+		if (ft_strchr(strs[i], c) == NULL) // changed != to ==, check consequences
 			return (&(strs[i]));
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:15:16 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 13:48:16 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 14:53:53 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ char		*ft_strjoin_delim(char const *s1, char const *s2, char const *delim);
 
 	// ms_env_utils.c
 t_list		*ft_getenv(char *var_name, t_list **this_env);
-void		stash_var(t_shell *sh);
+int			stash_var(t_shell *sh);
 void		add_new_env_var(t_shell *sh, char **split_str);
 int			ft_update_env_value(t_list *set_var, char **split_str);
 

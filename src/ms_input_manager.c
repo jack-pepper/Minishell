@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:23:56 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/06 13:23:07 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 16:35:23 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,39 +119,61 @@ int	process_input(t_shell *sh)
 	return (sh->last_exit_status);
 }
 
+
+char	*is_invalid_for_stash(t_shell *sh)
+{
+	char	*equal_char;
+	char	*var_name;
+	size_t	len;
+	int		i;
+	
+	i = 0;
+	while (sh->input_args[i] != NULL)
+	{
+		equal_char = ft_strchr(sh->input_args[i], '=');
+		len = (size_t)(equal_char - sh->input_args[i]);
+		var_name = ft_substr(sh->input_args[i], 0, len);
+		if (!is_valid_env_name(var_name))
+		{
+			return (var_name);
+		}
+		free(var_name);
+		i++;
+	}
+	return (NULL);
+}
+
 int	stash_var_or_invalidate(t_shell *sh)
 {
 	char	**invalid_cmd;
+	char	*invalid_var_name;
 	int		i;
 
 	invalid_cmd = ft_strschr(sh->input_args, '=', 0);
+	printf("invalid_cmd: %s\n", *invalid_cmd);
 	if (invalid_cmd == NULL)
 	{
-		while (sh->input_args)
+		invalid_var_name = is_invalid_for_stash(sh);
+		if (invalid_var_name != NULL)
+		{
+			printf("minishell: %s: command not found\n", invalid_var_name);
+			free(invalid_var_name);
+			return (127);
+		}
+		i = 0;
+		while (sh->input_args[i] != NULL)
 		{
 			i = 0;
 			while (sh->input_args[i])
 			{
-				if (ft_strpbrk(sh->input_args[i], "-") != NULL) // NO! rearrange logic with is_valid_env_name
+				if (stash_var(sh) == 2)
 				{
 					printf("minishell: %s: command not found\n", sh->input_args[i]);
-					return (-1);
+					return (127);
 				}
 				i++;
 			}
 		}
-		stash_var(sh);
-		/*DEBUG
-		t_list *cur_node = sh->env_stash;
-		while (cur_node != NULL)
-        	{
-                	printf("%s=%s\n",
-                        	((char **)cur_node->content)[0],
-                        	((char **)cur_node->content)[1]);
-                	cur_node = cur_node->next;
-        	}
-        	return ;
-		*/
 	}
 	else
 	{

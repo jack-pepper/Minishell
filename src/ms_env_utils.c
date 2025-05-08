@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/05 12:57:02 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 14:17:23 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_list	*ft_getenv(char *var_name, t_list **this_env)
 	return (NULL);
 }
 
-void	stash_var(t_shell *sh)
+int	stash_var(t_shell *sh)
 {
 	t_list	*stashed_var;
 	t_list	*node;
@@ -42,13 +42,16 @@ void	stash_var(t_shell *sh)
 	nb_args = ft_strslen(sh->input_args);
 	while (i < nb_args)
 	{
+		printf("stash: %s\n", sh->input_args[i]);
+		ft_flag_delim(sh->input_args[i], '=', CTRL_CHAR_EXTRA_DELIM, "f");
 		split_str = ft_split(sh->input_args[i], '=');
+		ft_unflag_delim(split_str[1], '=', CTRL_CHAR_EXTRA_DELIM);
 		if (!split_str)
-			return ;
+			return (-1) ;
 		if (!is_valid_env_name(split_str[0]))
 		{
 			free_args(split_str);
-			return ;
+			return (2);
 		}
 		stashed_var = ft_getenv(split_str[0], &sh->env_stash);
 		if (stashed_var != NULL)
@@ -56,7 +59,7 @@ void	stash_var(t_shell *sh)
 			if (ft_update_env_value(stashed_var, split_str) != 0)
 			{
 				free_args(split_str);
-				return ;
+				return (-1) ;
 			}
 		}
 		else
@@ -66,13 +69,13 @@ void	stash_var(t_shell *sh)
 			if (!node)
 			{
 				free_args(split_str);
-				return ;
+				return (-1);
 			}
 			ft_lstadd_back(&sh->env_stash, node);
 		}
 		i++;
 	}
-	return ;
+	return (0);
 }
 
 // add a new node with split_str content to the end of the list
