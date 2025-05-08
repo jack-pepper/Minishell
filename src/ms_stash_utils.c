@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:42:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 20:07:38 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 23:31:30 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,9 @@ int	stash_var(t_shell *sh)
 	nb_args = ft_strslen(sh->input_args);
 	while (i < nb_args)
 	{
-		ft_flag_delim(sh->input_args[i], '=', CTRL_CHAR_EXTRA_DELIM, "f");
-		split_str = ft_split(sh->input_args[i], '=');
-		ft_unflag_delim(split_str[1], '=', CTRL_CHAR_EXTRA_DELIM);
+		split_str = split_input_arg(sh, &i);
 		if (!split_str)
-			return (-1) ;
+			return (1);
 		if (!is_valid_env_name(split_str[0]))
 		{
 			free_args(split_str);
@@ -42,7 +40,7 @@ int	stash_var(t_shell *sh)
 			if (ft_update_env_value(stashed_var, split_str) != 0)
 			{
 				free_args(split_str);
-				return (-1) ;
+				return (-1);
 			}
 		}
 		else

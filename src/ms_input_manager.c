@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:09:13 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 19:10:00 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 23:29:08 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ char	*get_input(char *line)
 	line = readline(PROMPT_STYLE);
 	if (line && *line)
 	{
-		add_history(line); // Could be stored o
 		add_history(line); // Could be stored on a file before quitting
 		if (rl_on_new_line() != -1) // How to handle this error?
 			return (line);
@@ -132,7 +131,7 @@ int	process_input(t_shell *sh)
 		sh->last_exit_status = cmd_unset(sh);
 	else
 	{
-		printf("I am here 2000\n");
+		//printf("I am here 2000\n");
 		sh->last_exit_status = stash_var_or_invalidate(sh);
 	}
 	return (sh->last_exit_status);

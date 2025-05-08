@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 11:48:09 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/05 13:06:54 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 23:39:23 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ char	*get_abs_path(char *joined_path, char *cwd, char *path)
 // Split joined_path (absolute path) to split_path
 char	**split_abs_path(char **split_path, char *joined_path)
 {
-	//printf("[DEBUG] joined_path: %s\n", joined_path);
 	split_path = ft_split(joined_path, '/');
 	free(joined_path);
 	if (!split_path)
@@ -70,7 +69,6 @@ void	flag_dotted_path(char **split_path, char ctrl_char)
 	i = 0;
 	while (split_path[i] != NULL)
 	{
-		//printf("[DEBUG] split_path[%d]: %s\n", i, split_path[i]);
 		if (ft_strcmp(split_path[i], ".") == 0)
 			split_path[i][0] = ctrl_char;
 		else if (ft_strcmp(split_path[i], "..") == 0)
@@ -110,7 +108,6 @@ char	*rejoin_abs_path(char *rejoined_path, char **split_path)
 			rejoined_path = ft_strjoin(rejoined_path, temp);
 			if (!rejoined_path)
 				return (NULL);
-			//printf("[DEBUG] rejoined_path: %s\n", rejoined_path);
 			free(temp);
 			free(prev_rejoined_path);
 			j++;

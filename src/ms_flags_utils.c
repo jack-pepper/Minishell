@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 13:36:08 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 18:51:49 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 23:10:58 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	ft_flag_delim(char *str, char delim, char flag, char *mode)
 	if (ft_strchr(mode, 'f') != NULL)
 	{
 		ft_flag_all_but_first(str, delim, flag);
-		return;
+		return ;
 	}
 	if (ft_strchr(mode, 's') != NULL && str[0] == delim)
 		str[0] = flag;
@@ -30,7 +30,7 @@ void	ft_flag_delim(char *str, char delim, char flag, char *mode)
 	{
 		if (ft_strchr(mode, 'm') != NULL
 			&& str[i] == delim && str[i + 1] == delim)
-		str[i] = flag;
+			str[i] = flag;
 		i++;
 	}
 	if (ft_strchr(mode, 'e') != NULL && str[i] == delim)
@@ -52,7 +52,7 @@ void	ft_flag_all_but_first(char *str, char delim, char flag)
 			is_first = false;
 		i++;
 	}
-	return;
+	return ;
 }
 
 void	ft_unflag_delim(char *str, char delim, char flag)
@@ -61,7 +61,7 @@ void	ft_unflag_delim(char *str, char delim, char flag)
 
 	i = 0;
 	if (!str || str[i] == '\0')
-		return;
+		return ;
 	while (str[i] != '\0')
 	{
 		if (str[i] == flag)

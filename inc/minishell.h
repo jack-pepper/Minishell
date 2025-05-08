@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 22:26:03 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 23:24:03 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,9 +133,10 @@ void		add_new_env_var(t_shell *sh, char **split_str);
 int			ft_update_env_value(t_list *set_var, char **split_str);
 
 	// ms_stash_utils.c
-int	stash_var(t_shell *sh);
-int	is_valid_env_name_sub(char *arg);
-int	are_args_stashable(char **args);
+int			stash_var(t_shell *sh);
+char		**split_input_arg(t_shell *sh, size_t *i);
+int			is_valid_env_name_sub(char *arg);
+int			are_args_stashable(char **args);
 
 	// ms_cd_path_utils.c
 char		*handle_dotted_path(char *cwd, char *path);
@@ -176,10 +177,10 @@ char		*store_cwd(char *cwd);
 
 	// ms_cmd_cd.c - Change the working directory
 int			cmd_cd(t_shell *sh);
+int			cd_process_path(t_shell *sh, char *cwd, char *path);
 int			change_directory(t_shell *sh, char *cwd, char *path);
 void		update_pwds_vars(t_shell *sh, char *prev_cwd, char *new_pwd);
-void		update_pwd_var(t_shell *sh, char **split_pwd);
-void		update_old_pwd_var(t_shell *sh, char **split_old_pwd);
+void		update_pwd_var(t_shell *sh, char **split_pwd, char *key);
 
 	// ms_cmd_echo.c - Display a line of text
 int			cmd_echo(t_shell *sh);
@@ -197,7 +198,6 @@ int		exit_arg_overflow(char *str);
 int			cmd_export(t_shell *sh);
 int			try_export(t_shell *sh, size_t *i);
 int			export_from_term(t_shell *sh, size_t *i);
-char    	**split_input_arg(t_shell *sh, size_t *i);
 void		export_from_stash(t_shell *sh, t_list *stashed_var);
 
 	// ms_cmd_unset.c - Unset values and attributes of variables and functions
