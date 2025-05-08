@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 12:59:33 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/29 12:03:02 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/05 12:54:16 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,18 @@ int	cmd_cd(t_shell *sh)
 	char	*path;
 	char	*cur_path;
 	t_list	*home_var;
-	
+
 	cwd = NULL;
 	home_var = ft_getenv("HOME", &sh->this_env);
 	if (sh->input_args[2])
 		return (ft_ret(1, CD_TOO_MANY_ARGS, STDERR));
-	if (!sh->input_args[1] && (!home_var || !((char **)home_var->content)[1]))	
+	if (!sh->input_args[1] && (!home_var || !((char **)home_var->content)[1]))
 		return (ft_ret(-1, CD_HOME_NON_SET, STDERR));
 	else if (!sh->input_args[1] && home_var && ((char **)home_var->content)[1])
 		path = ((char **)home_var->content)[1];
 	else
 		path = sh->input_args[1];
 	cwd = store_cwd(cwd);
-
 	// cd_process_path
 	if (path[0] == '.')
 	{
@@ -103,7 +102,7 @@ void	update_pwd_var(t_shell *sh, char **split_pwd)
 }
 
 void	update_old_pwd_var(t_shell *sh, char **split_old_pwd)
-{	
+{
 	t_list	*old_pwd_var;
 
 	old_pwd_var = ft_getenv("OLDPWD", &sh->this_env);

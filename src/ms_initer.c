@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:56:45 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/02 16:12:56 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/06 17:20:34 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,44 @@ int	init_shell(t_shell *sh, char **env)
 	init_signals();
 	if (init_env(sh, env) != 0)
 		return (-1);
-        // init_pipex (make a pointer to this_env)
 	if (init_cmds(sh) != 0)
 		return (-1);
+	return (0);
+}
+
+// If a value from env contains more than one equal sign, it has been split.
+// 
+int	normalize_env(t_list *this_env)
+{
+	t_list	*cur_node;
+	char	*rejoined_var;
+	int		i;
+
+	cur_node = this_env;
+	while (cur_node != NULL)
+	{
+		i = 2;
+		if (ft_strslen((char **)cur_node->content) > 2)
+		{
+			rejoined_var = ft_strdup(((char **)cur_node->content)[1]);
+			free(((char **)cur_node->content)[1]);
+			while (((char **)cur_node->content)[i])
+			{
+				char *temp = ft_strdup(rejoined_var);
+				free(rejoined_var);
+				rejoined_var = ft_strjoin_delim(temp, ((char **)cur_node->content)[i], "=");
+				free(temp);
+				i++;
+			}
+			//ft_unflag_delim(rejoined_var, '=', CTRL_CHAR_EXTRA_DELIM);
+			//printf("[normalize_env] %s\n", rejoined_var);
+			((char **)cur_node->content)[1] = ft_strdup(rejoined_var);
+			free(rejoined_var);
+		}
+		ft_unflag_delim(((char **)cur_node->content)[1], '=', CTRL_CHAR_EXTRA_DELIM);
+	//	printf("[normalize_env] ctt %s\n", ((char **)cur_node->content)[1]);
+		cur_node = cur_node->next;
+	}
 	return (0);
 }
 
@@ -36,6 +71,8 @@ int	init_env(t_shell *sh, char **env)
 	sh->this_env = NULL;
 	sh->env_stash = NULL;
 	if (ft_strstolist(&sh->this_env, env, nb_vars, '=') != 0)
+		return (-1);
+	if (normalize_env(sh->this_env) != 0)
 		return (-1);
 	return (0);
 }

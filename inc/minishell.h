@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:15:16 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/07 16:41:53 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:44:43 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,17 @@
 # define CTRL_CHAR_VAR_TO_INTERPRET 30
 # define CTRL_CHAR_SUBARG_DELIM 31
 # define CTRL_CHAR_TO_BE_DELETED 23
-
+# define CTRL_CHAR_EXTRA_DELIM 31
 
 /* Return messages (ft_ret) */
+# define SHELL_NAME "minishell" // could be used to improve error msg
 # define CD_TOO_MANY_ARGS "minishell: cd: too many arguments\n"
 # define CD_HOME_NON_SET "minishell: cd: HOME non set\n"
 # define CD_NO_FILE_OR_DIR "minishell: cd: No such file or directory\n"
 # define EXPORT_INVALID_ID "minishell: export: not a valid identifier\n"
 # define EXIT_NUM_ARG_REQ "minishell: exit: numeric argument required\n"
 # define EXIT_TOO_MANY_ARGS "minishell: exit: too many arguments\n"
-# define CMD_NOT_FOUND "minishell: command not found\n"
+# define CMD_NOT_FOUND ": command not found\n"
 # define CMD_IS_DIR "minishell: Is a directory\n"
 
 /* Libraries */
@@ -48,6 +49,7 @@
 # include <curses.h>
 # include <dirent.h>
 # include <fcntl.h>
+# include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
@@ -99,6 +101,7 @@ int			init_shell(t_shell *sh, char **env);
 int			init_env(t_shell *sh, char **env);
 void		init_signals(void);
 void		signal_handler(int signum);
+int		normalize_env(t_list *this_env);
 
 	// ms_input_manager.c
 char		*get_input(char *line);
@@ -108,8 +111,10 @@ int			process_input(t_shell *sh);
 	// ms_normalizer.c
 char		*ft_normalize(char *line);
 char		*ft_strcollapse(char *line);
-void		handle_quote(char *line, char quote_type, int *i, int *to_collapse);
 char		*copy_collapse(char *dst, char *src, size_t src_len);
+
+	// ms_quotes_handler.c
+void		handle_quote(char *line, char quote_type, int *i, int *to_collapse);
 void		pass_quotes(char *dst, char *src, size_t *i, size_t *j);
 
 	// ms_env_interpreter.c
@@ -118,6 +123,7 @@ char		**ft_split_args(char **split_args, char *input_arg);
 char		*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args);
 char		*ft_rejoin_subarg(char **split_args, char *rejoined_arg, int i);
 char		**ft_copy_free(char **input_arg, char *rejoined_arg);
+char		*ft_strjoin_delim(char const *s1, char const *s2, char const *delim);
 
 	// ms_env_utils.c
 t_list		*ft_getenv(char *var_name, t_list **this_env);
@@ -136,6 +142,8 @@ char		*rejoin_abs_path(char *rejoined_path, char **split_path);
 void		ft_replace_if_space(char *cur_c, char new_c);
 void		ft_replace_char(char *cur_c, char new_c);
 void		ft_replace_all_chars(char **input_args, char old_c, char new_c);
+void		ft_flag_delim(char *str, char delim, char flag);
+void            ft_unflag_delim(char *str, char delim, char flag);
 
 	// ms_strs_utils.c
 size_t		ft_strslen(char **strs);
@@ -167,9 +175,14 @@ void		update_old_pwd_var(t_shell *sh, char **split_old_pwd);
 	// ms_cmd_echo.c - Display a line of text
 int			cmd_echo(t_shell *sh);
 void		echo_set_n(char **input_args, bool *opt_n, int *i);
+char		*echo_join_input(char *joined_input, char **input_args, int *i);
+void		echo_display(char *joined_output, bool opt_n);
 
 	// ms_cmd_exit.c - Cause the shell to exit
 int			cmd_exit(t_shell *sh, unsigned int status);
+int     	ft_isnum(char *str);
+char		*ms_trim(char *trimmed_arg, char *arg, int len, int k);
+int		exit_arg_overflow(char *str);
 
 	// ms_cmd_export.c - Set the export attribute for variables
 int			cmd_export(t_shell *sh);
@@ -179,6 +192,7 @@ int		is_valid_env_name(char *var_name);
 
 	// ms_cmd_unset.c - Unset values and attributes of variables and functions
 int			cmd_unset(t_shell *sh);
+t_list		*get_prev_node(t_list *cur_node, t_list *this_env);
 
 	// ms_cmd_env.c - Display the env variables
 int			cmd_env(t_shell *sh);
@@ -215,5 +229,4 @@ typedef struct s_redir {
 
 bool		is_builtin(const char *cmd);
 t_cmd_type classify_command(char **tokens);
-void shift_empty_leading_arg_if_needed(char **args);
 #endif

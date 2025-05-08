@@ -6,7 +6,7 @@
 #    By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/11 13:50:01 by mmalie            #+#    #+#              #
-#    Updated: 2025/04/27 14:18:23 by mmalie           ###   ########.fr        #
+#    Updated: 2025/05/06 13:03:59 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,7 @@ LIBFT = ./libft/libft.a
 
 MS_SRC = ./src/minishell.c \
       ./src/ms_initer.c \
+      ./src/ms_quotes_handler.c \
       ./src/ms_env_interpreter.c \
       ./src/ms_env_utils.c \
       ./src/ms_input_manager.c \

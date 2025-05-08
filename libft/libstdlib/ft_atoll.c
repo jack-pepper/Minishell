@@ -1,26 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atol.c                                          :+:      :+:    :+:   */
+/*   ft_atoll.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 18:21:29 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/07 13:18:34 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/07 13:20:53 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 /* 
- * Implementation of atol() from <stdlib.h>: Converts a string to a long, 
+ * Implementation of atoll() from <stdlib.h>: Converts a string to a long long,
  * stopping at the first non-numeric character.
  */
-long			ft_atol(const char *nptr);
-
-long	ft_atol(const char *nptr)
+long long	ft_atoll(const char *nptr)
 {
-	long	result;
-	long	sign;
+	long long	result;
+	long long	sign;
 
 	result = 0;
 	sign = 1;

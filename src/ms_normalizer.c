@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/05 15:25:00 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:48:08 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,26 +74,6 @@ char *ft_add_spaces_around_str(const char *line, const char *str) {
 	return result;
 }
 
-// char	*ft_normalize(char *line)
-// {
-// 	char	*trimmed_line;
-// 	char	*normalized_line;
-
-// 	trimmed_line = NULL;
-// 	normalized_line = NULL;
-// 	trimmed_line = ft_strtrim(line, " \f\n\r\t\v");
-// 	if (trimmed_line == NULL)
-// 	{
-// 		return (NULL);
-// 	}
-// 	normalized_line = ft_strcollapse(trimmed_line);
-// 	free(trimmed_line);
-// 	if (normalized_line == NULL)
-// 	{
-// 		return (NULL);
-// 	}
-// 	return (normalized_line);
-// }
 char	*ft_normalize(char *line)
 {
 	char	*trimmed_line;
@@ -144,8 +124,10 @@ char	*ft_strcollapse(char *line)
 	ft_init_two_ints(0, &i, &to_collapse);
 
 	while (line[i] != '\0')
-	{
-		if (line[i] == '$' && line[i + 1] != '\0' && line[i + 1] != ' ')
+	{	
+		if (line[i] == '$' && (line[i + 1] == '\"' || line[i + 1] == '\''))
+			ft_replace_char(&line[i], CTRL_CHAR_TO_BE_DELETED);
+		else if (line[i] == '$' && line[i + 1] != '\0' && line[i + 1] != ' ')
 			ft_replace_char(&line[i], CTRL_CHAR_VAR_TO_INTERPRET);
 		else if (line[i] == '|')
 		{
@@ -187,37 +169,6 @@ char	*ft_strcollapse(char *line)
 	return (collapsed_line);
 }
 
-void	handle_quote(char *line, char quote_type, int *i, int *to_collapse)
-{
-	(*i)++;
-	(*to_collapse)++;
-	if (quote_type == '\'')
-	{
-		while (line[(*i)] != '\'')
-		{
-			ft_replace_if_space(&line[(*i)], CTRL_CHAR_SPACE_IN_QUOTE);
-			(*i)++;
-		}
-	}
-	else if (quote_type == '\"')
-	{
-		while (line[(*i)] != '\"')
-		{
-			if (line[(*i)] == '$' && line[(*i + 1)] != '\"' && line[(*i + 1)] != ' ')
-			{
-				ft_replace_char(&line[(*i)], CTRL_CHAR_VAR_TO_INTERPRET);
-				(*i)++;
-			}
-			if (line[(*i)] != '\"')
-			{
-				ft_replace_if_space(&line[(*i)], CTRL_CHAR_SPACE_IN_QUOTE);
-				(*i)++;
-			}
-		}
-	}
-	(*to_collapse)++;
-}
-
 // Both the src and dst are expected to be non-NULL and their size is correct
 char	*copy_collapse(char *dst, char *src, size_t src_len)
 {
@@ -239,22 +190,4 @@ char	*copy_collapse(char *dst, char *src, size_t src_len)
 	}
 	dst[j] = '\0';
 	return (dst);
-}
-
-void	pass_quotes(char *dst, char *src, size_t *i, size_t *j)
-{
-	if (src[(*i)] == '\'' && ft_count_char(&src[(*i)], '\'') > 1)
-	{
-		(*i)++;
-		while (src[(*i)] != '\'')
-			dst[(*j)++] = src[(*i)++];
-		(*i)++;
-	}
-	else if (src[(*i)] == '\"' && ft_count_char(&src[(*i)], '\"') > 1)
-	{
-		(*i)++;
-		while (src[(*i)] != '\"')
-			dst[(*j)++] = src[(*i)++];
-		(*i)++;
-	}
 }
