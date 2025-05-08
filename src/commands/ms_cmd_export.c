@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 17:55:43 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 22:26:07 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 // Handle "export var_name" (from stash) & "export var_name=[value]"
 int	cmd_export(t_shell *sh)
 {
-	t_list	*stashed_var;
 	size_t	i;
 	int		res;
 
@@ -28,23 +27,34 @@ int	cmd_export(t_shell *sh)
 		{
 			if (sh->input_args[i][0] == '=' || ft_isdigit(sh->input_args[i][0]))
 				return (ft_ret(1, EXPORT_INVALID_ID, STDERR));
-			if (ft_strchr(sh->input_args[i], '=') == NULL)
-			{
-				if (ft_strpbrk(sh->input_args[i], "-") != NULL) // should check better
-					return (ft_ret(1, EXPORT_INVALID_ID, STDERR));
-				stashed_var = ft_getenv(sh->input_args[i], &sh->env_stash);
-				if (stashed_var != NULL)
-					export_from_stash(sh, stashed_var);
-				i++;
-			}
-			else
-			{
-				res = export_from_term(sh, &i);
-				if (res != 0)
-					return (res);
-				i++;
-			}
+			res = try_export(sh, &i);
+			if (res != 0)
+				return (res);
+			i++;
 		}
+	}
+	return (0);
+}
+
+int	try_export(t_shell *sh, size_t *i)
+{
+	t_list	*stashed_var;
+	int		res;
+
+	if (ft_strchr(sh->input_args[(*i)], '=') == NULL)
+	{
+		if (ft_isalnum_x_str(sh->input_args[(*i)], "_") != 0)
+			return (ft_ret(1, EXPORT_INVALID_ID, STDERR));
+		stashed_var = ft_getenv(sh->input_args[(*i)], &sh->env_stash);
+		if (stashed_var != NULL)
+			export_from_stash(sh, stashed_var);
+	}
+	else
+	{
+		res = 0;
+		res = export_from_term(sh, i);
+		if (res != 0)
+			return (res);
 	}
 	return (0);
 }
@@ -54,14 +64,7 @@ int	export_from_term(t_shell *sh, size_t *i)
 	t_list	*set_var;
 	char	**split_str;
 
-	split_str = NULL;
-//	printf("before flag: %s\n", sh->input_args[(*i)]);
-	ft_flag_delim(sh->input_args[(*i)], '=', CTRL_CHAR_EXTRA_DELIM, "f");	
-//	printf("after flag: %s\n", sh->input_args[(*i)]);
-	split_str = ft_split(sh->input_args[(*i)], '=');
-//	printf("after split: %s\n", sh->input_args[(*i)]);
-	ft_unflag_delim(split_str[1], '=', CTRL_CHAR_EXTRA_DELIM);
-//	printf("after unflag: %s\n", sh->input_args[(*i)]);
+	split_str = split_input_arg(sh, i);
 	if (!split_str)
 		return (1);
 	if (!is_valid_env_name(split_str[0]))
@@ -81,6 +84,19 @@ int	export_from_term(t_shell *sh, size_t *i)
 	else
 		add_new_env_var(sh, split_str);
 	return (0);
+}
+
+char	**split_input_arg(t_shell *sh, size_t *i)
+{
+	char	**split_str;
+
+	split_str = NULL;
+	ft_flag_delim(sh->input_args[(*i)], '=', CTRL_CHAR_EXTRA_DELIM, "f");
+	split_str = ft_split(sh->input_args[(*i)], '=');
+	ft_unflag_delim(split_str[1], '=', CTRL_CHAR_EXTRA_DELIM);
+	if (!split_str)
+		return (NULL);
+	return (split_str);
 }
 
 void	export_from_stash(t_shell *sh, t_list *stashed_var)

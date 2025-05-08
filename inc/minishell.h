@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 19:08:56 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 22:26:03 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ int			ft_update_env_value(t_list *set_var, char **split_str);
 
 	// ms_stash_utils.c
 int	stash_var(t_shell *sh);
-int	is_invalid_for_stash(char *arg);
+int	is_valid_env_name_sub(char *arg);
 int	are_args_stashable(char **args);
 
 	// ms_cd_path_utils.c
@@ -195,7 +195,9 @@ int		exit_arg_overflow(char *str);
 
 	// ms_cmd_export.c - Set the export attribute for variables
 int			cmd_export(t_shell *sh);
-int		export_from_term(t_shell *sh, size_t *i);
+int			try_export(t_shell *sh, size_t *i);
+int			export_from_term(t_shell *sh, size_t *i);
+char    	**split_input_arg(t_shell *sh, size_t *i);
 void		export_from_stash(t_shell *sh, t_list *stashed_var);
 
 	// ms_cmd_unset.c - Unset values and attributes of variables and functions

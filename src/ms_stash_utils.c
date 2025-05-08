@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:42:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 18:48:30 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 20:07:38 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,15 @@ int	stash_var(t_shell *sh)
 	return (0);
 }
 
-int	is_invalid_for_stash(char *arg)
+int	is_valid_env_name_sub(char *arg)
 {
 	char	*equal_char;
 	char	*var_name;
 	size_t	len;
 
 	equal_char = ft_strchr(arg, '=');
+	if (equal_char == NULL)
+		return (1);
 	len = (size_t)(equal_char - arg);
 	var_name = ft_substr(arg, 0, len);
 	if (!is_valid_env_name(var_name))
@@ -87,7 +89,7 @@ int	are_args_stashable(char **args)
 	while (args[i] != NULL)
 	{
 		invalid_cmd = ft_strchr(args[i], '=');
-		if ((invalid_cmd == NULL) || (is_invalid_for_stash(args[i]) != 0))
+		if ((invalid_cmd == NULL) || (is_valid_env_name_sub(args[i]) != 0))
 		{
 			printf("minishell: %s: command not found\n", args[i]);
 			return (127);
