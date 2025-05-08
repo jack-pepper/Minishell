@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:15:16 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 14:53:53 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 17:58:24 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # define CTRL_CHAR_VAR_TO_INTERPRET 30
 # define CTRL_CHAR_SUBARG_DELIM 31
 # define CTRL_CHAR_TO_BE_DELETED 23
-# define CTRL_CHAR_EXTRA_DELIM '*' // 31
+# define CTRL_CHAR_EXTRA_DELIM 31
 
 /* Return messages (ft_ret) */
 # define SHELL_NAME "minishell" // could be used to improve error msg
@@ -94,6 +94,7 @@ typedef struct s_shell
 
 	// minishell.c
 int			main(int argc, char **argv, char **env);
+int			is_invalid_for_stash(char *arg);
 int			stash_var_or_invalidate(t_shell *sh);
 
 	// ms_initer.c
@@ -127,9 +128,14 @@ char		*ft_strjoin_delim(char const *s1, char const *s2, char const *delim);
 
 	// ms_env_utils.c
 t_list		*ft_getenv(char *var_name, t_list **this_env);
-int			stash_var(t_shell *sh);
+int			is_valid_env_name(char *var_name);
 void		add_new_env_var(t_shell *sh, char **split_str);
 int			ft_update_env_value(t_list *set_var, char **split_str);
+
+	// ms_stash_utils.c
+int	stash_var(t_shell *sh);
+int	is_invalid_for_stash(char *arg);
+int	are_args_stashable(char **args);
 
 	// ms_cd_path_utils.c
 char		*handle_dotted_path(char *cwd, char *path);
@@ -191,7 +197,6 @@ int		exit_arg_overflow(char *str);
 int			cmd_export(t_shell *sh);
 int		export_from_term(t_shell *sh, size_t *i);
 void		export_from_stash(t_shell *sh, t_list *stashed_var);
-int		is_valid_env_name(char *var_name);
 
 	// ms_cmd_unset.c - Unset values and attributes of variables and functions
 int			cmd_unset(t_shell *sh);

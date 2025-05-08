@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 14:17:23 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 17:53:19 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,54 +28,23 @@ t_list	*ft_getenv(char *var_name, t_list **this_env)
 	return (NULL);
 }
 
-int	stash_var(t_shell *sh)
+int	is_valid_env_name(char *var_name)
 {
-	t_list	*stashed_var;
-	t_list	*node;
-	char	**split_str;
-	size_t	i;
-	size_t	nb_args;
+	size_t  i;
 
 	i = 0;
-	node = NULL;
-	split_str = NULL;
-	nb_args = ft_strslen(sh->input_args);
-	while (i < nb_args)
+	if (!var_name || var_name[0] == '\0'
+		|| var_name[0] == '='
+		|| ft_isdigit(var_name[0]))
+		return (0);
+	while (var_name[i])
 	{
-		printf("stash: %s\n", sh->input_args[i]);
-		ft_flag_delim(sh->input_args[i], '=', CTRL_CHAR_EXTRA_DELIM, "f");
-		split_str = ft_split(sh->input_args[i], '=');
-		ft_unflag_delim(split_str[1], '=', CTRL_CHAR_EXTRA_DELIM);
-		if (!split_str)
-			return (-1) ;
-		if (!is_valid_env_name(split_str[0]))
-		{
-			free_args(split_str);
-			return (2);
-		}
-		stashed_var = ft_getenv(split_str[0], &sh->env_stash);
-		if (stashed_var != NULL)
-		{
-			if (ft_update_env_value(stashed_var, split_str) != 0)
-			{
-				free_args(split_str);
-				return (-1) ;
-			}
-		}
-		else
-		{
-			node = ft_lstnew((char **)split_str);
-			ft_show_strs((char **)node->content, "[DEBUG] node_content -");
-			if (!node)
-			{
-				free_args(split_str);
-				return (-1);
-			}
-			ft_lstadd_back(&sh->env_stash, node);
-		}
+		if (!ft_isalnum(var_name[i])
+			&& var_name[i] != '_')
+			return (0);
 		i++;
 	}
-	return (0);
+	return (1);
 }
 
 // add a new node with split_str content to the end of the list

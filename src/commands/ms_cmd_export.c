@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 13:28:51 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/08 17:55:43 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,13 @@ int	export_from_term(t_shell *sh, size_t *i)
 	char	**split_str;
 
 	split_str = NULL;
-	printf("before flag: %s\n", sh->input_args[(*i)]);
+//	printf("before flag: %s\n", sh->input_args[(*i)]);
 	ft_flag_delim(sh->input_args[(*i)], '=', CTRL_CHAR_EXTRA_DELIM, "f");	
-	printf("after flag: %s\n", sh->input_args[(*i)]);
+//	printf("after flag: %s\n", sh->input_args[(*i)]);
 	split_str = ft_split(sh->input_args[(*i)], '=');
-	printf("after split: %s\n", sh->input_args[(*i)]);
+//	printf("after split: %s\n", sh->input_args[(*i)]);
 	ft_unflag_delim(split_str[1], '=', CTRL_CHAR_EXTRA_DELIM);
-	printf("after unflag: %s\n", sh->input_args[(*i)]);
+//	printf("after unflag: %s\n", sh->input_args[(*i)]);
 	if (!split_str)
 		return (1);
 	if (!is_valid_env_name(split_str[0]))
@@ -110,23 +110,4 @@ void	export_from_stash(t_shell *sh, t_list *stashed_var)
 	if (stashed_var->content)
 		free_args((char **)stashed_var->content);
 	free(stashed_var);
-}
-
-int	is_valid_env_name(char *var_name)
-{
-	size_t	i;
-
-	i = 0;
-	if (!var_name || var_name[0] == '\0'
-		|| var_name[0] == '='
-		|| ft_isdigit(var_name[0]))
-		return (0);
-	while (var_name[i])
-	{
-		if (!ft_isalnum(var_name[i])
-			&& var_name[i] != '_')
-			return (0);
-		i++;
-	}
-	return (1);
 }
