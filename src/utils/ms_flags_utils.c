@@ -6,11 +6,11 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 13:36:08 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 23:10:58 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/09 11:29:45 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 // If delim is repeated or met at end or start, flag for future reconversion.
 // mode: [s]tart, [m]iddle, [e]nd, keep [f]irst only

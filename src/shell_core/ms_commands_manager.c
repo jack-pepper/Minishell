@@ -6,11 +6,11 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:25:28 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/17 00:17:15 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/09 11:23:07 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 // Could be initialized like this:
 /*

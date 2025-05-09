@@ -6,11 +6,11 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:09:13 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 23:29:08 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/09 11:26:06 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 // Get the initial raw input from user
 char	*get_input(char *line)

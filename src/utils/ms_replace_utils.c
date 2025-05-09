@@ -1,33 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ms_cmd_env.c                                       :+:      :+:    :+:   */
+/*   ms_replace_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/20 13:01:09 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/06 17:34:04 by mmalie           ###   ########.fr       */
+/*   Created: 2025/04/06 11:40:44 by mmalie            #+#    #+#             */
+/*   Updated: 2025/05/09 11:29:54 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	cmd_env(t_shell *sh)
+void	ft_replace_if_space(char *cur_c, char new_c)
 {
-	t_list	*cur_node;
+	if (ft_isspace(*cur_c))
+		*cur_c = new_c;
+}
 
-	cur_node = sh->this_env;
-	while (cur_node != NULL)
+void	ft_replace_char(char *cur_c, char new_c)
+{
+	*cur_c = new_c;
+}
+
+void	ft_replace_all_chars(char **input_args, char old, char new)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (input_args[i])
 	{
-		if (((char **)cur_node->content)[1] != NULL)
+		j = 0;
+		while (input_args[i][j])
 		{
-			printf("%s=%s\n",
-				((char **)cur_node->content)[0],
-				((char **)cur_node->content)[1]);
+			if (input_args[i][j] == old)
+				input_args[i][j] = new;
+			j++;
 		}
-		else
-			printf("%s=%s\n", ((char **)cur_node->content)[0], "");
-		cur_node = cur_node->next;
+		i++;
 	}
-	return (0);
 }

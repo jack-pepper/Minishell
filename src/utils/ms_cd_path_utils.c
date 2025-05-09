@@ -6,11 +6,11 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 11:48:09 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 23:39:23 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/09 11:29:22 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 char	*handle_dotted_path(char *cwd, char *path)
 {

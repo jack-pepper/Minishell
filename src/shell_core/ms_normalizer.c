@@ -6,11 +6,12 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 12:48:08 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:23:44 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
- #include "../inc/minishell.h"
+#include "../../inc/minishell.h"
+
 char *ft_add_spaces_around(char *str, char special)
 {
 	int i = 0;

@@ -6,7 +6,7 @@
 #    By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/11 13:50:01 by mmalie            #+#    #+#              #
-#    Updated: 2025/05/08 17:49:44 by mmalie           ###   ########.fr        #
+#    Updated: 2025/05/09 11:27:39 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,29 +38,29 @@ LIBFT = ./libft/libft.a
 ####################
 
 MS_SRC = ./src/minishell.c \
-      ./src/ms_initer.c \
-      ./src/ms_quotes_handler.c \
-      ./src/ms_env_interpreter.c \
-      ./src/ms_env_utils.c \
-      ./src/ms_stash_utils.c \
-      ./src/ms_input_manager.c \
-      ./src/ms_normalizer.c \
-      ./src/ms_cd_path_utils.c \
-      ./src/ms_redirections_manager.c \
-      ./src/ms_strs_utils.c \
-      ./src/ms_replace_utils.c \
-      ./src/ms_flags_utils.c \
-      ./src/ms_debug_utils.c \
-      ./src/ms_commands_manager.c \
-      ./src/commands/ms_cmd_cd.c \
-      ./src/commands/ms_cmd_echo.c \
-      ./src/commands/ms_cmd_env.c \
-      ./src/commands/ms_cmd_exit.c \
-      ./src/commands/ms_cmd_export.c \
-      ./src/commands/ms_cmd_pwd.c \
-      ./src/commands/ms_cmd_unset.c \
-      ./src/ms_free.c \
-      ./src/yahya_ms_to_pipex.c \
+      ./src/shell_core/ms_initer.c \
+      ./src/shell_core/ms_normalizer.c \
+      ./src/shell_core/ms_commands_manager.c \
+      ./src/shell_core/ms_input_manager.c \
+      ./src/shell_core/ms_redirections_manager.c \
+      ./src/shell_core/ms_quotes_handler.c \
+      ./src/shell_core/ms_env_interpreter.c \
+      ./src/shell_core/ms_free.c \
+      ./src/shell_core/yahya_ms_to_pipex.c \
+      ./src/builtins/cd/ms_cmd_cd.c \
+      ./src/builtins/echo/ms_cmd_echo.c \
+      ./src/builtins/env/ms_cmd_env.c \
+      ./src/builtins/exit/ms_cmd_exit.c \
+      ./src/builtins/export/ms_cmd_export.c \
+      ./src/builtins/pwd/ms_cmd_pwd.c \
+      ./src/builtins/unset/ms_cmd_unset.c \
+      ./src/utils/ms_env_utils.c \
+      ./src/utils/ms_stash_utils.c \
+      ./src/utils/ms_cd_path_utils.c \
+      ./src/utils/ms_strs_utils.c \
+      ./src/utils/ms_replace_utils.c \
+      ./src/utils/ms_flags_utils.c \
+      ./src/utils/ms_debug_utils.c \
 
 PIPEX_SRC =       ./pipex_ms/pipex.c \
       ./pipex_ms/pipex_utils.c \

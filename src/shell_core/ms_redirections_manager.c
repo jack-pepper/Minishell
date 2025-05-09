@@ -6,11 +6,11 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 11:43:09 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 18:49:11 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/09 11:24:01 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 /*
 void    set_redirection(char **input_args)

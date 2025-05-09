@@ -6,11 +6,11 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:42:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 23:31:30 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/09 11:30:03 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 int	stash_var(t_shell *sh)
 {

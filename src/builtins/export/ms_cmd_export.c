@@ -6,11 +6,11 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 22:26:07 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/09 11:28:39 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "../../../inc/minishell.h"
 
 // Handle "export var_name" (from stash) & "export var_name=[value]"
 int	cmd_export(t_shell *sh)

@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ms_debug_utils.c                                   :+:      :+:    :+:   */
+/*   ms_cmd_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/25 14:29:10 by mmalie            #+#    #+#             */
-/*   Updated: 2025/04/28 23:24:48 by mmalie           ###   ########.fr       */
+/*   Created: 2025/03/20 13:01:09 by mmalie            #+#    #+#             */
+/*   Updated: 2025/05/09 11:28:17 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../../inc/minishell.h"
 
-// Display the content of strs
-void	ft_show_strs(char **strs, char *debug_msg)
+int	cmd_env(t_shell *sh)
 {
-	int	i;
+	t_list	*cur_node;
 
-	i = 0;
-	while (strs[i] != NULL)
+	cur_node = sh->this_env;
+	while (cur_node != NULL)
 	{
-		printf("%s: strs[%d]: %s\n", debug_msg, i, strs[i]);
-		i++;
+		if (((char **)cur_node->content)[1] != NULL)
+		{
+			printf("%s=%s\n",
+				((char **)cur_node->content)[0],
+				((char **)cur_node->content)[1]);
+		}
+		else
+			printf("%s=%s\n", ((char **)cur_node->content)[0], "");
+		cur_node = cur_node->next;
 	}
-}
-
-// Save a line on returning by sending a message to a fd
-int	ft_ret(int return_val, char *msg, int fd)
-{
-	ft_putstr_fd(msg, fd);
-	return (return_val);
+	return (0);
 }

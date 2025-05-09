@@ -6,11 +6,11 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:16:17 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 12:48:53 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:28:03 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/minishell.h"
+#include "../../../inc/minishell.h"
 
 int	cmd_echo(t_shell *sh)
 {

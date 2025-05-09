@@ -1,32 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ms_cmd_pwd.c                                       :+:      :+:    :+:   */
+/*   ms_debug_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/20 13:03:51 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/05 12:30:21 by mmalie           ###   ########.fr       */
+/*   Created: 2025/04/25 14:29:10 by mmalie            #+#    #+#             */
+/*   Updated: 2025/05/09 11:29:30 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-int	cmd_pwd(void)
+// Display the content of strs
+void	ft_show_strs(char **strs, char *debug_msg)
 {
-	char	*cwd;	
+	int	i;
 
-	cwd = NULL;
-	cwd = store_cwd(cwd);
-	printf("%s\n", cwd);
-	free(cwd);
-	return (0);
+	i = 0;
+	while (strs[i] != NULL)
+	{
+		printf("%s: strs[%d]: %s\n", debug_msg, i, strs[i]);
+		i++;
+	}
 }
 
-char	*store_cwd(char *cwd)
+// Save a line on returning by sending a message to a fd
+int	ft_ret(int return_val, char *msg, int fd)
 {
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-		return (NULL);
-	return (cwd);
+	ft_putstr_fd(msg, fd);
+	return (return_val);
 }
