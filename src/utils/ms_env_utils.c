@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/09 11:30:24 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/09 13:25:26 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	is_valid_env_name(char *var_name)
 }
 
 // add a new node with split_str content to the end of the list
-void	add_new_env_var(t_shell *sh, char **split_str)
+int	add_new_env_var(t_shell *sh, char **split_str)
 {
 	t_list	*new_node;
 
@@ -56,9 +56,10 @@ void	add_new_env_var(t_shell *sh, char **split_str)
 	if (!new_node)
 	{
 		free_args(split_str);
-		return ;
+		return (-1);
 	}
 	ft_lstadd_back(&sh->this_env, new_node);
+	return (0);
 }
 
 // free previous content, malloc for new content and copy it from split_str

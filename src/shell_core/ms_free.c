@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:53:00 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/09 11:23:30 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/09 14:30:05 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 void	free_memory(t_shell *sh)
 {
-	//if (sh->normalized_line != NULL)
-	//	free(sh->normalized_line);
 	if (sh->input_args != NULL)
 		free_args(sh->input_args);
 	if (sh->this_env != NULL)
@@ -44,13 +42,13 @@ void	free_list(t_list **list)
 {
 	t_list	*cur_node;
 	t_list	*prev_node;
-	int	i;
+	int		i;
 
 	if (list != NULL && *list != NULL)
 	{
 		cur_node = *list;
 		while (cur_node != NULL)
-		{	
+		{
 			if (cur_node->content != NULL)
 			{
 				i = 0;
@@ -74,7 +72,7 @@ void	free_commands(t_command **cmds)
 	i = 0;
 	if (cmds != NULL)
 	{
-		while (i < 4) // MODULATE according to the nb of commands (not implemented yet)
+		while (i < NB_CMDS)
 		{
 			if (cmds[i]->name != NULL)
 				free(cmds[i]->name);

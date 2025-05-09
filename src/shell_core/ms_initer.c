@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:56:45 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/09 11:22:57 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/09 14:36:48 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,39 +27,6 @@ int	init_shell(t_shell *sh, char **env)
 	return (0);
 }
 
-// If a value from env contains more than one equal sign, it has been split.
-// 
-int	normalize_env(t_list *this_env)
-{
-	t_list	*cur_node;
-	char	*rejoined_var;
-	int		i;
-
-	cur_node = this_env;
-	while (cur_node != NULL)
-	{
-		i = 2;
-		if (ft_strslen((char **)cur_node->content) > 2)
-		{
-			rejoined_var = ft_strdup(((char **)cur_node->content)[1]);
-			free(((char **)cur_node->content)[1]);
-			while (((char **)cur_node->content)[i])
-			{
-				char *temp = ft_strdup(rejoined_var);
-				free(rejoined_var);
-				rejoined_var = ft_strjoin_delim(temp, ((char **)cur_node->content)[i], "=");
-				free(temp);
-				i++;
-			}
-			((char **)cur_node->content)[1] = ft_strdup(rejoined_var);
-			free(rejoined_var);
-		}
-		ft_unflag_delim(((char **)cur_node->content)[1], '=', CTRL_CHAR_EXTRA_DELIM);
-		cur_node = cur_node->next;
-	}
-	return (0);
-}
-
 // Initialize a local environment by storing the env variables to a t_list
 int	init_env(t_shell *sh, char **env)
 {
@@ -72,6 +39,39 @@ int	init_env(t_shell *sh, char **env)
 		return (-1);
 	if (normalize_env(sh->this_env) != 0)
 		return (-1);
+	return (0);
+}
+
+// If a value from env contains more than one equal sign, it has been split. 
+int	normalize_env(t_list *this_env)
+{
+	t_list	*cur_node;
+	char	*rejoined_var;
+	char	*temp;
+	int		i;
+
+	cur_node = this_env;
+	while (cur_node != NULL)
+	{
+		i = 2;
+		if (ft_strslen((char **)cur_node->content) > 2)
+		{
+			rejoined_var = ft_strdup(((char **)cur_node->content)[1]);
+			free(((char **)cur_node->content)[1]);
+			while (((char **)cur_node->content)[i])
+			{
+				temp = ft_strdup(rejoined_var);
+				free(rejoined_var);
+				rejoined_var = ft_strjoin_delim(temp, ((char **)cur_node->content)[i], "=");
+				free(temp);
+				i++;
+			}
+			((char **)cur_node->content)[1] = ft_strdup(rejoined_var);
+			free(rejoined_var);
+		}
+		ft_unflag_delim(((char **)cur_node->content)[1], '=', CTRL_CHAR_EXTRA_DELIM);
+		cur_node = cur_node->next;
+	}
 	return (0);
 }
 

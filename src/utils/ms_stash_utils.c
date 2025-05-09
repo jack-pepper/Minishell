@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:42:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/09 11:30:03 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/09 13:35:50 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int	stash_var(t_shell *sh)
 {
-	t_list	*stashed_var;
 	t_list	*node;
 	char	**split_str;
 	size_t	i;
@@ -34,26 +33,30 @@ int	stash_var(t_shell *sh)
 			free_args(split_str);
 			return (2);
 		}
-		stashed_var = ft_getenv(split_str[0], &sh->env_stash);
-		if (stashed_var != NULL)
-		{
-			if (ft_update_env_value(stashed_var, split_str) != 0)
-			{
-				free_args(split_str);
-				return (-1);
-			}
-		}
-		else
-		{
-			node = ft_lstnew((char **)split_str);
-			if (!node)
-			{
-				free_args(split_str);
-				return (-1);
-			}
-			ft_lstadd_back(&sh->env_stash, node);
-		}
+		if (handle_stashing(sh, split_str) != 0)
+			return (-1);
 		i++;
+	}
+	return (0);
+}
+
+int	handle_stashing(t_shell *sh, char **split_str)
+{
+	t_list	*stashed_var;
+
+	stashed_var = ft_getenv(split_str[0], &sh->env_stash);
+	if (stashed_var != NULL)
+	{
+		if (ft_update_env_value(stashed_var, split_str) != 0)
+		{
+			free_args(split_str);
+			return (-1);
+		}
+	}
+	else
+	{
+		if (add_new_stash_var(sh, split_str) != 0)
+			return (-1);
 	}
 	return (0);
 }
@@ -87,12 +90,28 @@ int	are_args_stashable(char **args)
 	while (args[i] != NULL)
 	{
 		invalid_cmd = ft_strchr(args[i], '=');
-		if ((invalid_cmd == NULL) || (is_valid_env_name_sub(args[i]) != 0))
+		if ((invalid_cmd == NULL)
+			|| (is_valid_env_name_sub(args[i]) != 0))
 		{
 			printf("minishell: %s: command not found\n", args[i]);
 			return (127);
 		}
 		i++;
 	}
+	return (0);
+}
+
+// add a new node with split_str content to the end of the list
+int	add_new_stash_var(t_shell *sh, char **split_str)
+{
+	t_list	*new_node;
+
+	new_node = ft_lstnew((char **)split_str);
+	if (!new_node)
+	{
+		free_args(split_str);
+		return (-1);
+	}
+	ft_lstadd_back(&sh->env_stash, new_node);
 	return (0);
 }

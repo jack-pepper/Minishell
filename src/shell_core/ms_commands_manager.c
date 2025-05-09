@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:25:28 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/09 11:23:07 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/09 14:35:00 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,60 +27,54 @@ t_command commands[] = {
         };
 */
 
-int     init_cmds(t_shell *sh)
+int	init_cmds(t_shell *sh) // loop from a file instead
 {
-        sh->cmds = malloc(sizeof(t_command) * NB_CMDS);
-        if (!sh)
-                return (-1);
+	int	res;
+	int	i;
 
-        // We can use open, read and write, so we may want to loop this logic from a file
-        // containing the names and doc
-
-        // exit
-        sh->cmds[0] = register_cmd("exit", cmd_exit, "Cause the shell to exit");
-        if (sh->cmds[0] == NULL)
-                return (-1);
-
-        sh->cmds[1] = register_cmd("pwd", cmd_pwd, "Print name of current/working directory");
-        if (sh->cmds[1] == NULL)
-                return (-1);
-
-        sh->cmds[2] = register_cmd("cd", cmd_cd, "Change the working directory");
-        if (sh->cmds[2] == NULL)
-                return (-1);
-
-        sh->cmds[3] = register_cmd("env", cmd_env, "Display the env variables");
-        if (sh->cmds[3] == NULL)
-                return (-1);
-        return (0);
+	ft_init_two_ints(0, &res, &i);
+	sh->cmds = malloc(sizeof(t_command) * NB_CMDS + 1);
+	if (!sh)
+		return (-1);
+	sh->cmds[0] = register_cmd("exit", cmd_exit, "Exit minishell");
+	sh->cmds[1] = register_cmd("pwd", cmd_pwd, "Print working directory");
+	sh->cmds[2] = register_cmd("cd", cmd_cd, "Change working directory");
+	sh->cmds[3] = register_cmd("env", cmd_env, "Display env variables");
+	sh->cmds[4] = register_cmd("export", cmd_pwd,
+			"Set the export attribute for variables");
+	sh->cmds[5] = register_cmd("unset", cmd_cd,
+			"Unset values and attributes of variables and functions");
+	sh->cmds[6] = register_cmd("echo", cmd_env, "Display a line of text");
+	i = 0;
+	while (i < NB_CMDS)
+	{
+		if (sh->cmds[i] == NULL)
+			res = -1;
+		i++;
+	}
+	sh->cmds[7] = NULL;
+	return (res);
 }
 
-t_command       *register_cmd(char *name, void *func, char *doc)
+t_command	*register_cmd(char *name, void *func, char *doc)
 {
-        t_command       *cmd;
-        size_t          name_len;
-        size_t          doc_len;
+	t_command	*cmd;
+	size_t		name_len;
+	size_t		doc_len;
 
-        cmd = malloc(sizeof(t_command));
-        if (!cmd)
-                return (NULL);
-
-        name_len = ft_strlen(name);
-        doc_len = ft_strlen(doc);
-
-        cmd->name = malloc(sizeof(char) * name_len);
-        if (!cmd->name)
-                return (NULL);
-
-        cmd->doc = malloc(sizeof(char) * doc_len);
-        if (!cmd->doc)
-                return (NULL);
-
-        ft_strlcpy(cmd->name, name, name_len);
-        cmd->func = func;
-        ft_strlcpy(cmd->doc, doc, doc_len);
-
-        return (cmd);
+	cmd = malloc(sizeof(t_command));
+	if (!cmd)
+		return (NULL);
+	name_len = ft_strlen(name);
+	doc_len = ft_strlen(doc);
+	cmd->name = malloc(sizeof(char) * name_len);
+	if (!cmd->name)
+		return (NULL);
+	cmd->doc = malloc(sizeof(char) * doc_len);
+	if (!cmd->doc)
+		return (NULL);
+	ft_strlcpy(cmd->name, name, name_len);
+	cmd->func = func;
+	ft_strlcpy(cmd->doc, doc, doc_len);
+	return (cmd);
 }
-
-

@@ -6,14 +6,14 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 23:24:03 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/09 13:45:08 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define NB_CMDS 10 // Temporary, find out dynamically. DEBUG
+# define NB_CMDS 7
 
 # define STDERR 2
 
@@ -129,14 +129,16 @@ char		*ft_strjoin_delim(char const *s1, char const *s2, char const *delim);
 	// ms_env_utils.c
 t_list		*ft_getenv(char *var_name, t_list **this_env);
 int			is_valid_env_name(char *var_name);
-void		add_new_env_var(t_shell *sh, char **split_str);
+int			add_new_env_var(t_shell *sh, char **split_str);
 int			ft_update_env_value(t_list *set_var, char **split_str);
 
 	// ms_stash_utils.c
 int			stash_var(t_shell *sh);
+int			handle_stashing(t_shell *sh, char **split_str);
 char		**split_input_arg(t_shell *sh, size_t *i);
 int			is_valid_env_name_sub(char *arg);
 int			are_args_stashable(char **args);
+int			add_new_stash_var(t_shell *sh, char **split_str);
 
 	// ms_cd_path_utils.c
 char		*handle_dotted_path(char *cwd, char *path);
