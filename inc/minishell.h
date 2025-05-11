@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/11 18:39:46 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/11 18:59:21 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # define STDERR 2
 
 # define PROMPT_STYLE "ms> "
+
 # define CTRL_CHAR_REDIR_IN  24  // "<"
 # define CTRL_CHAR_REDIR_OUT 25 // ">"
 # define CTRL_CHAR_APPEND    26  // ">>"
@@ -160,6 +161,7 @@ int			cmd_env(t_shell *sh);
 
 	// ms_cmd_exit.c - Cause the shell to exit
 int			cmd_exit(t_shell *sh, unsigned int status);
+void		free_and_exit(t_shell *sh, unsigned int status);
 int     	ft_isnum(char *str);
 char		*ms_trim(char *trimmed_arg, char *arg, int len, int k);
 int		exit_arg_overflow(char *str);

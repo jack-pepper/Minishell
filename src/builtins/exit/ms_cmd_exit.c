@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:01:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/09 11:28:27 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/11 18:57:57 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	cmd_exit(t_shell *sh, unsigned int status)
 {
 	size_t	nb_args;
 
+	if (!sh->input_args)
+		free_and_exit(sh, status);
 	nb_args = ft_strslen(sh->input_args);
 	printf("exit\n");
 	if (ft_strcmp(sh->input_args[0], "exit") == 0)
@@ -33,10 +35,15 @@ int	cmd_exit(t_shell *sh, unsigned int status)
 		}
 		else
 			status = (unsigned char)(ft_atoll(sh->input_args[1]));
-		free_memory(sh);
-		exit(status);
+		free_and_exit(sh, status);
 	}
 	return (0);
+}
+
+void	free_and_exit(t_shell *sh, unsigned int status)
+{
+	free_memory(sh);
+	exit(status);
 }
 
 // Check if all str chars are a digit while accepting + or - at first pos
