@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:42:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/09 13:35:50 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/09 23:34:44 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,11 @@
 
 int	stash_var(t_shell *sh)
 {
-	t_list	*node;
 	char	**split_str;
 	size_t	i;
 	size_t	nb_args;
 
 	i = 0;
-	node = NULL;
 	split_str = NULL;
 	nb_args = ft_strslen(sh->input_args);
 	while (i < nb_args)

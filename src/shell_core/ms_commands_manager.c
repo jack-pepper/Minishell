@@ -6,45 +6,30 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:25:28 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/09 14:35:00 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/11 17:33:00 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-// Could be initialized like this:
-/*
-t_command commands[] = {
-                { "pwd", cmd_pwd, "Print name of current/working directory" },
-                { "cd", cmd_cd, "Change the working directory" }, 
-                { "echo", cmd_echo, "Display a line of text" }, 
-                { "exit", cmd_exit, "Cause the shell to exit" },
-                { "export", cmd_export, "Set the export attribute for variables" },
-                { "unset", cmd_unset, "Unset values and attributes of variables and functions" },
-                { "env", cmd_env, "Display the env variables" },
-                { "help", cmd_help, "Display this text" },
-                { (char *)NULL, (Function *)NULL, (char *)NULL } /// should allow to loop through the cmd list
-        };
-*/
-
-int	init_cmds(t_shell *sh) // loop from a file instead
+int	init_cmds(t_shell *sh) // could loop from a file instead
 {
 	int	res;
 	int	i;
 
 	ft_init_two_ints(0, &res, &i);
-	sh->cmds = malloc(sizeof(t_command) * NB_CMDS + 1);
-	if (!sh)
+	sh->cmds = malloc(sizeof(t_command) * (NB_CMDS + 1));
+	if (!sh->cmds)
 		return (-1);
 	sh->cmds[0] = register_cmd("exit", cmd_exit, "Exit minishell");
 	sh->cmds[1] = register_cmd("pwd", cmd_pwd, "Print working directory");
 	sh->cmds[2] = register_cmd("cd", cmd_cd, "Change working directory");
 	sh->cmds[3] = register_cmd("env", cmd_env, "Display env variables");
-	sh->cmds[4] = register_cmd("export", cmd_pwd,
+	sh->cmds[4] = register_cmd("export", cmd_export,
 			"Set the export attribute for variables");
-	sh->cmds[5] = register_cmd("unset", cmd_cd,
+	sh->cmds[5] = register_cmd("unset", cmd_unset,
 			"Unset values and attributes of variables and functions");
-	sh->cmds[6] = register_cmd("echo", cmd_env, "Display a line of text");
+	sh->cmds[6] = register_cmd("echo", cmd_echo, "Display a line of text");
 	i = 0;
 	while (i < NB_CMDS)
 	{
@@ -67,14 +52,29 @@ t_command	*register_cmd(char *name, void *func, char *doc)
 		return (NULL);
 	name_len = ft_strlen(name);
 	doc_len = ft_strlen(doc);
-	cmd->name = malloc(sizeof(char) * name_len);
+	cmd->name = malloc(sizeof(char) * (name_len + 1));
 	if (!cmd->name)
 		return (NULL);
-	cmd->doc = malloc(sizeof(char) * doc_len);
+	cmd->doc = malloc(sizeof(char) * (doc_len + 1));
 	if (!cmd->doc)
 		return (NULL);
-	ft_strlcpy(cmd->name, name, name_len);
+	ft_strlcpy(cmd->name, name, name_len + 1);
 	cmd->func = func;
-	ft_strlcpy(cmd->doc, doc, doc_len);
+	ft_strlcpy(cmd->doc, doc, doc_len + 1);
 	return (cmd);
+}
+
+t_command	*is_registered_cmd(t_shell *sh)
+{
+	int	i;
+
+	i = 0;
+	while (sh->cmds[i] != NULL)
+	{
+		if (ft_strcmp(sh->input_args[0], sh->cmds[i]->name) == 0)
+			return (sh->cmds[i]);
+		else
+			i++;
+	}
+	return (NULL);
 }

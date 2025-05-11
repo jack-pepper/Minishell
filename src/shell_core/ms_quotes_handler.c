@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/09 11:23:53 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/11 15:16:02 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,29 +15,22 @@
 void	handle_quote(char *line, char quote_type, int *i, int *to_collapse)
 {
 	(*i)++;
-	(*to_collapse)++; 
+	(*to_collapse)++;
 	if (quote_type == '\'')
 	{
 		while (line[(*i)] != '\'')
-		{
-			ft_replace_if_space(&line[(*i)], CTRL_CHAR_SPACE_IN_QUOTE);
-			(*i)++;
-		}
+			ft_replace_if_space(&line[(*i)++], CTRL_CHAR_SPACE_IN_QUOTE);
 	}
 	else if (quote_type == '\"')
 	{
 		while (line[(*i)] != '\"')
 		{
-			if (line[(*i)] == '$' && line[(*i + 1)] != '\"' && line[(*i + 1)] != ' ')
-			{
-				ft_replace_char(&line[(*i)], CTRL_CHAR_VAR_TO_INTERPRET);
-				(*i)++;
-			}
+			if (line[(*i)] == '$'
+				&& line[(*i + 1)] != '\"'
+				&& line[(*i + 1)] != ' ')
+				ft_replace_char(&line[(*i)++], CTRL_CHAR_VAR_TO_INTERPRET);
 			if (line[(*i)] != '\"')
-			{
-				ft_replace_if_space(&line[(*i)], CTRL_CHAR_SPACE_IN_QUOTE);
-				(*i)++;
-			}
+				ft_replace_if_space(&line[(*i)++], CTRL_CHAR_SPACE_IN_QUOTE);
 		}
 	}
 	(*to_collapse)++;

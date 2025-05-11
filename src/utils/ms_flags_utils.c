@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 13:36:08 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/09 11:29:45 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/11 18:41:18 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,17 @@ void	ft_unflag_delim(char *str, char delim, char flag)
 			str[i] = delim;
 		i++;
 	}
+}
+
+char	**split_input_arg(t_shell *sh, size_t *i)
+{
+	char	**split_str;
+
+	split_str = NULL;
+	ft_flag_delim(sh->input_args[(*i)], '=', CTRL_CHAR_EXTRA_DELIM, "f");
+	split_str = ft_split(sh->input_args[(*i)], '=');
+	ft_unflag_delim(split_str[1], '=', CTRL_CHAR_EXTRA_DELIM);
+	if (!split_str)
+		return (NULL);
+	return (split_str);
 }

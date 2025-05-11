@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 12:59:33 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/09 11:26:24 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/11 18:31:17 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,14 @@ int	cmd_cd(t_shell *sh)
 
 	cwd = NULL;
 	home_var = ft_getenv("HOME", &sh->this_env);
-	if (sh->input_args[2])
-		return (ft_ret(1, CD_TOO_MANY_ARGS, STDERR));
-	if (!sh->input_args[1] && (!home_var || !((char **)home_var->content)[1]))
+	if (!sh->input_args[1]
+		&& (!home_var || !((char **)home_var->content)[1]))
 		return (ft_ret(-1, CD_HOME_NON_SET, STDERR));
-	else if (!sh->input_args[1] && home_var && ((char **)home_var->content)[1])
+	else if (!sh->input_args[1] && home_var
+		&& ((char **)home_var->content)[1])
 		path = ((char **)home_var->content)[1];
+	else if (sh->input_args[2])
+		return (ft_ret(1, CD_TOO_MANY_ARGS, STDERR));
 	else
 		path = sh->input_args[1];
 	cwd = store_cwd(cwd);
@@ -53,7 +55,8 @@ int	cd_process_path(t_shell *sh, char *cwd, char *path)
 	else
 	{
 		if (ft_strcmp(path, "-") == 0)
-			path = ((char **)(ft_getenv("OLDPWD", &sh->this_env))->content)[1];
+			path = ((char **)(ft_getenv("OLDPWD", &sh->this_env))
+					->content)[1];
 		if (change_directory(sh, cwd, path) != 0)
 		{
 			free(cwd);
