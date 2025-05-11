@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/09 11:23:19 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/11 22:19:27 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,11 @@ int	ft_interpret_env(t_shell *sh)
 	while (sh->input_args[i])
 	{
 		split_args = NULL;
-//		ft_show_strs(sh->input_args, "[DEBUG] sh->input_args");
 		if (ft_strchr(sh->input_args[i], CTRL_CHAR_VAR_TO_INTERPRET) != NULL)
 		{
 			split_args = ft_split(sh->input_args[i], CTRL_CHAR_VAR_TO_INTERPRET);
 			if (!split_args)
 				return (-1);
-//			ft_show_strs(split_args, "[DEBUG] split_args");
 			if (sh->input_args[i][0] == CTRL_CHAR_VAR_TO_INTERPRET)
 			{
 				rejoined_arg = ft_strdup("");

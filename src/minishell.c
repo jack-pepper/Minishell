@@ -6,14 +6,14 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:16:39 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 19:24:30 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/11 22:14:52 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 
-/* TODO: env variables should be interpreted in paths too! (ex: with cmd cd) 
+/* 
  *
  *
  */
@@ -207,7 +207,6 @@ int main(int argc, char **argv, char **env)
 		return (-1);
 	if (init_shell(&sh, env) != 0)
 		return (-1);
-
 	while (1)
 	{
 		line = get_input(line);

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/11 18:59:21 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/11 21:50:59 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,16 @@
 # define CTRL_CHAR_EXTRA_DELIM 31
 
 /* Return messages (ft_ret) */
-# define SHELL_NAME "minishell" // could be used to improve error msg
-# define CD_TOO_MANY_ARGS "minishell: cd: too many arguments\n"
-# define CD_HOME_NON_SET "minishell: cd: HOME non set\n"
-# define CD_NO_FILE_OR_DIR "minishell: cd: No such file or directory\n"
-# define EXPORT_INVALID_ID "minishell: export: not a valid identifier\n"
-# define EXIT_NUM_ARG_REQ "minishell: exit: numeric argument required\n"
-# define EXIT_TOO_MANY_ARGS "minishell: exit: too many arguments\n"
+
+# define SHELL_NAME "minishell: " // could be used to improve error msg
+
+# define TOO_MANY_ARGS ": too many arguments\n"
+# define HOME_NON_SET ": HOME non set\n"
+# define NO_FILE_OR_DIR ": No such file or directory\n"
+# define INVALID_ID ": not a valid identifier\n"
+# define NUM_ARG_REQ ": numeric argument required\n"
 # define CMD_NOT_FOUND ": command not found\n"
-# define CMD_IS_DIR "minishell: Is a directory\n"
+# define CMD_IS_DIR ": Is a directory\n"
 
 /* Libraries */
 
@@ -192,6 +193,7 @@ char		*rejoin_abs_path(char *rejoined_path, char **split_path);
 	// ms_debug_utils.c
 void		ft_show_strs(char **strs, char *debug_msg);
 int			ft_ret(int return_val, char *msg, int fd);
+int		ms_err(char *cmd_name, char *arg, char *err_msg, int return_val);
 
 	// ms_env_utils.c
 t_list		*ft_getenv(char *var_name, t_list **this_env);

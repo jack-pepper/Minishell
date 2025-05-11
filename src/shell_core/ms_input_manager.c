@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:09:13 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/11 17:49:30 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/11 22:09:42 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,38 +49,26 @@ char	**normalize_input(char *line, t_shell *sh)
 
 int	handle_dollar_cmd(t_shell *sh)
 {
-	// NB: Should actually display the var value in the error...
 	char	*exit_status;
+	t_list	*set_var;
 
 	if (sh->input_args[0] && sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET)
 	{
-		if (ft_strcmp(sh->input_args[0], (char[]){CTRL_CHAR_VAR_TO_INTERPRET, '?', '\0'}) == 0)
+		if (ft_strcmp(sh->input_args[0],
+				(char[]){CTRL_CHAR_VAR_TO_INTERPRET, '?', '\0'}) == 0)
 		{
 			exit_status = ft_itoa(sh->last_exit_status);
-			ft_putstr_fd(exit_status, 2); // small fix, improve it later
+			ms_err("", exit_status, CMD_NOT_FOUND, 127);
 			free(exit_status);
-			return (ft_ret(127, CMD_NOT_FOUND, STDERR));
+			return (127);
 		}
-		else
-		{
-			// printf("I am here 312\n");
-			t_list *set_var = ft_getenv(&(sh->input_args[0][1]), &sh->this_env);
-			if (!set_var)
-			{
-				// printf("I am here 416\n");
-				return (0);
-			}
-			else
-			{
-				if (((char **)set_var->content)[1][0] == '/')
-					return (ft_ret(126, CMD_IS_DIR, STDERR));
-				else
-				{
-					// printf("I am here 200\n");
-					return (ft_ret(0, CMD_NOT_FOUND, STDERR));
-				}
-			}
-		}
+		set_var = ft_getenv(&(sh->input_args[0][1]), &sh->this_env);
+		if (!set_var)
+			return (0);
+		if (((char **)set_var->content)[1][0] == '/')
+			return (ms_err("", ((char **)set_var->content)[1],
+				CMD_IS_DIR, 126));
+		return (ms_err("", sh->input_args[0], CMD_NOT_FOUND, 0));
 	}
 	return (1);
 }
