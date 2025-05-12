@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/12 12:07:19 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/12 12:57:28 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,11 +126,10 @@ void		pass_quotes(char *dst, char *src, size_t *i, size_t *j);
 
 	// ms_env_interpreter.c
 int			ft_interpret_env(t_shell *sh);
-char		**ft_split_args(char **split_args, char *input_arg);
+char		*rejoin_arg(t_shell *sh, char *rejoined_arg, char **split_args, int i);
 char		*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args);
-char		*ft_rejoin_subarg(char **split_args, char *rejoined_arg, int i);
-char		**ft_copy_free(char **input_arg, char *rejoined_arg);
-char		*ft_strjoin_delim(char const *s1, char const *s2, char const *delim);
+char		*handle_space_in_quote_case(t_shell *sh, char *rejoined_arg, char **split_args, int i);
+char		*handle_exit_status_case(t_shell *sh, char *subarg);
 
 	// ms_commands_manager.c
 int			init_cmds(t_shell *sh);
@@ -212,6 +211,13 @@ char		**split_input_arg(t_shell *sh, size_t *i);
 void		ft_replace_if_space(char *cur_c, char new_c);
 void		ft_replace_char(char *cur_c, char new_c);
 void		ft_replace_all_chars(char **input_args, char old_c, char new_c);
+
+	// ms_split_join_utils.c
+//char		**ft_split_args(char **split_args, char *input_arg);
+char		*join_all_subargs(char **args, char delim);
+char		*ft_strjoin_delim(char const *s1, char const *s2, char const *delim);
+char		*ft_rejoin_subarg(char **split_args, char *rejoined_arg, int i);
+char		**ft_copy_free(char **input_arg, char *rejoined_arg);
 
 	// ms_stash_utils.c
 int			stash_var(t_shell *sh);

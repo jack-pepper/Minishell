@@ -6,7 +6,7 @@
 #    By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/11 13:50:01 by mmalie            #+#    #+#              #
-#    Updated: 2025/05/11 22:18:12 by mmalie           ###   ########.fr        #
+#    Updated: 2025/05/12 12:36:05 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,6 +56,7 @@ MS_SRC = ./src/minishell.c \
       ./src/utils/ms_env_utils.c \
       ./src/utils/ms_stash_utils.c \
       ./src/utils/ms_cd_path_utils.c \
+      ./src/utils/ms_split_join_utils.c \
       ./src/utils/ms_strs_utils.c \
       ./src/utils/ms_replace_utils.c \
       ./src/utils/ms_flags_utils.c \
