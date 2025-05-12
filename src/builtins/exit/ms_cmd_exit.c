@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:01:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/11 21:15:12 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/13 00:18:24 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,11 @@ int	cmd_exit(t_shell *sh, unsigned int status)
 	{
 		if (nb_args == 1)
 			;
+		else if (ft_isnum(sh->input_args[1]) != 0
+				|| exit_arg_overflow(sh->input_args[1]) != 0)
+			status = ms_err("exit: ", sh->input_args[1], NUM_ARG_REQ, 2);	
 		else if (nb_args > 2)
 			return (ms_err("exit", "", TOO_MANY_ARGS, 1));
-		else if (nb_args == 2
-			&& (ft_isnum(sh->input_args[1]) != 0
-				|| exit_arg_overflow(sh->input_args[1]) != 0))
-			status = ms_err("exit: ", sh->input_args[1], NUM_ARG_REQ, 2);
 		else
 			status = (unsigned char)(ft_atoll(sh->input_args[1]));
 		free_and_exit(sh, status);
@@ -49,9 +48,10 @@ int	ft_isnum(char *str)
 	size_t	i;
 
 	i = 0;
-	if (!ft_isdigit(str[i]))
+	if (!ft_isdigit(str[0]))
 	{
-		if (str[i] != '+' && str[i] != '-' && str[i + 1] != '\0')
+		if ((str[0] != '+' && str[0] != '-')
+			|| (str[i + 1] == '\0'))
 			return (1);
 	}
 	i++;
@@ -115,7 +115,7 @@ int	exit_arg_overflow(char *str)
 		llong_min = "-9223372036854775808";
 		llong_max = "9223372036854775807";
 		if (trimmed_str[0] == '-')
-			res = (ft_strcmp(trimmed_str, llong_min) < 0);
+			res = (ft_strcmp(trimmed_str, llong_min) > 0);
 		else
 			res = (ft_strcmp(trimmed_str, llong_max) > 0);
 	}

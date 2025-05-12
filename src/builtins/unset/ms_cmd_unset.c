@@ -6,14 +6,14 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:04:03 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/09 11:29:02 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/12 23:46:19 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../inc/minishell.h"
 
 // Remove requested vars from this_env.
-int	cmd_unset(t_shell *sh)
+int	cmd_unset(t_shell *sh) // NEED TO ADD ERRORS ON WRONG INPUT!!!
 {
 	t_list	*tgt_node;
 	t_list	*prev_node;
