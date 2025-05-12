@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/11 21:50:59 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/12 12:07:19 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # define NB_CMDS 7
 
+# define STDOUT 1
 # define STDERR 2
 
 # define PROMPT_STYLE "ms> "
