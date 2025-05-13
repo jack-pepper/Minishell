@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/12 12:57:28 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/13 13:23:25 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,7 @@ void		update_pwd_var(t_shell *sh, char **split_pwd, char *key);
 	// ms_cmd_echo.c - Display a line of text
 int			cmd_echo(t_shell *sh);
 void		echo_set_n(char **input_args, bool *opt_n, int *i);
+char		*echo_process_all_args(t_shell *sh, char *joined_input, int *i);
 char		*echo_join_input(char *joined_input, char **input_args, int *i);
 void		echo_display(char *joined_output, bool opt_n);
 

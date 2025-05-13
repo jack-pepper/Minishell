@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:09:13 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/13 10:06:24 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/13 10:49:48 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ int	process_input(t_shell *sh)
 {
 	t_command	*cmd;
 	int		res;
+
 
 	if (!sh->input_args || sh->input_args[0] == NULL)
 		return (-1);	
