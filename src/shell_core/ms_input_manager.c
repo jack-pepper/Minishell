@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:09:13 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/13 10:49:48 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/13 18:15:13 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,13 @@ int	handle_dollar_cmd(t_shell *sh)
 	char	*exit_status;
 	t_list	*set_var;
 
-	if (sh->input_args[0] && sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET)
+	//if (sh->input_args[0] && sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET)
+	//{
+	//	if (ft_strcmp(sh->input_args[0],
+	//			(char[]){CTRL_CHAR_VAR_TO_INTERPRET, '?', '\0'}) == 0)
+	if (sh->input_args[0] && sh->input_args[0][0] == '$')
 	{
-		if (ft_strcmp(sh->input_args[0],
-				(char[]){CTRL_CHAR_VAR_TO_INTERPRET, '?', '\0'}) == 0)
+		if (sh->input_args[0][1] == '?')
 		{
 			exit_status = ft_itoa(sh->last_exit_status);
 			ms_err("", exit_status, CMD_NOT_FOUND, 127);

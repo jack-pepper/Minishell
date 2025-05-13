@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:16:17 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/13 14:09:07 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/13 17:41:55 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,13 @@ int	cmd_echo(t_shell *sh)
 	echo_set_n(sh->input_args, &opt_n, &i);
 	if (!sh->input_args[i])
 		return (ft_ret(0, "", STDOUT));
+	if (ft_strcmp(sh->input_args[i], "$?") == 0)
+	{
+		char *exit_status = ft_itoa(sh->last_exit_status);
+		echo_display(exit_status, opt_n);
+		free(exit_status);
+		return (0);
+	}
 	head[0] = 0;
 	joined_input = &head[0];
 	joined_input = echo_process_all_args(sh, joined_input, &i);

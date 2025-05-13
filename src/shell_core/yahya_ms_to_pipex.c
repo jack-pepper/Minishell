@@ -14,8 +14,10 @@ bool is_builtin(const char *cmd)
 		ft_strcmp(cmd, "exit") == 0 ||
 		ft_strchr(cmd, '=') != NULL || // to handle env stash ("VAR_NAME=[VAR_VALUE]")
 		(cmd[0] == CTRL_CHAR_VAR_TO_INTERPRET) ||
-		((cmd[0] == CTRL_CHAR_VAR_TO_INTERPRET) && (cmd[1] == '?'))
-	)
+		((cmd[0] == CTRL_CHAR_VAR_TO_INTERPRET) && (cmd[1] == '?')) ||
+		(cmd[0] == '$') ||
+		((cmd[0] == '$') && (cmd[1] == '?'))
+		)
 		return true;
 	return false;
 }
