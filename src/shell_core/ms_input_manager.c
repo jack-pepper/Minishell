@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:09:13 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/12 23:28:46 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/13 10:06:24 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,10 @@ int	handle_dollar_cmd(t_shell *sh)
 		}
 		set_var = ft_getenv(&(sh->input_args[0][1]), &sh->this_env);
 		if (!set_var)
+		{
+			
 			return (0);
+		}
 		if (((char **)set_var->content)[1][0] == '/')
 			return (ms_err("", ((char **)set_var->content)[1],
 				CMD_IS_DIR, 126));
@@ -82,7 +85,7 @@ int	process_input(t_shell *sh)
 	if (!sh->input_args || sh->input_args[0] == NULL)
 		return (-1);	
 	res = handle_dollar_cmd(sh);
-	if (res != 1)
+	if (res != 1 && res != 0)
 		return (res);
 	ft_interpret_env(sh);
 	cmd = is_registered_cmd(sh);
