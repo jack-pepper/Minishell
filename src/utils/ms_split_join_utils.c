@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/12 12:29:13 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/13 14:15:51 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 char	*join_all_subargs(char **args, char delim)
 {
-	char	*result = ft_strdup("");
+	char	*result;
 	char	*temp;
-	int i = 0;
+	int		i;
 
 	result = ft_strdup("");
 	if (!result)
@@ -25,7 +25,7 @@ char	*join_all_subargs(char **args, char delim)
 	while (args[i])
 	{
 		temp = ft_strjoin(result, args[i]);
-        	free(result);
+		free(result);
 		result = temp;
 		if (delim != 'n' && args[i + 1])
 		{
@@ -45,27 +45,26 @@ char	*ft_strjoin_delim(char const *s1, char const *s2, char const *delim)
 	size_t	s1_len;
 	size_t	s2_len;
 
-	s1_len = 0;
-	s2_len = 0;
+	ft_init_two_size_t(0, &s1_len, &s2_len);
 	if (s1 != NULL)
 		s1_len = ft_strlen(s1);
 	if (s2 != NULL)
 		s2_len = ft_strlen(s2);
 	if (s1 && s2)
-        	len = s1_len + ft_strlen(delim) + s2_len;
+		len = s1_len + ft_strlen(delim) + s2_len;
 	else
 		len = s1_len + s2_len;
-        joined_str = (char *)malloc(sizeof(char) * (len + 1));
-        if (joined_str == NULL)
-                return (NULL);
+	joined_str = (char *)malloc(sizeof(char) * (len + 1));
+	if (joined_str == NULL)
+		return (NULL);
 	if (s1 != NULL)
-        {
+	{
 		ft_strlcpy(joined_str, s1, len + 1);
 		ft_strlcat(joined_str, delim, len + 1);
 	}
 	if (s2 != NULL)
-       		ft_strlcat(joined_str, s2, len + 1);
-        return (joined_str);
+		ft_strlcat(joined_str, s2, len + 1);
+	return (joined_str);
 }
 
 char	*ft_rejoin_subarg(char **split_args, char *rejoined_arg, int i)
