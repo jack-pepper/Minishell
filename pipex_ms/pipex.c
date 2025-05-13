@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/06 14:49:00 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/13 12:41:07 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ int run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 	int i;
 	int k = 0;
 
-	if (!pipeline->infile || !pipeline->outfile)
+	if (!pipeline->cmds->infile || !pipeline->cmds->outfile)
 	{
 		ft_printf("Error: missing infile or outfile\n");
 		return (1);
@@ -178,18 +178,18 @@ int run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 		return (-1);
 	// pipeline->pipex = &pipex;
 	// End added by [m]
-	if (ft_strcmp(pipeline->infile, "here_doc") == 0)
+	if (ft_strcmp(pipeline->cmds->infile, "here_doc") == 0)
 	{
-		if (handle_heredoc(pipeline->limiter) != 0)
+		if (handle_heredoc(pipeline->cmds->limiter) != 0)
 		{
 			fprintf(stderr, "Error: here_doc failed\n");
 			return (1);
 		}
-		free(pipeline->infile);
+		free(pipeline->cmds->infile);
 		printf("HANDLING hered_doc\n");
-		pipeline->infile = strdup(".heredoc_tmp"); // Replace infile with generated file
+		pipeline->cmds->infile = strdup(".heredoc_tmp"); // Replace infile with generated file
 	}
-	if (ft_strcmp(pipeline->infile, "here_doc") == 0)
+	if (ft_strcmp(pipeline->cmds->infile, "here_doc") == 0)
 		argc = 4 + pipeline->cmd_count; // pipex + here_doc + LIMITER + N cmds + outfile
 	else
 		argc = 3 + pipeline->cmd_count; // pipex + infile + N cmds + outfile
@@ -203,15 +203,15 @@ int run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 	}
 	// printf("I am here\n");
 	argv[k++] = strdup("pipex");                // argv[0]
-	if (ft_strcmp(pipeline->infile, "here_doc") == 0)
+	if (ft_strcmp(pipeline->cmds->infile, "here_doc") == 0)
 	{
 		pipex.here_doc = true;
 		argv[k++] = strdup("here_doc");         // argv[1]
-		argv[k++] = strdup(pipeline->limiter);  // argv[2]
+		argv[k++] = strdup(pipeline->cmds->limiter);  // argv[2]
 	}
 	else
 	{
-		argv[k++] = strdup(pipeline->infile);   // argv[1]
+		argv[k++] = strdup(pipeline->cmds->infile);   // argv[1]
 	}
 
 
@@ -222,7 +222,7 @@ int run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 		argv[k++] = join_args(pipeline->cmds[i].argv); // argv[2] to argv[n]
 		i++;
 	}
-	argv[k++] = strdup(pipeline->outfile);      // argv[n+1]
+	argv[k++] = strdup(pipeline->cmds->outfile);      // argv[n+1]
 	// printf("I made it here");
 	argv[k] = NULL;
 

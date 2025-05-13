@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:16:39 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 12:44:09 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/13 12:34:19 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,25 +178,24 @@ void handle_basic(t_shell *sh, char **env)
 	free_pipeline(pipeline);
 }
 
-void handle_pipeline(t_shell *sh, char **env)
-{
+void handle_pipeline(t_shell *sh, char **env) {
 	if (!validate_all_redirections(sh->input_args, sh))
 		return;
-	// printf("I am here \n ");
+
 	t_pipeline *pipeline = build_pipeline_from_tokens(sh->input_args);
-	if (!pipeline)
-	{
+	if (!pipeline) {
 		sh->last_exit_status = 1;
 		return;
 	}
 
-	if (strcmp(sh->input_args[0], (char[]){CTRL_CHAR_HEREDOC, '\0'}) == 0)
+	if (has_heredoc(pipeline))
 		run_pipex_from_minshell(pipeline, env);
 	else
 		run_pipeline_with_redir(pipeline, env, sh);
 
 	free_pipeline(pipeline);
 }
+
 
 int main(int argc, char **argv, char **env)
 {
@@ -223,7 +222,7 @@ int main(int argc, char **argv, char **env)
 		// int i = 0;
 		// while(sh.input_args[i])
 		// {
-		// 	printf("input_arg[i] = %s\n", sh.input_args[i]);
+		// 	printf("input_arg[%d] = %s\n", i,sh.input_args[i]);
 		// 	i++;
 		// }
 		t_cmd_type type = classify_command(sh.input_args);
@@ -243,6 +242,9 @@ int main(int argc, char **argv, char **env)
 		else if (type == PIPELINE)
 		{
 			// printf("handle pipeline\n");
+			int num_cmds = count_pipes(sh.input_args) + 1;
+			sh.pipeline->cmds = malloc(sizeof(t_command) * num_cmds);
+			parse_and_build_pipeline(sh.pipeline, sh.input_args);
 			handle_pipeline(&sh, env);
 		}
 		else if (type == MIXED_INVALID)
