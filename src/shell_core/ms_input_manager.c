@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:09:13 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/13 18:15:13 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/13 21:00:51 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,11 @@ int	handle_dollar_cmd(t_shell *sh)
 	char	*exit_status;
 	t_list	*set_var;
 
-	//if (sh->input_args[0] && sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET)
-	//{
-	//	if (ft_strcmp(sh->input_args[0],
-	//			(char[]){CTRL_CHAR_VAR_TO_INTERPRET, '?', '\0'}) == 0)
-	if (sh->input_args[0] && sh->input_args[0][0] == '$')
+	if (sh->input_args[0] && (sh->input_args[0][0] == '$' || sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET))
 	{
-		if (sh->input_args[0][1] == '?')
+		if (!sh->input_args[0][1])
+			return (ms_err("", "$", CMD_NOT_FOUND, 127));
+		if (sh->input_args[0][1] == '?') // should rejoin if there's more after
 		{
 			exit_status = ft_itoa(sh->last_exit_status);
 			ms_err("", exit_status, CMD_NOT_FOUND, 127);
@@ -67,14 +65,13 @@ int	handle_dollar_cmd(t_shell *sh)
 		}
 		set_var = ft_getenv(&(sh->input_args[0][1]), &sh->this_env);
 		if (!set_var)
-		{
-			
 			return (0);
-		}
 		if (((char **)set_var->content)[1][0] == '/')
 			return (ms_err("", ((char **)set_var->content)[1],
 				CMD_IS_DIR, 126));
-		return (ms_err("", sh->input_args[0], CMD_NOT_FOUND, 0));
+		else
+			return (ms_err("", ((char **)set_var->content)[1],
+				CMD_NOT_FOUND, 127));
 	}
 	return (1);
 }
@@ -87,18 +84,21 @@ int	process_input(t_shell *sh)
 
 
 	if (!sh->input_args || sh->input_args[0] == NULL)
-		return (-1);	
+		return (-1);
+
 	res = handle_dollar_cmd(sh);
 	if (res != 1 && res != 0)
 		return (res);
+	
 	ft_interpret_env(sh);
+	
 	cmd = is_registered_cmd(sh);
 	if (cmd != NULL)
 		sh->last_exit_status = cmd->func(sh);
 	else
-	{
-		//printf("I am here 2000\n");
-		sh->last_exit_status = stash_var_or_invalidate(sh);
+	{	
+		if (sh->input_args[0][0] != '\0')
+			sh->last_exit_status = stash_var_or_invalidate(sh);
 	}
 	return (sh->last_exit_status);
 }

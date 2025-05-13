@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/13 11:09:09 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/13 19:23:25 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ char	*ft_strcollapse(char *line)
 		else if (line[i] == '$' && line[i + 1] == '$')
 			;
 		else if (line[i] == '$' && line[i + 1] != '_' && ft_ispunct(line[i + 1]))
-			;	
+			;
 		else if (line[i] == '$' && line[i + 1] != '\0' && line[i + 1] != ' ')
 			ft_replace_char(&line[i], CTRL_CHAR_VAR_TO_INTERPRET);
 		else if (line[i] == '|')

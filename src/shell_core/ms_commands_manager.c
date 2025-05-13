@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:25:28 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/13 11:08:29 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/13 20:11:08 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,20 @@ t_command	*is_registered_cmd(t_shell *sh)
 {
 	int	i;
 	int	j;
+	size_t	nb_args;
 
 	i = 0;
 	j = 0;
+	nb_args = ft_strslen(sh->input_args);
+	while ((size_t)i < nb_args && (sh->input_args[i][0] == '\0'))
+	{	
+		if (sh->input_args[i][0] == '\0')
+			i++;
+		if (!sh->input_args[i])
+			return (NULL);
+	}
 	while (sh->cmds[j] != NULL)
 	{
-		while (sh->input_args[i][0] == '\0')
-			i++;
 		if (ft_strcmp(sh->input_args[i], sh->cmds[j]->name) == 0)
 			return (sh->cmds[j]);
 		else
