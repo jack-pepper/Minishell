@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:04:42 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/13 12:39:21 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:54:21 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -568,8 +568,8 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 			}
 
 			// Output redirection
-			if (p->cmds->outfile) {
-				int flags = O_WRONLY | O_CREAT | (p->cmds->append ? O_APPEND : O_TRUNC);
+			if (cmds->outfile) {
+				int flags = O_WRONLY | O_CREAT | (cmds->append ? O_APPEND : O_TRUNC);
 				out_fd = open(cmds->outfile, flags, 0644);
 				if (out_fd < 0) {
 					perror(cmds->outfile);
@@ -588,7 +588,7 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 				close(prev_fd);
 
 			// Get command path
-			char *cmd_path = get_cmd_path(p->cmds->argv[0], env);
+			char *cmd_path = get_cmd_path(cmds->argv[0], env);
 			if (!cmd_path)
 				exit(127);
 
@@ -598,10 +598,10 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 				exit(EXIT_FAILURE);
 
 			// Builtin handling
-			if (is_builtin(p->cmds->argv[0]))
-				exit(exec_builtin_in_child(p->cmds->argv, sh));
+			if (is_builtin(cmds->argv[0]))
+				exit(exec_builtin_in_child(cmds->argv, sh));
 
-			execve(cmd_path, p->cmds->argv, cleaned_env);
+			execve(cmd_path, cmds->argv, cleaned_env);
 			perror("execve failed");
 			exit(EXIT_FAILURE);
 		}
