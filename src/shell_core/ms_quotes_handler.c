@@ -6,12 +6,27 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/11 15:16:02 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/13 22:50:05 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+// Interpret $VAR prematurely to solve echo "$HO"ME showing "$HOME" instead of "ME"
+/*	premature_env()
+{
+	char	*start;
+	char	*end;
+	// if there is a $ in the current quote
+	start = ft_strchr(line, );
+	ft_str)
+	// split line to keep the $VAR (end: closing double quotes ") 
+
+	// interpret the env
+
+	// rejoin
+}
+*/
 void	handle_quote(char *line, char quote_type, int *i, int *to_collapse)
 {
 	(*i)++;
@@ -32,6 +47,8 @@ void	handle_quote(char *line, char quote_type, int *i, int *to_collapse)
 			if (line[(*i)] != '\"')
 				ft_replace_if_space(&line[(*i)++], CTRL_CHAR_SPACE_IN_QUOTE);
 		}
+//		if (line[(*i) + 1] && line[(*i) + 1] != ' ')
+//			premature_env(line, i);
 	}
 	(*to_collapse)++;
 }
