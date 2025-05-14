@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/14 13:59:47 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/15 00:30:51 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # define CTRL_CHAR_SUBARG_DELIM 31
 # define CTRL_CHAR_TO_BE_DELETED 23
 # define CTRL_CHAR_EXTRA_DELIM 31
+# define CTRL_CHAR_VAR '*' // 21 // For edge case `echo "$HO"ME`
 
 /* Return messages (ft_ret) */
 
@@ -121,7 +122,8 @@ char		*ft_strcollapse(char *line);
 char		*copy_collapse(char *dst, char *src, size_t src_len);
 
 	// ms_quotes_handler.c
-char		*handle_quote(char *line, char quote_type, int *i, int *to_collapse);
+char		*flag_edge_var(char *line, int *i);
+void		handle_quote(char *line, char quote_type, int *i, int *to_collapse);
 void		pass_quotes(char *dst, char *src, size_t *i, size_t *j);
 
 	// ms_env_interpreter.c
@@ -130,6 +132,12 @@ char		*rejoin_arg(t_shell *sh, char *rejoined_arg, char **split_args, int i);
 char		*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args);
 char		*handle_space_in_quote_case(t_shell *sh, char *rejoined_arg, char **split_args, int i);
 char		*handle_exit_status_case(t_shell *sh, char *subarg);
+
+	// ms_env_interpreter_edge.c
+int			ft_interpret_env_edge(t_shell *sh);
+char		*rejoin_arg_edge(t_shell *sh, char *rejoined_arg, char **split_args, int i);
+char		*ft_nametoval_edge(t_shell *sh, char *rejoined_arg, char **split_args);
+char		*handle_space_in_quote_case_edge(t_shell *sh, char *rejoined_arg, char **split_args, int i);
 
 	// ms_commands_manager.c
 int			init_cmds(t_shell *sh);

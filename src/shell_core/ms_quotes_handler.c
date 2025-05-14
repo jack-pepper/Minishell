@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/14 14:51:21 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/15 00:30:16 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,25 +24,25 @@ char	*flag_edge_var(char *line, int *i)
 	// if there is a $ in the current quote
 	start = ft_strrchr(line, CTRL_CHAR_VAR_TO_INTERPRET);
 	if (start == NULL)
-		return (line);
-	ft_replace_char(start, 'X');	
+		return (NULL);
+	ft_replace_char(start, CTRL_CHAR_VAR);
 	len = (size_t)(&line[(*i)] - start);
 	
 	printf("start: %s\n - len: %lu\n", start, len);
 	substr = ft_substr(line, (*i) - len, len);
 	printf("substr: %s\n", substr);
 
-	flagged_substr = ft_strjoin(substr, "X");
+	flagged_substr = ft_strjoin(substr, (char[]) { CTRL_CHAR_VAR, '\"', '\0'});
 	free(substr);
 	if (!flagged_substr)
-		return (line);
+		return (NULL);
 	printf("flagged_substr: %s\n", flagged_substr);
 
-	updated_line = malloc(ft_strlen(line) + 3);
+	updated_line = malloc(ft_strlen(line) + 2); // LEAKS
 	if (!updated_line)
 	{
 		free(flagged_substr);
-		return (line);
+		return (NULL);
 	}
 	int	j;
 	j = 0;
@@ -52,12 +52,12 @@ char	*flag_edge_var(char *line, int *i)
 	l = 0;
 	while (line[j])
 	{
-		if (line[j] == 'X')
+		if (line[j] == CTRL_CHAR_VAR)
 		{
 			updated_line[k++] = flagged_substr[l++];
 			while (flagged_substr[l])
 				updated_line[k++] = flagged_substr[l++];
-			j = j + ft_strlen(flagged_substr);
+			j = j + ft_strlen(flagged_substr) - 1;
 			free(flagged_substr);
 		}
 		else
@@ -68,11 +68,8 @@ char	*flag_edge_var(char *line, int *i)
 	return (updated_line);
 }
 
-char	*handle_quote(char *line, char quote_type, int *i, int *to_collapse)
+void	handle_quote(char *line, char quote_type, int *i, int *to_collapse)
 {
-	char	*updated_line;
-
-	updated_line = NULL;
 	(*i)++;
 	(*to_collapse)++;
 	if (quote_type == '\'')
@@ -91,21 +88,8 @@ char	*handle_quote(char *line, char quote_type, int *i, int *to_collapse)
 			if (line[(*i)] != '\"')
 				ft_replace_if_space(&line[(*i)++], CTRL_CHAR_SPACE_IN_QUOTE);
 		}
-		// echo "$HO"ME case
-		if (line[(*i) + 1] && line[(*i) + 1] != ' ')
-		{
-			updated_line = flag_edge_var(line, i);
-			//free(line);
-			//line = ft_strdup(updated_line); // need to pass it to solve leak
-			//free(updated_line);
-			(*i) = (*i) + 2;
-		}
 	}
 	(*to_collapse)++;
-	if (updated_line == NULL)
-		return (line);
-	else
-		return (updated_line);
 }
 
 void	pass_quotes(char *dst, char *src, size_t *i, size_t *j)

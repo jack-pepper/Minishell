@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/14 14:27:11 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/15 00:34:16 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ char	*ft_normalize(char *line)
 	free(trimmed_line);
 	if (normalized_line == NULL)
 		return (NULL);
-
+	printf("[NORMALIZER] %s\n", normalized_line);
 	spaced = ft_add_spaces_around(normalized_line, CTRL_CHAR_PIPE);
 	free(normalized_line);
 	if (!spaced)
@@ -119,9 +119,12 @@ char	*ft_strcollapse(char *line)
 	size_t	line_len;
 	int		to_collapse;
 	int		i;
+	char		*new_line;
+	char		*old_line;
 
+	old_line = NULL;
 	collapsed_line = NULL;
-	line_len = ft_strlen(line);
+
 	ft_init_two_ints(0, &i, &to_collapse);
 
 	while (line[i])
@@ -161,24 +164,36 @@ char	*ft_strcollapse(char *line)
 			handle_quote(line, '\'', &i, &to_collapse);
 		else if (line[i] == '\"' && ft_count_char(&line[i], '\"') > 1)
 		{
-			char *updated_line = handle_quote(line, '\"', &i, &to_collapse);
-			if (ft_strlen(updated_line) > ft_strlen(line))
+			handle_quote(line, '\"', &i, &to_collapse);
+			// If the quote is followed by any char other than nul or space: case echo "$HO"ME
+			if (line[i + 1] && line[i + 1] != ' ')
 			{
-				free(line);
-				line = ft_strdup(updated_line);
-				//free(updated_line);
-				//printf("[str_collapse] updated_line: %s\n", updated_line);
-				printf("[str_collapse] line: %s\n", line);
+				new_line = flag_edge_var(line, &i); // LEAKS
+				if (new_line == NULL)
+					;
+				else
+				{
+					old_line = line;
+					line = new_line;
+				}
+				printf("[str_collapse] line: %s - i: %d\n", line, i);
 			}
 		}
 		else if (ft_isspace(line[i]) && ft_isspace(line[i + 1]))
 			to_collapse++;
 		i++;
 	}
-	collapsed_line = malloc(sizeof(char) * ((line_len - to_collapse) + 1));
+	line_len = ft_strlen(line);
+	collapsed_line = malloc(sizeof(char) * ((line_len - to_collapse) + 2));
 	if (!collapsed_line)
 		return (NULL);
-	collapsed_line = copy_collapse(collapsed_line, line, line_len);
+	if (old_line != NULL)
+	{
+		line = old_line;
+		collapsed_line = copy_collapse(collapsed_line, new_line, line_len);
+	}
+	else
+		collapsed_line = copy_collapse(collapsed_line, line, line_len);
 	return (collapsed_line);
 }
 
@@ -191,7 +206,7 @@ char	*copy_collapse(char *dst, char *src, size_t src_len)
 	if (!src)
 		return (NULL);
 	ft_init_two_size_t(0, &i, &j);
-	while (i < src_len)
+	while (i <= src_len)
 	{
 		if ((src[i] == '\'' && ft_count_char(&src[i], '\'') > 1)
 			|| (src[i] == '\"' && ft_count_char(&src[i], '\"') > 1))

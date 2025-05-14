@@ -6,7 +6,7 @@
 #    By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/11 13:50:01 by mmalie            #+#    #+#              #
-#    Updated: 2025/05/12 12:36:05 by mmalie           ###   ########.fr        #
+#    Updated: 2025/05/14 20:16:55 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,6 +44,7 @@ MS_SRC = ./src/minishell.c \
       ./src/shell_core/ms_input_manager.c \
       ./src/shell_core/ms_quotes_handler.c \
       ./src/shell_core/ms_env_interpreter.c \
+      ./src/shell_core/ms_env_edge_case.c \
       ./src/shell_core/ms_free.c \
       ./src/shell_core/yahya_ms_to_pipex.c \
       ./src/builtins/cd/ms_cmd_cd.c \
