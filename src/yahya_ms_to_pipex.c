@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:04:42 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/14 16:03:06 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/14 16:14:19 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -534,28 +534,28 @@ void print_env(t_list *env)
     }
 }
 int cmd_echo_x(char **argv) {
-	int i = 1;
-	while (argv[i]) {
-		printf("%s", argv[i]);
-		if (argv[i + 1])
-			printf(" ");
-		i++;
-	}
-	printf("\n");
-	return 0;
+    int i = 1;  // Skip the command name
+    while (argv[i]) {
+        printf("%s", argv[i]);
+        if (argv[i + 1])
+            printf(" ");
+        i++;
+    }
+    printf("\n");
+    return 0;
 }
 
 int exec_builtin_in_child(char **argv, t_shell *sh)
 {
     if (ft_strcmp(argv[0], "echo") == 0)
-        return cmd_echo_x(sh->input_args);
+        return cmd_echo_x(argv);  // Pass the command's argv directly
     else if (ft_strcmp(argv[0], "pwd") == 0)
         return cmd_pwd();
     else if (ft_strcmp(argv[0], "env") == 0)
         return cmd_env(sh);
     else if (argv[0][0] == CTRL_CHAR_VAR_TO_INTERPRET && argv[0][1] == '?' && !argv[0][2])
     {
-		perror(" ");
+        perror(" ");
         sh->last_exit_status = 1;
         return 0;
     }
@@ -566,24 +566,24 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 	int i = 0;
 	int prev_fd = -1;
 	int pipe_fd[2];
-	printf("cmd_count = %d\n", p->cmd_count);
-	for (int c = 0; c < p->cmd_count; c++) {
-		printf("Command %d:\n", c);
-		for (int k = 0; p->cmds[c].argv && p->cmds[c].argv[k]; k++) {
-			printf("  argv[%d] = %s\n", k, p->cmds[c].argv[k]);
-		}
-		if (p->cmds[c].infile)
-			printf("  infile = %s\n", p->cmds[c].infile);
-		if (p->cmds[c].outfile)
-			printf("  outfile = %s (%s)\n", p->cmds[c].outfile, p->cmds[c].append ? "append" : "truncate");
-	}
-	printf("RAW ARGV for command %d:\n", i);
-	for (int k = 0; p->cmds[i].argv && p->cmds[i].argv[k]; k++) {
-		for (int ch = 0; p->cmds[i].argv[k][ch]; ch++) {
-			if ((unsigned char)p->cmds[i].argv[k][ch] < 32)
-				printf("  argv[%d][%d] = [CTRL %d]\n", k, ch, (unsigned char)p->cmds[i].argv[k][ch]);
-		}
-	}
+	// printf("cmd_count = %d\n", p->cmd_count);
+	// for (int c = 0; c < p->cmd_count; c++) {
+	// 	printf("Command %d:\n", c);
+	// 	for (int k = 0; p->cmds[c].argv && p->cmds[c].argv[k]; k++) {
+	// 		printf("  argv[%d] = %s\n", k, p->cmds[c].argv[k]);
+	// 	}
+	// 	if (p->cmds[c].infile)
+	// 		printf("  infile = %s\n", p->cmds[c].infile);
+	// 	if (p->cmds[c].outfile)
+	// 		printf("  outfile = %s (%s)\n", p->cmds[c].outfile, p->cmds[c].append ? "append" : "truncate");
+	// }
+	// printf("RAW ARGV for command %d:\n", i);
+	// for (int k = 0; p->cmds[i].argv && p->cmds[i].argv[k]; k++) {
+	// 	for (int ch = 0; p->cmds[i].argv[k][ch]; ch++) {
+	// 		if ((unsigned char)p->cmds[i].argv[k][ch] < 32)
+	// 			printf("  argv[%d][%d] = [CTRL %d]\n", k, ch, (unsigned char)p->cmds[i].argv[k][ch]);
+	// 	}
+	// }
 
 	while (i < p->cmd_count) {
 		if (i < p->cmd_count - 1)
@@ -624,17 +624,17 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 			// Now run builtin *after* redirection is set
 			if (is_builtin(p->cmds[i].argv[0]))
 			{
-				printf("==== Inspecting argv for command %d ====\n", i);
-				for (int a = 0; p->cmds[i].argv && p->cmds[i].argv[a]; a++) {
-					printf("argv[%d] = [", a);
-					for (int b = 0; p->cmds[i].argv[a][b]; b++) {
-						if ((unsigned char)p->cmds[i].argv[a][b] < 32)
-							printf("\\x%02x", (unsigned char)p->cmds[i].argv[a][b]);
-						else
-							printf("%c", p->cmds[i].argv[a][b]);
-					}
-					printf("]\n");
-				}
+				// printf("==== Inspecting argv for command %d ====\n", i);
+				// for (int a = 0; p->cmds[i].argv && p->cmds[i].argv[a]; a++) {
+				// 	printf("argv[%d] = [", a);
+				// 	for (int b = 0; p->cmds[i].argv[a][b]; b++) {
+				// 		if ((unsigned char)p->cmds[i].argv[a][b] < 32)
+				// 			printf("\\x%02x", (unsigned char)p->cmds[i].argv[a][b]);
+				// 		else
+				// 			printf("%c", p->cmds[i].argv[a][b]);
+				// 	}
+				// 	printf("]\n");
+				// }
 	
 				exit(exec_builtin_in_child(p->cmds[i].argv, sh));
 			}
