@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:04:47 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/14 13:29:46 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:57:05 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,26 @@ int count_args(char **tokens)
 {
 	int count = 0;
 	int i = 0;
-	while(tokens[i])
+	while (tokens[i])
 	{
-		if ((ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0
-		||ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0
-		|| ft_strcmp(tokens[i], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0) && tokens[i + 1])
-            i++;
-		else
+		if ((ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0 ||
+			 ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0 ||
+			 ft_strcmp(tokens[i], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0) &&
+			tokens[i + 1])
 		{
+			i += 2; // Skip redirection token + filename
+		}
+		else if ((unsigned char)tokens[i][0] < 32 && tokens[i][1] == '\0') {
+			i++; // Skip other control characters (e.g. pipe)
+		}
+		else {
 			count++;
-			i++;	
+			i++;
 		}
 	}
 	return count;
 }
+
 
 char **extract_tokens(char **tokens, int start, int end) {
     int len = end - start;
@@ -72,14 +78,19 @@ t_commands parse_command(char **tokens) {
             cmd.outfile = ft_strdup(tokens[++i]);
             cmd.append = true;
         }
+        else if ((unsigned char)tokens[i][0] < 32 && tokens[i][1] == '\0') {
+            continue;
+        }
         else {
             cmd.argv[argc++] = ft_strdup(tokens[i]);
         }
+        
     }
 
     cmd.argv[argc] = NULL;
     return cmd;
 }
+
 void free_command(t_commands *cmd) {
     if (cmd->argv) {
         for (int i = 0; cmd->argv[i]; i++)
@@ -102,7 +113,9 @@ void free_tokens(char **tokens) {
 
 void parse_and_build_pipeline(t_pipeline *pipeline, char **tokens) {
     int num_cmds = count_pipes(tokens) + 1;
+
     pipeline->cmd_count = num_cmds;
+    // printf("num_cmds = %d\n", pipeline->cmd_count);
     pipeline->cmds = ft_calloc(num_cmds, sizeof(t_command));
     if (!pipeline->cmds)
         exit(1); // handle malloc failure

@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:04:42 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/14 13:25:04 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/14 16:03:06 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -533,10 +533,22 @@ void print_env(t_list *env)
         env = env->next;
     }
 }
+int cmd_echo_x(char **argv) {
+	int i = 1;
+	while (argv[i]) {
+		printf("%s", argv[i]);
+		if (argv[i + 1])
+			printf(" ");
+		i++;
+	}
+	printf("\n");
+	return 0;
+}
+
 int exec_builtin_in_child(char **argv, t_shell *sh)
 {
     if (ft_strcmp(argv[0], "echo") == 0)
-        return cmd_echo(sh);
+        return cmd_echo_x(sh->input_args);
     else if (ft_strcmp(argv[0], "pwd") == 0)
         return cmd_pwd();
     else if (ft_strcmp(argv[0], "env") == 0)
@@ -554,6 +566,24 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 	int i = 0;
 	int prev_fd = -1;
 	int pipe_fd[2];
+	printf("cmd_count = %d\n", p->cmd_count);
+	for (int c = 0; c < p->cmd_count; c++) {
+		printf("Command %d:\n", c);
+		for (int k = 0; p->cmds[c].argv && p->cmds[c].argv[k]; k++) {
+			printf("  argv[%d] = %s\n", k, p->cmds[c].argv[k]);
+		}
+		if (p->cmds[c].infile)
+			printf("  infile = %s\n", p->cmds[c].infile);
+		if (p->cmds[c].outfile)
+			printf("  outfile = %s (%s)\n", p->cmds[c].outfile, p->cmds[c].append ? "append" : "truncate");
+	}
+	printf("RAW ARGV for command %d:\n", i);
+	for (int k = 0; p->cmds[i].argv && p->cmds[i].argv[k]; k++) {
+		for (int ch = 0; p->cmds[i].argv[k][ch]; ch++) {
+			if ((unsigned char)p->cmds[i].argv[k][ch] < 32)
+				printf("  argv[%d][%d] = [CTRL %d]\n", k, ch, (unsigned char)p->cmds[i].argv[k][ch]);
+		}
+	}
 
 	while (i < p->cmd_count) {
 		if (i < p->cmd_count - 1)
@@ -566,24 +596,23 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 		}
 		// printf("I am here0\n");
 		pid_t pid = fork();
-		if (pid == 0) {  // Child process
+		if (pid == 0) {
 			int in_fd = -1, out_fd = -1;
-			// Only open redirection for first or last command
+
 			if (open_redirection_fds_mixed(&p->cmds[i], &in_fd, &out_fd, sh) < 0)
 				exit(1);
 
-			// Apply input redirection or pipe
+			// Setup input
 			if (in_fd != -1)
 				dup2(in_fd, STDIN_FILENO), close(in_fd);
 			else if (prev_fd != -1)
 				dup2(prev_fd, STDIN_FILENO);
 
-			// Apply output redirection only for last command
+			// Setup output
 			if (i == p->cmd_count - 1) {
 				if (out_fd != -1)
 					dup2(out_fd, STDOUT_FILENO), close(out_fd);
 			} else {
-				// Not last command: write to next pipe
 				close(pipe_fd[0]);
 				dup2(pipe_fd[1], STDOUT_FILENO);
 				close(pipe_fd[1]);
@@ -591,20 +620,37 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 
 			if (prev_fd != -1)
 				close(prev_fd);
-			// Get command path
+
+			// Now run builtin *after* redirection is set
+			if (is_builtin(p->cmds[i].argv[0]))
+			{
+				printf("==== Inspecting argv for command %d ====\n", i);
+				for (int a = 0; p->cmds[i].argv && p->cmds[i].argv[a]; a++) {
+					printf("argv[%d] = [", a);
+					for (int b = 0; p->cmds[i].argv[a][b]; b++) {
+						if ((unsigned char)p->cmds[i].argv[a][b] < 32)
+							printf("\\x%02x", (unsigned char)p->cmds[i].argv[a][b]);
+						else
+							printf("%c", p->cmds[i].argv[a][b]);
+					}
+					printf("]\n");
+				}
+	
+				exit(exec_builtin_in_child(p->cmds[i].argv, sh));
+			}
+
+			// External command fallback
 			char *cmd_path = get_cmd_path(p->cmds[i].argv[0], env);
 			if (!cmd_path)
 				exit(127);
-			// Filter environment
 			char **cleaned_env = clean_env(env);
 			if (!cleaned_env)
 				exit(1);
-			if (is_builtin(p->cmds[i].argv[0]))
-				exit(exec_builtin_in_child(p->cmds[i].argv, sh)); // you’ll need to implement this
 			execve(cmd_path, p->cmds[i].argv, cleaned_env);
 			perror("execve failed");
 			exit(EXIT_FAILURE);
 		}
+
 
 		// Parent process cleanup
 		if (prev_fd != -1)

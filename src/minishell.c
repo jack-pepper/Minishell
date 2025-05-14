@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:16:39 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/14 13:29:58 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:30:53 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,7 +270,9 @@ int main(int argc, char **argv, char **env)
 		}
 		else if (type == PIPELINE_WITH_RED)
 		{
+			// printf("pipeline with redi\n");
 			// int num_cmds = count_pipes(sh.input_args) + 1;
+			sh.pipeline = ft_calloc(1, sizeof(t_pipeline)); 
 			parse_and_build_pipeline(sh.pipeline, sh.input_args);
 			run_pipeline_with_redir(sh.pipeline, env, &sh);
 		}
