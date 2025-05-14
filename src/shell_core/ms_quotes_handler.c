@@ -6,29 +6,76 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/13 22:50:05 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/14 11:53:29 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
 // Interpret $VAR prematurely to solve echo "$HO"ME showing "$HOME" instead of "ME"
-/*	premature_env()
+char	*flag_edge_var(char *line, int *i)
 {
+	char	*updated_line;
+	char	*substr;
+	char	*flagged_substr;
 	char	*start;
-	char	*end;
+	size_t	len;
+
 	// if there is a $ in the current quote
-	start = ft_strchr(line, );
-	ft_str)
-	// split line to keep the $VAR (end: closing double quotes ") 
+	start = ft_strrchr(line, CTRL_CHAR_VAR_TO_INTERPRET);
+	if (start == NULL)
+		return (line);
+	ft_replace_char(start, 'X');	
+	len = (size_t)(&line[(*i)] - start);
+	
+	printf("start: %s\n - len: %lu\n", start, len);
+	substr = ft_substr(line, (*i) - len, len);
+	printf("substr: %s\n", substr);
 
-	// interpret the env
+	flagged_substr = ft_strjoin(substr, "X");
+	free(substr);
+	if (!flagged_substr)
+		return (line);
+	printf("flagged_substr: %s\n", flagged_substr);
 
-	// rejoin
+	updated_line = malloc(ft_strlen(line) + 3);
+	if (!updated_line)
+	{
+		free(flagged_substr);
+		return (line);
+	}
+	int	j;
+	j = 0;
+	int	k;
+	k = 0;
+	int	l;
+	l = 0;
+	while (line[j])
+	{
+		if (line[j] == 'X')
+		{
+			updated_line[k++] = flagged_substr[l++];
+			while (flagged_substr[l])
+				updated_line[k++] = flagged_substr[l++];
+			j = j + ft_strlen(flagged_substr) - 1;
+			free(flagged_substr);
+		}
+		else
+			updated_line[k++] = line[j++];
+	}
+	updated_line[k] = '\0';
+	printf("updated_line: %s\n", updated_line);
+	//free(line);
+	//line = ft_strdup(updated_line);
+	//printf("final line: %s\n", line);
+	//free(updated_line);
+	return (updated_line);
 }
-*/
+
 void	handle_quote(char *line, char quote_type, int *i, int *to_collapse)
 {
+	char	*updated_line;
+
 	(*i)++;
 	(*to_collapse)++;
 	if (quote_type == '\'')
@@ -47,8 +94,15 @@ void	handle_quote(char *line, char quote_type, int *i, int *to_collapse)
 			if (line[(*i)] != '\"')
 				ft_replace_if_space(&line[(*i)++], CTRL_CHAR_SPACE_IN_QUOTE);
 		}
-//		if (line[(*i) + 1] && line[(*i) + 1] != ' ')
-//			premature_env(line, i);
+		// echo "$HO"ME case
+		if (line[(*i) + 1] && line[(*i) + 1] != ' ')
+		{
+			updated_line = flag_edge_var(line, i);
+			//free(line);
+			line = ft_strdup(updated_line); // need to pass it to solve leak
+			free(updated_line);
+			(*i) = (*i) + 2;
+		}
 	}
 	(*to_collapse)++;
 }
