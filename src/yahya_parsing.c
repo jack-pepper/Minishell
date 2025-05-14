@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:04:47 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/13 12:47:24 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/14 13:29:46 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void free_tokens(char **tokens) {
 void parse_and_build_pipeline(t_pipeline *pipeline, char **tokens) {
     int num_cmds = count_pipes(tokens) + 1;
     pipeline->cmd_count = num_cmds;
-    pipeline->cmds = malloc(sizeof(t_command) * num_cmds);
+    pipeline->cmds = ft_calloc(num_cmds, sizeof(t_command));
     if (!pipeline->cmds)
         exit(1); // handle malloc failure
 

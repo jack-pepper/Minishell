@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:15:16 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/13 12:45:36 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/14 13:20:29 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,7 +219,8 @@ typedef enum e_cmd_type {
 	BASIC,
 	REDIR_ONLY,  
 	PIPELINE,   
-	MIXED_INVALID
+	MIXED_INVALID,
+	PIPELINE_WITH_RED
 }	t_cmd_type;
 typedef struct s_redir {
 	char *file;
@@ -236,4 +237,5 @@ char **extract_tokens(char **tokens, int start, int end);
 t_commands parse_command(char **tokens);
 void free_command(t_commands *cmd);
 void free_tokens(char **tokens);
+void run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh);
 #endif
