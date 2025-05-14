@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/13 19:23:25 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/14 14:27:11 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ char	*ft_strcollapse(char *line)
 	line_len = ft_strlen(line);
 	ft_init_two_ints(0, &i, &to_collapse);
 
-	while (line[i] != '\0')
+	while (line[i])
 	{	
 		if (line[i] == '$' && (line[i + 1] == '\"' || line[i + 1] == '\''))
 			ft_replace_char(&line[i], CTRL_CHAR_TO_BE_DELETED);
@@ -161,7 +161,15 @@ char	*ft_strcollapse(char *line)
 			handle_quote(line, '\'', &i, &to_collapse);
 		else if (line[i] == '\"' && ft_count_char(&line[i], '\"') > 1)
 		{
-			handle_quote(line, '\"', &i, &to_collapse);
+			char *updated_line = handle_quote(line, '\"', &i, &to_collapse);
+			if (ft_strlen(updated_line) > ft_strlen(line))
+			{
+				free(line);
+				line = ft_strdup(updated_line);
+				//free(updated_line);
+				//printf("[str_collapse] updated_line: %s\n", updated_line);
+				printf("[str_collapse] line: %s\n", line);
+			}
 		}
 		else if (ft_isspace(line[i]) && ft_isspace(line[i + 1]))
 			to_collapse++;

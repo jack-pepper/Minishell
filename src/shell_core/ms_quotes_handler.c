@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/14 11:53:29 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/14 14:51:21 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	*flag_edge_var(char *line, int *i)
 			updated_line[k++] = flagged_substr[l++];
 			while (flagged_substr[l])
 				updated_line[k++] = flagged_substr[l++];
-			j = j + ft_strlen(flagged_substr) - 1;
+			j = j + ft_strlen(flagged_substr);
 			free(flagged_substr);
 		}
 		else
@@ -65,17 +65,14 @@ char	*flag_edge_var(char *line, int *i)
 	}
 	updated_line[k] = '\0';
 	printf("updated_line: %s\n", updated_line);
-	//free(line);
-	//line = ft_strdup(updated_line);
-	//printf("final line: %s\n", line);
-	//free(updated_line);
 	return (updated_line);
 }
 
-void	handle_quote(char *line, char quote_type, int *i, int *to_collapse)
+char	*handle_quote(char *line, char quote_type, int *i, int *to_collapse)
 {
 	char	*updated_line;
 
+	updated_line = NULL;
 	(*i)++;
 	(*to_collapse)++;
 	if (quote_type == '\'')
@@ -99,12 +96,16 @@ void	handle_quote(char *line, char quote_type, int *i, int *to_collapse)
 		{
 			updated_line = flag_edge_var(line, i);
 			//free(line);
-			line = ft_strdup(updated_line); // need to pass it to solve leak
-			free(updated_line);
+			//line = ft_strdup(updated_line); // need to pass it to solve leak
+			//free(updated_line);
 			(*i) = (*i) + 2;
 		}
 	}
 	(*to_collapse)++;
+	if (updated_line == NULL)
+		return (line);
+	else
+		return (updated_line);
 }
 
 void	pass_quotes(char *dst, char *src, size_t *i, size_t *j)
