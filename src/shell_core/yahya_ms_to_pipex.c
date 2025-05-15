@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   yahya_ms_to_pipex.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:04:42 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/15 13:46:46 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/15 17:52:21 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -569,6 +569,7 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 	int i = 0;
 	int prev_fd = -1;
 	int pipe_fd[2];
+	pid_t last_pid = -1;
 	// printf("cmd_count = %d\n", p->cmd_count);
 	// for (int c = 0; c < p->cmd_count; c++) {
 	// 	printf("Command %d:\n", c);
@@ -653,7 +654,10 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 			perror("execve failed");
 			exit(EXIT_FAILURE);
 		}
-
+		else {
+			if (i == p->cmd_count - 1)
+				last_pid = pid;
+		}
 
 		// Parent process cleanup
 		if (prev_fd != -1)
@@ -671,13 +675,20 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 	int status;
 	while (i < p->cmd_count)
 	{
-		wait(&status);
-		if (WIFEXITED(status))
-			sh->last_exit_status = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			sh->last_exit_status = 128 + WTERMSIG(status);
+		pid_t wpid = wait(&status);
+		if (wpid == -1)
+			break;
+	
+		if (wpid == last_pid) {
+			if (WIFEXITED(status))
+				sh->last_exit_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				sh->last_exit_status = 128 + WTERMSIG(status);
+		}
+	
 		i++;
 	}
+	
 }
 void run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh) {
 	int i = 0;
