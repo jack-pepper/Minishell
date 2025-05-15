@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   yahya_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:04:47 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/15 17:55:44 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/15 15:21:11 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,19 +62,27 @@ char **extract_tokens(char **tokens, int start, int end) {
 }
 t_commands parse_command(char **tokens) {
     t_commands cmd;
-    memset(&cmd, 0, sizeof(t_command)); // clean init
+    memset(&cmd, 0, sizeof(t_commands));
     cmd.argv = malloc(sizeof(char *) * (count_args(tokens) + 1));
+    if (!cmd.argv) {
+        cmd.infile = NULL;
+        cmd.outfile = NULL;
+        return cmd;
+    }
     int argc = 0;
 
     for (int i = 0; tokens[i]; i++) {
         if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0 && tokens[i + 1]) {
+            free(cmd.infile);
             cmd.infile = ft_strdup(tokens[++i]);
         }
         else if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0 && tokens[i + 1]) {
+            free(cmd.outfile);
             cmd.outfile = ft_strdup(tokens[++i]);
             cmd.append = false;
         }
         else if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0 && tokens[i + 1]) {
+            free(cmd.outfile);
             cmd.outfile = ft_strdup(tokens[++i]);
             cmd.append = true;
         }
@@ -84,9 +92,7 @@ t_commands parse_command(char **tokens) {
         else {
             cmd.argv[argc++] = ft_strdup(tokens[i]);
         }
-        
     }
-
     cmd.argv[argc] = NULL;
     return cmd;
 }
@@ -115,8 +121,7 @@ void parse_and_build_pipeline(t_pipeline *pipeline, char **tokens) {
     int num_cmds = count_pipes(tokens) + 1;
 
     pipeline->cmd_count = num_cmds;
-    // printf("num_cmds = %d\n", pipeline->cmd_count);
-    pipeline->cmds = ft_calloc(num_cmds, sizeof(t_command));
+    pipeline->cmds = ft_calloc(num_cmds, sizeof(t_commands));
     if (!pipeline->cmds)
         exit(1); // handle malloc failure
 
@@ -125,6 +130,10 @@ void parse_and_build_pipeline(t_pipeline *pipeline, char **tokens) {
 
     while (tokens[i]) {
         if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_PIPE, '\0'}) == 0) {
+            if (cmd_index >= num_cmds) {
+                fprintf(stderr, "Overflow during parsing: cmd_index=%d >= num_cmds=%d\n", cmd_index, num_cmds);
+                exit(1);
+            }
             char **cmd_tokens = extract_tokens(tokens, start, i);
             pipeline->cmds[cmd_index++] = parse_command(cmd_tokens);
             free_tokens(cmd_tokens);
@@ -132,10 +141,15 @@ void parse_and_build_pipeline(t_pipeline *pipeline, char **tokens) {
         }
         i++;
     }
-    // Last command (after last pipe)
+
+    // Final command
+    if (cmd_index >= num_cmds) {
+        fprintf(stderr, "Overflow at final command: cmd_index=%d >= num_cmds=%d\n", cmd_index, num_cmds);
+        exit(1);
+    }
     char **cmd_tokens = extract_tokens(tokens, start, i);
-    pipeline->cmds[cmd_index++] = parse_command(cmd_tokens);
-    // free_tokens(cmd_tokens);
+    pipeline->cmds[cmd_index] = parse_command(cmd_tokens);
+    free_tokens(cmd_tokens);
 }
 
 

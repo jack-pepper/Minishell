@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   yahya_ms_to_pipex.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:04:42 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/15 17:52:21 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/15 15:18:20 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -602,6 +602,11 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 		pid_t pid = fork();
 		if (pid == 0) {
 			int in_fd = -1, out_fd = -1;
+
+			// if (i >= p->cmd_count) {
+			// 	fprintf(stderr, "ERROR: i (%d) >= p->cmd_count (%d)\n", i, p->cmd_count);
+			// 	exit(1);
+			// }
 
 			if (open_redirection_fds_mixed(&p->cmds[i], &in_fd, &out_fd, sh) < 0)
 				exit(1);
