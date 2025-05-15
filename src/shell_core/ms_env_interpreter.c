@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/15 14:20:55 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/15 23:14:52 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,22 +79,25 @@ char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 			else
 			{
 				// echo "$HO"ME
-				if (ft_strrchr(split_args[i], CTRL_CHAR_VAR) != NULL)
+				if (ft_strrchr(split_args[i], CTRL_CHAR_STICKY_VAR) != NULL)
 				{
 					//split_args[i][ft_strlen(split_args[i])] = '\0';
-					char **split_subargs = ft_split(split_args[i], CTRL_CHAR_VAR);
+					char **split_subargs = ft_split(split_args[i], CTRL_CHAR_STICKY_VAR);
 					ft_show_strs(split_subargs, "[split_subargs]");
 					printf("split_subargs[0]: %s\n", split_subargs[0]);
 					set_var = ft_getenv(split_subargs[0], &sh->this_env);
 					free(split_subargs[0]);
 					if (set_var != NULL)
 					{
-						printf("FOUND VAR\n");
 						split_subargs[0] = ft_strdup(((char **)set_var->content)[1]);
 						printf("split_subargs[0]: %s\n", split_subargs[0]);
 					}
 					else
 						split_subargs[0] = ft_strdup("");
+
+					free(split_args[i]);
+					split_args[i] = join_all_subargs(split_subargs, 'n');
+					//rejoined_arg = ft_rejoin_subarg(split_subargs, rejoined_arg, i);
 				}
 				else
 				{

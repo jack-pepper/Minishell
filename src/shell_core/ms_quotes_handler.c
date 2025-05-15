@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/15 12:59:44 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/15 23:13:55 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*flag_edge_var(char *line, int *i)
 		return (NULL);
 	printf("flagged_substr: %s\n", flagged_substr);
 
-	updated_line = malloc(ft_strlen(line) + 2); // LEAKS
+	updated_line = malloc(ft_strlen(line) + 2);
 	if (!updated_line)
 	{
 		free(flagged_substr);
@@ -105,8 +105,16 @@ void	pass_quotes(char *dst, char *src, size_t *i, size_t *j)
 	{
 		(*i)++;
 		while (src[(*i)] != CTRL_CHAR_VAR)
+		{
+			printf("[%c] ", src[(*i)]);
 			dst[(*j)++] = src[(*i)++];
-		//(*i)++; // commented to keep the CTRL_CHAR_VAR
+		}
+		src[(*i)] = CTRL_CHAR_STICKY_VAR;
+		while (src[(*i)] && src[(*i)] != ' ')
+		{
+			printf("[%c] ", src[(*i)]);
+			dst[(*j)++] = src[(*i)++];
+		}
 	}
 	else if (src[(*i)] == '\"' && ft_count_char(&src[(*i)], '\"') > 1)
 	{
