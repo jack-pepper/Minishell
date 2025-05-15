@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/16 00:06:17 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/16 00:27:38 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,11 +175,16 @@ char	*ft_strcollapse(char *line)
 			}
 		}
 		else if (ft_isspace(line[i]) && line[i + 1] && ft_isspace(line[i + 1]))
+		{	
 			to_collapse++;
+			printf("[%d] collapse: %c\n", i, line[i]);
+		}
 		i++;
+		printf("%d - line_len: %zu, to_collapse: %d\n", i, ft_strlen(line), to_collapse);
 	}
 	line_len = ft_strlen(line);
-	collapsed_line = malloc(sizeof(char) * ((line_len - to_collapse + 3)));
+	//collapsed_line = malloc(sizeof(char) * ((line_len - to_collapse + 3)));
+	collapsed_line = malloc(sizeof(char) * ((line_len + 1)));
 	if (!collapsed_line)
 		return (NULL);
 	collapsed_line = copy_collapse(collapsed_line, line, line_len);
