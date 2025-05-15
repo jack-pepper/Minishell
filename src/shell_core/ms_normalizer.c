@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/15 00:34:16 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/15 10:21:59 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,7 @@ char	*ft_strcollapse(char *line)
 	{
 		line = old_line;
 		collapsed_line = copy_collapse(collapsed_line, new_line, line_len);
+		free(new_line);
 	}
 	else
 		collapsed_line = copy_collapse(collapsed_line, line, line_len);
