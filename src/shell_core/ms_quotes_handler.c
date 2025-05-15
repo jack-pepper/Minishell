@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/15 00:30:16 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/15 12:59:44 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,13 @@ void	pass_quotes(char *dst, char *src, size_t *i, size_t *j)
 		while (src[(*i)] != '\'')
 			dst[(*j)++] = src[(*i)++];
 		(*i)++;
+	}
+	else if (src[(*i)] == '\"' && ft_strrchr(src, CTRL_CHAR_VAR) != NULL)
+	{
+		(*i)++;
+		while (src[(*i)] != CTRL_CHAR_VAR)
+			dst[(*j)++] = src[(*i)++];
+		//(*i)++; // commented to keep the CTRL_CHAR_VAR
 	}
 	else if (src[(*i)] == '\"' && ft_count_char(&src[(*i)], '\"') > 1)
 	{

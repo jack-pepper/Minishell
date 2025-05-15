@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/12 13:02:12 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/15 14:20:55 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	ft_interpret_env(t_shell *sh)
 		if (ft_strchr(sh->input_args[i], CTRL_CHAR_VAR_TO_INTERPRET) != NULL)
 		{
 			split_args = ft_split(sh->input_args[i], CTRL_CHAR_VAR_TO_INTERPRET);
+			ft_show_strs(split_args, "[ENV]");
 			if (!split_args)
 				return (-1);
 			rejoined_arg = rejoin_arg(sh, rejoined_arg, split_args, i);
@@ -77,12 +78,34 @@ char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 				split_args[i] = handle_exit_status_case(sh, split_args[i]);
 			else
 			{
-				set_var = ft_getenv(split_args[i], &sh->this_env);
-				free(split_args[i]);
-				if (set_var != NULL)
-					split_args[i] = ft_strdup(((char **)set_var->content)[1]);
+				// echo "$HO"ME
+				if (ft_strrchr(split_args[i], CTRL_CHAR_VAR) != NULL)
+				{
+					//split_args[i][ft_strlen(split_args[i])] = '\0';
+					char **split_subargs = ft_split(split_args[i], CTRL_CHAR_VAR);
+					ft_show_strs(split_subargs, "[split_subargs]");
+					printf("split_subargs[0]: %s\n", split_subargs[0]);
+					set_var = ft_getenv(split_subargs[0], &sh->this_env);
+					free(split_subargs[0]);
+					if (set_var != NULL)
+					{
+						printf("FOUND VAR\n");
+						split_subargs[0] = ft_strdup(((char **)set_var->content)[1]);
+						printf("split_subargs[0]: %s\n", split_subargs[0]);
+					}
+					else
+						split_subargs[0] = ft_strdup("");
+				}
 				else
-					split_args[i] = ft_strdup("");
+				{
+					printf("[nametoval - split_args[%d]] %s\n", i, split_args[i]);
+					set_var = ft_getenv(split_args[i], &sh->this_env);
+					free(split_args[i]);
+					if (set_var != NULL)
+						split_args[i] = ft_strdup(((char **)set_var->content)[1]);
+					else
+						split_args[i] = ft_strdup("");
+				}
 			}
 			rejoined_arg = ft_rejoin_subarg(split_args, rejoined_arg, i);
 		}

@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/14 21:12:20 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/15 11:33:14 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@ int	ft_interpret_env_edge(t_shell *sh)
 			if (!split_args)
 				return (-1);
 			ft_show_strs(split_args, "[ENV_EDGE]");
-			rejoined_arg = rejoin_arg(sh, rejoined_arg, split_args, i);
+			rejoined_arg = rejoin_arg_edge(sh, rejoined_arg, split_args, i);
+			//rejoined_arg = ft_strdup("");
+			//rejoined_arg = ft_nametoval_edge(sh, rejoined_arg, split_args);
 			free_args(split_args);
 			if (!rejoined_arg)
 				return (-1);
@@ -44,15 +46,16 @@ int	ft_interpret_env_edge(t_shell *sh)
 
 char	*rejoin_arg_edge(t_shell *sh, char *rejoined_arg, char **split_args, int i)
 {
+	printf("[rejoin_arg_edge] %s\n", sh->input_args[i]);
 	if (sh->input_args[i][0] == CTRL_CHAR_VAR)
 	{
 		rejoined_arg = ft_strdup("");
-		rejoined_arg = ft_nametoval(sh, rejoined_arg, split_args);
+		rejoined_arg = ft_nametoval_edge(sh, rejoined_arg, split_args);
 	}
 	else
 	{
 		rejoined_arg = ft_strdup(split_args[0]);
-		rejoined_arg = ft_nametoval(sh, rejoined_arg, &split_args[1]);
+		rejoined_arg = ft_nametoval_edge(sh, rejoined_arg, &split_args[1]);
 	}
 	return (rejoined_arg);
 }
@@ -78,12 +81,16 @@ char	*ft_nametoval_edge(t_shell *sh, char *rejoined_arg, char **split_args)
 				split_args[i] = handle_exit_status_case(sh, split_args[i]);
 			else
 			{
-				set_var = ft_getenv(split_args[i], &sh->this_env);
-				free(split_args[i]);
-				if (set_var != NULL)
-					split_args[i] = ft_strdup(((char **)set_var->content)[1]);
-				else
-					split_args[i] = ft_strdup("");
+				if (i == 0 || i % 2 == 0)
+				{
+					set_var = ft_getenv(split_args[i], &sh->this_env);
+					//printf("%s\n", ((char **)set_var->content)[1]);
+					free(split_args[i]);
+					if (set_var != NULL)
+						split_args[i] = ft_strdup(((char **)set_var->content)[1]);
+					else
+						split_args[i] = ft_strdup("");
+				}
 			}
 			rejoined_arg = ft_rejoin_subarg(split_args, rejoined_arg, i);
 		}
@@ -118,4 +125,3 @@ char	*handle_space_in_quote_case_edge(t_shell *sh, char *rejoined_arg, char **sp
 	rejoined_arg = ft_rejoin_subarg(split_args, rejoined_arg, i);
 	return (rejoined_arg);
 }
-

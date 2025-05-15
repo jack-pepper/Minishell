@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:09:13 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/14 20:11:42 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/15 11:38:43 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	process_input(t_shell *sh)
 		return (res);
 	
 	ft_interpret_env(sh);
-	ft_interpret_env_edge(sh);	
+//	ft_interpret_env_edge(sh);	
 	cmd = is_registered_cmd(sh);
 	if (cmd != NULL)
 		sh->last_exit_status = cmd->func(sh);
