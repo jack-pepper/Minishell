@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:54:10 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/04/29 14:17:02 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/13 12:33:41 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,18 @@ typedef struct s_pipex
 
 typedef struct s_commands {
 	char **argv;
+	char *infile;
+    char *outfile;
+	char *limiter; 
+	t_bool append;
 } t_commands;
 
 
 typedef struct s_pipeline {
     char **tokens;
-	char *infile;
-    char *outfile;
-    t_bool append;
     t_commands *cmds;
     int cmd_count;
     t_pipex	*pipex;
-	char *limiter; 
 } t_pipeline;
 
 void	ft_exit_error(t_pipex *pipex, const char *msg);

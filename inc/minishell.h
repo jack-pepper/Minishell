@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/13 13:23:25 by mmalie           ###   ########.fr       */
+/*   Created: 2025/05/15 13:41:52 by mmalie            #+#    #+#             */
+/*   Updated: 2025/05/15 13:43:04 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@
 
 # define PROMPT_STYLE "ms> "
 
-# define CTRL_CHAR_REDIR_IN  24  // "<"
-# define CTRL_CHAR_REDIR_OUT 25 // ">"
-# define CTRL_CHAR_APPEND    26  // ">>"
-# define CTRL_CHAR_HEREDOC   27 // "<<"
-# define CTRL_CHAR_PIPE 28 // "|"
-# define CTRL_CHAR_SPACE_IN_QUOTE 29
+# define CTRL_CHAR_REDIR_IN  24  // "<"     ***   (char[]){CTRL_CHAR_REDIR_IN, '\0'} ***
+# define CTRL_CHAR_REDIR_OUT 25 // ">"   	 ***   (char[]){CTRL_CHAR_REDIR_OUT, '\0'} ***
+# define CTRL_CHAR_APPEND    26  // ">>"	 ***   (char[]){CTRL_CHAR_APPEND, '\0'} ***
+# define CTRL_CHAR_HEREDOC   27 // "<<"		 ***   (char[]){CTRL_CHAR_HEREDOC, '\0'} ***
+# define CTRL_CHAR_PIPE 28 // "|"		 ***   (char[]){CTRL_CHAR_PIPE, '\0'} ***
+# define CTRL_CHAR_SPACE_IN_QUOTE 29		
 # define CTRL_CHAR_VAR_TO_INTERPRET 30
 # define CTRL_CHAR_SUBARG_DELIM 31
 # define CTRL_CHAR_TO_BE_DELETED 23
@@ -247,7 +247,8 @@ typedef enum e_cmd_type {
 	BASIC,
 	REDIR_ONLY,  
 	PIPELINE,   
-	MIXED_INVALID
+	MIXED_INVALID,
+	PIPELINE_WITH_RED
 }	t_cmd_type;
 typedef struct s_redir {
 	char *file;
@@ -257,4 +258,12 @@ typedef struct s_redir {
 
 bool		is_builtin(const char *cmd);
 t_cmd_type classify_command(char **tokens);
+int count_pipes(char **tokens);
+void parse_and_build_pipeline(t_pipeline *pipeline, char **tokens);
+bool has_heredoc(t_pipeline *p);
+char **extract_tokens(char **tokens, int start, int end);
+t_commands parse_command(char **tokens);
+void free_command(t_commands *cmd);
+void free_tokens(char **tokens);
+void run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh);
 #endif

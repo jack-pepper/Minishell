@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/04 17:16:39 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/11 22:14:52 by mmalie           ###   ########.fr       */
+/*   Created: 2025/05/15 13:44:18 by mmalie            #+#    #+#             */
+/*   Updated: 2025/05/15 13:44:31 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ bool validate_all_redirections(char **tokens, t_shell *sh)
 			i++; // Skip file name
 		}
 	}
-	// printf("TUREE!");
+	// printf("TUREE!\n");
 	return true;
 }
 
@@ -178,22 +178,45 @@ void handle_basic(t_shell *sh, char **env)
 	free_pipeline(pipeline);
 }
 
-void handle_pipeline(t_shell *sh, char **env)
-{
-	if (!validate_all_redirections(sh->input_args, sh))
-		return;
-	// printf("I am here \n ");
+void handle_pipeline(t_shell *sh, char **env) {
+	// if (!validate_all_redirections(sh->input_args, sh))
+	// 	return;
+
 	t_pipeline *pipeline = build_pipeline_from_tokens(sh->input_args);
-	if (!pipeline)
-	{
+	if (!pipeline) {
+		// printf("I am here55\n");
 		sh->last_exit_status = 1;
 		return;
 	}
 
-	if (strcmp(sh->input_args[0], (char[]){CTRL_CHAR_HEREDOC, '\0'}) == 0)
+	if (has_heredoc(pipeline))
 		run_pipex_from_minshell(pipeline, env);
 	else
-		run_pipeline_with_redir(pipeline, env, sh);
+	{
+		// printf("I am here31\n");	
+		run_pipeline_basic_pipeline(pipeline, env, sh);
+	}
+
+	free_pipeline(pipeline);
+}
+void handle_pipeline_with_red(t_shell *sh, char **env) {
+	// if (!validate_all_redirections(sh->input_args, sh))
+	// 	return;
+
+	t_pipeline *pipeline = build_pipeline_from_tokens(sh->input_args);
+	if (!pipeline) {
+		// printf("I am here55\n");
+		sh->last_exit_status = 1;
+		return;
+	}
+
+	if (has_heredoc(pipeline))
+		run_pipex_from_minshell(pipeline, env);
+	else
+	{
+		// printf("I am here31\n");	
+		run_pipeline_basic_pipeline(pipeline, env, sh);
+	}
 
 	free_pipeline(pipeline);
 }
@@ -222,7 +245,7 @@ int main(int argc, char **argv, char **env)
 		// int i = 0;
 		// while(sh.input_args[i])
 		// {
-		// 	printf("input_arg[i] = %s\n", sh.input_args[i]);
+		// 	printf("input_arg[%d] = %s\n", i,sh.input_args[i]);
 		// 	i++;
 		// }
 		t_cmd_type type = classify_command(sh.input_args);
@@ -244,7 +267,15 @@ int main(int argc, char **argv, char **env)
 			// printf("handle pipeline\n");
 			handle_pipeline(&sh, env);
 		}
-		else if (type == MIXED_INVALID)
+		else if (type == PIPELINE_WITH_RED)
+		{
+			// printf("pipeline with redi\n");
+			// int num_cmds = count_pipes(sh.input_args) + 1;
+			sh.pipeline = ft_calloc(1, sizeof(t_pipeline)); 
+			parse_and_build_pipeline(sh.pipeline, sh.input_args);
+			run_pipeline_with_redir(sh.pipeline, env, &sh);
+		}
+		else
 		{
 			sh.last_exit_status = 1;
 			fprintf(stderr, "Error: Unsupported combination of pipes and redirections\n");
