@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:16:17 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/16 12:41:27 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/16 14:57:45 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char	*echo_join_input(char *joined_input, char **input_args, int *i)
 	temp_1 = ft_strjoin(joined_input, input_args[(*i)]);
 	if (!temp_1)
 		return (NULL);
-	if (joined_input && joined_input[0] != '\0')
+	if (joined_input) //&& joined_input[0] != '\0')
 		free(joined_input);
 	joined_input = ft_strdup(temp_1);
 	free(temp_1);

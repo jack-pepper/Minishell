@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/16 01:43:59 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/16 14:21:34 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 
 					free(split_args[i]);
 					split_args[i] = join_all_subargs(split_subargs, 'n');
-					//rejoined_arg = ft_rejoin_subarg(split_subargs, rejoined_arg, i);
+					free_args(split_subargs);
 				}
 				else
 				{

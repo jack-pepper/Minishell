@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/16 12:50:36 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/16 14:37:35 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ char	*ft_strcollapse(char *line)
 			if (line[i + 1] && line[i + 1] != ' ' && ft_strchr(line, CTRL_CHAR_VAR_TO_INTERPRET) != NULL)
 			{
 				temp_i = i - 1;
-				while (temp_i >= 0 && line[temp_i] != CTRL_CHAR_SPACE_IN_QUOTE && line[temp_i] != '\"' && line[temp_i] != CTRL_CHAR_VAR && line[temp_i] != ' ')
+				while (temp_i >= 0 && line[temp_i] != '\"' && line[temp_i] != CTRL_CHAR_VAR && line[temp_i] != ' ')
 				{
 					temp_i--;
 					if (line[temp_i] == CTRL_CHAR_VAR_TO_INTERPRET)
