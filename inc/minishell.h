@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/16 01:29:45 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/16 23:35:13 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,17 +122,28 @@ char		*ft_normalize(char *line);
 char		*ft_strcollapse(char *line);
 char		*copy_collapse(char *dst, char *src, size_t src_len);
 
+	// ms_flagger.c
+void	flag_dollar(char *line, int *i);
+void	flag_pipe_and_redir(char *line, int *i);
+void	flag_quote(char *line, int *i);
+void	ante_merge_quote(char *line, int *i);
+void	post_merge_quote(char *line, int *i);
+
+
 	// ms_quotes_handler.c
 char		*flag_edge_var(char *line, int *i);
-void		handle_quote(char *line, char quote_type, int *i, int *to_collapse);
+void		handle_quote(char *line, char quote_type, int *i);
 void		pass_quotes(char *dst, char *src, size_t *i, size_t *j);
 
 	// ms_env_interpreter.c
 int			ft_interpret_env(t_shell *sh);
 char		*rejoin_arg(t_shell *sh, char *rejoined_arg, char **split_args, int i);
+
+	// ms_nametoval.c
 char		*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args);
 char		*handle_space_in_quote_case(t_shell *sh, char *rejoined_arg, char **split_args, int i);
 char		*handle_exit_status_case(t_shell *sh, char *subarg);
+char		*handle_var_case(t_shell *sh, char **split_args, int i);
 
 	// ms_env_interpreter_edge.c
 int			ft_interpret_env_edge(t_shell *sh);

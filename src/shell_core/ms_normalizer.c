@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/16 14:37:35 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/16 21:01:49 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,93 +121,22 @@ char	*ft_strcollapse(char *line)
 	size_t	line_len;
 	int		to_collapse;
 	int		i;
-	int		temp_i;	
 
 	collapsed_line = NULL;
 
 	ft_init_two_ints(0, &i, &to_collapse);
 
 	while (line[i] != '\0')
-	{	
-		if (line[i] == '$' && (line[i + 1] == '\"' || line[i + 1] == '\''))
-			ft_replace_char(&line[i], CTRL_CHAR_TO_BE_DELETED);
-		else if (line[i] == '$' && line[i + 1] == '$')
-			;
-		else if (line[i] == '$' && line[i + 1] != '_' && ft_ispunct(line[i + 1]))
-			;
-		else if (line[i] == '$' && line[i + 1] != '\0' && line[i + 1] != ' ')
-			ft_replace_char(&line[i], CTRL_CHAR_VAR_TO_INTERPRET);
-		else if (line[i] == '|')
-		{
-			ft_replace_char(&line[i], CTRL_CHAR_PIPE);
-		}
-		else if (line[i] == '<' && line[i + 1] == '<')
-		{
-
-			ft_replace_char(&line[i], CTRL_CHAR_HEREDOC);
-			ft_replace_char(&line[i + 1], ' ');
-			i++; // are you sure?
-
-		}
-		else if (line[i] == '>' && line[i + 1] == '>')
-		{
-
-			ft_replace_char(&line[i], CTRL_CHAR_APPEND);
-			ft_replace_char(&line[i + 1], ' ');
-			i++; // are you sure?
-		}					
-		else if(line[i] == '<')
-			ft_replace_char(&line[i], CTRL_CHAR_REDIR_IN);
-		else if(line[i] == '>')
-			ft_replace_char(&line[i], CTRL_CHAR_REDIR_OUT);
-		else if (line[i] == '\'' && ft_count_char(&line[i], '\'') > 1)
-			handle_quote(line, '\'', &i, &to_collapse);
-		else if (line[i] == '\"' && ft_count_char(&line[i], '\"') > 1)
-		{
-			// If the quote is precedeed by any char other than nul or space: echo $HO"ME
-			if (i > 0 && line[i - 1] != ' ' && ft_strchr(line, CTRL_CHAR_VAR_TO_INTERPRET) != NULL)
-			{
-				temp_i = i;
-				while (temp_i > 0 && line[temp_i] != ' ')
-				{
-					temp_i--;
-					if (line[temp_i] == CTRL_CHAR_VAR_TO_INTERPRET)
-					{
-						ft_replace_char(&line[i], CTRL_CHAR_VAR);
-						break;
-					}
-				}
-			}
-			handle_quote(line, '\"', &i, &to_collapse);
-			// If the quote is followed by any char other than nul or space: case echo "$HO"ME
-			if (line[i + 1] && line[i + 1] != ' ' && ft_strchr(line, CTRL_CHAR_VAR_TO_INTERPRET) != NULL)
-			{
-				temp_i = i - 1;
-				while (temp_i >= 0 && line[temp_i] != '\"' && line[temp_i] != CTRL_CHAR_VAR && line[temp_i] != ' ')
-				{
-					temp_i--;
-					if (line[temp_i] == CTRL_CHAR_VAR_TO_INTERPRET)
-					{
-						ft_replace_char(&line[i], CTRL_CHAR_VAR);
-						printf("replaced\n");
-						break;
-					}
-				}
-				while (line[i] != '\0' && line[i] != ' ')
-				{
-					if (line[i] == '$'
-                                		&& line[i + 1] != '\"'
-                                		&& line[i + 1] != ' '
-                                		&& line[i + 1] != CTRL_CHAR_VAR)
-                                		ft_replace_char(&line[i++], CTRL_CHAR_VAR_TO_INTERPRET);
-					i++;
-				}
-				i--;
-			}
-		}
+	{
+		if (line[i] == '$')
+			flag_dollar(line, &i);
+		else if (line[i] == '|' || line[i] == '<' || line[i] == '>')
+			flag_pipe_and_redir(line, &i);
+		else if (line[i] == '\"' || line[i] == '\'')
+			flag_quote(line, &i);
 		else if (ft_isspace(line[i]) && line[i + 1] && ft_isspace(line[i + 1]))
-			to_collapse++;
-		i++;
+                        to_collapse++;
+                i++;
 	}
 	line_len = ft_strlen(line);
 	//collapsed_line = malloc(sizeof(char) * ((line_len - to_collapse + 3)));

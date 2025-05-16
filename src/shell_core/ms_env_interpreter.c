@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/16 14:21:34 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/16 23:37:18 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,16 @@ int	ft_interpret_env(t_shell *sh)
 	int		i;
 
 	i = 0;
+
+	ft_show_strs(&sh->input_args[i], "[interpret_env] sh->input_args ");
 	while (sh->input_args[i])
 	{
 		split_args = NULL;
 		if (ft_strchr(sh->input_args[i], CTRL_CHAR_VAR_TO_INTERPRET) != NULL)
 		{
+			printf("[interpret_env] contains CC_VAR_TO_INTERPRET!\n");
 			split_args = ft_split(sh->input_args[i], CTRL_CHAR_VAR_TO_INTERPRET);
-			ft_show_strs(split_args, "[ENV]");
+			ft_show_strs(split_args, "[interpret_env] split_args ");
 			if (!split_args)
 				return (-1);
 			rejoined_arg = rejoin_arg(sh, rejoined_arg, split_args, i);
@@ -57,6 +60,16 @@ char	*rejoin_arg(t_shell *sh, char *rejoined_arg, char **split_args, int i)
 	return (rejoined_arg);
 }
 
+char    **ft_copy_free(char **input_arg, char *rejoined_arg)
+{
+        free(*input_arg);
+        (*input_arg) = ft_strdup(rejoined_arg);
+        if (!(*input_arg))
+                return (NULL);
+        return (input_arg);
+}
+
+/*
 char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 {
 	char	*first_space;
@@ -164,3 +177,4 @@ char	*handle_exit_status_case(t_shell *sh, char *subarg)
 	free(exit_status);
 	return (subarg);
 }
+*/

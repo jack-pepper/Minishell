@@ -6,7 +6,7 @@
 #    By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/11 13:50:01 by mmalie            #+#    #+#              #
-#    Updated: 2025/05/14 20:16:55 by mmalie           ###   ########.fr        #
+#    Updated: 2025/05/16 22:45:54 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,10 +40,12 @@ LIBFT = ./libft/libft.a
 MS_SRC = ./src/minishell.c \
       ./src/shell_core/ms_initer.c \
       ./src/shell_core/ms_normalizer.c \
+      ./src/shell_core/ms_flagger.c \
       ./src/shell_core/ms_commands_manager.c \
       ./src/shell_core/ms_input_manager.c \
       ./src/shell_core/ms_quotes_handler.c \
       ./src/shell_core/ms_env_interpreter.c \
+      ./src/shell_core/ms_nametoval.c \
       ./src/shell_core/ms_env_edge_case.c \
       ./src/shell_core/ms_free.c \
       ./src/shell_core/yahya_ms_to_pipex.c \
