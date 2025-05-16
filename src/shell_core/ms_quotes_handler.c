@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/15 23:13:55 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/16 11:45:34 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,14 @@ void	handle_quote(char *line, char quote_type, int *i, int *to_collapse)
 	}
 	else if (quote_type == '\"')
 	{
-		while (line[(*i)] != '\"')
+		while (line[(*i)] != '\"' && line[(*i)] != CTRL_CHAR_VAR)
 		{
 			if (line[(*i)] == '$'
 				&& line[(*i + 1)] != '\"'
-				&& line[(*i + 1)] != ' ')
+				&& line[(*i + 1)] != ' '
+				&& line[(*i + 1)] != CTRL_CHAR_VAR)
 				ft_replace_char(&line[(*i)++], CTRL_CHAR_VAR_TO_INTERPRET);
-			if (line[(*i)] != '\"')
+			if (line[(*i)] != '\"' && line[(*i)] != CTRL_CHAR_VAR)
 				ft_replace_if_space(&line[(*i)++], CTRL_CHAR_SPACE_IN_QUOTE);
 		}
 	}
@@ -100,6 +101,25 @@ void	pass_quotes(char *dst, char *src, size_t *i, size_t *j)
 		while (src[(*i)] != '\'')
 			dst[(*j)++] = src[(*i)++];
 		(*i)++;
+	}
+	else if (src[(*i)] == CTRL_CHAR_VAR)
+	{
+		src[(*i)] = CTRL_CHAR_STICKY_VAR;
+		while (src[(*i)] != '\"' && src[(*i)] != CTRL_CHAR_VAR)
+		{
+			printf("[%c] ", src[(*i)]);
+			dst[(*j)++] = src[(*i)++];
+		}
+		if (src[(*i)] == CTRL_CHAR_VAR)
+			src[(*i)] = CTRL_CHAR_STICKY_VAR;
+		else
+			(*i)++;
+		while (src[(*i)] && src[(*i)] != ' ')
+		{
+			printf("[%c] ", src[(*i)]);
+			dst[(*j)++] = src[(*i)++];
+		}
+		
 	}
 	else if (src[(*i)] == '\"' && ft_strrchr(src, CTRL_CHAR_VAR) != NULL)
 	{

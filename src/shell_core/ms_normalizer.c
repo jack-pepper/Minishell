@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/16 00:27:38 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/16 12:50:36 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,8 @@ char	*ft_strcollapse(char *line)
 	size_t	line_len;
 	int		to_collapse;
 	int		i;
-	
+	int		temp_i;	
+
 	collapsed_line = NULL;
 
 	ft_init_two_ints(0, &i, &to_collapse);
@@ -163,24 +164,50 @@ char	*ft_strcollapse(char *line)
 			handle_quote(line, '\'', &i, &to_collapse);
 		else if (line[i] == '\"' && ft_count_char(&line[i], '\"') > 1)
 		{
+			// If the quote is precedeed by any char other than nul or space: echo $HO"ME
+			if (i > 0 && line[i - 1] != ' ' && ft_strchr(line, CTRL_CHAR_VAR_TO_INTERPRET) != NULL)
+			{
+				temp_i = i;
+				while (temp_i > 0 && line[temp_i] != ' ')
+				{
+					temp_i--;
+					if (line[temp_i] == CTRL_CHAR_VAR_TO_INTERPRET)
+					{
+						ft_replace_char(&line[i], CTRL_CHAR_VAR);
+						break;
+					}
+				}
+			}
 			handle_quote(line, '\"', &i, &to_collapse);
 			// If the quote is followed by any char other than nul or space: case echo "$HO"ME
-			if (line[i + 1] && line[i + 1] != ' ')
+			if (line[i + 1] && line[i + 1] != ' ' && ft_strchr(line, CTRL_CHAR_VAR_TO_INTERPRET) != NULL)
 			{
-				ft_replace_char(&line[i], CTRL_CHAR_VAR);	
-				printf("line: %s, line[i]: %s\n", line, &line[i]);
+				temp_i = i - 1;
+				while (temp_i >= 0 && line[temp_i] != CTRL_CHAR_SPACE_IN_QUOTE && line[temp_i] != '\"' && line[temp_i] != CTRL_CHAR_VAR && line[temp_i] != ' ')
+				{
+					temp_i--;
+					if (line[temp_i] == CTRL_CHAR_VAR_TO_INTERPRET)
+					{
+						ft_replace_char(&line[i], CTRL_CHAR_VAR);
+						printf("replaced\n");
+						break;
+					}
+				}
 				while (line[i] != '\0' && line[i] != ' ')
+				{
+					if (line[i] == '$'
+                                		&& line[i + 1] != '\"'
+                                		&& line[i + 1] != ' '
+                                		&& line[i + 1] != CTRL_CHAR_VAR)
+                                		ft_replace_char(&line[i++], CTRL_CHAR_VAR_TO_INTERPRET);
 					i++;
+				}
 				i--;
 			}
 		}
 		else if (ft_isspace(line[i]) && line[i + 1] && ft_isspace(line[i + 1]))
-		{	
 			to_collapse++;
-			printf("[%d] collapse: %c\n", i, line[i]);
-		}
 		i++;
-		printf("%d - line_len: %zu, to_collapse: %d\n", i, ft_strlen(line), to_collapse);
 	}
 	line_len = ft_strlen(line);
 	//collapsed_line = malloc(sizeof(char) * ((line_len - to_collapse + 3)));
@@ -204,6 +231,7 @@ char	*copy_collapse(char *dst, char *src, size_t src_len)
 	while (i < src_len)
 	{
 		if ((src[i] == '\'' && ft_count_char(&src[i], '\'') > 1)
+			|| (src[i] == CTRL_CHAR_VAR)
 			|| (src[i] == '\"' && ft_strrchr(&src[i], CTRL_CHAR_VAR) != NULL)
 			|| (src[i] == '\"' && ft_count_char(&src[i], '\"') > 1))
 			pass_quotes(dst, src, &i, &j);

@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/15 23:14:52 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/16 01:43:59 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,7 @@ char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 				{
 					//split_args[i][ft_strlen(split_args[i])] = '\0';
 					char **split_subargs = ft_split(split_args[i], CTRL_CHAR_STICKY_VAR);
-					ft_show_strs(split_subargs, "[split_subargs]");
-					printf("split_subargs[0]: %s\n", split_subargs[0]);
+					ft_show_strs(split_subargs, "[split_subargs]");;
 					set_var = ft_getenv(split_subargs[0], &sh->this_env);
 					free(split_subargs[0]);
 					if (set_var != NULL)

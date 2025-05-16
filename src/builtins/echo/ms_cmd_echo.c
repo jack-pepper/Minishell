@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:16:17 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/14 10:12:53 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/16 12:41:27 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	cmd_echo(t_shell *sh)
 {
 	char	*joined_input;
-	char	head[1];
 	bool	opt_n;
 	int		i;
 
@@ -37,8 +36,7 @@ int	cmd_echo(t_shell *sh)
 		free(exit_status);
 		return (0);
 	}
-	head[0] = 0;
-	joined_input = &head[0];
+	joined_input = ft_strdup("");
 	joined_input = echo_process_all_args(sh, joined_input, &i);
 	if (joined_input == NULL)
 		return (-1);

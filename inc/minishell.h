@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/15 23:13:42 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/16 01:29:45 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # define CTRL_CHAR_TO_BE_DELETED 'x' // 23
 # define CTRL_CHAR_EXTRA_DELIM ';' // 31
 # define CTRL_CHAR_VAR '*' // 21 // For edge case `echo "$HO"ME`
-# define CTRL_CHAR_STICKY_VAR 22
+# define CTRL_CHAR_STICKY_VAR '@' // 22
 
 /* Return messages (ft_ret) */
 
