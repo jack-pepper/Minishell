@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/17 23:19:19 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/18 00:17:23 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,14 @@ char	*ft_strflag(char *line)
 	{
 		if (line[i] == '$')
 			flag_dollar(line, &i);
-		else if (line[i] == '|' || line[i] == '<' || line[i] == '>')
+		else if (ft_is_in_set(line[i], "|<>")) // == '|' || line[i] == '<' || line[i] == '>')
 			flag_pipe_and_redir(line, &i);
-		else if (line[i] == '\"' || line[i] == '\'')
+		else if (ft_is_in_set(line[i], "\"\'"))  //(line[i] == '\"' || line[i] == '\'')
 			flag_quote(line, &i);
-		else if (ft_isspace(line[i]) && line[i + 1] && ft_isspace(line[i + 1]))
-			{;}
+		//else if (ft_isspace(line[i]) && line[i + 1] && ft_isspace(line[i + 1]))
+		//{
+		//	;
+		//}
                 i++;
 	}
 	line_len = ft_strlen(line);

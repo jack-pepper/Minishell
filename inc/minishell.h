@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/17 23:27:46 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/18 00:03:42 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 # define PROMPT_STYLE "ms> "
 
+/* Control chars */
 # define CC_REDIR_IN  24  // "<"
 # define CC_REDIR_OUT 25 // ">"
 # define CC_APPEND    26  // ">>"
@@ -129,14 +130,15 @@ char		*copy_collapse(char *dst, char *src, size_t src_len);
 void	flag_dollar(char *line, int *i);
 void	flag_pipe_and_redir(char *line, int *i);
 void	flag_quote(char *line, int *i);
-void	ante_merge_quote(char *line, int *i);
-void	post_merge_quote(char *line, int *i);
 
 
 	// ms_quotes_handler.c
-char		*flag_edge_var(char *line, int *i);
+//char		*flag_edge_var(char *line, int *i);
+void		ante_merge_quote(char *line, int *i);
 void		handle_quote(char *line, char quote_type, int *i);
+void		post_merge_quote(char *line, int *i);
 void		pass_quotes(char *dst, char *src, size_t *i, size_t *j);
+
 
 	// ms_env_interpreter.c
 int			ft_interpret_env(t_shell *sh);

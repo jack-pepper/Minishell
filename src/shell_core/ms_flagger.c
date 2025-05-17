@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:03:35 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/17 23:30:11 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/18 00:23:23 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,20 @@ void	flag_dollar(char *line, int *i)
 {
 	if (line[(*i) + 1])
 	{
-		if ((line[(*i) + 1] == '\"' || line[(*i) + 1] == '\''))
+		if (ft_is_in_set(line[(*i) + 1], "\"\'"))
 			ft_replace_char(&line[(*i)], CC_TO_BE_DELETED);
 		else if (line[(*i) + 1] == '$')
-			{;}
-	}
-	else if (line[(*i) + 1] != '_' && ft_ispunct(line[(*i) + 1]))
-        {
-		if (line[(*i) + 1] == '?')
+		{
+			;
+		}
+		else if (line[(*i) + 1] != '_' && ft_ispunct(line[(*i) + 1]))
+        	{
+			if (line[(*i) + 1] == '?')
+				ft_replace_char(&line[(*i)], CC_VAR_TO_INTERPRET);
+		}
+		else if (line[(*i) + 1] != '\0' && line[(*i) + 1] != ' ')
 			ft_replace_char(&line[(*i)], CC_VAR_TO_INTERPRET);
 	}
-	else if (line[(*i) + 1] != '\0' && line[(*i) + 1] != ' ')
-		ft_replace_char(&line[(*i)], CC_VAR_TO_INTERPRET);
-	//else if (line[(*i)] == '$' && (line[(*i) + 1] == '?'))
-	//	ft_replace_char(&line[(*i)], CC_VAR_TO_INTERPRET);
 	return ;
 }
 
@@ -37,70 +37,22 @@ void	flag_pipe_and_redir(char *line, int *i)
 {
 	if (line[(*i)] == '|')
 		ft_replace_char(&line[(*i)], CC_PIPE);
-        else if (line[(*i)] == '<' && line[(*i) + 1] == '<')
-        {
-	        ft_replace_char(&line[(*i)], CC_HEREDOC);
-                ft_replace_char(&line[(*i) + 1], ' ');
-                (*i)++; // are you sure?
-        }
+	else if (line[(*i)] == '<' && line[(*i) + 1] == '<')
+	{
+		ft_replace_char(&line[(*i)], CC_HEREDOC);
+		ft_replace_char(&line[(*i) + 1], ' ');
+		(*i)++;
+	}
 	else if (line[(*i)] == '>' && line[(*i) + 1] == '>')
-        {
+	{
 		ft_replace_char(&line[(*i)], CC_APPEND);
 		ft_replace_char(&line[(*i) + 1], ' ');
-		(*i)++; // are you sure?
-        }
-        else if (line[(*i)] == '<')
+		(*i)++;
+	}
+	else if (line[(*i)] == '<')
 		ft_replace_char(&line[(*i)], CC_REDIR_IN);
 	else if (line[(*i)] == '>')
 		ft_replace_char(&line[(*i)], CC_REDIR_OUT);
-}
-
-void	ante_merge_quote(char *line, int *i)
-{
-	int	temp_i;
-
-	if ((*i) > 0 && line[(*i) - 1] != ' ' && line[(*i) - 1] != '\"' && ft_strchr(line, CC_VAR_TO_INTERPRET) != NULL)
-	{
-		temp_i = (*i);
-		while (temp_i > 0 && line[temp_i] != ' ')
-		{
-			temp_i--;
-			if (line[temp_i] == CC_VAR_TO_INTERPRET)
-			{
-				ft_replace_char(&line[(*i)], CC_VAR_BOUND);
-				break;
-			}
-		}
-	}
-}
-
-void	post_merge_quote(char *line, int *i)
-{
-	int	temp_i;
-
-	if (line[(*i) + 1] && line[(*i) + 1] != ' ' && line[(*i) + 1] != '\"'
-		&& ft_strchr(line, CC_VAR_TO_INTERPRET) != NULL)
-	{
-		temp_i = (*i) - 1;
-		while (temp_i >= 0 && line[temp_i] != '\"' && line[temp_i] != CC_VAR_BOUND && line[temp_i] != ' ')
-		{
-			temp_i--;
-			if (line[temp_i] == CC_VAR_TO_INTERPRET)
-			{
-				ft_replace_char(&line[(*i)], CC_VAR_BOUND);
-				break;
-			}
-		}
-		while (line[(*i)] != '\0' && line[(*i)] != ' ')
-		{
-			if (line[(*i)] == '$' && line[(*i) + 1] != '\"'
-				&& line[(*i) + 1] != ' '
-				&& line[(*i) + 1] != CC_VAR_BOUND)
-				ft_replace_char(&line[(*i)++], CC_VAR_TO_INTERPRET);
-			(*i)++;
-		}
-		(*i)--;
-	}
 }
 
 void	flag_quote(char *line, int *i)
@@ -108,11 +60,9 @@ void	flag_quote(char *line, int *i)
 	if (line[(*i)] == '\'' && ft_count_char(&line[(*i)], '\'') > 1)
 		handle_quote(line, '\'', i);
 	else if (line[(*i)] == '\"' && ft_count_char(&line[(*i)], '\"') > 1)
-        {
+	{
 		ante_merge_quote(line, i);
-
 		handle_quote(line, '\"', i);
-                
 		post_merge_quote(line, i);
 	}
 }
