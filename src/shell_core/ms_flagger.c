@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:03:35 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/16 20:56:28 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/17 10:08:36 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	flag_dollar(char *line, int *i)
         	;
 	else if (line[(*i)] == '$' && line[(*i) + 1] != '\0' && line[(*i) + 1] != ' ')
 		ft_replace_char(&line[(*i)], CTRL_CHAR_VAR_TO_INTERPRET);
+	//else if (line[(*i)] == '$' && (line[(*i) + 1] == '?'))
+	//	ft_replace_char(&line[(*i)], CTRL_CHAR_VAR_TO_INTERPRET);
 	return ;
 }
 

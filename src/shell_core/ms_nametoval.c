@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:03:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/16 23:34:58 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/17 10:05:02 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ char    *handle_space_in_quote_case(t_shell *sh, char *rejoined_arg, char **spli
 {
         char    **subargs;
         t_list  *set_var;
+	char	*var_bound;
+	char	**subsubargs;
 
         subargs = ft_split(split_args[i], CTRL_CHAR_SUBARG_DELIM);
         ft_show_strs(subargs, "[case space in quote] subargs ");
@@ -56,14 +58,36 @@ char    *handle_space_in_quote_case(t_shell *sh, char *rejoined_arg, char **spli
                 subargs[0] = handle_exit_status_case(sh, subargs[0]);
         else
         {
-                set_var = ft_getenv(subargs[0], &sh->this_env);
-                free(subargs[0]);
-                if (set_var != NULL)
-                        subargs[0] = ft_strdup(((char **)set_var->content)[1]);
-                else
-                        subargs[0] = ft_strdup("");
-        }
-        free(split_args[i]);
+		var_bound = ft_strchr(subargs[0], CTRL_CHAR_STICKY_VAR); 
+		if (var_bound != NULL)
+		{
+			subsubargs = ft_split(subargs[0], CTRL_CHAR_STICKY_VAR);
+			if (subsubargs == NULL)
+				return (NULL);
+			ft_show_strs(subsubargs, "[nametoval] subsubargs ");
+                	set_var = ft_getenv(subsubargs[0], &sh->this_env);
+                	free(subsubargs[0]);
+                	if (set_var != NULL)
+                        	subsubargs[0] = ft_strdup(((char **)set_var->content)[1]);
+                	else
+                        	subsubargs[0] = ft_strdup("");
+			free(subargs[0]);
+			subargs[0] = join_all_subargs(subsubargs, 'n');
+			free_args(subsubargs);
+		}
+		//
+		else
+		{
+                	set_var = ft_getenv(subargs[0], &sh->this_env);
+                	free(subargs[0]);
+                	if (set_var != NULL)
+                        	subargs[0] = ft_strdup(((char **)set_var->content)[1]);
+                	else
+                        	subargs[0] = ft_strdup("");
+
+        	}
+        	free(split_args[i]);
+	}
         if (subargs[1] != NULL)
                 split_args[i] = ft_strjoin_delim(subargs[0], subargs[1], " ");
         else
@@ -82,6 +106,7 @@ char    *handle_exit_status_case(t_shell *sh, char *subarg)
         if (subarg[1] != '\0')
         {
                 temp = ft_strdup(&subarg[1]);
+		printf("temp: %s\n", temp);
                 free(subarg);
                 subarg = ft_strjoin(exit_status, temp);
                 free(temp);
