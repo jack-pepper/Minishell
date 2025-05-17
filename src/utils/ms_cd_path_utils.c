@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 11:48:09 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/09 11:29:22 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/17 23:06:17 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*handle_dotted_path(char *cwd, char *path)
 	split_path = split_abs_path(split_path, joined_path);
 	if (!split_path)
 		return (NULL);
-	flag_dotted_path(split_path, CTRL_CHAR_TO_BE_DELETED);
+	flag_dotted_path(split_path, CC_TO_BE_DELETED);
 	rejoined_path = rejoin_abs_path(rejoined_path, split_path);
 	free_args(split_path);
 	if (!rejoined_path)
@@ -101,7 +101,7 @@ char	*rejoin_abs_path(char *rejoined_path, char **split_path)
 	ft_init_two_ints(0, &i, &j);
 	while (split_path[i])
 	{
-		if (split_path[i][0] != CTRL_CHAR_TO_BE_DELETED)
+		if (split_path[i][0] != CC_TO_BE_DELETED)
 		{
 			prev_rejoined_path = rejoined_path;
 			temp = ft_strjoin("/", split_path[i]);

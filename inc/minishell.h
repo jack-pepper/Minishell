@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/16 23:35:13 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/17 23:27:46 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,18 @@
 
 # define PROMPT_STYLE "ms> "
 
-# define CTRL_CHAR_REDIR_IN  24  // "<"
-# define CTRL_CHAR_REDIR_OUT 25 // ">"
-# define CTRL_CHAR_APPEND    26  // ">>"
-# define CTRL_CHAR_HEREDOC   27 // "<<"
-# define CTRL_CHAR_PIPE 28 // "|"
-# define CTRL_CHAR_SPACE_IN_QUOTE '_' // 29
-# define CTRL_CHAR_VAR_TO_INTERPRET '#' // 30
-# define CTRL_CHAR_SUBARG_DELIM '-' // 31
-# define CTRL_CHAR_TO_BE_DELETED 'x' // 23
-# define CTRL_CHAR_EXTRA_DELIM ';' // 31
-# define CTRL_CHAR_VAR '*' // 21 // For edge case `echo "$HO"ME`
-# define CTRL_CHAR_STICKY_VAR '@' // 22
+# define CC_REDIR_IN  24  // "<"
+# define CC_REDIR_OUT 25 // ">"
+# define CC_APPEND    26  // ">>"
+# define CC_HEREDOC   27 // "<<"
+# define CC_PIPE 28 // "|"
+# define CC_SPACE_IN_QUOTE '_' // 29
+# define CC_VAR_TO_INTERPRET '#' // 30
+# define CC_SUBARG_DELIM '-' // 31
+# define CC_TO_BE_DELETED 'x' // 23
+# define CC_EXTRA_DELIM ';' // 31
+# define CC_VAR_BOUND '*' // 21 // For edge case `echo "$HO"ME`
+# define CC_STICKY_VAR '@' // 22
 
 /* Return messages (ft_ret) */
 
@@ -119,8 +119,11 @@ int			process_input(t_shell *sh);
 
 	// ms_normalizer.c
 char		*ft_normalize(char *line);
-char		*ft_strcollapse(char *line);
+char		*ft_strflag(char *line);
+char		*ft_add_spaces_around(char *str, char special);
+char		*ft_add_spaces_around_str(const char *line, const char *str);
 char		*copy_collapse(char *dst, char *src, size_t src_len);
+
 
 	// ms_flagger.c
 void	flag_dollar(char *line, int *i);

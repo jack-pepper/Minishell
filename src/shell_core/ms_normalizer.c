@@ -6,11 +6,103 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/16 21:01:49 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/17 23:19:19 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+// Returns a normalized (trimmed, flagged and spaced) line
+char	*ft_normalize(char *line)
+{
+	char	*trimmed;
+	char	*flagged;
+	char	*spaced;
+	char	*tmp;
+
+	trimmed = ft_strtrim(line, " \f\n\r\t\v");
+	if (trimmed == NULL)
+		return (NULL);
+	flagged = ft_strflag(trimmed);
+	free(trimmed);
+	if (flagged == NULL)
+		return (NULL);
+	spaced = ft_add_spaces_around(flagged, CC_PIPE);
+	free(flagged);
+	if (!spaced)
+		return (NULL);
+
+	// Add spaces around <, >, <<, >>
+	tmp = spaced;
+	spaced = ft_add_spaces_around_str(tmp, (char[]){CC_APPEND, '\0'});
+	free(tmp);
+	tmp = spaced;
+	spaced = ft_add_spaces_around_str(tmp, (char[]){CC_HEREDOC, '\0'});
+	free(tmp);
+	tmp = spaced;
+	spaced = ft_add_spaces_around_str(tmp, (char[]){CC_REDIR_IN, '\0'});
+	free(tmp);
+	tmp = spaced;
+	spaced = ft_add_spaces_around_str(tmp, (char[]){CC_REDIR_OUT, '\0'});
+	free(tmp);
+	return (spaced);
+}
+
+// If there is more than one consecutive space, they are suppressed.
+char	*ft_strflag(char *line)
+{
+	char	*collapsed_line;
+	size_t	line_len;
+	int		i;
+
+	collapsed_line = NULL;
+	i = 0;
+	while (line[i] != '\0')
+	{
+		if (line[i] == '$')
+			flag_dollar(line, &i);
+		else if (line[i] == '|' || line[i] == '<' || line[i] == '>')
+			flag_pipe_and_redir(line, &i);
+		else if (line[i] == '\"' || line[i] == '\'')
+			flag_quote(line, &i);
+		else if (ft_isspace(line[i]) && line[i + 1] && ft_isspace(line[i + 1]))
+			{;}
+                i++;
+	}
+	line_len = ft_strlen(line);
+	collapsed_line = malloc(sizeof(char) * ((line_len + 1)));
+	if (!collapsed_line)
+		return (NULL);
+	collapsed_line = copy_collapse(collapsed_line, line, line_len);
+	return (collapsed_line);
+}
+
+// Both the src and dst are expected to be non-NULL and their size is correct
+char	*copy_collapse(char *dst, char *src, size_t src_len)
+{
+	size_t	i;
+	size_t	j;
+
+	if (!src)
+		return (NULL);
+	ft_init_two_size_t(0, &i, &j);
+	printf("[copy_collapse] src: %s\n", src);
+	while (i < src_len)
+	{
+		if ((src[i] == '\'' && ft_count_char(&src[i], '\'') > 1)
+			|| (src[i] == CC_VAR_BOUND)
+			|| (src[i] == '\"' && ft_strrchr(&src[i], CC_VAR_BOUND) != NULL)
+			|| (src[i] == '\"' && ft_count_char(&src[i], '\"') > 1))
+			pass_quotes(dst, src, &i, &j);
+		else if (ft_isspace(src[i]) && ft_isspace(src[i + 1]))
+			i++;
+		else
+			dst[j++] = src[i++];
+	}
+	dst[j] = '\0';
+	return (dst);
+}
+
 
 char *ft_add_spaces_around(char *str, char special)
 {
@@ -75,100 +167,4 @@ char *ft_add_spaces_around_str(const char *line, const char *str) {
 	return result;
 }
 
-char	*ft_normalize(char *line)
-{
-	char	*trimmed_line;
-	char	*normalized_line;
-	char	*spaced;
-	char	*tmp;
 
-	trimmed_line = ft_strtrim(line, " \f\n\r\t\v");
-	if (trimmed_line == NULL)
-		return (NULL);
-	normalized_line = ft_strcollapse(trimmed_line);
-	free(trimmed_line);
-	if (normalized_line == NULL)
-		return (NULL);
-	printf("[NORMALIZER - normalized_line] %s\n", normalized_line);
-	spaced = ft_add_spaces_around(normalized_line, CTRL_CHAR_PIPE);
-	free(normalized_line);
-	if (!spaced)
-		return (NULL);
-
-	// Add spaces around <, >, <<, >>
-	tmp = spaced;
-	spaced = ft_add_spaces_around_str(tmp, (char[]){CTRL_CHAR_APPEND, '\0'});
-	free(tmp);
-	tmp = spaced;
-	spaced = ft_add_spaces_around_str(tmp, (char[]){CTRL_CHAR_HEREDOC, '\0'});
-	free(tmp);
-	tmp = spaced;
-	spaced = ft_add_spaces_around_str(tmp, (char[]){CTRL_CHAR_REDIR_IN, '\0'});
-	free(tmp);
-	tmp = spaced;
-	spaced = ft_add_spaces_around_str(tmp, (char[]){CTRL_CHAR_REDIR_OUT, '\0'});
-	free(tmp);
-
-	printf("[NORMALIZER - spaced] %s\n", spaced);
-
-	return spaced;
-}
-
-// If there is more than one consecutive space, they are suppressed.
-char	*ft_strcollapse(char *line)
-{
-	char	*collapsed_line;
-	size_t	line_len;
-	int		to_collapse;
-	int		i;
-
-	collapsed_line = NULL;
-
-	ft_init_two_ints(0, &i, &to_collapse);
-
-	while (line[i] != '\0')
-	{
-		if (line[i] == '$')
-			flag_dollar(line, &i);
-		else if (line[i] == '|' || line[i] == '<' || line[i] == '>')
-			flag_pipe_and_redir(line, &i);
-		else if (line[i] == '\"' || line[i] == '\'')
-			flag_quote(line, &i);
-		else if (ft_isspace(line[i]) && line[i + 1] && ft_isspace(line[i + 1]))
-                        to_collapse++;
-                i++;
-	}
-	line_len = ft_strlen(line);
-	//collapsed_line = malloc(sizeof(char) * ((line_len - to_collapse + 3)));
-	collapsed_line = malloc(sizeof(char) * ((line_len + 1)));
-	if (!collapsed_line)
-		return (NULL);
-	collapsed_line = copy_collapse(collapsed_line, line, line_len);
-	return (collapsed_line);
-}
-
-// Both the src and dst are expected to be non-NULL and their size is correct
-char	*copy_collapse(char *dst, char *src, size_t src_len)
-{
-	size_t	i;
-	size_t	j;
-
-	if (!src)
-		return (NULL);
-	ft_init_two_size_t(0, &i, &j);
-	printf("[copy_collapse] src: %s\n", src);
-	while (i < src_len)
-	{
-		if ((src[i] == '\'' && ft_count_char(&src[i], '\'') > 1)
-			|| (src[i] == CTRL_CHAR_VAR)
-			|| (src[i] == '\"' && ft_strrchr(&src[i], CTRL_CHAR_VAR) != NULL)
-			|| (src[i] == '\"' && ft_count_char(&src[i], '\"') > 1))
-			pass_quotes(dst, src, &i, &j);
-		else if (ft_isspace(src[i]) && ft_isspace(src[i + 1]))
-			i++;
-		else
-			dst[j++] = src[i++];
-	}
-	dst[j] = '\0';
-	return (dst);
-}

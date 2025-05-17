@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/16 23:37:18 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/17 23:01:29 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ int	ft_interpret_env(t_shell *sh)
 	while (sh->input_args[i])
 	{
 		split_args = NULL;
-		if (ft_strchr(sh->input_args[i], CTRL_CHAR_VAR_TO_INTERPRET) != NULL)
+		if (ft_strchr(sh->input_args[i], CC_VAR_TO_INTERPRET) != NULL)
 		{
 			printf("[interpret_env] contains CC_VAR_TO_INTERPRET!\n");
-			split_args = ft_split(sh->input_args[i], CTRL_CHAR_VAR_TO_INTERPRET);
+			split_args = ft_split(sh->input_args[i], CC_VAR_TO_INTERPRET);
 			ft_show_strs(split_args, "[interpret_env] split_args ");
 			if (!split_args)
 				return (-1);
@@ -47,7 +47,7 @@ int	ft_interpret_env(t_shell *sh)
 
 char	*rejoin_arg(t_shell *sh, char *rejoined_arg, char **split_args, int i)
 {
-	if (sh->input_args[i][0] == CTRL_CHAR_VAR_TO_INTERPRET)
+	if (sh->input_args[i][0] == CC_VAR_TO_INTERPRET)
 	{
 		rejoined_arg = ft_strdup("");
 		rejoined_arg = ft_nametoval(sh, rejoined_arg, split_args);
@@ -79,10 +79,10 @@ char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 	i = 0;
 	while (split_args[i])
 	{
-		first_space = ft_strpbrk(split_args[i], (char[]){CTRL_CHAR_SPACE_IN_QUOTE, '\0'});
+		first_space = ft_strpbrk(split_args[i], (char[]){CC_SPACE_IN_QUOTE, '\0'});
 		if (first_space != NULL)
 		{
-			first_space[0] = CTRL_CHAR_SUBARG_DELIM;
+			first_space[0] = CC_SUBARG_DELIM;
 			rejoined_arg = handle_space_in_quote_case(sh, rejoined_arg, split_args, i);
 		}
 		else
@@ -92,10 +92,10 @@ char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 			else
 			{
 				// echo "$HO"ME
-				if (ft_strrchr(split_args[i], CTRL_CHAR_STICKY_VAR) != NULL)
+				if (ft_strrchr(split_args[i], CC_STICKY_VAR) != NULL)
 				{
 					//split_args[i][ft_strlen(split_args[i])] = '\0';
-					char **split_subargs = ft_split(split_args[i], CTRL_CHAR_STICKY_VAR);
+					char **split_subargs = ft_split(split_args[i], CC_STICKY_VAR);
 					ft_show_strs(split_subargs, "[split_subargs]");;
 					set_var = ft_getenv(split_subargs[0], &sh->this_env);
 					free(split_subargs[0]);
@@ -134,7 +134,7 @@ char	*handle_space_in_quote_case(t_shell *sh, char *rejoined_arg, char **split_a
 	char	**subargs;
 	t_list	*set_var;
 
-	subargs = ft_split(split_args[i], CTRL_CHAR_SUBARG_DELIM);
+	subargs = ft_split(split_args[i], CC_SUBARG_DELIM);
 	if (subargs[0][0] == '?')
 		subargs[0] = handle_exit_status_case(sh, subargs[0]);
 	else

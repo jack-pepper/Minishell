@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:09:13 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/15 11:38:43 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/17 23:00:49 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	**normalize_input(char *line, t_shell *sh)
 	sh->normalized_line = NULL;
 	if (!sh->input_args)
 		return (NULL);
-	ft_replace_all_chars(sh->input_args, '|', CTRL_CHAR_PIPE);
+	ft_replace_all_chars(sh->input_args, '|', CC_PIPE);
 	return (sh->input_args);
 }
 
@@ -52,7 +52,7 @@ int	handle_dollar_cmd(t_shell *sh)
 	char	*exit_status;
 	t_list	*set_var;
 
-	if (sh->input_args[0] && (sh->input_args[0][0] == '$' || sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET))
+	if (sh->input_args[0] && (sh->input_args[0][0] == '$' || sh->input_args[0][0] == CC_VAR_TO_INTERPRET))
 	{
 		if (!sh->input_args[0][1])
 			return (ms_err("", "$", CMD_NOT_FOUND, 127));

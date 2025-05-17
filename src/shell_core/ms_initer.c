@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 11:56:45 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/15 12:11:04 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/17 22:59:46 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	normalize_env(t_list *this_env)
 			((char **)cur_node->content)[1] = ft_strdup(rejoined_var);
 			free(rejoined_var);
 		}
-		ft_unflag_delim(((char **)cur_node->content)[1], '=', CTRL_CHAR_EXTRA_DELIM);
+		ft_unflag_delim(((char **)cur_node->content)[1], '=', CC_EXTRA_DELIM);
 		cur_node = cur_node->next;
 	}
 	return (0);

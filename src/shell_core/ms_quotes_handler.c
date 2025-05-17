@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/17 10:12:20 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/17 23:01:11 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,17 @@ char	*flag_edge_var(char *line, int *i)
 	size_t	len;
 
 	// if there is a $ in the current quote
-	start = ft_strrchr(line, CTRL_CHAR_VAR_TO_INTERPRET);
+	start = ft_strrchr(line, CC_VAR_TO_INTERPRET);
 	if (start == NULL)
 		return (NULL);
-	ft_replace_char(start, CTRL_CHAR_VAR);
+	ft_replace_char(start, CC_VAR_BOUND);
 	len = (size_t)(&line[(*i)] - start);
 	
 	printf("start: %s\n - len: %lu\n", start, len);
 	substr = ft_substr(line, (*i) - len, len);
 	printf("substr: %s\n", substr);
 
-	flagged_substr = ft_strjoin(substr, (char[]) { CTRL_CHAR_VAR, '\"', '\0'});
+	flagged_substr = ft_strjoin(substr, (char[]) { CC_VAR_BOUND, '\"', '\0'});
 	free(substr);
 	if (!flagged_substr)
 		return (NULL);
@@ -52,7 +52,7 @@ char	*flag_edge_var(char *line, int *i)
 	l = 0;
 	while (line[j])
 	{
-		if (line[j] == CTRL_CHAR_VAR)
+		if (line[j] == CC_VAR_BOUND)
 		{
 			updated_line[k++] = flagged_substr[l++];
 			while (flagged_substr[l])
@@ -75,22 +75,22 @@ void	handle_quote(char *line, char quote_type, int *i)
 	{
 		while (line[(*i)] != '\'')
 		{
-			ft_replace_if_space(&line[(*i)++], CTRL_CHAR_SPACE_IN_QUOTE);
-			//if (line[(*i)] == CTRL_CHAR_VAR_TO_INTERPRET)
+			ft_replace_if_space(&line[(*i)++], CC_SPACE_IN_QUOTE);
+			//if (line[(*i)] == CC_VAR_TO_INTERPRET)
 			//	line[(*i)] = '$'; // should no be needed...
 		}
 	}
 	else if (quote_type == '\"')
 	{
-		while (line[(*i)] != '\"' && line[(*i)] != CTRL_CHAR_VAR)
+		while (line[(*i)] != '\"' && line[(*i)] != CC_VAR_BOUND)
 		{
 			if (line[(*i)] == '$'
 				&& line[(*i + 1)] != '\"'
 				&& line[(*i + 1)] != ' '
-				&& line[(*i + 1)] != CTRL_CHAR_VAR)
-				ft_replace_char(&line[(*i)++], CTRL_CHAR_VAR_TO_INTERPRET);
-			if (line[(*i)] != '\"' && line[(*i)] != CTRL_CHAR_VAR)
-				ft_replace_if_space(&line[(*i)++], CTRL_CHAR_SPACE_IN_QUOTE);
+				&& line[(*i + 1)] != CC_VAR_BOUND)
+				ft_replace_char(&line[(*i)++], CC_VAR_TO_INTERPRET);
+			if (line[(*i)] != '\"' && line[(*i)] != CC_VAR_BOUND)
+				ft_replace_if_space(&line[(*i)++], CC_SPACE_IN_QUOTE);
 		}
 	}
 }
@@ -104,16 +104,16 @@ void	pass_quotes(char *dst, char *src, size_t *i, size_t *j)
 			dst[(*j)++] = src[(*i)++];
 		(*i)++;
 	}
-	else if (src[(*i)] == CTRL_CHAR_VAR)
+	else if (src[(*i)] == CC_VAR_BOUND)
 	{
-		src[(*i)] = CTRL_CHAR_STICKY_VAR;
-		while (src[(*i)] != '\"' && src[(*i)] != CTRL_CHAR_VAR)
+		src[(*i)] = CC_STICKY_VAR;
+		while (src[(*i)] != '\"' && src[(*i)] != CC_VAR_BOUND)
 		{
 			printf("[%c] ", src[(*i)]);
 			dst[(*j)++] = src[(*i)++];
 		}
-		if (src[(*i)] == CTRL_CHAR_VAR)
-			src[(*i)] = CTRL_CHAR_STICKY_VAR;
+		if (src[(*i)] == CC_VAR_BOUND)
+			src[(*i)] = CC_STICKY_VAR;
 		else
 			(*i)++;
 		while (src[(*i)] && src[(*i)] != ' ')
@@ -123,15 +123,15 @@ void	pass_quotes(char *dst, char *src, size_t *i, size_t *j)
 		}
 		
 	}
-	else if (src[(*i)] == '\"' && ft_strrchr(src, CTRL_CHAR_VAR) != NULL)
+	else if (src[(*i)] == '\"' && ft_strrchr(src, CC_VAR_BOUND) != NULL)
 	{
 		(*i)++;
-		while (src[(*i)] != CTRL_CHAR_VAR)
+		while (src[(*i)] != CC_VAR_BOUND)
 		{
 			printf("[%c] ", src[(*i)]);
 			dst[(*j)++] = src[(*i)++];
 		}
-		src[(*i)] = CTRL_CHAR_STICKY_VAR;
+		src[(*i)] = CC_STICKY_VAR;
 		while (src[(*i)] && src[(*i)] != ' ')
 		{
 			printf("[%c] ", src[(*i)]);

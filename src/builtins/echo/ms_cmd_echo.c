@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:16:17 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/16 14:57:45 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/17 23:04:15 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ void	echo_set_n(char **input_args, bool *opt_n, int *i)
 
 char	*echo_process_all_args(t_shell *sh, char *joined_input, int *i)
 {
-	ft_replace_all_chars(sh->input_args, CTRL_CHAR_PIPE, '|');
-	ft_replace_all_chars(sh->input_args, CTRL_CHAR_SPACE_IN_QUOTE, ' ');
+	ft_replace_all_chars(sh->input_args, CC_PIPE, '|');
+	ft_replace_all_chars(sh->input_args, CC_SPACE_IN_QUOTE, ' ');
 	while (sh->input_args[(*i)])
 	{
 		if (sh->input_args[(*i)] && sh->input_args[(*i)][0] != '\0')

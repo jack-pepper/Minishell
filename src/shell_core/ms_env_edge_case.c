@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/15 11:33:14 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/17 23:02:27 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ int	ft_interpret_env_edge(t_shell *sh)
 	while (sh->input_args[i])
 	{
 		split_args = NULL;
-		if (ft_strchr(sh->input_args[i], CTRL_CHAR_VAR) != NULL)
+		if (ft_strchr(sh->input_args[i], CC_VAR_BOUND) != NULL)
 		{
-			split_args = ft_split(sh->input_args[i], CTRL_CHAR_VAR);
+			split_args = ft_split(sh->input_args[i], CC_VAR_BOUND);
 			if (!split_args)
 				return (-1);
 			ft_show_strs(split_args, "[ENV_EDGE]");
@@ -47,7 +47,7 @@ int	ft_interpret_env_edge(t_shell *sh)
 char	*rejoin_arg_edge(t_shell *sh, char *rejoined_arg, char **split_args, int i)
 {
 	printf("[rejoin_arg_edge] %s\n", sh->input_args[i]);
-	if (sh->input_args[i][0] == CTRL_CHAR_VAR)
+	if (sh->input_args[i][0] == CC_VAR_BOUND)
 	{
 		rejoined_arg = ft_strdup("");
 		rejoined_arg = ft_nametoval_edge(sh, rejoined_arg, split_args);
@@ -69,10 +69,10 @@ char	*ft_nametoval_edge(t_shell *sh, char *rejoined_arg, char **split_args)
 	i = 0;
 	while (split_args[i])
 	{
-		first_space = ft_strpbrk(split_args[i], (char[]){CTRL_CHAR_SPACE_IN_QUOTE, '\0'});
+		first_space = ft_strpbrk(split_args[i], (char[]){CC_SPACE_IN_QUOTE, '\0'});
 		if (first_space != NULL)
 		{
-			first_space[0] = CTRL_CHAR_SUBARG_DELIM;
+			first_space[0] = CC_SUBARG_DELIM;
 			rejoined_arg = handle_space_in_quote_case(sh, rejoined_arg, split_args, i);
 		}
 		else
@@ -104,7 +104,7 @@ char	*handle_space_in_quote_case_edge(t_shell *sh, char *rejoined_arg, char **sp
 	char	**subargs;
 	t_list	*set_var;
 
-	subargs = ft_split(split_args[i], CTRL_CHAR_SUBARG_DELIM);
+	subargs = ft_split(split_args[i], CC_SUBARG_DELIM);
 	if (subargs[0][0] == '?')
 		subargs[0] = handle_exit_status_case(sh, subargs[0]);
 	else

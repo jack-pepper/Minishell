@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:16:39 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/11 22:14:52 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/17 22:59:28 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void restore_quoted_spaces(char *str)
 {
 	for (int i = 0; str && str[i]; i++)
 	{
-		if (str[i] == CTRL_CHAR_SPACE_IN_QUOTE)
+		if (str[i] == CC_SPACE_IN_QUOTE)
 			str[i] = ' ';
 	}
 }
@@ -87,8 +87,8 @@ bool validate_all_redirections(char **tokens, t_shell *sh)
 {
 	for (int i = 0; tokens[i]; i++)
 	{
-		if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0 ||
-			ft_strcmp(tokens[i], (char[]){CTRL_CHAR_HEREDOC, '\0'}) == 0)
+		if (ft_strcmp(tokens[i], (char[]){CC_REDIR_IN, '\0'}) == 0 ||
+			ft_strcmp(tokens[i], (char[]){CC_HEREDOC, '\0'}) == 0)
 		{
 			restore_quoted_spaces(tokens[i+1]);
 			if (!tokens[i + 1] || access(tokens[i + 1], R_OK) != 0)
@@ -99,8 +99,8 @@ bool validate_all_redirections(char **tokens, t_shell *sh)
 			}
 			i++; // Skip file name
 		}
-		else if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0 ||
-		         ft_strcmp(tokens[i], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0)
+		else if (ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0 ||
+		         ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0)
 		{
 			if (!tokens[i + 1])
 			{
@@ -130,7 +130,7 @@ void handle_redir_only(t_shell *sh, char **env)
 	if (!validate_all_redirections(sh->input_args, sh))
 		return;
 		
-	if (strcmp(sh->input_args[0], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0)
+	if (strcmp(sh->input_args[0], (char[]){CC_REDIR_IN, '\0'}) == 0)
 	{
 		int new_file = open(sh->input_args[1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (new_file == -1)
@@ -190,7 +190,7 @@ void handle_pipeline(t_shell *sh, char **env)
 		return;
 	}
 
-	if (strcmp(sh->input_args[0], (char[]){CTRL_CHAR_HEREDOC, '\0'}) == 0)
+	if (strcmp(sh->input_args[0], (char[]){CC_HEREDOC, '\0'}) == 0)
 		run_pipex_from_minshell(pipeline, env);
 	else
 		run_pipeline_with_redir(pipeline, env, sh);
