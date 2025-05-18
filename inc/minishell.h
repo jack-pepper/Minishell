@@ -6,12 +6,14 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/18 00:03:42 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/18 10:38:11 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# define DEBUG 0
 
 # define NB_CMDS 7
 
@@ -26,13 +28,14 @@
 # define CC_APPEND    26  // ">>"
 # define CC_HEREDOC   27 // "<<"
 # define CC_PIPE 28 // "|"
-# define CC_SPACE_IN_QUOTE '_' // 29
-# define CC_VAR_TO_INTERPRET '#' // 30
-# define CC_SUBARG_DELIM '-' // 31
-# define CC_TO_BE_DELETED 'x' // 23
-# define CC_EXTRA_DELIM ';' // 31
-# define CC_VAR_BOUND '*' // 21 // For edge case `echo "$HO"ME`
-# define CC_STICKY_VAR '@' // 22
+# define CC_SPACE_IN_QUOTE 29 // '_' // 29
+# define CC_VAR_TO_INTERPRET 30 // '#' // 30
+# define CC_SUBARG_DELIM 31 // '-' // 31
+# define CC_LONE_DOLLAR 23 // '&' // 23 == $ before opening quote (should disappear)
+# define CC_EXTRA_DELIM 31 // ';' // 31
+# define CC_VAR_BOUND 21 // '*' // 21 // For edge case `echo "$HO"ME`
+# define CC_STICKY_VAR 22 // '@' // 22
+# define CC_TO_BE_DELETED 20 // 'X' // 20
 
 /* Return messages (ft_ret) */
 

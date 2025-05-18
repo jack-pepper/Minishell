@@ -6,24 +6,26 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:03:35 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/18 00:23:23 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/18 10:59:10 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+// Flag $ (outside quotes only)
 void	flag_dollar(char *line, int *i)
 {
 	if (line[(*i) + 1])
 	{
-		if (ft_is_in_set(line[(*i) + 1], "\"\'"))
-			ft_replace_char(&line[(*i)], CC_TO_BE_DELETED);
+		if (ft_is_in_set(line[(*i) + 1], "\"\'")
+			|| line[(*i)] == ' ')
+			ft_replace_char(&line[(*i)], CC_LONE_DOLLAR);
 		else if (line[(*i) + 1] == '$')
 		{
 			;
 		}
 		else if (line[(*i) + 1] != '_' && ft_ispunct(line[(*i) + 1]))
-        	{
+		{
 			if (line[(*i) + 1] == '?')
 				ft_replace_char(&line[(*i)], CC_VAR_TO_INTERPRET);
 		}

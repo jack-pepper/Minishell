@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:09:13 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/17 23:00:49 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/18 10:45:46 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,16 +82,14 @@ int	process_input(t_shell *sh)
 	t_command	*cmd;
 	int		res;
 
-
 	if (!sh->input_args || sh->input_args[0] == NULL)
 		return (-1);
-
 	res = handle_dollar_cmd(sh);
 	if (res != 1 && res != 0)
-		return (res);
-	
+		return (res);	
 	ft_interpret_env(sh);
-//	ft_interpret_env_edge(sh);	
+	if (DEBUG == 1)
+		ft_show_strs(sh->input_args, "[DEBUG AFTER ENV]");
 	cmd = is_registered_cmd(sh);
 	if (cmd != NULL)
 		sh->last_exit_status = cmd->func(sh);
