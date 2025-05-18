@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/18 11:00:06 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/18 23:33:44 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	*ft_strflag(char *line)
 
 	flagged_line = NULL;
 	i = 0;
-	while (line[i] != '\0')
+	while (line[i])
 	{
 		if (line[i] == '$')
 			flag_dollar(line, &i);

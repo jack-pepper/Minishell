@@ -6,12 +6,13 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/17 23:02:27 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/18 20:12:50 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+/*
 int	ft_interpret_env_edge(t_shell *sh)
 {
 	char	**split_args;
@@ -125,3 +126,4 @@ char	*handle_space_in_quote_case_edge(t_shell *sh, char *rejoined_arg, char **sp
 	rejoined_arg = ft_rejoin_subarg(split_args, rejoined_arg, i);
 	return (rejoined_arg);
 }
+*/
