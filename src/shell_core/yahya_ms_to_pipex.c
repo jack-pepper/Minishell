@@ -6,11 +6,12 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:04:42 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/16 13:40:11 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/16 17:00:05 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+#include <signal.h>
 
 bool has_heredoc(t_pipeline *p) {
 	for (int i = 0; i < p->cmd_count; i++) {
@@ -595,6 +596,10 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
     int pipe_fd[2];
     pid_t last_pid = -1;
 
+    // Set up signal handling for parent
+    signal(SIGINT, SIG_IGN);   // Parent ignores CTRL+C
+    signal(SIGQUIT, SIG_IGN);  // Parent ignores CTRL+
+
     while (i < p->cmd_count) {
         if (i < p->cmd_count - 1)
         {
@@ -606,6 +611,10 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
         }
         pid_t pid = fork();
         if (pid == 0) {
+            // Restore default signal handling in child
+            signal(SIGINT, SIG_DFL);
+            signal(SIGQUIT, SIG_DFL);
+
             int in_fd = -1, out_fd = -1;
 
             if (open_redirection_fds_mixed(&p->cmds[i], &in_fd, &out_fd, sh) < 0)
@@ -680,12 +689,25 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
         if (wpid == last_pid) {
             if (WIFEXITED(status))
                 sh->last_exit_status = WEXITSTATUS(status);
-            else if (WIFSIGNALED(status))
-                sh->last_exit_status = 128 + WTERMSIG(status);
+            else if (WIFSIGNALED(status)) {
+                int sig = WTERMSIG(status);
+                if (sig == SIGINT) {
+                    sh->last_exit_status = 130;
+                    printf("\n");
+                }
+                else if (sig == SIGQUIT) {
+                    sh->last_exit_status = 131;
+                    printf("Quit (core dumped)\n");
+                }
+                else
+                    sh->last_exit_status = 128 + sig;
+            }
         }
-    
         i++;
     }
+
+    // Restore signal handlers
+    init_signals(sh);
 }
 void run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh) {
 	int i = 0;

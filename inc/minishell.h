@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 13:41:52 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/15 13:43:04 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/16 16:59:50 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int			stash_var_or_invalidate(t_shell *sh);
 	// ms_initer.c
 int			init_shell(t_shell *sh, char **env);
 int			init_env(t_shell *sh, char **env);
-void		init_signals(void);
+void		init_signals(t_shell *sh);
 void		signal_handler(int signum);
 int		normalize_env(t_list *this_env);
 
@@ -266,4 +266,8 @@ t_commands parse_command(char **tokens);
 void free_command(t_commands *cmd);
 void free_tokens(char **tokens);
 void run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh);
+
+// Global shell pointer for signal handling
+extern t_shell *g_shell;
+
 #endif
