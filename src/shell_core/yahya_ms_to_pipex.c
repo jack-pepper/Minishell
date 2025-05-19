@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:04:42 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/16 17:00:05 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/19 10:52:12 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -590,6 +590,36 @@ int exec_builtin_in_child(char **argv, t_shell *sh)
     return 1; // Not a safe builtin for child process
 }
 
+static bool validate_pipeline_commands(t_pipeline *p, t_shell *sh) {
+    for (int i = 0; i < p->cmd_count; i++) {
+        char **argv = p->cmds[i].argv;
+        if (!argv || !argv[0])
+            continue;
+
+        // Check for builtin commands that require valid arguments
+        if (strcmp(argv[0], "cd") == 0) {
+            if (!argv[1]) {
+                fprintf(stderr, "cd: missing argument\n");
+                sh->last_exit_status = 1;
+                return false;
+            }
+            struct stat st;
+            if (stat(argv[1], &st) != 0) {
+                fprintf(stderr, "cd: %s: No such file or directory\n", argv[1]);
+                sh->last_exit_status = 1;
+                return false;
+            }
+            if (!S_ISDIR(st.st_mode)) {
+                fprintf(stderr, "cd: %s: Not a directory\n", argv[1]);
+                sh->last_exit_status = 1;
+                return false;
+            }
+        }
+        // Add other builtin validations here if needed
+    }
+    return true;
+}
+
 void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
     int i = 0;
     int prev_fd = -1;
@@ -597,8 +627,8 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
     pid_t last_pid = -1;
 
     // Set up signal handling for parent
-    signal(SIGINT, SIG_IGN);   // Parent ignores CTRL+C
-    signal(SIGQUIT, SIG_IGN);  // Parent ignores CTRL+
+    // signal(SIGINT, SIG_IGN);   // Parent ignores CTRL+C
+    // signal(SIGQUIT, SIG_IGN);  // Parent ignores CTRL+
 
     while (i < p->cmd_count) {
         if (i < p->cmd_count - 1)
@@ -612,8 +642,8 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
         pid_t pid = fork();
         if (pid == 0) {
             // Restore default signal handling in child
-            signal(SIGINT, SIG_DFL);
-            signal(SIGQUIT, SIG_DFL);
+            // signal(SIGINT, SIG_DFL);
+            // signal(SIGQUIT, SIG_DFL);
 
             int in_fd = -1, out_fd = -1;
 
@@ -710,70 +740,81 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
     init_signals(sh);
 }
 void run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh) {
-	int i = 0;
-	int prev_fd = -1;
-	int pipe_fd[2];
-	// printf("cmd_count = %d\n", p->cmd_count);
-	// for (int c = 0; c < p->cmd_count; c++) {
-	// 	printf("Command %d:\n", c);
-	// 	for (int k = 0; p->cmds[c].argv && p->cmds[c].argv[k]; k++) {
-	// 		printf("  argv[%d] = %s\n", k, p->cmds[c].argv[k]);
-	// 	}
-	// }
-	
-	while (i < p->cmd_count) {
-		if (i < p->cmd_count - 1) {
-			if (pipe(pipe_fd) < 0) {
-				perror("pipe");
-				exit(EXIT_FAILURE);
-			}
-		}
+    // Validate commands before executing
+    if (!validate_pipeline_commands(p, sh))
+        return;
 
-		pid_t pid = fork();
-		if (pid == 0) {  // Child
+    int i = 0;
+    int prev_fd = -1;
+    int pipe_fd[2];
+    
+    while (i < p->cmd_count) {
+        if (i < p->cmd_count - 1) {
+            if (pipe(pipe_fd) < 0) {
+                perror("pipe");
+                exit(EXIT_FAILURE);
+            }
+        }
 
-			// Input
-			if (prev_fd != -1) {
-				dup2(prev_fd, STDIN_FILENO);
-				close(prev_fd);
-			}
+        pid_t pid = fork();
+        if (pid == 0) {  // Child
+            // Handle cat without arguments
+            if (strcmp(p->cmds[i].argv[0], "cat") == 0 && !p->cmds[i].argv[1]) {
+                signal(SIGPIPE, SIG_IGN);
+                // Redirect both stdout and stderr to /dev/null if not the last command
+                if (i < p->cmd_count - 1) {
+                    int dev_null = open("/dev/null", O_WRONLY);
+                    if (dev_null != -1) {
+                        dup2(dev_null, STDOUT_FILENO);
+                        dup2(dev_null, STDERR_FILENO);
+                        close(dev_null);
+                    }
+                }
+            }
 
-			// Output (only if not the last command)
-			if (i < p->cmd_count - 1) {
-				close(pipe_fd[0]); // close unused read
-				dup2(pipe_fd[1], STDOUT_FILENO);
-				close(pipe_fd[1]);
-			}
+            // Input
+            if (prev_fd != -1) {
+                dup2(prev_fd, STDIN_FILENO);
+                close(prev_fd);
+            }
 
-			// Exec
-			char *cmd_path = get_cmd_path(p->cmds[i].argv[0], env);
-			if (!cmd_path)
-				exit(127);
+            // Output (only if not the last command)
+            if (i < p->cmd_count - 1) {
+                close(pipe_fd[0]); // close unused read
+                dup2(pipe_fd[1], STDOUT_FILENO);
+                close(pipe_fd[1]);
+            }
 
-			// if (is_builtin(p->cmds[i].argv[0]))
-			// 	exit(exec_builtin_in_child(p->cmds[i].argv, sh));
+            // Exec
+            if (is_builtin(p->cmds[i].argv[0])) {
+                exit(exec_builtin_in_child(p->cmds[i].argv, sh));
+            }
 
-			execve(cmd_path, p->cmds[i].argv, env);
-			perror("execve failed");
-			exit(EXIT_FAILURE);
-		}
+            char *cmd_path = get_cmd_path(p->cmds[i].argv[0], env);
+            if (!cmd_path)
+                exit(127);
 
-		// Parent
-		if (prev_fd != -1)
-			close(prev_fd);
-		if (i < p->cmd_count - 1) {
-			close(pipe_fd[1]); // close unused write
-			prev_fd = pipe_fd[0]; // save read end for next command
-		}
-		i++;
-	}
+            execve(cmd_path, p->cmds[i].argv, env);
+            perror("execve failed");
+            exit(EXIT_FAILURE);
+        }
 
-	// Wait for all
-	int status;
-	while (wait(&status) > 0) {
-		if (WIFEXITED(status))
-			sh->last_exit_status = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			sh->last_exit_status = 128 + WTERMSIG(status);
-	}
+        // Parent
+        if (prev_fd != -1)
+            close(prev_fd);
+        if (i < p->cmd_count - 1) {
+            close(pipe_fd[1]); // close unused write
+            prev_fd = pipe_fd[0]; // save read end for next command
+        }
+        i++;
+    }
+
+    // Wait for all
+    int status;
+    while (wait(&status) > 0) {
+        if (WIFEXITED(status))
+            sh->last_exit_status = WEXITSTATUS(status);
+        else if (WIFSIGNALED(status))
+            sh->last_exit_status = 128 + WTERMSIG(status);
+    }
 }

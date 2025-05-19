@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 13:44:18 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/16 16:56:01 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/19 11:26:07 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,16 @@ int validate_and_exec_command(char **argv, char **envp, t_shell *sh)
 			{
 				fprintf(stderr, "%s: Is a directory\n", argv[0]);
 				sh->last_exit_status = 126;
-				return 1;
+				return 1;  // Return immediately after detecting directory
 			}
 		
-			// check execute permissions
+			// check execute permissions only if it's not a directory
 			if (access(argv[0], X_OK) != 0)
 			{
-				perror(argv[0]); // ermission denied
+				perror(argv[0]); // permission denied
 				sh->last_exit_status = 126;
 				return 1;
 			}
-
 		}
 	}
 	else
