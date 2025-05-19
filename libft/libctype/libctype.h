@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/04 11:25:28 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/08 21:16:53 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/19 22:21:53 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ int		ft_isupper(int c);
 int		ft_islower(int c);
 int		ft_toupper(int c);
 int		ft_tolower(int c);
-int		ft_isalnum_x_str(char *str, char *set);
 int		ft_is_in_set(char c, char *set);
+int		ft_isalnum_x_chr(char *c, char *set);
+int		ft_isalnum_x_str(char *str, char *set);
 
 #endif

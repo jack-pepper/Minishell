@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:09:13 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/19 09:12:48 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/19 22:00:52 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,16 +86,16 @@ int	process_input(t_shell *sh)
 		return (-1);
 	res = handle_dollar_cmd(sh);
 	if (res != 1 && res != 0)
-		return (res);	
+		return (res);
 	ft_interpret_env(sh);
 	ft_replace_all_chars(sh->input_args, CC_TRAILING_DOLLAR, '$');
 	if (DEBUG == 1)
-		ft_show_strs(sh->input_args, "[DEBUG AFTER ENV]");
+		ft_show_strs(sh->input_args, "[PROCESS_INPUT (after env)]");
 	cmd = is_registered_cmd(sh);
 	if (cmd != NULL)
 		sh->last_exit_status = cmd->func(sh);
 	else
-	{	
+	{
 		if (sh->input_args[0][0] != '\0')
 			sh->last_exit_status = stash_var_or_invalidate(sh);
 	}
@@ -106,7 +106,7 @@ int	stash_var_or_invalidate(t_shell *sh)
 {
 	int		res;
 
-	res = 0;	
+	res = 0;
 	res = are_args_stashable(sh->input_args);
 	if (res != 0)
 		return (res);

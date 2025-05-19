@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/18 00:05:13 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/19 23:18:54 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,22 @@ t_list	*ft_getenv(char *var_name, t_list **this_env)
 		cur_node = cur_node->next;
 	}
 	return (NULL);
+}
+
+char	*ft_setenv(t_list *set_var, char *arg)
+{
+	if (arg != NULL)
+	{
+		free(arg);
+		if (set_var != NULL)
+			arg = ft_strdup(((char **)set_var->content)[1]);
+		else
+			arg = ft_strdup("");
+		return (arg);
+	}
+	else
+		arg = ft_strdup("");
+	return (arg);
 }
 
 int	is_valid_env_name(char *var_name)

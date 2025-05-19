@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/19 11:01:06 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/19 23:25:35 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,16 +163,10 @@ char		*rejoin_arg(t_shell *sh, char *rejoined_arg, char **split_args, int i);
 
 	// ms_nametoval.c
 char		*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args);
-char		*handle_trailing_dollar_case(t_shell *sh, char *rejoined_arg, char **split_args, int i);
-char		*handle_space_in_quote_case(t_shell *sh, char *rejoined_arg, char **split_args, int i);
+char		*split_rejoin(t_shell *sh, char *rejoined_arg, char *arg, char splitter);
+char		*to_delim(char splitter);
 char		*handle_exit_status_case(t_shell *sh, char *rejoined_arg, char *subarg);
 char		*handle_var_case(t_shell *sh, char *rejoined_arg, char *arg);
-
-	// ms_env_interpreter_edge.c
-int			ft_interpret_env_edge(t_shell *sh);
-char		*rejoin_arg_edge(t_shell *sh, char *rejoined_arg, char **split_args, int i);
-char		*ft_nametoval_edge(t_shell *sh, char *rejoined_arg, char **split_args);
-char		*handle_space_in_quote_case_edge(t_shell *sh, char *rejoined_arg, char **split_args, int i);
 
 	// ms_commands_manager.c
 int			init_cmds(t_shell *sh);
@@ -241,6 +235,7 @@ int		ms_err(char *cmd_name, char *arg, char *err_msg, int return_val);
 
 	// ms_env_utils.c
 t_list		*ft_getenv(char *var_name, t_list **this_env);
+char		*ft_setenv(t_list *set_var, char *arg);
 int			is_valid_env_name(char *var_name);
 int			add_new_env_var(t_shell *sh, char **split_str);
 int			ft_update_env_value(t_list *set_var, char **split_str);

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/19 09:54:29 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/19 23:04:00 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ void	handle_quote(char *line, char quote_type, int *i)
 	{
 		while (line[(*i)] != '\"' && line[(*i)] != CC_VAR_BOUND)
 		{
-			if (line[(*i)] == '$' && (ft_is_in_set(line[(*i) + 1], "_?") || ft_isalpha(line[(*i) + 1])))
-				ft_replace_char(&line[(*i)], CC_VAR_TO_INTERPRET);	
-			else if (line[(*i)] == '$' && (ft_is_in_set(line[(*i) - 1], "_?") || ft_isalnum(line[(*i) - 1 ])))
+			if (line[(*i)] == '$' && ft_isalnum_x_chr(&line[(*i) + 1], "_?"))
+				ft_replace_char(&line[(*i)], CC_VAR_TO_INTERPRET);
+			else if (line[(*i)] == '$' && ft_isalnum_x_chr(&line[(*i) - 1], "_?"))
 				ft_replace_char(&line[(*i)], CC_TRAILING_DOLLAR);
 			else if (line[(*i)] == '$' && (ft_is_in_set(line[(*i) + 1], "\"\'")))
 				ft_replace_char(&line[(*i)], CC_TRAILING_DOLLAR);
@@ -77,8 +77,6 @@ void	post_merge_quote(char *line, int *i)
 		}
 		while (line[(*i)] != '\0' && line[(*i)] != ' ')
 		{
-			//if (line[(*i)] == '$' && !line[(*i + 1)])
-			//	ft_replace_char(&line[(*i)], '$');
 			if (line[(*i)] == '$' && line[(*i) + 1] != '\0'
 				&& line[(*i) + 1] != '\"'
 				&& line[(*i) + 1] != ' '
