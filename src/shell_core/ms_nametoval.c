@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:03:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/18 23:29:27 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/19 10:58:38 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,20 +64,24 @@ char	*split_rejoin(t_shell *sh, char *rejoined_arg, char *arg, char splitter)
 	char	*temp;
 
 	trailing_splitter = 0;
-	printf("[DEBUG split_rejoin] %s - splitter: %c\n", arg, splitter);
 	if (arg[ft_strlen(arg) - 1] == splitter)
 		trailing_splitter = 1;
-	printf("[arg last char] : %c\n", arg[ft_strlen(arg) - 1]);
+	if (DEBUG == 1)
+		printf("[arg last char] : %c\n", arg[ft_strlen(arg) - 1]);
 	// split
 	subargs = ft_split(arg, splitter);
 	if (DEBUG == 1)
 		ft_show_strs(subargs, "subargs ");
-	
-	// look for var in env and update
+
 	set_var = ft_getenv(subargs[0], &sh->this_env);
-	free(subargs[0]);
-	if (set_var != NULL)
-		subargs[0] = ft_strdup(((char **)set_var->content)[1]);
+	if (subargs[0] != NULL)
+	{
+		free(subargs[0]);
+		if (set_var != NULL)
+			subargs[0] = ft_strdup(((char **)set_var->content)[1]);
+		else
+			subargs[0] = ft_strdup("");
+	}
 	else
 		subargs[0] = ft_strdup("");
 	// rejoin all subargs
@@ -112,37 +116,57 @@ char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 	i = 0;
 	while (split_args[i])
 	{
-		printf("[DEBUG start nametoval] %s\n", split_args[i]);
+		if (DEBUG == 1)
+			printf("[DEBUG start nametoval] %s\n", split_args[i]);
 		if (split_args[i][0] != '?')
 		{
 			j = 0;
 			while ((split_args[i][j] && (split_args[i][j] == '_' || ft_isalnum(split_args[i][j]))))
 				j++;
 			end_name = split_args[i][j];
+			if (DEBUG == 1)
+				printf("[DEBUG nametoval] end_name: %c\n", end_name);
 			if (end_name != '\0') // can it be another char or control char?
 			{
-				if (ft_ispunct(end_name))
+				if (ft_ispunct(end_name) && !ft_is_in_set(end_name, "$_/.")) // which one???
+				{	
+					if (DEBUG == 1)
+						printf("[CASE PUNCT]\n");
 					rejoined_arg = split_rejoin(sh, rejoined_arg, split_args[i], end_name);
-				else if (end_name == CC_TRAILING_DOLLAR) // $ABC123_$ : rejoin subargs with "$"
+				}
+				else if (end_name == CC_TRAILING_DOLLAR || end_name == '$') // $ABC123_$ : rejoin subargs with "$"
+				{
+					if (DEBUG == 1)
+						printf("[CASE TRAILING_DOLLAR\n]");
+					split_args[i][j] = CC_TRAILING_DOLLAR;
 					rejoined_arg = split_rejoin(sh, rejoined_arg, split_args[i], CC_TRAILING_DOLLAR);
+				}
 				else if (end_name == CC_SPACE_IN_QUOTE) // "$ABC YYY" : rejoin subargs with " "
 				{
+					if (DEBUG == 1)
+						printf("[CASE SPACE IN QUOTE\n]");
 					split_args[i][j] = CC_SUBARG_DELIM;
 					rejoined_arg = split_rejoin(sh, rejoined_arg, split_args[i], CC_SUBARG_DELIM);
 				}
 				else if (end_name == CC_VAR_BOUND) // $USER"ABC"ABC or ABC"$USER"ABC
+				{	
+					if (DEBUG == 1)
+						printf("[CASE VAR BOUND\n]");
 					rejoined_arg = split_rejoin(sh, rejoined_arg, split_args[i], CC_VAR_BOUND);
+				}
 			}
 			else // var ready to be tested
 			{
+				if (DEBUG == 1)
+					printf("[CASE VAR READY\n]");
 				rejoined_arg = split_rejoin(sh, rejoined_arg, split_args[i], '\0');
-				//rejoined_arg = handle_var_case(sh, rejoined_arg, split_args[i]);
-				//rejoined_arg = ft_rejoin_subarg(rejoined_arg, split_args[i]);
 			}
 		}
 		else // $?
-		{ 
-			split_args[i] = handle_exit_status_case(sh, split_args[i]);
+		{
+			if (DEBUG == 1)
+				printf("[CASE EXIT STATUS\n]");
+			rejoined_arg = handle_exit_status_case(sh, rejoined_arg, split_args[i]);
 			//rejoined_arg = ft_rejoin_subarg(rejoined_arg, split_args[i]);
 		}
 		i++;
@@ -151,8 +175,9 @@ char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 }
 
 
-char	*handle_exit_status_case(t_shell *sh, char *subarg)
+char	*handle_exit_status_case(t_shell *sh, char *rejoined_arg, char *subarg)
 {
+	char	*arg;
 	char	*exit_status;
 	char	*temp;
 
@@ -160,18 +185,25 @@ char	*handle_exit_status_case(t_shell *sh, char *subarg)
 	if (subarg[1] != '\0')
 	{
 		temp = ft_strdup(&subarg[1]);
-		//printf("temp: %s\n", temp);
-		free(subarg);
-		subarg = ft_strjoin(exit_status, temp);
+		if (!temp)
+		{
+			free(exit_status);
+			return (NULL);
+		}
+		arg = ft_strjoin(exit_status, temp);
 		free(temp);
 	}
 	else
 	{
-		free(subarg);
-		subarg = ft_strdup(exit_status);
+		//free(subarg);
+		arg = ft_strdup(exit_status);
 	}
 	free(exit_status);
-	return (subarg);
+	if (!arg)
+		return (NULL);
+	rejoined_arg = ft_rejoin_subarg(arg, rejoined_arg);
+	free(arg);
+	return (rejoined_arg);
 }
 
 char	*handle_var_case(t_shell *sh, char *rejoined_arg, char *arg)

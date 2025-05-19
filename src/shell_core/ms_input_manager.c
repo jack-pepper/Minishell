@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:09:13 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/18 10:45:46 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/19 09:12:48 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ int	process_input(t_shell *sh)
 	if (res != 1 && res != 0)
 		return (res);	
 	ft_interpret_env(sh);
+	ft_replace_all_chars(sh->input_args, CC_TRAILING_DOLLAR, '$');
 	if (DEBUG == 1)
 		ft_show_strs(sh->input_args, "[DEBUG AFTER ENV]");
 	cmd = is_registered_cmd(sh);

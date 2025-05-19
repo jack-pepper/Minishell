@@ -6,14 +6,14 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/18 23:20:33 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/19 11:01:06 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define DEBUG 1
+# define DEBUG 0
 
 # define NB_CMDS 7
 
@@ -32,14 +32,13 @@
 
 # define CC_SPACE_IN_QUOTE 29 // '_' // 29
 # define CC_VAR_TO_INTERPRET 30 // '#' // 30
-# define CC_SUBARG_DELIM '-' // 31
+# define CC_SUBARG_DELIM 31 // '-' // 31
 # define CC_LONE_DOLLAR 23 // '&' // 23 == $ before opening quote (should disappear)
 # define CC_EXTRA_DELIM 31 // ';' // 31
 # define CC_VAR_BOUND 21 // '*' // 21 // For edge case `echo "$HO"ME`
 # define CC_STICKY_VAR 22 // '@' // 22
 # define CC_TO_BE_DELETED 20 // 'X' // 20
 # define CC_TRAILING_DOLLAR 19 // '%' // 19
-
 
 /*
 # define CC_SPACE_IN_QUOTE '_' // 29
@@ -51,8 +50,8 @@
 # define CC_STICKY_VAR '@' // 22
 # define CC_TO_BE_DELETED 'X' // 20
 # define CC_TRAILING_DOLLAR '%' // 19
-*/
 
+*/
 /* Return messages (ft_ret) */
 
 # define SHELL_NAME "minishell: " // could be used to improve error msg
@@ -166,7 +165,7 @@ char		*rejoin_arg(t_shell *sh, char *rejoined_arg, char **split_args, int i);
 char		*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args);
 char		*handle_trailing_dollar_case(t_shell *sh, char *rejoined_arg, char **split_args, int i);
 char		*handle_space_in_quote_case(t_shell *sh, char *rejoined_arg, char **split_args, int i);
-char		*handle_exit_status_case(t_shell *sh, char *subarg);
+char		*handle_exit_status_case(t_shell *sh, char *rejoined_arg, char *subarg);
 char		*handle_var_case(t_shell *sh, char *rejoined_arg, char *arg);
 
 	// ms_env_interpreter_edge.c

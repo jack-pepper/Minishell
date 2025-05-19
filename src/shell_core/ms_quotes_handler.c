@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/19 00:44:30 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/19 09:54:29 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ void	handle_quote(char *line, char quote_type, int *i)
 			if (line[(*i)] == '$' && (ft_is_in_set(line[(*i) + 1], "_?") || ft_isalpha(line[(*i) + 1])))
 				ft_replace_char(&line[(*i)], CC_VAR_TO_INTERPRET);	
 			else if (line[(*i)] == '$' && (ft_is_in_set(line[(*i) - 1], "_?") || ft_isalnum(line[(*i) - 1 ])))
+				ft_replace_char(&line[(*i)], CC_TRAILING_DOLLAR);
+			else if (line[(*i)] == '$' && (ft_is_in_set(line[(*i) + 1], "\"\'")))
 				ft_replace_char(&line[(*i)], CC_TRAILING_DOLLAR);
 			else if (line[(*i)] != '\"' && line[(*i)] != CC_VAR_BOUND)
 				ft_replace_if_space(&line[(*i)], CC_SPACE_IN_QUOTE);
@@ -67,7 +69,7 @@ void	post_merge_quote(char *line, int *i)
 			&& line[temp_i] != CC_VAR_BOUND && line[temp_i] != ' ')
 		{
 			temp_i--;
-			if (line[temp_i] == CC_VAR_TO_INTERPRET)
+			if (line[temp_i] == CC_VAR_TO_INTERPRET && line[(*i) + 1] != '$')
 			{
 				ft_replace_char(&line[(*i)], CC_VAR_BOUND);
 				break ;
@@ -80,7 +82,8 @@ void	post_merge_quote(char *line, int *i)
 			if (line[(*i)] == '$' && line[(*i) + 1] != '\0'
 				&& line[(*i) + 1] != '\"'
 				&& line[(*i) + 1] != ' '
-				&& line[(*i) + 1] != CC_VAR_BOUND)
+				&& line[(*i) + 1] != CC_VAR_BOUND
+				&& line[(*i) + 1] != '$')
 				ft_replace_char(&line[(*i)], CC_VAR_TO_INTERPRET);
 			(*i)++;
 		}
@@ -99,13 +102,10 @@ void	pass_quotes(char *dst, char *src, size_t *i, size_t *j)
 	}
 	else if (src[(*i)] == CC_VAR_BOUND)
 	{
-		//src[(*i)] = CC_STICKY_VAR;
 		while (src[(*i)] != '\"' && src[(*i)] != CC_VAR_BOUND)
 			dst[(*j)++] = src[(*i)++];
-		//if (src[(*i)] == CC_VAR_BOUND)
-		//	src[(*i)] = CC_STICKY_VAR;
-		//else
-		//	(*i)++;
+		if (src[(*i)] == CC_VAR_BOUND)
+			dst[(*j)] = src[(*i)];
 		(*i)++;
 		while (src[(*i)] && src[(*i)] != ' ')
 			dst[(*j)++] = src[(*i)++];
@@ -115,7 +115,6 @@ void	pass_quotes(char *dst, char *src, size_t *i, size_t *j)
 		(*i)++;
 		while (src[(*i)] != CC_VAR_BOUND)
 			dst[(*j)++] = src[(*i)++];
-		//src[(*i)] = CC_STICKY_VAR;
 		while (src[(*i)] && src[(*i)] != ' ')
 			dst[(*j)++] = src[(*i)++];
 	}
