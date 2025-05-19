@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:04:42 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/19 10:52:12 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/19 12:04:33 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -743,6 +743,19 @@ void run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh) {
     // Validate commands before executing
     if (!validate_pipeline_commands(p, sh))
         return;
+
+    // Check if all commands exist before starting the pipeline
+    for (int i = 0; i < p->cmd_count; i++) {
+        if (!is_builtin(p->cmds[i].argv[0])) {
+            char *cmd_path = get_cmd_path(p->cmds[i].argv[0], env);
+            if (!cmd_path) {
+                fprintf(stderr, "%s: command not found\n", p->cmds[i].argv[0]);
+                sh->last_exit_status = 127;
+                return;
+            }
+            free(cmd_path);
+        }
+    }
 
     int i = 0;
     int prev_fd = -1;
