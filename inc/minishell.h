@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 13:41:52 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/16 16:59:50 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/19 14:31:58 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,7 +248,8 @@ typedef enum e_cmd_type {
 	REDIR_ONLY,  
 	PIPELINE,   
 	MIXED_INVALID,
-	PIPELINE_WITH_RED
+	PIPELINE_WITH_RED,
+	HERE_DOC
 }	t_cmd_type;
 typedef struct s_redir {
 	char *file;

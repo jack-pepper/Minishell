@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 13:44:18 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/19 11:26:07 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/19 15:23:40 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,7 @@
 int validate_and_exec_command(char **argv, char **envp, t_shell *sh)
 {
 	if (!argv || !argv[0] || argv[0][0] == '\0')
-	{
 		return 0; // Nothing to run (example: $EMPTY)
-	}
 	
 	if (ft_strchr(argv[0], '/'))
 	{
@@ -168,7 +166,7 @@ void handle_basic(t_shell *sh, char **env)
 	{
 		// printf("I am here2939\n");
 		sh->last_exit_status = 127;
-		fprintf(stderr, "%s: command not found\n", sh->input_args[0]);
+		ft_printf("%s: command not found\n", sh->input_args[0]);
 		free_pipeline(pipeline);
 		return;
 	}
@@ -178,21 +176,28 @@ void handle_basic(t_shell *sh, char **env)
 }
 
 void handle_pipeline(t_shell *sh, char **env) {
-	// if (!validate_all_redirections(sh->input_args, sh))
-	// 	return;
-
 	t_pipeline *pipeline = build_pipeline_from_tokens(sh->input_args);
 	if (!pipeline) {
-		// printf("I am here55\n");
 		sh->last_exit_status = 1;
 		return;
 	}
 
 	if (has_heredoc(pipeline))
-		run_pipex_from_minshell(pipeline, env);
-	else
 	{
-		// printf("I am here31\n");	
+		// For heredoc, we need at least one command
+		if (pipeline->cmd_count < 1) {
+			ft_printf("Error: heredoc requires at least one command\n");
+			sh->last_exit_status = 1;
+			free_pipeline(pipeline);
+			return;
+		}
+		int status = run_pipex_from_minshell(pipeline, env);
+		if (status != 0) {
+			sh->last_exit_status = status;
+			free_pipeline(pipeline);
+			return;
+		}
+	} else {
 		run_pipeline_basic_pipeline(pipeline, env, sh);
 	}
 
@@ -204,7 +209,6 @@ void handle_pipeline_with_red(t_shell *sh, char **env) {
 
 	t_pipeline *pipeline = build_pipeline_from_tokens(sh->input_args);
 	if (!pipeline) {
-		// printf("I am here55\n");
 		sh->last_exit_status = 1;
 		return;
 	}
@@ -237,7 +241,6 @@ int main(int argc, char **argv, char **env)
 
 		if (line[0] == '\0')
 			continue;
-		// printf("line = %s\n", line);
 		sh.input_args = normalize_input(line, &sh);
 		if (!sh.input_args)
 			continue;
@@ -261,7 +264,7 @@ int main(int argc, char **argv, char **env)
 			validate_and_exec_command(sh.tokens, sh.input_args, &sh);
 			handle_basic(&sh, env);
 		}
-		else if (type == PIPELINE)
+		else if (type == PIPELINE || type == HERE_DOC)
 		{
 			// printf("handle pipeline\n");
 			handle_pipeline(&sh, env);

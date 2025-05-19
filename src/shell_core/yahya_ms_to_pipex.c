@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:04:42 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/19 12:04:33 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/19 15:21:50 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -499,13 +499,14 @@ t_cmd_type classify_command(char **tokens)
 	int i = 0;
 	int has_pipe = 0;
 	int has_redir = 0;
+	int here_doc = 0;
 
 	while (tokens[i])
 	{
 		if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_PIPE, '\0'}) == 0)
-		{
 			has_pipe = 1;
-		}
+				if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_HEREDOC, '\0'}) == 0)
+			here_doc = 1;
 		else if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0 ||
 		         ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0 ||
 		         ft_strcmp(tokens[i], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0)
@@ -518,7 +519,8 @@ t_cmd_type classify_command(char **tokens)
 		}
 		i++;
 	}
-
+	if(here_doc)
+		return HERE_DOC;
 	if (has_pipe && has_redir)
 		return PIPELINE_WITH_RED;
 	if (has_pipe)
@@ -529,38 +531,38 @@ t_cmd_type classify_command(char **tokens)
 }
 
 
-char **clean_env(char **env) {
-	int count = 0;
-	for (int i = 0; env[i]; i++) {
-		if (strncmp(env[i], "SHLVL=", 6) == 0 || env[i][0] == '_')
-			continue;
-		count++;
-	}
+// char **clean_env(char **env) {
+// 	int count = 0;
+// 	for (int i = 0; env[i]; i++) {
+// 		if (strncmp(env[i], "SHLVL=", 6) == 0 || env[i][0] == '_')
+// 			continue;
+// 		count++;
+// 	}
 
-	char **filtered = malloc(sizeof(char *) * (count + 1));
-	if (!filtered)
-		return NULL;
+// 	char **filtered = malloc(sizeof(char *) * (count + 1));
+// 	if (!filtered)
+// 		return NULL;
 
-	int j = 0;
-	for (int i = 0; env[i]; i++) {
-		if (strncmp(env[i], "SHLVL=", 6) == 0 || env[i][0] == '_')
-			continue;
-		filtered[j++] = strdup(env[i]);
-	}
-	filtered[j] = NULL;
-	return filtered;
-}
+// 	int j = 0;
+// 	for (int i = 0; env[i]; i++) {
+// 		if (strncmp(env[i], "SHLVL=", 6) == 0 || env[i][0] == '_')
+// 			continue;
+// 		filtered[j++] = strdup(env[i]);
+// 	}
+// 	filtered[j] = NULL;
+// 	return filtered;
+// }
 
-void print_env(t_list *env)
-{
-    while (env)
-    {
-        char *entry = (char *)env->content;
-        if (entry && ft_strchr(entry, '=') && ft_strncmp(entry, "_=", 2) != 0)
-            printf("%s\n", entry);
-        env = env->next;
-    }
-}
+// void print_env(t_list *env)
+// {
+//     while (env)
+//     {
+//         char *entry = (char *)env->content;
+//         if (entry && ft_strchr(entry, '=') && ft_strncmp(entry, "_=", 2) != 0)
+//             printf("%s\n", entry);
+//         env = env->next;
+//     }
+// }
 int cmd_echo_x(char **argv) {
     int i = 1;  // Skip the command name
     while (argv[i]) {
@@ -684,10 +686,10 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
             char *cmd_path = get_cmd_path(p->cmds[i].argv[0], env);
             if (!cmd_path)
                 exit(127);
-            char **cleaned_env = clean_env(env);
-            if (!cleaned_env)
-                exit(1);
-            execve(cmd_path, p->cmds[i].argv, cleaned_env);
+            // char **cleaned_env = clean_env(env);
+            // if (!cleaned_env)
+            //     exit(1);
+            execve(cmd_path, p->cmds[i].argv, env);
             perror("execve failed");
             exit(EXIT_FAILURE);
         }
