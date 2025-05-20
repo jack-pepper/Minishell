@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 14:43:43 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/20 23:41:45 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,8 @@ void	post_merge_quote(char *line, int *i)
 		while (line[(*i)] != '\0' && line[(*i)] != ' ')
 		{
 			if (line[(*i)] == '$' && line[(*i) + 1] != '\0'
-				&& line[(*i) + 1] != '\"'
-				&& line[(*i) + 1] != ' '
-				&& line[(*i) + 1] != CC_VAR_BOUND
-				&& line[(*i) + 1] != '$')
+				&& line[(*i) + 1] != '\"' && line[(*i) + 1] != ' '
+				&& line[(*i) + 1] != CC_VAR_BOUND && line[(*i) + 1] != '$')
 				ft_replace_char(&line[(*i)], CC_VAR_TO_INTERPRET);
 			(*i)++;
 		}

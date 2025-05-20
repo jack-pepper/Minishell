@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:06 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 18:07:17 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/20 23:56:55 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,13 @@ char	**normalize_input(char *line, t_shell *sh)
 	return (sh->input_args);
 }
 
+// SHOULD HANDLE THE CASE $? is inside another word
+//char	*cmd_exit_status()
+//{
+
+//}
+
+
 int	handle_dollar_cmd(t_shell *sh)
 {
 	char	*exit_status;
@@ -58,6 +65,7 @@ int	handle_dollar_cmd(t_shell *sh)
 			return (ms_err("", "$", CMD_NOT_FOUND, 127));
 		if (sh->input_args[0][1] == '?') // should rejoin if there's more after
 		{
+			//exit_status = cmd_exit_status();
 			exit_status = ft_itoa(sh->last_exit_status);
 			ms_err("", exit_status, CMD_NOT_FOUND, 127);
 			free(exit_status);

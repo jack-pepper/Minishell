@@ -6,14 +6,14 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 18:18:50 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/20 19:53:47 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define DEBUG 0
+# define DEBUG 1
 
 # define NB_CMDS 7
 
@@ -165,8 +165,12 @@ char		*rejoin_arg(t_shell *sh, char *rejoined_arg, char **split_args, int i);
 char		*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args);
 char		*split_rejoin(t_shell *sh, char *rejoined_arg, char *arg, char splitter);
 char		*to_delim(char splitter);
+
+	// ms_nametoval_cases.c
+char		*handle_special_cases(t_shell *sh, char *rejoined_arg, char *split_arg, char *end_name);
 char		*handle_exit_status_case(t_shell *sh, char *rejoined_arg, char *subarg);
 char		*handle_var_case(t_shell *sh, char *rejoined_arg, char *arg);
+
 
 	// ms_commands_manager.c
 int			init_cmds(t_shell *sh);
@@ -254,9 +258,13 @@ void		ft_replace_all_chars(char **input_args, char old_c, char new_c);
 
 	// ms_split_join_utils.c
 char		*ft_chrtostr(char chr);
+char		*join_with_delim(char *result, char *temp, char delim);
 char		*join_all_subargs(char **args, char delim);
 char		*ft_strjoin_delim(char const *s1, char const *s2, char const *delim);
 char		*ft_rejoin_subarg(char *rejoined_arg, char *arg);
+
+
+
 char		**ft_copy_free(char **input_arg, char *rejoined_arg);
 
 	// ms_stash_utils.c
