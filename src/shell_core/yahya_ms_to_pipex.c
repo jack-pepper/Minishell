@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:04:42 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/15 13:46:46 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/20 17:54:17 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ bool is_builtin(const char *cmd)
 		ft_strcmp(cmd, "unset") == 0 ||
 		ft_strcmp(cmd, "exit") == 0 ||
 		ft_strchr(cmd, '=') != NULL || // to handle env stash ("VAR_NAME=[VAR_VALUE]")
-		(cmd[0] == CTRL_CHAR_VAR_TO_INTERPRET) ||
-		((cmd[0] == CTRL_CHAR_VAR_TO_INTERPRET) && (cmd[1] == '?')) ||
+		(cmd[0] == CC_VAR_TO_INTERPRET) ||
+		((cmd[0] == CC_VAR_TO_INTERPRET) && (cmd[1] == '?')) ||
 		(cmd[0] == '$') ||
 		((cmd[0] == '$') && (cmd[1] == '?'))
 		)
@@ -47,11 +47,11 @@ bool is_builtin(const char *cmd)
 int count_command_tokens(char **tokens, int start) {
 	int count = 0;
 	while (tokens[start] &&
-	       ft_strcmp(tokens[start], (char[]){CTRL_CHAR_PIPE, '\0'}) != 0)
+	       ft_strcmp(tokens[start], (char[]){CC_PIPE, '\0'}) != 0)
 	{
-		if ((ft_strcmp(tokens[start], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0 ||
-		ft_strcmp(tokens[start], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0 ||
-		ft_strcmp(tokens[start], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0) &&
+		if ((ft_strcmp(tokens[start], (char[]){CC_REDIR_IN, '\0'}) == 0 ||
+		ft_strcmp(tokens[start], (char[]){CC_REDIR_OUT, '\0'}) == 0 ||
+		ft_strcmp(tokens[start], (char[]){CC_APPEND, '\0'}) == 0) &&
 	   tokens[start + 1])
 		{
 			start += 2;
@@ -71,8 +71,21 @@ char **extract_command_args(char **tokens, int *i, int count) {
 	if (!argv)
 		return NULL;
 
-	while (tokens[*i] && ft_strcmp(tokens[*i], (char[]){CTRL_CHAR_PIPE, '\0'}) != 0)
+	while (tokens[*i] &&
+		ft_strcmp(tokens[*i], (char[]){CC_PIPE, '\0'}) != 0 &&
+		ft_strcmp(tokens[*i], (char[]){CC_REDIR_IN, '\0'}) != 0 &&
+		ft_strcmp(tokens[*i], (char[]){CC_REDIR_OUT, '\0'}) != 0 &&
+		ft_strcmp(tokens[*i], (char[]){CC_APPEND, '\0'}) != 0)
 	{
+					// If it's a redirection token, skip its target
+		if ((ft_strcmp(tokens[*i], (char[]){CC_REDIR_IN, '\0'}) == 0 ||
+			ft_strcmp(tokens[*i], (char[]){CC_REDIR_OUT, '\0'}) == 0 ||
+			ft_strcmp(tokens[*i], (char[]){CC_APPEND, '\0'}) == 0) &&
+			tokens[*i + 1])
+		{
+		   *i += 2;
+		   continue;
+	    }		   
 		argv[j++] = ft_strdup(tokens[*i]);
 		(*i)++;
 	}
@@ -83,7 +96,7 @@ char **extract_command_args(char **tokens, int *i, int count) {
 
 void parse_next_command(char **tokens, int *i, t_pipeline *p, int *cmd_i) {
 	// Skip leading pipes (important for double pipes or pipe at start)
-	while (tokens[*i] && ft_strcmp(tokens[*i], (char[]){CTRL_CHAR_PIPE, '\0'}) == 0)
+	while (tokens[*i] && ft_strcmp(tokens[*i], (char[]){CC_PIPE, '\0'}) == 0)
 		(*i)++;
 	int count = count_command_tokens(tokens, *i);
 	if (count == 0)
@@ -102,8 +115,7 @@ void parse_next_command(char **tokens, int *i, t_pipeline *p, int *cmd_i) {
 	(*cmd_i)++;
 
 	// Skip trailing pipe, if any (in case it's still there)
-		if (tokens[*i] && ft_strcmp(tokens[*i], (char[]){CTRL_CHAR_PIPE, '\0'}) == 0
-	)
+	if (tokens[*i] && ft_strcmp(tokens[*i], (char[]){CC_PIPE, '\0'}) == 0)
 		(*i)++;
 }
 
@@ -113,11 +125,11 @@ int count_cmds(char **tokens) {
     int in_cmd = 0;
 
     while (tokens[i]) {
-        if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_PIPE, '\0'}) == 0) {
+        if (ft_strcmp(tokens[i], (char[]){CC_PIPE, '\0'}) == 0) {
             in_cmd = 0;  // Reset after encountering a pipe
-        } else if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0 ||
-                   ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0 ||
-                   ft_strcmp(tokens[i], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0) {
+        } else if (ft_strcmp(tokens[i], (char[]){CC_REDIR_IN, '\0'}) == 0 ||
+                   ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0 ||
+                   ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0) {
             if (tokens[i + 1]) {
                 i++;  // Skip the file argument
             }
@@ -151,7 +163,7 @@ static t_pipeline *init_pipeline(char **tokens) {
 }
 
 static bool handle_redirection_tokens(char **tokens, int *i, t_pipeline *p) {
-	if (strcmp(tokens[*i], (char[]){CTRL_CHAR_HEREDOC, '\0'}) == 0) {
+	if (strcmp(tokens[*i], (char[]){CC_HEREDOC, '\0'}) == 0) {
 		if (tokens[*i + 1]) {
 			p->cmds->infile = ft_strdup("here_doc"); // This is the key translation
 			p->cmds->limiter = ft_strdup(tokens[++(*i)]); // Store the LIMITER
@@ -162,7 +174,7 @@ static bool handle_redirection_tokens(char **tokens, int *i, t_pipeline *p) {
 		return false;
 	}
 	
-	if (strcmp(tokens[*i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0) {
+	if (strcmp(tokens[*i], (char[]){CC_REDIR_IN, '\0'}) == 0) {
 		if (tokens[*i + 1]) {
 			p->cmds->infile = ft_strdup(tokens[++(*i)]);
 			(*i)++;
@@ -170,7 +182,7 @@ static bool handle_redirection_tokens(char **tokens, int *i, t_pipeline *p) {
 		}
 		return false;
 	}
-	if (strcmp(tokens[*i], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0) {
+	if (strcmp(tokens[*i], (char[]){CC_REDIR_OUT, '\0'}) == 0) {
 		if (tokens[*i + 1]) {
 			p->cmds->outfile = ft_strdup(tokens[++(*i)]);
 			p->cmds->append = false;
@@ -179,7 +191,7 @@ static bool handle_redirection_tokens(char **tokens, int *i, t_pipeline *p) {
 		}
 		return false;
 	}
-	if (strcmp(tokens[*i], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0) {
+	if (strcmp(tokens[*i], (char[]){CC_APPEND, '\0'}) == 0) {
 		if (tokens[*i + 1]) {
 			p->cmds->outfile = ft_strdup(tokens[++(*i)]);
 			p->cmds->append = true;
@@ -227,7 +239,7 @@ t_pipeline *parse_redirection_only(char **tokens)
 
 	while (tokens[i])
 	{
-		if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0)
+		if (ft_strcmp(tokens[i], (char[]){CC_REDIR_IN, '\0'}) == 0)
 		{
 			if (tokens[i + 1])
 				p->cmds->infile = ft_strdup(tokens[++i]);
@@ -238,7 +250,7 @@ t_pipeline *parse_redirection_only(char **tokens)
 				return NULL;
 			}
 		}
-		else if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0)
+		else if (ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0)
 		{
 			if (tokens[i + 1])
 				p->cmds->outfile = ft_strdup(tokens[++i]), p->cmds->append = true;
@@ -249,7 +261,7 @@ t_pipeline *parse_redirection_only(char **tokens)
 				return NULL;
 			}
 		}
-		else if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0)
+		else if (ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0)
 		{
 			if (tokens[i + 1])
 				p->cmds->outfile = ft_strdup(tokens[++i]), p->cmds->append = false;
@@ -477,19 +489,28 @@ t_cmd_type classify_command(char **tokens)
 
 	while (tokens[i])
 	{
-		if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_PIPE, '\0'}) == 0)
+		if (ft_strcmp(tokens[i], (char[]){CC_PIPE, '\0'}) == 0)
 		{
 			has_pipe = 1;
 		}
-		else if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0 ||
-		         ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0 ||
-		         ft_strcmp(tokens[i], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0)
+		else if (ft_strcmp(tokens[i], (char[]){CC_REDIR_IN, '\0'}) == 0 || ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0 || ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0)
 		{
 			has_redir = 1;
 			// Check if file is missing after redirection
 			if (!tokens[i + 1])
 				return MIXED_INVALID;
 			i++; // skip the redirection target
+
+			// If redirection appears in the middle of the pipeline
+			if (seen_pipe && tokens[i + 2] && ft_strcmp(tokens[i + 2], (char[]){CC_PIPE, '\0'}) != 0)
+				return MIXED_INVALID;
+
+			i += 2;
+			continue;
+		}
+		else
+		{
+			i++;
 		}
 		i++;
 	}
@@ -556,7 +577,7 @@ int exec_builtin_in_child(char **argv, t_shell *sh)
         return cmd_pwd();
     else if (ft_strcmp(argv[0], "env") == 0)
         return cmd_env(sh);
-    else if (argv[0][0] == CTRL_CHAR_VAR_TO_INTERPRET && argv[0][1] == '?' && !argv[0][2])
+    else if (argv[0][0] == CC_VAR_TO_INTERPRET && argv[0][1] == '?' && !argv[0][2])
     {
         perror(" ");
         sh->last_exit_status = 1;

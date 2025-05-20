@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 12:59:33 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/11 21:28:07 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/20 11:11:21 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,15 @@ int	cmd_cd(t_shell *sh)
 
 	cwd = NULL;
 	home_var = ft_getenv("HOME", &sh->this_env);
-	if (!sh->input_args[1]
-		&& (!home_var || !((char **)home_var->content)[1]))
-		return (ms_err("cd", "", HOME_NON_SET, 1));
-	else if (!sh->input_args[1] && home_var
-		&& ((char **)home_var->content)[1])
-		path = ((char **)home_var->content)[1];
+	if (!sh->input_args[1])
+	{
+		if (!home_var)
+			return (ms_err("cd", "", HOME_NON_SET, 1));
+		else if (home_var && !((char **)home_var->content)[1])
+			return (0);
+		else
+			path = ((char **)home_var->content)[1];
+	}
 	else if (sh->input_args[2])
 		return (ms_err("cd", "", TOO_MANY_ARGS, 1));
 	else

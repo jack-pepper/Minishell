@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/11 18:38:39 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/17 23:07:23 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	ft_strstolist(t_list **list, char **strs, size_t nb_strs, char delim)
 			node = ft_lstnew((char *)strs[i]);
 		else
 		{
-			ft_flag_delim(strs[i], delim, CTRL_CHAR_EXTRA_DELIM, "sme");
+			ft_flag_delim(strs[i], delim, CC_EXTRA_DELIM, "sme");
 			split_str = ft_split(strs[i], delim);
 			if (!split_str)
 				return (-1);

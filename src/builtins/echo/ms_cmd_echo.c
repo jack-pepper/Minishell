@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:16:17 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/13 17:41:55 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/20 12:30:43 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	cmd_echo(t_shell *sh)
 {
 	char	*joined_input;
-	char	head[1];
 	bool	opt_n;
 	int		i;
 
@@ -30,15 +29,7 @@ int	cmd_echo(t_shell *sh)
 	echo_set_n(sh->input_args, &opt_n, &i);
 	if (!sh->input_args[i])
 		return (ft_ret(0, "", STDOUT));
-	if (ft_strcmp(sh->input_args[i], "$?") == 0)
-	{
-		char *exit_status = ft_itoa(sh->last_exit_status);
-		echo_display(exit_status, opt_n);
-		free(exit_status);
-		return (0);
-	}
-	head[0] = 0;
-	joined_input = &head[0];
+	joined_input = ft_strdup("");
 	joined_input = echo_process_all_args(sh, joined_input, &i);
 	if (joined_input == NULL)
 		return (-1);
@@ -49,10 +40,19 @@ int	cmd_echo(t_shell *sh)
 
 void	echo_set_n(char **input_args, bool *opt_n, int *i)
 {
-	if (ft_strcmp(input_args[(*i)], "-n") == 0)
+	if (input_args[(*i)] && input_args[(*i) + 1]
+		&& input_args[(*i)][0] == '-'
+		&& !ft_strnopbrk(&input_args[(*i)][1], "n"))
 	{
 		*opt_n = true;
-		(*i)++;
+		while (input_args[(*i)])
+		{
+			if (input_args[(*i)][0] == '-'
+				&& !ft_strnopbrk(&input_args[(*i)][1], "n"))
+				(*i)++;
+			else
+				break ;
+		}
 	}
 	else
 		*opt_n = false;
@@ -60,8 +60,8 @@ void	echo_set_n(char **input_args, bool *opt_n, int *i)
 
 char	*echo_process_all_args(t_shell *sh, char *joined_input, int *i)
 {
-	ft_replace_all_chars(sh->input_args, CTRL_CHAR_PIPE, '|');
-	ft_replace_all_chars(sh->input_args, CTRL_CHAR_SPACE_IN_QUOTE, ' ');
+	ft_replace_all_chars(sh->input_args, CC_PIPE, '|');
+	ft_replace_all_chars(sh->input_args, CC_SPACE_IN_QUOTE, ' ');
 	while (sh->input_args[(*i)])
 	{
 		if (sh->input_args[(*i)] && sh->input_args[(*i)][0] != '\0')
@@ -84,7 +84,7 @@ char	*echo_join_input(char *joined_input, char **input_args, int *i)
 	temp_1 = ft_strjoin(joined_input, input_args[(*i)]);
 	if (!temp_1)
 		return (NULL);
-	if (joined_input && joined_input[0] != '\0')
+	if (joined_input)
 		free(joined_input);
 	joined_input = ft_strdup(temp_1);
 	free(temp_1);
@@ -99,6 +99,8 @@ char	*echo_join_input(char *joined_input, char **input_args, int *i)
 		free(joined_input);
 		joined_input = ft_strdup(temp_2);
 		free(temp_2);
+		if (!joined_input)
+			return (NULL);
 	}
 	return (joined_input);
 }

@@ -6,7 +6,7 @@
 #    By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/14 09:35:38 by mmalie            #+#    #+#              #
-#    Updated: 2025/05/08 21:15:37 by mmalie           ###   ########.fr        #
+#    Updated: 2025/05/19 22:22:26 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,7 @@ LIBCTYPE = ft_isalpha.c \
 	   ft_islower.c \
            ft_toupper.c \
 	   ft_tolower.c \
+	   ft_isalnum_x_chr.c \
 	   ft_isalnum_x_str.c \
 	   ft_is_in_set.c \
 

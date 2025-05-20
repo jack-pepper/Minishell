@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:09:13 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/13 21:00:51 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/19 22:00:52 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	**normalize_input(char *line, t_shell *sh)
 	sh->normalized_line = NULL;
 	if (!sh->input_args)
 		return (NULL);
-	ft_replace_all_chars(sh->input_args, '|', CTRL_CHAR_PIPE);
+	ft_replace_all_chars(sh->input_args, '|', CC_PIPE);
 	return (sh->input_args);
 }
 
@@ -52,7 +52,7 @@ int	handle_dollar_cmd(t_shell *sh)
 	char	*exit_status;
 	t_list	*set_var;
 
-	if (sh->input_args[0] && (sh->input_args[0][0] == '$' || sh->input_args[0][0] == CTRL_CHAR_VAR_TO_INTERPRET))
+	if (sh->input_args[0] && (sh->input_args[0][0] == '$' || sh->input_args[0][0] == CC_VAR_TO_INTERPRET))
 	{
 		if (!sh->input_args[0][1])
 			return (ms_err("", "$", CMD_NOT_FOUND, 127));
@@ -82,21 +82,20 @@ int	process_input(t_shell *sh)
 	t_command	*cmd;
 	int		res;
 
-
 	if (!sh->input_args || sh->input_args[0] == NULL)
 		return (-1);
-
 	res = handle_dollar_cmd(sh);
 	if (res != 1 && res != 0)
 		return (res);
-	
 	ft_interpret_env(sh);
-	
+	ft_replace_all_chars(sh->input_args, CC_TRAILING_DOLLAR, '$');
+	if (DEBUG == 1)
+		ft_show_strs(sh->input_args, "[PROCESS_INPUT (after env)]");
 	cmd = is_registered_cmd(sh);
 	if (cmd != NULL)
 		sh->last_exit_status = cmd->func(sh);
 	else
-	{	
+	{
 		if (sh->input_args[0][0] != '\0')
 			sh->last_exit_status = stash_var_or_invalidate(sh);
 	}
@@ -107,7 +106,7 @@ int	stash_var_or_invalidate(t_shell *sh)
 {
 	int		res;
 
-	res = 0;	
+	res = 0;
 	res = are_args_stashable(sh->input_args);
 	if (res != 0)
 		return (res);
