@@ -6,7 +6,7 @@
 #    By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/14 09:35:38 by mmalie            #+#    #+#              #
-#    Updated: 2025/05/07 13:21:10 by mmalie           ###   ########.fr        #
+#    Updated: 2025/05/20 12:24:05 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ LIBSTDLIB = ft_atoi.c \
 	    ft_atoll.c \
 	    ft_calloc.c \
 	    ft_memdel.c \
+	    ft_free_two_str.c \
 
 SRC = ${LIBSTDLIB}
 

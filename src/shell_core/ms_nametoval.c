@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:03:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 11:54:49 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/20 13:19:47 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 				{	
 					if (DEBUG == 1)
 						printf("[CASE PUNCT]\n");
+					split_args[i][j] = CC_SUBARG_DELIM;
 					rejoined_arg = split_rejoin(sh, rejoined_arg, split_args[i], end_name);
 				}
 				else if (end_name == CC_TRAILING_DOLLAR || end_name == '$') // $ABC123_$ : rejoin subargs with "$"
@@ -88,7 +89,12 @@ char	*split_rejoin(t_shell *sh, char *rejoined_arg, char *arg, char splitter)
 
 	trailing_splitter = 0;
 	if (arg[ft_strlen(arg) - 1] == splitter)
-		trailing_splitter = 1;
+		trailing_splitter = 1;	
+	delim = to_delim(splitter);
+	if (!delim)
+		return (NULL);
+	if (ft_ispunct(splitter))
+		splitter = CC_SUBARG_DELIM;
 	if (DEBUG == 1)
 		printf("[arg last char] : %c\n", arg[ft_strlen(arg) - 1]);
 	subargs = ft_split(arg, splitter);
@@ -96,7 +102,6 @@ char	*split_rejoin(t_shell *sh, char *rejoined_arg, char *arg, char splitter)
 		ft_show_strs(subargs, "subargs ");
 	set_var = ft_getenv(subargs[0], &sh->this_env);
 	subargs[0] = ft_setenv(set_var, subargs[0]);
-	delim = to_delim(splitter);
 	if (splitter == '\0' || splitter == CC_VAR_BOUND)
 		arg = join_all_subargs(subargs, 'n');
 	else if (trailing_splitter == 1)

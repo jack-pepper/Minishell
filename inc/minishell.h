@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 11:58:13 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/20 12:48:02 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,6 +249,7 @@ char		**split_input_arg(t_shell *sh, size_t *i);
 	// ms_replace_utils.c
 void		ft_replace_if_space(char *cur_c, char new_c);
 void		ft_replace_char(char *cur_c, char new_c);
+void		ft_replace_chars_in_str(char *str, char cur_c, char new_c);
 void		ft_replace_all_chars(char **input_args, char old_c, char new_c);
 
 	// ms_split_join_utils.c

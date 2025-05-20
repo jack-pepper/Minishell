@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:16:17 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 10:48:20 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/20 12:30:43 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,11 @@ void	echo_set_n(char **input_args, bool *opt_n, int *i)
 				&& !ft_strnopbrk(&input_args[(*i)][1], "n"))
 				(*i)++;
 			else
-				break;
+				break ;
 		}
 	}
 	else
 		*opt_n = false;
-
 }
 
 char	*echo_process_all_args(t_shell *sh, char *joined_input, int *i)
@@ -85,7 +84,7 @@ char	*echo_join_input(char *joined_input, char **input_args, int *i)
 	temp_1 = ft_strjoin(joined_input, input_args[(*i)]);
 	if (!temp_1)
 		return (NULL);
-	if (joined_input) //&& joined_input[0] != '\0')
+	if (joined_input)
 		free(joined_input);
 	joined_input = ft_strdup(temp_1);
 	free(temp_1);
@@ -100,6 +99,8 @@ char	*echo_join_input(char *joined_input, char **input_args, int *i)
 		free(joined_input);
 		joined_input = ft_strdup(temp_2);
 		free(temp_2);
+		if (!joined_input)
+			return (NULL);
 	}
 	return (joined_input);
 }
