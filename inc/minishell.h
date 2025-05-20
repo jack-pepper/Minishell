@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/19 23:25:35 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/20 11:58:13 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,7 +252,7 @@ void		ft_replace_char(char *cur_c, char new_c);
 void		ft_replace_all_chars(char **input_args, char old_c, char new_c);
 
 	// ms_split_join_utils.c
-//char		**ft_split_args(char **split_args, char *input_arg);
+char		*ft_chrtostr(char chr);
 char		*join_all_subargs(char **args, char delim);
 char		*ft_strjoin_delim(char const *s1, char const *s2, char const *delim);
 char		*ft_rejoin_subarg(char *rejoined_arg, char *arg);

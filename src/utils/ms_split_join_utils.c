@@ -6,16 +6,29 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/19 23:43:19 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/20 11:53:17 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
+char	*ft_chrtostr(char chr)
+{
+	char	*str;
+
+	str = malloc(2);
+	if (!str)
+		return (NULL);
+	str[0] = chr;
+	str[1] = '\0';
+	return (str);
+}
+
 char	*join_all_subargs(char **args, char delim)
 {
 	char	*result;
 	char	*temp;
+	char	*delim_str;
 	int		i;
 
 	result = ft_strdup("");
@@ -29,8 +42,12 @@ char	*join_all_subargs(char **args, char delim)
 		result = temp;
 		if (delim != 'n' && args[i + 1])
 		{
-			temp = ft_strjoin(result, (char[]){delim , '\0'});
+			delim_str = ft_chrtostr(delim);
+			temp = ft_strjoin(result, delim_str);
 			free(result);
+			free(delim_str);
+			if (!temp)
+				return (NULL);
 			result = temp;
 		}
 		i++;
