@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 13:44:18 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/19 15:23:40 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/20 12:01:29 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -280,7 +280,7 @@ int main(int argc, char **argv, char **env)
 		else
 		{
 			sh.last_exit_status = 1;
-			fprintf(stderr, "Error: Unsupported combination of pipes and redirections\n");
+			perror("Error: Unsupported combination of pipes and redirections\n");
 		}
 
 		ft_free_array(sh.input_args, -1);

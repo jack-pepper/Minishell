@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/19 15:24:15 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/20 12:00:35 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,54 +100,51 @@ void	handle_mandatory(t_pipex *pipex, char **argv, int argc)
 	ft_execute_pipex(pipex);
 	free_pipex(pipex);
 }
-static char *join_args(char **args)
-{
-    if (!args || !args[0])
-        return strdup("");
+// static char *join_args(char **args)
+// {
+//     if (!args || !args[0])
+//         return strdup("");
 
-    int i;
-    size_t total_len = 0;
-    char *result;
+//     int i;
+//     size_t total_len = 0;
+//     char *result;
     
-    i = 0;
-    // First calculate total length
-    while(args[i])
-    {
-        if (args[i])  // Add NULL check for each argument
-            total_len += strlen(args[i]) + 1; // +1 for space or '\0'
-        i++;
-    }
+//     i = 0;
+//     // First calculate total length
+//     while(args[i])
+//     {
+//         if (args[i])  // Add NULL check for each argument
+//             total_len += strlen(args[i]) + 1; // +1 for space or '\0'
+//         i++;
+//     }
 
-    if (total_len == 0)
-        return strdup("");
+//     if (total_len == 0)
+//         return strdup("");
 
-    result = malloc(total_len);
-    if (!result)
-        return NULL;
+//     result = malloc(total_len);
+//     if (!result)
+//         return NULL;
 
-    result[0] = '\0';
-    i = 0;
-    while (args[i]) 
-    {
-        if (args[i])  // Add NULL check for each argument
-        {
-            strcat(result, args[i]);
-            if (args[i + 1])
-                strcat(result, " ");
-        }
-        i++;
-    }
-    return result;
-}
+//     result[0] = '\0';
+//     i = 0;
+//     while (args[i]) 
+//     {
+//         if (args[i])  // Add NULL check for each argument
+//         {
+//             strcat(result, args[i]);
+//             if (args[i + 1])
+//                 strcat(result, " ");
+//         }
+//         i++;
+//     }
+//     return result;
+// }
 int handle_heredoc(const char *limiter)
 {
     char *line = NULL;
     int fd = open(".heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (fd < 0)
-    {
-        perror("open .heredoc_tmp");
         return (1);
-    }
     while (1)
     {
         line = readline("> ");
@@ -165,70 +162,154 @@ int handle_heredoc(const char *limiter)
 int run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 {
     if (!pipeline || !pipeline->cmds->infile)
-        return (fprintf(stderr, "Invalid pipeline\n"), 1);
+    {
+        ft_printf("Invalid pipeline\n");
+        return (1);
+    }
 
     if (ft_strcmp(pipeline->cmds->infile, "here_doc") != 0)
-        return (fprintf(stderr, "run_pipex_from_minshell is for here_doc only\n"), 1);
+    {
+        ft_printf("run_pipex_from_minshell is for here_doc only\n");
+        return (1);
+    }
 
     t_pipex pipex = {0};
-    char **argv;
-    int argc = 4 + pipeline->cmd_count; // pipex here_doc LIMITER cmd1 ... cmdN outfile
-    int i = 0, k = 0;
+    int i = 0;
 
     // Initialize pipex structure
     pipex.envp = envp;
     pipex.here_doc = true;
     pipex.cmd_args = NULL;
     pipex.cmd_paths = NULL;
-    pipex.cmd_count = 0;
+    pipex.cmd_count = pipeline->cmd_count;
     pipex.in_fd = -1;
     pipex.out_fd = -1;
 
     if (handle_heredoc(pipeline->cmds->limiter) != 0)
-        return (fprintf(stderr, "Error: here_doc failed\n"), 1);
+    {
+        ft_printf("Error: here_doc failed\n");
+        return (1);
+    }
 
-    free(pipeline->cmds->infile);
-    pipeline->cmds->infile = strdup(".heredoc_tmp"); // now infile is the temp file
+    pipex.in_fd = open(".heredoc_tmp", O_RDONLY);
+    if (pipex.in_fd == -1)
+    {
+        perror("open .heredoc_tmp");   
+        return (1);
+    }
 
-    argv = malloc(sizeof(char *) * (argc + 1));
-    if (!argv)
-        return (perror("malloc"), 1);
+    // Open the output file
+    if (pipeline->cmds[pipeline->cmd_count - 1].outfile)
+    {
+        t_commands *last_cmd = &pipeline->cmds[pipeline->cmd_count - 1];
+        int flags = O_WRONLY | O_CREAT;
 
-    argv[k++] = strdup("pipex");                  // argv[0]
-    argv[k++] = strdup("here_doc");               // argv[1]
-    argv[k++] = strdup(pipeline->cmds->limiter);  // argv[2]
+        if (last_cmd->append)
+            flags |= O_APPEND;
+        else
+            flags |= O_TRUNC;
 
+        pipex.out_fd = open(last_cmd->outfile, flags, 0644);
+        if (pipex.out_fd == -1)
+        {
+            close(pipex.in_fd);
+            perror(pipeline->cmds[pipeline->cmd_count - 1].outfile);
+            return (1);
+        }
+    }
+    else
+    {
+        pipex.out_fd = STDOUT_FILENO;
+    }
+
+    // Allocate and initialize cmd_args
+    pipex.cmd_args = malloc(sizeof(char **) * pipex.cmd_count);
+    if (!pipex.cmd_args)
+    {
+        close(pipex.in_fd);
+        if (pipex.out_fd != STDOUT_FILENO)
+            close(pipex.out_fd);
+        perror("malloc");
+        return (1);
+    }
+
+    // Copy command arguments
+    i = 0;
     while (i < pipeline->cmd_count)
     {
         if (!pipeline->cmds[i].argv)
         {
-			int j = 0;
-            while(j < k)
-			{
-                free(argv[j]);
-				j++;
-			}
-            free(argv);
+            int j = 0;
+            while (j < i)
+            {
+                ft_free_2d_array(pipex.cmd_args[j]);
+                j++;
+            }
+            free(pipex.cmd_args);
+            close(pipex.in_fd);
+            if (pipex.out_fd != STDOUT_FILENO)
+                close(pipex.out_fd);
             return 1;
         }
-        argv[k++] = join_args(pipeline->cmds[i++].argv);      // argv[3] to argv[N]
+        // Copy argv array
+        int arg_count = 0;
+        while (pipeline->cmds[i].argv[arg_count])
+            arg_count++;
+        
+        pipex.cmd_args[i] = malloc(sizeof(char *) * (arg_count + 1));
+        if (!pipex.cmd_args[i])
+        {
+            int j = 0;
+            while (j < i)
+            {
+                ft_free_2d_array(pipex.cmd_args[j]);
+                j++;
+            }
+            free(pipex.cmd_args);
+            close(pipex.in_fd);
+            if (pipex.out_fd != STDOUT_FILENO)
+                close(pipex.out_fd);
+            perror("malloc");
+            return (1);
+        }
+        
+        int j = 0;
+        while (j < arg_count)
+        {
+            pipex.cmd_args[i][j] = ft_strdup(pipeline->cmds[i].argv[j]);
+            if (!pipex.cmd_args[i][j])
+            {
+                int k = 0;
+                while (k < j)
+                {
+                    free(pipex.cmd_args[i][k]);
+                    k++;
+                }
+                free(pipex.cmd_args[i]);
+                int l = 0;
+                while (l < i)
+                {
+                    ft_free_2d_array(pipex.cmd_args[l]);
+                    l++;
+                }
+                free(pipex.cmd_args);
+                close(pipex.in_fd);
+                if (pipex.out_fd != STDOUT_FILENO)
+                    close(pipex.out_fd);
+                perror("malloc");
+                return (1);
+            }
+            j++;
+        }
+        pipex.cmd_args[i][j] = NULL;
+        i++;
     }
-    
-    // If there's no outfile specified, use stdout
-    if (pipeline->cmds[pipeline->cmd_count - 1].outfile)
-        argv[k++] = strdup(pipeline->cmds[pipeline->cmd_count - 1].outfile);
-    else
-        argv[k++] = strdup("/dev/stdout");
-    argv[k] = NULL;
 
-    // Parse paths before handling bonus
+    // Parse paths and execute
     ft_parse_paths(&pipex);
-    handle_bonus(&pipex, argc, argv);
+    execute_multiple_cmds(&pipex);
 
     // Clean up
-    for (i = 0; i < argc; i++)
-        free(argv[i]);
-    free(argv);
     free_pipex(&pipex);
 
     return pipex.exit_status;
