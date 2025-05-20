@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 11:23:22 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/20 17:27:54 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	cmd_export(t_shell *sh)
 	size_t	i;
 	int		res;
 
-	if (!(sh->input_args[1]))
+	if (sh->input_args[1] == NULL)
 		cmd_env((sh));
 	else
 	{
@@ -27,7 +27,7 @@ int	cmd_export(t_shell *sh)
 		{
 			if (sh->input_args[i][0] == '='
 				|| ft_isdigit(sh->input_args[i][0]))
-				return (ms_err("export :", sh->input_args[i], INVALID_ID, 1));
+				return (ms_err("export: `", sh->input_args[i], INVALID_ID, 1));
 			res = try_export(sh, &i);
 			if (res != 0)
 				return (res);
@@ -45,7 +45,7 @@ int	try_export(t_shell *sh, size_t *i)
 	if (ft_strchr(sh->input_args[(*i)], '=') == NULL)
 	{
 		if (ft_isalnum_x_str(sh->input_args[(*i)], "_") != 0)
-			return (ms_err("export :", sh->input_args[(*i)], INVALID_ID, 1));
+			return (ms_err("export: `", sh->input_args[(*i)], INVALID_ID, 1));
 		stashed_var = ft_getenv(sh->input_args[(*i)], &sh->env_stash);
 		if (stashed_var != NULL)
 			export_from_stash(sh, stashed_var);
@@ -71,7 +71,7 @@ int	export_from_term(t_shell *sh, size_t *i)
 	if (!is_valid_env_name(split_str[0]))
 	{
 		free_args(split_str);
-		return (ms_err("export: ", sh->input_args[(*i)], INVALID_ID, 1));
+		return (ms_err("export: `", sh->input_args[(*i)], INVALID_ID, 1));
 	}
 	set_var = ft_getenv(split_str[0], &sh->this_env);
 	if (set_var != NULL)

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 14:51:10 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/20 17:19:17 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@
 # define TOO_MANY_ARGS ": too many arguments\n"
 # define HOME_NON_SET ": HOME non set\n"
 # define NO_FILE_OR_DIR ": No such file or directory\n"
-# define INVALID_ID ": not a valid identifier\n"
+# define INVALID_ID "': not a valid identifier\n"
 # define NUM_ARG_REQ ": numeric argument required\n"
 # define CMD_NOT_FOUND ": command not found\n"
 # define CMD_IS_DIR ": Is a directory\n"
