@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   yahya_ms_to_pipex.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 18:16:55 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/20 15:53:37 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -508,39 +508,54 @@ void exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh) {
 
 t_cmd_type classify_command(char **tokens)
 {
-	int i = 0;
-	int has_pipe = 0;
-	int has_redir = 0;
-	int here_doc = 0;
+    int i = 0;
+    int has_pipe = 0;
+    int has_redir = 0;
+    int here_doc = 0;
+    int has_cmd = 0;
+    int first_is_redir = 0;  // Track if first token is a redirection
 
-	while (tokens[i])
-	{
-		if (ft_strcmp(tokens[i], (char[]){CC_PIPE, '\0'}) == 0)
-			has_pipe = 1;
-				if (ft_strcmp(tokens[i], (char[]){CC_HEREDOC, '\0'}) == 0)
-			here_doc = 1;
-		else if (ft_strcmp(tokens[i], (char[]){CC_REDIR_IN, '\0'}) == 0 ||
-		         ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0 ||
-		         ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0)
-		{
+    // Check if first token is a redirection
+    if (tokens[0] && (ft_strcmp(tokens[0], (char[]){CC_REDIR_IN, '\0'}) == 0 ||
+                      ft_strcmp(tokens[0], (char[]){CC_REDIR_OUT, '\0'}) == 0 ||
+                      ft_strcmp(tokens[0], (char[]){CC_APPEND, '\0'}) == 0))
+        first_is_redir = 1;
 
-			has_redir = 1;
-			// Check if file is missing after redirection
-			if (!tokens[i + 1])
-				return MIXED_INVALID;
-			i++; // skip the redirection target
-		}
-		i++;
-	}
-	if(here_doc)
-		return HERE_DOC;
-	if (has_pipe && has_redir)
-		return PIPELINE_WITH_RED;
-	if (has_pipe)
-		return PIPELINE;
-	if (has_redir)
-		return REDIR_ONLY;
-	return BASIC;
+    while (tokens[i])
+    {
+        if (ft_strcmp(tokens[i], (char[]){CC_PIPE, '\0'}) == 0)
+            has_pipe = 1;
+        else if (ft_strcmp(tokens[i], (char[]){CC_HEREDOC, '\0'}) == 0)
+            here_doc = 1;
+        else if (ft_strcmp(tokens[i], (char[]){CC_REDIR_IN, '\0'}) == 0 ||
+                 ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0 ||
+                 ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0)
+        {
+            has_redir = 1;
+            if (!tokens[i + 1])
+                return MIXED_INVALID;
+            i++; // skip the redirection target
+        }
+        else if ((unsigned char)tokens[i][0] >= 32) // not a control char
+            has_cmd = 1;
+        i++;
+    }
+
+    if(here_doc)
+        return HERE_DOC;
+    if (has_pipe && has_redir)
+        return PIPELINE_WITH_RED;
+    if (has_pipe)
+        return PIPELINE;
+    if (has_redir)
+    {
+        if (first_is_redir)
+            return BASIC;  // Only return BASIC if first token is a redirection
+        return REDIR_ONLY;  // All other redirection cases
+    }
+    if(has_cmd)
+        return BASIC;
+    return BASIC;
 }
 
 
