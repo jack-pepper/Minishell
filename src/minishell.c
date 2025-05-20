@@ -3,10 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
+<<<<<<< HEAD
 /*   Created: 2025/05/20 17:54:45 by mmalie            #+#    #+#             */
 /*   Updated: 2025/05/20 17:55:36 by mmalie           ###   ########.fr       */
+=======
+/*   Created: 2025/05/15 13:44:18 by mmalie            #+#    #+#             */
+/*   Updated: 2025/05/19 15:23:40 by yel-bouk         ###   ########.fr       */
+>>>>>>> origin/ms-pipex_v13
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +26,7 @@
 int validate_and_exec_command(char **argv, char **envp, t_shell *sh)
 {
 	if (!argv || !argv[0] || argv[0][0] == '\0')
-	{
 		return 0; // Nothing to run (example: $EMPTY)
-	}
 	
 	if (ft_strchr(argv[0], '/'))
 	{
@@ -49,17 +52,16 @@ int validate_and_exec_command(char **argv, char **envp, t_shell *sh)
 			{
 				fprintf(stderr, "%s: Is a directory\n", argv[0]);
 				sh->last_exit_status = 126;
-				return 1;
+				return 1;  // Return immediately after detecting directory
 			}
 		
-			// check execute permissions
+			// check execute permissions only if it's not a directory
 			if (access(argv[0], X_OK) != 0)
 			{
-				perror(argv[0]); // ermission denied
+				perror(argv[0]); // permission denied
 				sh->last_exit_status = 126;
 				return 1;
 			}
-
 		}
 	}
 	else
@@ -169,7 +171,7 @@ void handle_basic(t_shell *sh, char **env)
 	{
 		// printf("I am here2939\n");
 		sh->last_exit_status = 127;
-		fprintf(stderr, "%s: command not found\n", sh->input_args[0]);
+		ft_printf("%s: command not found\n", sh->input_args[0]);
 		free_pipeline(pipeline);
 		return;
 	}
@@ -179,21 +181,34 @@ void handle_basic(t_shell *sh, char **env)
 }
 
 void handle_pipeline(t_shell *sh, char **env) {
-	// if (!validate_all_redirections(sh->input_args, sh))
-	// 	return;
-
 	t_pipeline *pipeline = build_pipeline_from_tokens(sh->input_args);
 	if (!pipeline) {
-		// printf("I am here55\n");
 		sh->last_exit_status = 1;
 		return;
 	}
 
+<<<<<<< HEAD
 	if (strcmp(sh->input_args[0], (char[]){CC_HEREDOC, '\0'}) == 0)
 		run_pipex_from_minshell(pipeline, env);
 	else
+=======
+	if (has_heredoc(pipeline))
+>>>>>>> origin/ms-pipex_v13
 	{
-		// printf("I am here31\n");	
+		// For heredoc, we need at least one command
+		if (pipeline->cmd_count < 1) {
+			ft_printf("Error: heredoc requires at least one command\n");
+			sh->last_exit_status = 1;
+			free_pipeline(pipeline);
+			return;
+		}
+		int status = run_pipex_from_minshell(pipeline, env);
+		if (status != 0) {
+			sh->last_exit_status = status;
+			free_pipeline(pipeline);
+			return;
+		}
+	} else {
 		run_pipeline_basic_pipeline(pipeline, env, sh);
 	}
 
@@ -205,7 +220,6 @@ void handle_pipeline_with_red(t_shell *sh, char **env) {
 
 	t_pipeline *pipeline = build_pipeline_from_tokens(sh->input_args);
 	if (!pipeline) {
-		// printf("I am here55\n");
 		sh->last_exit_status = 1;
 		return;
 	}
@@ -238,7 +252,6 @@ int main(int argc, char **argv, char **env)
 
 		if (line[0] == '\0')
 			continue;
-		// printf("line = %s\n", line);
 		sh.input_args = normalize_input(line, &sh);
 		if (!sh.input_args)
 			continue;
@@ -262,7 +275,7 @@ int main(int argc, char **argv, char **env)
 			validate_and_exec_command(sh.tokens, sh.input_args, &sh);
 			handle_basic(&sh, env);
 		}
-		else if (type == PIPELINE)
+		else if (type == PIPELINE || type == HERE_DOC)
 		{
 			// printf("handle pipeline\n");
 			handle_pipeline(&sh, env);

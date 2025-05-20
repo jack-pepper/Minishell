@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/13 12:41:07 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/19 15:24:15 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,35 +102,42 @@ void	handle_mandatory(t_pipex *pipex, char **argv, int argc)
 }
 static char *join_args(char **args)
 {
-	int i;
-	size_t total_len = 0;
-	char *result;
-	
-	i = 0;
-	// First calculate total length
-	while(args[i])
-	{
-		total_len += strlen(args[i]) + 1; // +1 for space or '\0'
-		i++;
-	}
+    if (!args || !args[0])
+        return strdup("");
 
-	if (total_len == 0)
-		return (strdup(""));
+    int i;
+    size_t total_len = 0;
+    char *result;
+    
+    i = 0;
+    // First calculate total length
+    while(args[i])
+    {
+        if (args[i])  // Add NULL check for each argument
+            total_len += strlen(args[i]) + 1; // +1 for space or '\0'
+        i++;
+    }
 
-	result = malloc(total_len);
-	if (!result)
-		return (NULL);
+    if (total_len == 0)
+        return strdup("");
 
-	result[0] = '\0';
-	i = 0;
-	while (args[i]) 
-	{
-		strcat(result, args[i]);
-		if (args[i + 1])
-			strcat(result, " ");
-		i++;
-	}
-	return result;
+    result = malloc(total_len);
+    if (!result)
+        return NULL;
+
+    result[0] = '\0';
+    i = 0;
+    while (args[i]) 
+    {
+        if (args[i])  // Add NULL check for each argument
+        {
+            strcat(result, args[i]);
+            if (args[i + 1])
+                strcat(result, " ");
+        }
+        i++;
+    }
+    return result;
 }
 int handle_heredoc(const char *limiter)
 {
@@ -157,107 +164,76 @@ int handle_heredoc(const char *limiter)
 
 int run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 {
-	t_pipex pipex;
-	char **argv;
-	int argc;
-	int i;
-	int k = 0;
+    if (!pipeline || !pipeline->cmds->infile)
+        return (fprintf(stderr, "Invalid pipeline\n"), 1);
 
-	if (!pipeline->cmds->infile || !pipeline->cmds->outfile)
-	{
-		ft_printf("Error: missing infile or outfile\n");
-		return (1);
-	}
+    if (ft_strcmp(pipeline->cmds->infile, "here_doc") != 0)
+        return (fprintf(stderr, "run_pipex_from_minshell is for here_doc only\n"), 1);
 
-	pipex = (t_pipex){0};
-	pipex.envp = envp;
+    t_pipex pipex = {0};
+    char **argv;
+    int argc = 4 + pipeline->cmd_count; // pipex here_doc LIMITER cmd1 ... cmdN outfile
+    int i = 0, k = 0;
 
-	// Added by [m] for $? support
-	pipeline->pipex = malloc(sizeof(pipex));
-	if (!pipeline->pipex)
-		return (-1);
-	// pipeline->pipex = &pipex;
-	// End added by [m]
-	if (ft_strcmp(pipeline->cmds->infile, "here_doc") == 0)
-	{
-		if (handle_heredoc(pipeline->cmds->limiter) != 0)
-		{
-			fprintf(stderr, "Error: here_doc failed\n");
-			return (1);
-		}
-		free(pipeline->cmds->infile);
-		printf("HANDLING hered_doc\n");
-		pipeline->cmds->infile = strdup(".heredoc_tmp"); // Replace infile with generated file
-	}
-	if (ft_strcmp(pipeline->cmds->infile, "here_doc") == 0)
-		argc = 4 + pipeline->cmd_count; // pipex + here_doc + LIMITER + N cmds + outfile
-	else
-		argc = 3 + pipeline->cmd_count; // pipex + infile + N cmds + outfile
+    // Initialize pipex structure
+    pipex.envp = envp;
+    pipex.here_doc = true;
+    pipex.cmd_args = NULL;
+    pipex.cmd_paths = NULL;
+    pipex.cmd_count = 0;
+    pipex.in_fd = -1;
+    pipex.out_fd = -1;
 
+    if (handle_heredoc(pipeline->cmds->limiter) != 0)
+        return (fprintf(stderr, "Error: here_doc failed\n"), 1);
 
-	argv = malloc(sizeof(char *) * (argc + 1));
-	if (!argv)
-	{
-		perror("malloc failed");
-		return (1);
-	}
-	// printf("I am here\n");
-	argv[k++] = strdup("pipex");                // argv[0]
-	if (ft_strcmp(pipeline->cmds->infile, "here_doc") == 0)
-	{
-		pipex.here_doc = true;
-		argv[k++] = strdup("here_doc");         // argv[1]
-		argv[k++] = strdup(pipeline->cmds->limiter);  // argv[2]
-	}
-	else
-	{
-		argv[k++] = strdup(pipeline->cmds->infile);   // argv[1]
-	}
+    free(pipeline->cmds->infile);
+    pipeline->cmds->infile = strdup(".heredoc_tmp"); // now infile is the temp file
 
+    argv = malloc(sizeof(char *) * (argc + 1));
+    if (!argv)
+        return (perror("malloc"), 1);
 
-	i = 0;
-	// Join all commands into a single string
-	while (i < pipeline->cmd_count)
-	{
-		argv[k++] = join_args(pipeline->cmds[i].argv); // argv[2] to argv[n]
-		i++;
-	}
-	argv[k++] = strdup(pipeline->cmds->outfile);      // argv[n+1]
-	// printf("I made it here");
-	argv[k] = NULL;
+    argv[k++] = strdup("pipex");                  // argv[0]
+    argv[k++] = strdup("here_doc");               // argv[1]
+    argv[k++] = strdup(pipeline->cmds->limiter);  // argv[2]
 
-	// Dispatch to the correct pipex handler
-	if (argc == 5)
-	{
-		// printf("mandatory\n");
-		handle_mandatory(&pipex, argv, argc);
-	}
-	else if (argc > 5)
-	{
-		// printf("bonus\n");
-		handle_bonus(&pipex, argc, argv);
-	}
-	else
-	{
-		ft_printf("Invalid input to pipex\n");
-		// free argv
-		i = 0;
-		while (i < argc)
-			free(argv[i++]);
-		free(argv);
-		return (1);
-	}
+    while (i < pipeline->cmd_count)
+    {
+        if (!pipeline->cmds[i].argv)
+        {
+			int j = 0;
+            while(j < k)
+			{
+                free(argv[j]);
+				j++;
+			}
+            free(argv);
+            return 1;
+        }
+        argv[k++] = join_args(pipeline->cmds[i++].argv);      // argv[3] to argv[N]
+    }
+    
+    // If there's no outfile specified, use stdout
+    if (pipeline->cmds[pipeline->cmd_count - 1].outfile)
+        argv[k++] = strdup(pipeline->cmds[pipeline->cmd_count - 1].outfile);
+    else
+        argv[k++] = strdup("/dev/stdout");
+    argv[k] = NULL;
 
-	// Cleanup
-	i = 0;
-	while (i < argc)
-		free(argv[i++]);
-	free(argv);
+    // Parse paths before handling bonus
+    ft_parse_paths(&pipex);
+    handle_bonus(&pipex, argc, argv);
 
-	// printf("[DEBUG - runpipexfromminshell()] PIPEX EXIT STATUS: %d\n", pipex.exit_status);
+    // Clean up
+    for (i = 0; i < argc; i++)
+        free(argv[i]);
+    free(argv);
+    free_pipex(&pipex);
 
-	return pipex.exit_status;
+    return pipex.exit_status;
 }
+
 // int	main(int argc, char **argv, char **envp)
 // {
 // 	t_pipex	pipex;

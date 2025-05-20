@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:54:10 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/13 12:33:41 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/19 14:54:46 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ typedef struct s_pipeline {
 
 void	ft_exit_error(t_pipex *pipex, const char *msg);
 void	ft_free_array(char **arr, int count);
-void	ft_free_2d_array(char ***arr, int count);
+void	ft_free_2d_array(char **arr);
 void	free_pipex(t_pipex *pipex);
 void	ft_init_pipex(t_pipex *pipex, char *infile, char *outfile);
 void	ft_parse_cmds(t_pipex *pipex, char **argv);

@@ -3,10 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
+<<<<<<< HEAD
 /*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
 /*   Updated: 2025/05/20 18:00:44 by mmalie           ###   ########.fr       */
+=======
+/*   Created: 2025/05/15 13:41:52 by mmalie            #+#    #+#             */
+/*   Updated: 2025/05/19 14:31:58 by yel-bouk         ###   ########.fr       */
+>>>>>>> origin/ms-pipex_v13
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +132,7 @@ int			stash_var_or_invalidate(t_shell *sh);
 	// ms_initer.c
 int			init_shell(t_shell *sh, char **env);
 int			init_env(t_shell *sh, char **env);
-void		init_signals(void);
+void		init_signals(t_shell *sh);
 void		signal_handler(int signum);
 int		normalize_env(t_list *this_env);
 
@@ -286,7 +291,13 @@ typedef enum e_cmd_type {
 	BASIC,
 	REDIR_ONLY,  
 	PIPELINE,   
+<<<<<<< HEAD
 	MIXED_INVALID
+=======
+	MIXED_INVALID,
+	PIPELINE_WITH_RED,
+	HERE_DOC
+>>>>>>> origin/ms-pipex_v13
 }	t_cmd_type;
 typedef struct s_redir {
 	char *file;
@@ -296,4 +307,19 @@ typedef struct s_redir {
 
 bool		is_builtin(const char *cmd);
 t_cmd_type classify_command(char **tokens);
+<<<<<<< HEAD
+=======
+int count_pipes(char **tokens);
+void parse_and_build_pipeline(t_pipeline *pipeline, char **tokens);
+bool has_heredoc(t_pipeline *p);
+char **extract_tokens(char **tokens, int start, int end);
+t_commands parse_command(char **tokens);
+void free_command(t_commands *cmd);
+void free_tokens(char **tokens);
+void run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh);
+
+// Global shell pointer for signal handling
+extern t_shell *g_shell;
+
+>>>>>>> origin/ms-pipex_v13
 #endif
