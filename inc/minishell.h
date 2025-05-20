@@ -3,22 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-<<<<<<< HEAD
-/*   Created: 2025/05/08 19:08:37 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 18:00:44 by mmalie           ###   ########.fr       */
-=======
-/*   Created: 2025/05/15 13:41:52 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/19 14:31:58 by yel-bouk         ###   ########.fr       */
->>>>>>> origin/ms-pipex_v13
+/*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
+/*   Updated: 2025/05/20 18:18:50 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define DEBUG 1
+# define DEBUG 0
 
 # define NB_CMDS 7
 
@@ -291,13 +286,9 @@ typedef enum e_cmd_type {
 	BASIC,
 	REDIR_ONLY,  
 	PIPELINE,   
-<<<<<<< HEAD
-	MIXED_INVALID
-=======
 	MIXED_INVALID,
 	PIPELINE_WITH_RED,
 	HERE_DOC
->>>>>>> origin/ms-pipex_v13
 }	t_cmd_type;
 typedef struct s_redir {
 	char *file;
@@ -307,8 +298,6 @@ typedef struct s_redir {
 
 bool		is_builtin(const char *cmd);
 t_cmd_type classify_command(char **tokens);
-<<<<<<< HEAD
-=======
 int count_pipes(char **tokens);
 void parse_and_build_pipeline(t_pipeline *pipeline, char **tokens);
 bool has_heredoc(t_pipeline *p);
@@ -321,5 +310,4 @@ void run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh);
 // Global shell pointer for signal handling
 extern t_shell *g_shell;
 
->>>>>>> origin/ms-pipex_v13
 #endif

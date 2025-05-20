@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   yahya_ms_to_pipex.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/13 12:04:42 by yel-bouk          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/05/20 17:54:17 by mmalie           ###   ########.fr       */
-=======
-/*   Updated: 2025/05/19 15:21:50 by yel-bouk         ###   ########.fr       */
->>>>>>> origin/ms-pipex_v13
+/*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
+/*   Updated: 2025/05/20 18:16:55 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,13 +163,8 @@ static t_pipeline *init_pipeline(char **tokens) {
 	return p;
 }
 
-<<<<<<< HEAD
-static bool handle_redirection_tokens(char **tokens, int *i, t_pipeline *p) {
-	if (strcmp(tokens[*i], (char[]){CC_HEREDOC, '\0'}) == 0) {
-=======
 static bool handle_redirection_tokens(char **tokens, int *i, t_pipeline *p, int cmd_index) {
-	if (strcmp(tokens[*i], (char[]){CTRL_CHAR_HEREDOC, '\0'}) == 0) {
->>>>>>> origin/ms-pipex_v13
+	if (strcmp(tokens[*i], (char[]){CC_HEREDOC, '\0'}) == 0) {
 		if (tokens[*i + 1]) {
 			p->cmds[cmd_index].infile = ft_strdup("here_doc");
 			p->cmds[cmd_index].limiter = ft_strdup(tokens[++(*i)]);
@@ -227,7 +218,7 @@ t_pipeline *build_pipeline_from_tokens(char **tokens) {
         }
         
         // If we hit a pipe, move to next command
-        if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_PIPE, '\0'}) == 0) {
+        if (ft_strcmp(tokens[i], (char[]){CC_PIPE, '\0'}) == 0) {
             current_cmd++;
             i++;
             continue;
@@ -524,38 +515,20 @@ t_cmd_type classify_command(char **tokens)
 
 	while (tokens[i])
 	{
-<<<<<<< HEAD
 		if (ft_strcmp(tokens[i], (char[]){CC_PIPE, '\0'}) == 0)
-		{
 			has_pipe = 1;
-		}
-		else if (ft_strcmp(tokens[i], (char[]){CC_REDIR_IN, '\0'}) == 0 || ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0 || ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0)
-=======
-		if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_PIPE, '\0'}) == 0)
-			has_pipe = 1;
-				if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_HEREDOC, '\0'}) == 0)
+				if (ft_strcmp(tokens[i], (char[]){CC_HEREDOC, '\0'}) == 0)
 			here_doc = 1;
-		else if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0 ||
-		         ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0 ||
-		         ft_strcmp(tokens[i], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0)
->>>>>>> origin/ms-pipex_v13
+		else if (ft_strcmp(tokens[i], (char[]){CC_REDIR_IN, '\0'}) == 0 ||
+		         ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0 ||
+		         ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0)
 		{
+
 			has_redir = 1;
 			// Check if file is missing after redirection
 			if (!tokens[i + 1])
 				return MIXED_INVALID;
 			i++; // skip the redirection target
-
-			// If redirection appears in the middle of the pipeline
-			if (seen_pipe && tokens[i + 2] && ft_strcmp(tokens[i + 2], (char[]){CC_PIPE, '\0'}) != 0)
-				return MIXED_INVALID;
-
-			i += 2;
-			continue;
-		}
-		else
-		{
-			i++;
 		}
 		i++;
 	}

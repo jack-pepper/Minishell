@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:04:47 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/15 15:21:11 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/20 18:17:45 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int count_pipes(char **tokens) {
     int count = 0;
     int i = 0;
     while (tokens[i]) {
-        if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_PIPE, '\0'}) == 0)
+        if (ft_strcmp(tokens[i], (char[]){CC_PIPE, '\0'}) == 0)
             count++;
         i++;
     }
@@ -28,9 +28,9 @@ int count_args(char **tokens)
 	int i = 0;
 	while (tokens[i])
 	{
-		if ((ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0 ||
-			 ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0 ||
-			 ft_strcmp(tokens[i], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0) &&
+		if ((ft_strcmp(tokens[i], (char[]){CC_REDIR_IN, '\0'}) == 0 ||
+			 ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0 ||
+			 ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0) &&
 			tokens[i + 1])
 		{
 			i += 2; // Skip redirection token + filename
@@ -72,16 +72,16 @@ t_commands parse_command(char **tokens) {
     int argc = 0;
 
     for (int i = 0; tokens[i]; i++) {
-        if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_IN, '\0'}) == 0 && tokens[i + 1]) {
+        if (ft_strcmp(tokens[i], (char[]){CC_REDIR_IN, '\0'}) == 0 && tokens[i + 1]) {
             free(cmd.infile);
             cmd.infile = ft_strdup(tokens[++i]);
         }
-        else if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_REDIR_OUT, '\0'}) == 0 && tokens[i + 1]) {
+        else if (ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0 && tokens[i + 1]) {
             free(cmd.outfile);
             cmd.outfile = ft_strdup(tokens[++i]);
             cmd.append = false;
         }
-        else if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_APPEND, '\0'}) == 0 && tokens[i + 1]) {
+        else if (ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0 && tokens[i + 1]) {
             free(cmd.outfile);
             cmd.outfile = ft_strdup(tokens[++i]);
             cmd.append = true;
@@ -129,7 +129,7 @@ void parse_and_build_pipeline(t_pipeline *pipeline, char **tokens) {
     int i = 0, cmd_index = 0;
 
     while (tokens[i]) {
-        if (ft_strcmp(tokens[i], (char[]){CTRL_CHAR_PIPE, '\0'}) == 0) {
+        if (ft_strcmp(tokens[i], (char[]){CC_PIPE, '\0'}) == 0) {
             if (cmd_index >= num_cmds) {
                 fprintf(stderr, "Overflow during parsing: cmd_index=%d >= num_cmds=%d\n", cmd_index, num_cmds);
                 exit(1);

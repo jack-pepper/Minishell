@@ -3,15 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-<<<<<<< HEAD
-/*   Created: 2025/05/20 17:54:45 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 17:55:36 by mmalie           ###   ########.fr       */
-=======
-/*   Created: 2025/05/15 13:44:18 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/19 15:23:40 by yel-bouk         ###   ########.fr       */
->>>>>>> origin/ms-pipex_v13
+/*   Created: 2025/05/20 18:05:05 by mmalie            #+#    #+#             */
+/*   Updated: 2025/05/20 18:05:39 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,13 +182,7 @@ void handle_pipeline(t_shell *sh, char **env) {
 		return;
 	}
 
-<<<<<<< HEAD
-	if (strcmp(sh->input_args[0], (char[]){CC_HEREDOC, '\0'}) == 0)
-		run_pipex_from_minshell(pipeline, env);
-	else
-=======
 	if (has_heredoc(pipeline))
->>>>>>> origin/ms-pipex_v13
 	{
 		// For heredoc, we need at least one command
 		if (pipeline->cmd_count < 1) {
