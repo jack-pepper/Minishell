@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:03:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 13:19:47 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/20 13:28:14 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,57 +21,49 @@ char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 	i = 0;
 	while (split_args[i])
 	{
-		if (DEBUG == 1)
-			printf("[DEBUG start nametoval] %s\n", split_args[i]);
+		//if (DEBUG == 1) printf("[DEBUG start nametoval] %s\n", split_args[i]);
 		if (split_args[i][0] != '?')
 		{
 			j = 0;
 			while ((split_args[i][j] && (split_args[i][j] == '_' || ft_isalnum(split_args[i][j]))))
 				j++;
 			end_name = split_args[i][j];
-			if (DEBUG == 1)
-				printf("[DEBUG nametoval] end_name: %c\n", end_name);
+			//if (DEBUG == 1)	printf("[DEBUG nametoval] end_name: %c\n", end_name);
 			if (end_name != '\0') // can it be another char or control char?
 			{
 				if (ft_ispunct(end_name) && !ft_is_in_set(end_name, "$")) // which one???
 				{	
-					if (DEBUG == 1)
-						printf("[CASE PUNCT]\n");
+					//if (DEBUG == 1) printf("[CASE PUNCT]\n");
 					split_args[i][j] = CC_SUBARG_DELIM;
 					rejoined_arg = split_rejoin(sh, rejoined_arg, split_args[i], end_name);
 				}
 				else if (end_name == CC_TRAILING_DOLLAR || end_name == '$') // $ABC123_$ : rejoin subargs with "$"
 				{
-					if (DEBUG == 1)
-						printf("[CASE TRAILING_DOLLAR\n]");
+					//if (DEBUG == 1) printf("[CASE TRAILING_DOLLAR\n]");
 					split_args[i][j] = CC_TRAILING_DOLLAR;
 					rejoined_arg = split_rejoin(sh, rejoined_arg, split_args[i], CC_TRAILING_DOLLAR);
 				}
 				else if (end_name == CC_SPACE_IN_QUOTE) // "$ABC YYY" : rejoin subargs with " "
 				{
-					if (DEBUG == 1)
-						printf("[CASE SPACE IN QUOTE\n]");
+					//if (DEBUG == 1) printf("[CASE SPACE IN QUOTE\n]");
 					split_args[i][j] = CC_SUBARG_DELIM;
 					rejoined_arg = split_rejoin(sh, rejoined_arg, split_args[i], CC_SUBARG_DELIM);
 				}
 				else if (end_name == CC_VAR_BOUND) // $USER"ABC"ABC or ABC"$USER"ABC
 				{	
-					if (DEBUG == 1)
-						printf("[CASE VAR BOUND\n]");
+					//if (DEBUG == 1) printf("[CASE VAR BOUND\n]");
 					rejoined_arg = split_rejoin(sh, rejoined_arg, split_args[i], CC_VAR_BOUND);
 				}
 			}
 			else // var ready to be tested
 			{
-				if (DEBUG == 1)
-					printf("[CASE VAR READY\n]");
+				// if (DEBUG == 1) printf("[CASE VAR READY\n]");
 				rejoined_arg = split_rejoin(sh, rejoined_arg, split_args[i], '\0');
 			}
 		}
 		else // $?
 		{
-			if (DEBUG == 1)
-				printf("[CASE EXIT STATUS\n]");
+			// if (DEBUG == 1) printf("[CASE EXIT STATUS\n]");
 			rejoined_arg = handle_exit_status_case(sh, rejoined_arg, split_args[i]);
 		}
 		i++;
