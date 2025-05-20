@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:04:47 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/20 16:03:27 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/20 16:30:59 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,21 +70,51 @@ t_commands parse_command(char **tokens) {
         return cmd;
     }
     int argc = 0;
+    char *last_outfile = NULL;
+    bool last_append = false;
+    int test_fd;
 
     for (int i = 0; tokens[i]; i++) {
         if (ft_strcmp(tokens[i], (char[]){CC_REDIR_IN, '\0'}) == 0 && tokens[i + 1]) {
+            // Test if we can open the input file
+            test_fd = open(tokens[i + 1], O_RDONLY);
+            if (test_fd < 0) {
+                perror(tokens[i + 1]);
+                free(cmd.argv);
+                cmd.argv = NULL;
+                return cmd;
+            }
+            close(test_fd);
             free(cmd.infile);
             cmd.infile = ft_strdup(tokens[++i]);
         }
         else if (ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0 && tokens[i + 1]) {
-            free(cmd.outfile);
-            cmd.outfile = ft_strdup(tokens[++i]);
-            cmd.append = false;
+            // Test if we can open the output file
+            test_fd = open(tokens[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            if (test_fd < 0) {
+                perror(tokens[i + 1]);
+                free(cmd.argv);
+                cmd.argv = NULL;
+                return cmd;
+            }
+            close(test_fd);
+            free(last_outfile);
+            last_outfile = ft_strdup(tokens[++i]);
+            last_append = false;
         }
         else if (ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0 && tokens[i + 1]) {
-            free(cmd.outfile);
-            cmd.outfile = ft_strdup(tokens[++i]);
-            cmd.append = true;
+            // Test if we can open the output file
+            test_fd = open(tokens[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+            if (test_fd < 0) {
+                perror(tokens[i + 1]);
+                free(cmd.argv);
+                cmd.argv = NULL;
+                return cmd;
+            }
+            close(test_fd);
+            free(last_outfile);
+            last_outfile = ft_strdup(tokens[++i]);
+            last_append = true;
         }
         else if ((unsigned char)tokens[i][0] < 32 && tokens[i][1] == '\0') {
             continue;
@@ -93,6 +123,14 @@ t_commands parse_command(char **tokens) {
             cmd.argv[argc++] = ft_strdup(tokens[i]);
         }
     }
+
+    // Set the final output file and append flag
+    if (last_outfile) {
+        free(cmd.outfile);
+        cmd.outfile = last_outfile;
+        cmd.append = last_append;
+    }
+
     cmd.argv[argc] = NULL;
     return cmd;
 }
@@ -144,7 +182,7 @@ void parse_and_build_pipeline(t_pipeline *pipeline, char **tokens) {
 
     // Final command
     if (cmd_index >= num_cmds) {
-        fprintf(stderr, "Overflow at final command: cmd_index=%d >= num_cmds=%d\n", cmd_index, num_cmds);
+        perror("overflow");
         exit(1);
     }
     char **cmd_tokens = extract_tokens(tokens, start, i);
