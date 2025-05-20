@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:03:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 13:28:14 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/20 14:34:25 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,16 @@ char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 	i = 0;
 	while (split_args[i])
 	{
-		//if (DEBUG == 1) printf("[DEBUG start nametoval] %s\n", split_args[i]);
-		if (split_args[i][0] != '?')
+		if (DEBUG == 1) printf("[DEBUG start nametoval] %s\n", split_args[i]);
+		if (split_args[i][0] == '?')
+			rejoined_arg = handle_exit_status_case(sh, rejoined_arg, split_args[i]);
+		else
 		{
 			j = 0;
-			while ((split_args[i][j] && (split_args[i][j] == '_' || ft_isalnum(split_args[i][j]))))
+			while (split_args[i][j] && ft_isalnum_x_chr(&split_args[i][j], "_"))
 				j++;
 			end_name = split_args[i][j];
-			//if (DEBUG == 1)	printf("[DEBUG nametoval] end_name: %c\n", end_name);
+			if (DEBUG == 1)	printf("[DEBUG nametoval] end_name: %c\n", end_name);
 			if (end_name != '\0') // can it be another char or control char?
 			{
 				if (ft_ispunct(end_name) && !ft_is_in_set(end_name, "$")) // which one???
@@ -61,11 +63,6 @@ char	*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args)
 				rejoined_arg = split_rejoin(sh, rejoined_arg, split_args[i], '\0');
 			}
 		}
-		else // $?
-		{
-			// if (DEBUG == 1) printf("[CASE EXIT STATUS\n]");
-			rejoined_arg = handle_exit_status_case(sh, rejoined_arg, split_args[i]);
-		}
 		i++;
 	}
 	return (rejoined_arg);
@@ -83,6 +80,8 @@ char	*split_rejoin(t_shell *sh, char *rejoined_arg, char *arg, char splitter)
 	if (arg[ft_strlen(arg) - 1] == splitter)
 		trailing_splitter = 1;	
 	delim = to_delim(splitter);
+	if (DEBUG == 1)	
+		printf("delim: %s\n", delim);
 	if (!delim)
 		return (NULL);
 	if (ft_ispunct(splitter))
@@ -96,7 +95,8 @@ char	*split_rejoin(t_shell *sh, char *rejoined_arg, char *arg, char splitter)
 	subargs[0] = ft_setenv(set_var, subargs[0]);
 	if (splitter == '\0' || splitter == CC_VAR_BOUND)
 		arg = join_all_subargs(subargs, 'n');
-	else if (trailing_splitter == 1)
+	else if ((trailing_splitter == 0 && ft_ispunct(delim[0]))
+		|| (trailing_splitter == 1 && !ft_ispunct(delim[0])))
 	{
 		temp = join_all_subargs(subargs, *delim);
 		arg = ft_strjoin(temp, delim);

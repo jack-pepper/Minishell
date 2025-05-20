@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/19 23:04:00 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/20 14:43:43 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	ante_merge_quote(char *line, int *i)
 		while (temp_i > 0 && line[temp_i] != ' ')
 		{
 			temp_i--;
+			printf("line[temp_i]: %c\n", line[temp_i]);
 			if (line[temp_i] == CC_VAR_TO_INTERPRET)
 			{
 				ft_replace_char(&line[(*i)], CC_VAR_BOUND);
