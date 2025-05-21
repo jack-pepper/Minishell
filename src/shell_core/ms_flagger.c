@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:03:35 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/21 23:19:33 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/21 23:57:12 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ void	flag_dollar(char *line, int *i)
 				|| (line[(*i)] + 1) == '$'))
 			ft_replace_char(&line[(*i)], CC_TRAILING_DOLLAR);
 	}
-	else if (*i > 0) //line[(*i) - 1])
+	else if (*i > 0)
 	{
 		if (ft_isalnum_x_chr(&line[(*i) - 1], "_?"))
 			ft_replace_char(&line[(*i)], CC_TRAILING_DOLLAR);
 		else if (((ft_is_in_set(line[(*i) - 1], "\"\'")
-				|| line[(*i) - 1] == CC_VAR_BOUND)))
+					|| line[(*i) - 1] == CC_VAR_BOUND)))
 			ft_replace_char(&line[(*i)], '$');
 	}
 	else

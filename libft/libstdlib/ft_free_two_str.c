@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:21:17 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 12:22:42 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/21 23:54:49 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,5 @@ void	ft_free_two_str(char *s1, char *s2)
 		free (s1);
 	if (s2)
 		free (s2);
-	return;
+	return ;
 }

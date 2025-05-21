@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:42:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/21 11:32:40 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/21 23:48:00 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,12 +89,10 @@ int	are_args_stashable(char **args)
 	{
 		if (ft_strchr(args[i], '/') != NULL)
 			return (1);
-			//return (ms_err("", args[i], CMD_IS_DIR, 127));
 		invalid_cmd = ft_strchr(args[i], '=');
 		if ((invalid_cmd == NULL)
 			|| (is_valid_env_name_sub(args[i]) != 0))
 			return (1);
-			//return (ms_err("", args[i], CMD_NOT_FOUND, 127)); 
 		i++;
 	}
 	return (0);

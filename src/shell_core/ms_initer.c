@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:06:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/21 20:54:46 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/21 23:51:01 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ int	normalize_env(t_list *this_env)
 			{
 				temp = ft_strdup(rejoined_var);
 				free(rejoined_var);
-				rejoined_var = ft_strjoin_delim(temp, ((char **)cur_node->content)[i], "=");
+				rejoined_var = ft_strjoin_delim(
+						temp, ((char **)cur_node->content)[i], "=");
 				free(temp);
 				i++;
 			}
@@ -82,7 +83,7 @@ void	init_signals(t_shell *sh)
 	struct sigaction	act_sigint;
 	struct sigaction	act_sigquit;
 
-	g_shell = sh;  // Store shell pointer for signal handler // Is it allowed by the subject?
+	g_shell = sh;// Store shell pointer for signal handler// Is it allowed?
 	ft_memset(&act_sigquit, 0, sizeof(act_sigquit));
 	act_sigquit.sa_handler = SIG_IGN;
 	act_sigquit.sa_flags = 0;

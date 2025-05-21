@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/21 22:43:10 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/22 00:01:37 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,8 @@ void handle_basic(t_shell *sh, char **env)
 	int	first_arg;
 
 	i = 0;
+	if (!sh->input_args[i])
+		return ;
 	while (sh->input_args[i][0] == '\0')
 		i++;
 	first_arg = i;
@@ -169,11 +171,15 @@ void handle_basic(t_shell *sh, char **env)
 		}
 		i++;
 	}
-	if (is_registered_cmd(sh) || get_cmd_path(sh->input_args[first_arg], env) == NULL)
+
+	char * cmd_path = get_cmd_path(sh->input_args[first_arg], env);
+	if (is_registered_cmd(sh) || cmd_path == NULL)
 	{
+		free(cmd_path);
 		sh->last_exit_status = process_input(sh);
 		return ;
 	}
+	free(cmd_path);
 
 	// Not a builtin, run normally
 	if (!validate_all_redirections(sh->input_args, sh))
