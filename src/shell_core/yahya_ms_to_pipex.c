@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 16:30:59 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/21 10:36:04 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -656,10 +656,6 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
     int pipe_fd[2];
     pid_t last_pid = -1;
 
-    // Set up signal handling for parent
-    // signal(SIGINT, SIG_IGN);   // Parent ignores CTRL+C
-    // signal(SIGQUIT, SIG_IGN);  // Parent ignores CTRL+
-
     while (i < p->cmd_count) {
         if (i < p->cmd_count - 1)
         {
@@ -671,14 +667,16 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
         }
         pid_t pid = fork();
         if (pid == 0) {
-            // Restore default signal handling in child
-            // signal(SIGINT, SIG_DFL);
-            // signal(SIGQUIT, SIG_DFL);
-
             int in_fd = -1, out_fd = -1;
 
-            if (open_redirection_fds_mixed(&p->cmds[i], &in_fd, &out_fd, sh) < 0)
-                exit(1);
+            // Try to open redirections
+            if (open_redirection_fds_mixed(&p->cmds[i], &in_fd, &out_fd, sh) < 0) {
+                // If this is the last command, exit with status 1
+                if (i == p->cmd_count - 1)
+                    exit(1);
+                // Otherwise, continue with the pipeline
+                exit(0);
+            }
 
             // Setup input (prioritize redirection over pipe)
             if (in_fd != -1) {
@@ -704,19 +702,19 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
                 close(pipe_fd[1]);
             }
 
+            // Check if argv is NULL before trying to access it
+            if (!p->cmds[i].argv || !p->cmds[i].argv[0]) {
+                exit(1);
+            }
+
             // Now run builtin *after* redirection is set
             if (is_builtin(p->cmds[i].argv[0]))
-            {
                 exit(exec_builtin_in_child(p->cmds[i].argv, sh));
-            }
 
             // External command fallback
             char *cmd_path = get_cmd_path(p->cmds[i].argv[0], env);
             if (!cmd_path)
                 exit(127);
-            // char **cleaned_env = clean_env(env);
-            // if (!cleaned_env)
-            //     exit(1);
             execve(cmd_path, p->cmds[i].argv, env);
             perror("execve failed");
             exit(EXIT_FAILURE);

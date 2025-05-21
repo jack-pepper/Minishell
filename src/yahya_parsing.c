@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:04:47 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/20 16:30:59 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/20 16:33:59 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,9 @@ t_commands parse_command(char **tokens) {
     char *last_outfile = NULL;
     bool last_append = false;
     int test_fd;
-
-    for (int i = 0; tokens[i]; i++) {
+    int i = 0;
+    while(tokens[i])
+    {
         if (ft_strcmp(tokens[i], (char[]){CC_REDIR_IN, '\0'}) == 0 && tokens[i + 1]) {
             // Test if we can open the input file
             test_fd = open(tokens[i + 1], O_RDONLY);
@@ -122,6 +123,7 @@ t_commands parse_command(char **tokens) {
         else {
             cmd.argv[argc++] = ft_strdup(tokens[i]);
         }
+        i++;
     }
 
     // Set the final output file and append flag
@@ -137,8 +139,12 @@ t_commands parse_command(char **tokens) {
 
 void free_command(t_commands *cmd) {
     if (cmd->argv) {
-        for (int i = 0; cmd->argv[i]; i++)
+        int i = 0;
+        while (cmd->argv[i])
+        {
             free(cmd->argv[i]);
+            i++;   
+        }
         free(cmd->argv);
     }
     free(cmd->infile);
