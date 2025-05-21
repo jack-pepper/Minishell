@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/21 11:09:45 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/21 22:43:10 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,17 +151,30 @@ void handle_redir_only(t_shell *sh, char **env)
 }
 void handle_basic(t_shell *sh, char **env)
 {
-// TEST (pass all outputs to process_input)
-	sh->last_exit_status = process_input(sh);
-	return;
+	int	i;
+	int	first_arg;
 
-//
-	if (is_builtin(sh->input_args[0]))
+	i = 0;
+	while (sh->input_args[i][0] == '\0')
+		i++;
+	first_arg = i;
+	while (sh->input_args[i])
 	{
-		// printf("heey\n");
-		sh->last_exit_status = process_input(sh);
-		return;
+		if (sh->input_args[i][0] == '\0')
+			i++;
+		else if (ft_strpbrk(sh->input_args[i], "|<>") != NULL)
+		{	
+			printf("arg[%d] (%s) contains pipe or redir!\n", i, sh->input_args[i]);
+			break ;
+		}
+		i++;
 	}
+	if (is_registered_cmd(sh) || get_cmd_path(sh->input_args[first_arg], env) == NULL)
+	{
+		sh->last_exit_status = process_input(sh);
+		return ;
+	}
+
 	// Not a builtin, run normally
 	if (!validate_all_redirections(sh->input_args, sh))
 		return;
@@ -244,17 +257,21 @@ int main(int argc, char **argv, char **env)
 		if (line == NULL)
 			cmd_exit(&sh, 1);
 
+		// What are those lines for?
 		if (line[0] == '\0')
-			continue;
+			continue; 
 		sh.input_args = normalize_input(line, &sh);
 		if (!sh.input_args)
 			continue;
+		////////////////////////////
+
 		// int i = 0;
 		// while(sh.input_args[i])
 		// {
 		// 	printf("input_arg[%d] = %s\n", i,sh.input_args[i]);
 		// 	i++;
 		// }
+
 		t_cmd_type type = classify_command(sh.input_args);
 
 		// Handle each command type

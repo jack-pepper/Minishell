@@ -6,13 +6,13 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:06:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 18:06:53 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/21 20:54:46 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-t_shell *g_shell = NULL;  // Global shell pointer for signal handling
+t_shell	*g_shell = NULL;
 
 // Initialize what is needed for the shell (signals, env, pipex, commands)
 int	init_shell(t_shell *sh, char **env)
@@ -82,8 +82,7 @@ void	init_signals(t_shell *sh)
 	struct sigaction	act_sigint;
 	struct sigaction	act_sigquit;
 
-	g_shell = sh;  // Store shell pointer for signal handler
-
+	g_shell = sh;  // Store shell pointer for signal handler // Is it allowed by the subject?
 	ft_memset(&act_sigquit, 0, sizeof(act_sigquit));
 	act_sigquit.sa_handler = SIG_IGN;
 	act_sigquit.sa_flags = 0;

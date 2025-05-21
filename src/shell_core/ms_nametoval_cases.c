@@ -6,39 +6,39 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:03:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 23:18:41 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/21 20:55:51 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-char	*handle_special_cases(t_shell *sh, char *rejoined_arg, char *split_arg, char *end_name)
+char	*handle_special_cases(t_shell *sh, char *joined, char *split, char *end)
 {
 	char	temp;
 
-	if (ft_ispunct(*end_name) && !ft_is_in_set(*end_name, "$"))
+	if (ft_ispunct(*end) && !ft_is_in_set(*end, "$"))
 	{
-		temp = *end_name;
-		*end_name = CC_SUBARG_DELIM;
-		rejoined_arg = split_rejoin(sh, rejoined_arg, split_arg, temp);
+		temp = *end;
+		*end = CC_SUBARG_DELIM;
+		joined = split_rejoin(sh, joined, split, temp);
 	}
-	else if (*end_name == CC_TRAILING_DOLLAR)
+	else if (*end == CC_TRAILING_DOLLAR)
 	{
-		rejoined_arg = split_rejoin(sh, rejoined_arg, split_arg,
+		joined = split_rejoin(sh, joined, split,
 				CC_TRAILING_DOLLAR);
 	}
-	else if (*end_name == CC_SPACE_IN_QUOTE)
+	else if (*end == CC_SPACE_IN_QUOTE)
 	{
-		*end_name = CC_SUBARG_DELIM;
-		rejoined_arg = split_rejoin(sh, rejoined_arg, split_arg,
+		*end = CC_SUBARG_DELIM;
+		joined = split_rejoin(sh, joined, split,
 				CC_SUBARG_DELIM);
 	}
-	else if (*end_name == CC_VAR_BOUND)
+	else if (*end == CC_VAR_BOUND)
 	{
-		rejoined_arg = split_rejoin(sh, rejoined_arg, split_arg,
+		joined = split_rejoin(sh, joined, split,
 				CC_VAR_BOUND);
 	}
-	return (rejoined_arg);
+	return (joined);
 }
 
 char	*handle_exit_status_case(t_shell *sh, char *rejoined_arg, char *subarg)

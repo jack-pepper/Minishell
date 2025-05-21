@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 18:16:55 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/21 21:35:04 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,12 @@ bool is_builtin(const char *cmd)
 	if (!cmd)
 		return false;
 
+	//if ((is_registered_cmd(sh) != NULL)
+	//	return (true);
+
+	return (false);
+}
+/*
 	if (ft_strcmp(cmd, "cd") == 0 ||
 		ft_strcmp(cmd, "echo") == 0 ||
 		ft_strcmp(cmd, "env") == 0 ||
@@ -41,7 +47,7 @@ bool is_builtin(const char *cmd)
 		)
 		return true;
 	return false;
-}
+*/
 
 
 

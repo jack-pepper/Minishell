@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:03:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 23:27:15 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/21 23:26:59 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*rejoin_subarg(char **subargs, char splitter, char *delim, int trailing)
 	if (splitter == '\0' || splitter == CC_VAR_BOUND)
 		arg = join_all_subargs(subargs, 'n');
 	else if ((trailing == 0 && ft_ispunct(delim[0] && delim[0] != '$'))
-		|| (trailing == 1 && !ft_ispunct(delim[0])))
+		|| (trailing == 1 && (delim[0] == '$' || !ft_ispunct(delim[0]))))
 	{
 		temp = join_all_subargs(subargs, *delim);
 		arg = ft_strjoin(temp, delim);
@@ -71,7 +71,7 @@ char	*split_rejoin(t_shell *sh, char *rejoined_arg, char *arg, char splitter)
 	delim = to_delim(splitter);
 	if (!delim)
 		return (NULL);
-	if (ft_ispunct(splitter))
+	if (ft_ispunct(splitter) && delim[0] != '$')
 		splitter = CC_SUBARG_DELIM;
 	subargs = ft_split(arg, splitter);
 	set_var = ft_getenv(subargs[0], &sh->this_env);

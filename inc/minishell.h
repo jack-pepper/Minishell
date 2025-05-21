@@ -6,14 +6,14 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/21 11:46:51 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/21 20:56:48 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define DEBUG 1
+# define DEBUG 0
 
 # define NB_CMDS 7
 
@@ -170,7 +170,7 @@ char		*split_rejoin(t_shell *sh, char *rejoined_arg, char *arg, char splitter);
 char		*to_delim(char splitter);
 
 	// ms_nametoval_cases.c
-char		*handle_special_cases(t_shell *sh, char *rejoined_arg, char *split_arg, char *end_name);
+char		*handle_special_cases(t_shell *sh, char *joined, char *split, char *end);
 char		*handle_exit_status_case(t_shell *sh, char *rejoined_arg, char *subarg);
 char		*handle_var_case(t_shell *sh, char *rejoined_arg, char *arg);
 
