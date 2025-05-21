@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 18:05:39 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/21 11:09:45 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,11 @@ void handle_redir_only(t_shell *sh, char **env)
 }
 void handle_basic(t_shell *sh, char **env)
 {
+// TEST (pass all outputs to process_input)
+	sh->last_exit_status = process_input(sh);
+	return;
+
+//
 	if (is_builtin(sh->input_args[0]))
 	{
 		// printf("heey\n");

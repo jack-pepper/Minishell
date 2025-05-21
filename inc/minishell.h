@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 19:53:47 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/21 11:46:51 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@
 # define NUM_ARG_REQ ": numeric argument required\n"
 # define CMD_NOT_FOUND ": command not found\n"
 # define CMD_IS_DIR ": Is a directory\n"
+# define PERM_DENY ": Permission denied\n"
 
 /* Libraries */
 
@@ -122,7 +123,9 @@ typedef struct s_shell
 	// minishell.c
 int			main(int argc, char **argv, char **env);
 int			is_invalid_for_stash(char *arg);
-int			stash_var_or_invalidate(t_shell *sh);
+int			handle_non_cmd(t_shell *sh);
+int			handle_file_or_dir(t_shell *sh);
+
 
 	// ms_initer.c
 int			init_shell(t_shell *sh, char **env);
