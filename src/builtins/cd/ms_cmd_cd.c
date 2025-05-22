@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 12:59:33 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 11:11:21 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/22 21:32:00 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 int	cmd_cd(t_shell *sh)
 {
+
+	// ERROR: $PWD is NOT updated properly! (keeps the trailing ../..////))
+
 	char	*cwd;
 	char	*path;
 	t_list	*home_var;
@@ -47,6 +50,7 @@ int	cd_process_path(t_shell *sh, char *cwd, char *path)
 	if (path[0] == '.')
 	{
 		cur_path = handle_dotted_path(cwd, path);
+		printf("%s\n", cur_path);
 		if (change_directory(sh, cwd, cur_path) != 0)
 		{
 			free(cur_path);
@@ -71,9 +75,14 @@ int	cd_process_path(t_shell *sh, char *cwd, char *path)
 
 int	change_directory(t_shell *sh, char *cwd, char *path)
 {
+	char	*trimmed;
+
+	trimmed = NULL;
 	if (chdir(path) != 0)
 		return (ms_err("cd: ", path, NO_FILE_OR_DIR, 1));
-	update_pwds_vars(sh, cwd, path);
+	trimmed = store_cwd(trimmed);
+	update_pwds_vars(sh, cwd, trimmed);
+	free(trimmed);
 	return (0);
 }
 

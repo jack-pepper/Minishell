@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 11:48:09 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/17 23:06:17 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/22 21:32:50 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ char	*handle_dotted_path(char *cwd, char *path)
 	rejoined_path = NULL;
 	joined_path = get_abs_path(joined_path, cwd, path);
 	if (!joined_path)
-		return (NULL);
+		return (NULL);	
 	split_path = split_abs_path(split_path, joined_path);
 	if (!split_path)
 		return (NULL);
-	flag_dotted_path(split_path, CC_TO_BE_DELETED);
+	flag_dotted_path(split_path, CC_TO_BE_DELETED);	
 	rejoined_path = rejoin_abs_path(rejoined_path, split_path);
 	free_args(split_path);
 	if (!rejoined_path)
@@ -77,13 +77,18 @@ void	flag_dotted_path(char **split_path, char ctrl_char)
 			while (split_path[j] && ft_strcmp(split_path[j], "..") == 0)
 			{
 				i--;
-				if (i >= 0 && split_path[i] != NULL)
+				if (i >= 0 && split_path[i] != NULL
+					&& split_path[i][0] != ctrl_char)
 					split_path[i][0] = ctrl_char;
-				split_path[j][0] = ctrl_char;
+				else
+					return ;
+				split_path[j][0] = ctrl_char;	
 				j++;
 			}
 			i = j - 1;
 		}
+		else if (ft_strcmp(split_path[i], "home") == 0)
+			return ;
 		i++;
 	}
 }
@@ -95,7 +100,10 @@ char	*rejoin_abs_path(char *rejoined_path, char **split_path)
 	int		i;
 	int		j;
 
-	rejoined_path = ft_strdup("");
+	if (split_path[0][0] == CC_TO_BE_DELETED)
+		rejoined_path = ft_strdup("/");
+	else
+		rejoined_path = ft_strdup("");
 	if (!rejoined_path)
 		return (NULL);
 	ft_init_two_ints(0, &i, &j);
@@ -108,8 +116,7 @@ char	*rejoin_abs_path(char *rejoined_path, char **split_path)
 			rejoined_path = ft_strjoin(rejoined_path, temp);
 			if (!rejoined_path)
 				return (NULL);
-			free(temp);
-			free(prev_rejoined_path);
+			ft_free_two_str(temp, prev_rejoined_path);
 			j++;
 		}
 		i++;
