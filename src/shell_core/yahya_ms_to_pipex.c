@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/21 21:35:04 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/22 15:52:34 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,7 +257,7 @@ t_pipeline *build_pipeline_from_tokens(char **tokens) {
 
 t_pipeline *parse_redirection_only(char **tokens)
 {
-	t_pipeline *p = ft_calloc(1, sizeof(t_pipeline));
+	t_pipeline *p = ft_calloc(1, sizeof(t_pipeline)); // [m] leak (cmd: echo ../../)
 	t_commands *cmd = ft_calloc(1, sizeof(t_commands));
 	p->cmds = cmd;
 	char **argv = ft_calloc(128, sizeof(char *));
