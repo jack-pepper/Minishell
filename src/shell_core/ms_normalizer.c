@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 19:08:10 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/22 12:17:25 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ char	*ft_strflag(char *line)
 			flag_quote(line, &i);
                 i++;
 	}
+	ft_replace_chars_in_str(line, CC_DOLLAR_UNCLOSED, '$');
 	line_len = ft_strlen(line);
 	flagged_line = malloc(sizeof(char) * ((line_len + 1)));
 	if (!flagged_line)

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/22 00:01:37 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/22 11:50:17 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ void handle_basic(t_shell *sh, char **env)
 			i++;
 		else if (ft_strpbrk(sh->input_args[i], "|<>") != NULL)
 		{	
-			printf("arg[%d] (%s) contains pipe or redir!\n", i, sh->input_args[i]);
+		//	printf("arg[%d] (%s) contains pipe or redir!\n", i, sh->input_args[i]);
 			break ;
 		}
 		i++;

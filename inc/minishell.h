@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/21 20:56:48 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/22 12:16:45 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 # define CC_STICKY_VAR 22 // '@' // 22
 # define CC_TO_BE_DELETED 20 // 'X' // 20
 # define CC_TRAILING_DOLLAR 19 // '%' // 19
+# define CC_DOLLAR_UNCLOSED 18
 
 /*
 # define CC_SPACE_IN_QUOTE '_' // 29
