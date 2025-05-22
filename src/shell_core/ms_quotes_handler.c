@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/22 12:27:18 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/22 13:31:19 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 void	handle_quote(char *line, char quote_type, int *i)
 {
 	(*i)++;
-	if (quote_type == '\'')
+	if (quote_type == '\'' && ft_count_char(&line[(*i)], '\'') > 1)
 	{
 		while (line[(*i)] != '\'')
 			ft_replace_if_space(&line[(*i)++], CC_SPACE_IN_QUOTE);
 	}
-	else if (quote_type == '\"')
+	else if (quote_type == '\"' && ft_count_char(&line[(*i)], '\"') > 1)
 	{
 		while (line[(*i)] != '\"' && line[(*i)] != CC_VAR_BOUND)
 		{

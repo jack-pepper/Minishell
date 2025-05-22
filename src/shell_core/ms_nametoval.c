@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:03:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/22 11:50:58 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/22 13:51:08 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,17 @@ char	*rejoin_subarg(char **subargs, char splitter, char *delim, int trailing)
 	else if ((trailing == 0 && ft_ispunct(delim[0]) && delim[0] != '$')
 		|| (trailing == 1 && (delim[0] == '$' || !ft_ispunct(delim[0]))))
 	{
-		temp = join_all_subargs(subargs, *delim);
+
 //		printf("// C2 // temp: %s\n", temp);
-		arg = ft_strjoin(temp, delim);
-//		printf("// C2 // arg: %s\n", arg);
-		free(temp);
+		if (trailing == 1)
+		{
+			temp = join_all_subargs(subargs, *delim);
+			arg = ft_strjoin(temp, delim);
+			free(temp);
+		}
+		else
+			arg = join_all_subargs(subargs, *delim);
+		//printf("// C2 // arg: %s\n", arg);
 	}
 	else
 	{
