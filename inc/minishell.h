@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/22 21:14:21 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/22 21:42:23 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,7 +234,7 @@ char		*handle_dotted_path(char *cwd, char *path);
 char		*get_abs_path(char *joined_path, char *cwd, char *path);
 char		**split_abs_path(char **split_path, char *joined_path);
 void		flag_dotted_path(char **split_path, char ctrl_char);
-char		*rejoin_abs_path(char *rejoined_path, char **split_path);
+char		*rejoin_abs_path(char *rejoined_path, char **split_path, int i, int j);
 
 	// ms_debug_utils.c
 void		ft_show_strs(char **strs, char *debug_msg);

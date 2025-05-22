@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:03:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/22 13:51:08 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/22 22:07:53 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,11 @@ char	*rejoin_subarg(char **subargs, char splitter, char *delim, int trailing)
 	char	*arg;
 	char	*temp;
 
-//	printf("[DEBUG] trailing: %d - is delim punct?: %d\n", trailing, ft_ispunct(delim[0]));
 	if (splitter == '\0' || splitter == CC_VAR_BOUND)
-	{
 		arg = join_all_subargs(subargs, 'n');
-//		printf("// C1 // arg: %s\n", arg);
-	}
 	else if ((trailing == 0 && ft_ispunct(delim[0]) && delim[0] != '$')
 		|| (trailing == 1 && (delim[0] == '$' || !ft_ispunct(delim[0]))))
 	{
-
-//		printf("// C2 // temp: %s\n", temp);
 		if (trailing == 1)
 		{
 			temp = join_all_subargs(subargs, *delim);
@@ -65,13 +59,9 @@ char	*rejoin_subarg(char **subargs, char splitter, char *delim, int trailing)
 		}
 		else
 			arg = join_all_subargs(subargs, *delim);
-		//printf("// C2 // arg: %s\n", arg);
 	}
 	else
-	{
 		arg = join_all_subargs(subargs, *delim);
-//		printf("// C3 // arg: %s\n", arg);
-	}
 	return (arg);
 }
 
@@ -86,11 +76,8 @@ char	*split_rejoin(t_shell *sh, char *rejoined_arg, char *arg, char splitter)
 	delim = to_delim(splitter);
 	if (!delim)
 		return (NULL);
-
 	if (ft_ispunct(splitter) && delim[0] != '$')
 		splitter = CC_SUBARG_DELIM;
-
-//	printf("[DEBUG] splitter: %c - delim: %c\n", splitter, delim[0]);
 	subargs = ft_split(arg, splitter);
 	set_var = ft_getenv(subargs[0], &sh->this_env);
 	subargs[0] = ft_setenv(set_var, subargs[0]);

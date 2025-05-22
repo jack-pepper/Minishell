@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 11:48:09 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/22 21:32:50 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/22 21:56:55 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ char	*handle_dotted_path(char *cwd, char *path)
 	rejoined_path = NULL;
 	joined_path = get_abs_path(joined_path, cwd, path);
 	if (!joined_path)
-		return (NULL);	
+		return (NULL);
 	split_path = split_abs_path(split_path, joined_path);
 	if (!split_path)
 		return (NULL);
-	flag_dotted_path(split_path, CC_TO_BE_DELETED);	
-	rejoined_path = rejoin_abs_path(rejoined_path, split_path);
+	flag_dotted_path(split_path, CC_TO_BE_DELETED);
+	rejoined_path = rejoin_abs_path(rejoined_path, split_path, 0, 0);
 	free_args(split_path);
 	if (!rejoined_path)
 		return (NULL);
@@ -80,10 +80,7 @@ void	flag_dotted_path(char **split_path, char ctrl_char)
 				if (i >= 0 && split_path[i] != NULL
 					&& split_path[i][0] != ctrl_char)
 					split_path[i][0] = ctrl_char;
-				else
-					return ;
-				split_path[j][0] = ctrl_char;	
-				j++;
+				split_path[j++][0] = ctrl_char;
 			}
 			i = j - 1;
 		}
@@ -93,12 +90,10 @@ void	flag_dotted_path(char **split_path, char ctrl_char)
 	}
 }
 
-char	*rejoin_abs_path(char *rejoined_path, char **split_path)
+char	*rejoin_abs_path(char *rejoined_path, char **split_path, int i, int j)
 {
 	char	*temp;
 	char	*prev_rejoined_path;
-	int		i;
-	int		j;
 
 	if (split_path[0][0] == CC_TO_BE_DELETED)
 		rejoined_path = ft_strdup("/");
@@ -106,7 +101,6 @@ char	*rejoin_abs_path(char *rejoined_path, char **split_path)
 		rejoined_path = ft_strdup("");
 	if (!rejoined_path)
 		return (NULL);
-	ft_init_two_ints(0, &i, &j);
 	while (split_path[i])
 	{
 		if (split_path[i][0] != CC_TO_BE_DELETED)

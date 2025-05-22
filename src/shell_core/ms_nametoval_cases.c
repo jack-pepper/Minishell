@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:03:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/22 13:45:56 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/22 22:06:19 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ char	*handle_special_cases(t_shell *sh, char *joined, char *split, char *end)
 
 	if (ft_ispunct(*end) && !ft_is_in_set(*end, "$"))
 	{
-		printf("end: %c - punct case!\n", *end);
 		temp = *end;
 		*end = CC_SUBARG_DELIM;
 		joined = split_rejoin(sh, joined, split, temp);
