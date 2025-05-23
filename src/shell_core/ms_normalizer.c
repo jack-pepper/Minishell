@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/23 10:54:14 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/23 16:16:47 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ char	*ft_normalize(char *line)
 	free(flagged);
 	if (!spaced)
 		return (NULL);
+	
 
-	// Add spaces around <, >, <<, >>
 	tmp = spaced;
 	spaced = ft_add_spaces_around_str(tmp, (char[]){CC_APPEND, '\0'});
 	free(tmp);
@@ -103,6 +103,7 @@ char	*copy_collapse(char *dst, char *src, size_t src_len)
 			dst[j++] = src[i++];
 	}
 	dst[j] = '\0';
+	//printf("[DEB - after cpclapse] %s\n", dst);
 	return (dst);
 }
 

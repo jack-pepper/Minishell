@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:03:35 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/23 10:00:24 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/23 16:12:42 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	flag_quote(char *line, int *i)
 	{
 		ante_merge_quote(line, i);
 		handle_quote(line, '\"', i);
-		post_merge_quote(line, i);
+		post_merge_quote(line, i, (*i) - 1);
 	}
 	else if ((ft_is_in_set(line[(*i)], "\"\'"))
 		&& (ft_count_char(&line[(*i)], '\"') == 1

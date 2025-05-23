@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/23 10:53:14 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/23 16:14:49 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,23 +60,17 @@ void	ante_merge_quote(char *line, int *i)
 	}
 }
 
-void	post_merge_quote(char *line, int *i)
+void	post_merge_quote(char *line, int *i, int temp_i)
 {
-	int	temp_i;
-	
-	if (line[(*i) + 1] && line[(*i) + 1] != ' ' //&& line[(*i) + 1] != '\"'
+	if (line[(*i) + 1] && line[(*i) + 1] != ' '
 		&& ft_strchr(line, CC_VAR_TO_INTERPRET) != NULL)
 	{
-		temp_i = (*i) - 1;
 		while (temp_i >= 0 && line[temp_i] != '\"'
 			&& line[temp_i] != CC_VAR_BOUND && line[temp_i] != ' ')
 		{
-			temp_i--; // replaced on next line for norm, test it
-			if (line[temp_i] == CC_VAR_TO_INTERPRET && line[(*i) + 1] != '$')
-			{
+			temp_i--;
+			if (line[temp_i] == CC_VAR_TO_INTERPRET)
 				ft_replace_char(&line[(*i)], CC_VAR_BOUND);
-				return ;//break ;
-			}
 		}
 		(*i)++;
 		while (line[(*i)] != '\0' && line[(*i)] != ' ')

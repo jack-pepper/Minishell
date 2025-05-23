@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:06:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/21 23:51:01 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/23 16:12:18 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,15 @@ int	normalize_env(t_list *this_env)
 		if (ft_strslen((char **)cur_node->content) > 2)
 		{
 			rejoined_var = ft_strdup(((char **)cur_node->content)[1]);
+			if (!rejoined_var)
+				return (1);
 			free(((char **)cur_node->content)[1]);
 			while (((char **)cur_node->content)[i])
 			{
 				temp = ft_strdup(rejoined_var);
 				free(rejoined_var);
+				if (!temp)
+					return (1);
 				rejoined_var = ft_strjoin_delim(
 						temp, ((char **)cur_node->content)[i], "=");
 				free(temp);

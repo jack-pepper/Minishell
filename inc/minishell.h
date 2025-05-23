@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/23 10:55:35 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/23 16:11:09 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ void	flag_quote(char *line, int *i);
 //char		*flag_edge_var(char *line, int *i);
 void		ante_merge_quote(char *line, int *i);
 void		handle_quote(char *line, char quote_type, int *i);
-void		post_merge_quote(char *line, int *i);
+void		post_merge_quote(char *line, int *i, int temp_i);
 void		pass_quotes(char *dst, char *src, size_t *i, size_t *j);
 
 	// ms_env_interpreter.c
