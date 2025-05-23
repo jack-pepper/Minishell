@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/22 21:42:23 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/23 10:55:35 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 # define CC_HEREDOC   27 // "<<"
 # define CC_PIPE 28 // "|"
 
-
 # define CC_SPACE_IN_QUOTE 29 // '_' // 29
 # define CC_VAR_TO_INTERPRET 30 // '#' // 30
 # define CC_SUBARG_DELIM 31 // '-' // 31
@@ -37,7 +36,7 @@
 # define CC_EXTRA_DELIM 31 // ';' // 31
 # define CC_VAR_BOUND 21 // '*' // 21 // For edge case `echo "$HO"ME`
 # define CC_STICKY_VAR 22 // '@' // 22
-# define CC_TO_BE_DELETED '*' // 'X' // 20
+# define CC_TO_BE_DELETED 20 // 'X' // 20
 # define CC_TRAILING_DOLLAR 19 // '%' // 19
 # define CC_DOLLAR_UNCLOSED 18
 
@@ -51,8 +50,9 @@
 # define CC_STICKY_VAR '@' // 22
 # define CC_TO_BE_DELETED 'X' // 20
 # define CC_TRAILING_DOLLAR '%' // 19
-
+# define CC_DOLLAR_UNCLOSED 18
 */
+
 /* Return messages (ft_ret) */
 
 # define SHELL_NAME "minishell: " // could be used to improve error msg
