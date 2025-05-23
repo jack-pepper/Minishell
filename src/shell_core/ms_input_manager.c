@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:06 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/23 14:26:42 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/23 20:26:22 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,20 @@ char	*get_input(char *line)
 // Normalize the input and store the arguments for further use
 char	**normalize_input(char *line, t_shell *sh)
 {
+	if (DEBUG == 1)
+		printf("[normalize_input] (user input) %s\n", line);
 	sh->normalized_line = ft_normalize(line);
 	if (!sh->normalized_line)
 		return (NULL);
+	if (DEBUG == 1)	
+		printf("[normalize_input] (normalized) %s\n", sh->normalized_line);
 	sh->input_args = ft_split(sh->normalized_line, ' ');
 	free(sh->normalized_line);
 	sh->normalized_line = NULL;
 	if (!sh->input_args)
 		return (NULL);
+	if (DEBUG == 1)
+		ft_show_strs(sh->input_args, "[normalize_input] (split input_args) ");
 	ft_replace_all_chars(sh->input_args, '|', CC_PIPE);
 	return (sh->input_args);
 }
@@ -57,7 +63,7 @@ int	process_input(t_shell *sh)
 	ft_interpret_env(sh);
 	ft_replace_all_chars(sh->input_args, CC_TRAILING_DOLLAR, '$');
 	if (DEBUG == 1)
-		ft_show_strs(sh->input_args, "[PROCESS_INPUT (after env)]");
+		ft_show_strs(sh->input_args, "[process_input] (after env)] ");
 	cmd = is_registered_cmd(sh);
 	if (cmd != NULL)
 		sh->last_exit_status = cmd->func(sh);

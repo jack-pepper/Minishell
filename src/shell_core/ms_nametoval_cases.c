@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:03:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/23 16:03:19 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/23 23:54:22 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,28 @@ char	*handle_special_cases(t_shell *sh, char *joined, char *split, char *end)
 {
 	char	temp;
 
-	if (ft_ispunct(*end) && !ft_is_in_set(*end, "$"))
+	if (ft_ispunct(*end))
 	{
 		temp = *end;
 		*end = CC_SUBARG_DELIM;
 		joined = split_rejoin(sh, joined, split, temp);
-	}
-	else if (*end == CC_TRAILING_DOLLAR)
-	{
-		joined = split_rejoin(sh, joined, split,
-				CC_TRAILING_DOLLAR);
+		if (DEBUG == 1)
+			printf(">$$$ [special_case] (is punct) joined: ~%s~\n", joined);
 	}
 	else if (*end == CC_SPACE_IN_QUOTE)
 	{
 		*end = CC_SUBARG_DELIM;
 		joined = split_rejoin(sh, joined, split,
 				CC_SUBARG_DELIM);
+		if (DEBUG == 1)
+			printf(">$$$ [special_case] (is CC_SPACE_IN_QUOTE) joined: ~%s~\n", joined);
 	}
 	else if (*end == CC_VAR_BOUND)
 	{
 		joined = split_rejoin(sh, joined, split,
-				CC_VAR_BOUND);
+				CC_VAR_BOUND);	
+		if (DEBUG == 1)
+			printf(">$$$ [special_case] (is CC_VAR_BOUND) joined: ~%s~\n", joined);
 	}
 	return (joined);
 }

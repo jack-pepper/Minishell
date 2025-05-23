@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/23 19:34:00 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/23 21:24:21 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*ft_normalize(char *line)
 		return (NULL);
 	spaced = ft_add_spaces_around_redir(spaced);
 	if (DEBUG == 1)
-		printf("[DEBUG FT_NORMALIZER] %s\n", spaced);
+		printf("[ft_normalize] (normalized and spaced) %s\n", spaced);
 	return (spaced);
 }
 
@@ -53,6 +53,8 @@ char	*ft_strflag(char *line)
 			flag_pipe_and_redir(line, &i);
 		else if (ft_is_in_set(line[i], "\"\'"))
 			flag_quote(line, &i);
+		if (DEBUG == 1)
+			printf("[ft_strflag ($, |, ><, "", '')] (line[%d]) ~%c~\n", i, line[i]);
 		i++;
 	}
 	ft_replace_chars_in_str(line, CC_DOLLAR_UNCLOSED, '$');
@@ -74,7 +76,7 @@ char	*copy_collapse(char *dst, char *src, size_t src_len)
 		return (NULL);
 	ft_init_two_size_t(0, &i, &j);
 	if (DEBUG == 1)
-		printf("[DEBUG COPY_COLLAPSE] %s\n", src);
+		printf("[before copy_collapse] %s\n", src);
 	while (i < src_len)
 	{
 		if ((src[i] == '\'' && ft_count_char(&src[i], '\'') > 1)
@@ -84,9 +86,15 @@ char	*copy_collapse(char *dst, char *src, size_t src_len)
 			pass_quotes(dst, src, &i, &j);
 		else if ((ft_isspace(src[i]) && ft_isspace(src[i + 1]))
 			|| (src[i] == CC_LONE_DOLLAR))
+		{
+			if (DEBUG == 1)
+				printf("--> [pass] src[%ld] ~%c~\n", i, src[i]);
 			i++;
+		}
 		else
+		{		
 			dst[j++] = src[i++];
+		}
 	}
 	dst[j] = '\0';
 	return (dst);

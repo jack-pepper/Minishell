@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/23 14:25:09 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/23 22:40:57 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,8 @@ char	*join_all_subargs(char **args, char delim)
 		if (!temp)
 			return (NULL);
 		result = temp;
-		if ((delim != 'n' && (args[i + 1]))
-			|| (ft_ispunct(delim)))
-		{
+		if (delim != 'n')
 			result = join_with_delim(result, temp, delim);
-		}
 		i++;
 	}
 	return (result);

@@ -6,14 +6,14 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/23 19:29:33 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/23 22:15:40 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define DEBUG 0
+# define DEBUG 1
 
 # define NB_CMDS 7
 
@@ -29,6 +29,7 @@
 # define CC_HEREDOC   27 // "<<"
 # define CC_PIPE 28 // "|"
 
+
 # define CC_SPACE_IN_QUOTE 29 // '_' // 29
 # define CC_VAR_TO_INTERPRET 30 // '#' // 30
 # define CC_SUBARG_DELIM 31 // '-' // 31
@@ -40,17 +41,18 @@
 # define CC_TRAILING_DOLLAR 19 // '%' // 19
 # define CC_DOLLAR_UNCLOSED 18
 
+
 /*
-# define CC_SPACE_IN_QUOTE '_' // 29
-# define CC_VAR_TO_INTERPRET '#' // 30
-# define CC_SUBARG_DELIM '-' // 31
-# define CC_LONE_DOLLAR '&' // 23 == $ before opening quote (should disappear)
-# define CC_EXTRA_DELIM ';' // 31
-# define CC_VAR_BOUND '*' // 21 // For edge case `echo "$HO"ME`
-# define CC_STICKY_VAR '@' // 22
-# define CC_TO_BE_DELETED 'X' // 20
-# define CC_TRAILING_DOLLAR '%' // 19
-# define CC_DOLLAR_UNCLOSED 18
+# define CC_SPACE_IN_QUOTE '0' // 29
+# define CC_VAR_TO_INTERPRET '1' // 30
+# define CC_SUBARG_DELIM '2' // 31
+# define CC_LONE_DOLLAR '3' // 23 == $ before opening quote (should disappear)
+# define CC_EXTRA_DELIM '4' // 31
+# define CC_VAR_BOUND '5' // 21 // For edge case `echo "$HO"ME`
+# define CC_STICKY_VAR '6' // 22
+# define CC_TO_BE_DELETED '7' // 20
+# define CC_TRAILING_DOLLAR '8' // 19
+# define CC_DOLLAR_UNCLOSED '9' // 18
 */
 
 /* Return messages (ft_ret) */

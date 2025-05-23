@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/19 14:53:58 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/23 20:03:17 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	ft_free_array(char **arr, int count)
 		while (i < count)
 			free(arr[i++]);
 	}
-	free(arr);
+	free(arr); // ERROR: causes an invalid read if any cmd followed by CTRL-D
 }
 
 void	ft_free_2d_array(char **arr)
