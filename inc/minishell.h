@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/23 16:11:09 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/23 19:29:33 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,10 +143,12 @@ int			process_input(t_shell *sh);
 	// ms_normalizer.c
 char		*ft_normalize(char *line);
 char		*ft_strflag(char *line);
-char		*ft_add_spaces_around(char *str, char special);
-char		*ft_add_spaces_around_str(const char *line, const char *str);
 char		*copy_collapse(char *dst, char *src, size_t src_len);
 
+	// ms_normalizer_add_spaces.c
+char		*ft_add_spaces_around_redir(char *spaced);
+char		*ft_add_spaces_around(char *str, char special);
+char		*ft_add_spaces_around_str(const char *line, const char *str);
 
 	// ms_flagger.c
 void	flag_dollar(char *line, int *i);

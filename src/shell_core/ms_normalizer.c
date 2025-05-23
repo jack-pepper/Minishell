@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/23 16:16:47 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/23 19:34:00 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ char	*ft_normalize(char *line)
 	char	*trimmed;
 	char	*flagged;
 	char	*spaced;
-	char	*tmp;
 
 	trimmed = ft_strtrim(line, " \f\n\r\t\v");
 	if (trimmed == NULL)
@@ -31,20 +30,7 @@ char	*ft_normalize(char *line)
 	free(flagged);
 	if (!spaced)
 		return (NULL);
-	
-
-	tmp = spaced;
-	spaced = ft_add_spaces_around_str(tmp, (char[]){CC_APPEND, '\0'});
-	free(tmp);
-	tmp = spaced;
-	spaced = ft_add_spaces_around_str(tmp, (char[]){CC_HEREDOC, '\0'});
-	free(tmp);
-	tmp = spaced;
-	spaced = ft_add_spaces_around_str(tmp, (char[]){CC_REDIR_IN, '\0'});
-	free(tmp);
-	tmp = spaced;
-	spaced = ft_add_spaces_around_str(tmp, (char[]){CC_REDIR_OUT, '\0'});
-	free(tmp);
+	spaced = ft_add_spaces_around_redir(spaced);
 	if (DEBUG == 1)
 		printf("[DEBUG FT_NORMALIZER] %s\n", spaced);
 	return (spaced);
@@ -103,69 +89,5 @@ char	*copy_collapse(char *dst, char *src, size_t src_len)
 			dst[j++] = src[i++];
 	}
 	dst[j] = '\0';
-	//printf("[DEB - after cpclapse] %s\n", dst);
 	return (dst);
-}
-
-
-char *ft_add_spaces_around(char *str, char special)
-{
-	int i = 0;
-	int len = ft_strlen(str);
-	int extra = 0;
-
-	// Count how many extra spaces we need
-	for (i = 0; str[i]; i++)
-		if (str[i] == special)
-			extra += 2;
-
-	char *new_str = malloc(len + extra + 1);
-	if (!new_str) return NULL;
-
-	int j = 0;
-	for (i = 0; str[i]; i++)
-	{
-		if (str[i] == special)
-		{
-			new_str[j++] = ' ';
-			new_str[j++] = special;
-			new_str[j++] = ' ';
-		}
-		else
-			new_str[j++] = str[i];
-	}
-	new_str[j] = '\0';
-	return new_str;
-}
-
-char *ft_add_spaces_around_str(const char *line, const char *str) {
-	int len = strlen(line);
-	int op_len = strlen(str);
-	int count = 0;
-	for (int i = 0; line[i]; i++) {
-		if (strncmp(&line[i], str, op_len) == 0)
-			count++;
-	}
-	if (count == 0)
-		return strdup(line);
-
-	// Each match will add 2 extra spaces
-	char *result = malloc(len + count * 2 + 1);
-	if (!result)
-		return NULL;
-
-	int i = 0, j = 0;
-	while (line[i]) {
-		if (strncmp(&line[i], str, op_len) == 0) {
-			result[j++] = ' ';
-			for (int k = 0; k < op_len; k++)
-				result[j++] = str[k];
-			result[j++] = ' ';
-			i += op_len;
-		} else {
-			result[j++] = line[i++];
-		}
-	}
-	result[j] = '\0';
-	return result;
 }

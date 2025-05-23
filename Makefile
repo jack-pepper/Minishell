@@ -6,7 +6,7 @@
 #    By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/20 17:50:19 by mmalie            #+#    #+#              #
-#    Updated: 2025/05/20 19:54:23 by mmalie           ###   ########.fr        #
+#    Updated: 2025/05/23 19:26:15 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ LIBFT = ./libft/libft.a
 MS_SRC = ./src/minishell.c \
       ./src/shell_core/ms_initer.c \
       ./src/shell_core/ms_normalizer.c \
+      ./src/shell_core/ms_normalizer_add_spaces.c \
       ./src/shell_core/ms_flagger.c \
       ./src/shell_core/ms_commands_manager.c \
       ./src/shell_core/ms_input_manager.c \
