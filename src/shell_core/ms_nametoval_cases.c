@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:03:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/23 23:54:22 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/25 00:33:55 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,29 @@
 
 char	*handle_special_cases(t_shell *sh, char *joined, char *split, char *end)
 {
-	char	temp;
+	char	symbol;
 
-	if (ft_ispunct(*end))
-	{
-		temp = *end;
-		*end = CC_SUBARG_DELIM;
-		joined = split_rejoin(sh, joined, split, temp);
-		if (DEBUG == 1)
-			printf(">$$$ [special_case] (is punct) joined: ~%s~\n", joined);
-	}
-	else if (*end == CC_SPACE_IN_QUOTE)
+	if (*end == CC_VAR_BOUND)
 	{
 		*end = CC_SUBARG_DELIM;
-		joined = split_rejoin(sh, joined, split,
-				CC_SUBARG_DELIM);
+		joined = split_rejoin(sh, joined, split, CC_VAR_BOUND);
 		if (DEBUG == 1)
-			printf(">$$$ [special_case] (is CC_SPACE_IN_QUOTE) joined: ~%s~\n", joined);
+			printf(">$$$ [special_case] (is CC_VAR_BOUND: TO REMOVE) joined: ~%s~\n", joined);
 	}
-	else if (*end == CC_VAR_BOUND)
+	else if (*end == CC_VAR_BOUND_SQUOTE)
 	{
-		joined = split_rejoin(sh, joined, split,
-				CC_VAR_BOUND);	
+		*end = CC_SUBARG_DELIM;
+		joined = split_rejoin(sh, joined, split, CC_VAR_BOUND_SQUOTE);
 		if (DEBUG == 1)
-			printf(">$$$ [special_case] (is CC_VAR_BOUND) joined: ~%s~\n", joined);
+			printf(">$$$ [special_case] (is CC_VAR_BOUND_SQUOTE: TO RESTORE) joined: ~%s~\n", joined);
+	}
+	else if (*end == CC_SPACE_IN_QUOTE || ft_ispunct(*end))
+	{
+		symbol = *end;
+		*end = CC_SUBARG_DELIM;
+		joined = split_rejoin(sh, joined, split, symbol);
+		if (DEBUG == 1)
+			printf(">$$$ Symbol: CC_SPACE_IN_QUOTE or punct (TO KEEP) joined: ~%s~\n", joined);
 	}
 	return (joined);
 }

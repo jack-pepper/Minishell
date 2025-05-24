@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/23 22:15:40 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/24 23:39:41 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@
 # define CC_SUBARG_DELIM 31 // '-' // 31
 # define CC_LONE_DOLLAR 23 // '&' // 23 == $ before opening quote (should disappear)
 # define CC_EXTRA_DELIM 31 // ';' // 31
-# define CC_VAR_BOUND 21 // '*' // 21 // For edge case `echo "$HO"ME`
+# define CC_VAR_BOUND 21 // '*' // 21 // To remove "
+# define CC_VAR_BOUND_SQUOTE 19// To restore '
 # define CC_STICKY_VAR 22 // '@' // 22
 # define CC_TO_BE_DELETED 20 // 'X' // 20
 # define CC_TRAILING_DOLLAR 19 // '%' // 19

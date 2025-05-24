@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/23 23:28:58 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/25 01:05:11 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 void	handle_quote(char *line, char quote_type, int *i)
 {
-	if (DEBUG == 1)
-		printf("---> which quote? / (line[%d] ~%c~)\n", (*i), line[(*i)]);
 	(*i)++;
 	if (quote_type == '\'' && ft_count_char(&line[(*i - 1)], '\'') > 1)
 	{
@@ -31,14 +29,26 @@ void	handle_quote(char *line, char quote_type, int *i)
 		while (line[(*i)] != '\"' && line[(*i)] != CC_VAR_BOUND)
 		{
 			if (line[(*i)] == '$' && ft_isalnum_x_chr(&line[(*i) + 1], "_?"))
+			{
 				ft_replace_char(&line[(*i)], CC_VAR_TO_INTERPRET);
-			//else if (line[(*i)] == '$'
-			//	&& ft_isalnum_x_chr(&line[(*i) - 1], "_?"))
-			//	ft_replace_char(&line[(*i)], CC_TRAILING_DOLLAR);
-			//else if (line[(*i)] == '$'
-			//	&& (ft_is_in_set(line[(*i) + 1], "\"\'")))
-			//	ft_replace_char(&line[(*i)], CC_TRAILING_DOLLAR);
-			else if (line[(*i)] != '\"' && line[(*i)] != CC_VAR_BOUND)
+				(*i)++;
+				while (ft_isalnum_x_chr(&line[(*i)], "_?"))
+					(*i)++;
+				if (line[(*i)] == '\'')
+				{
+					if (DEBUG == 1)
+						printf("SINGLE QUOTE!\n");
+					line[(*i)] = CC_VAR_BOUND_SQUOTE;
+				}
+				else if (line[(*i)] == '\"')
+				{
+					if (DEBUG == 1)
+						printf("DOUBLE QUOTE\n");
+					line[(*i)] = CC_VAR_BOUND;
+				}
+				(*i)--;
+			}
+			else if (line[(*i)] != '\"' && line[(*i)] != CC_VAR_BOUND && line[(*i)] != CC_VAR_BOUND_SQUOTE)
 				ft_replace_if_space(&line[(*i)], CC_SPACE_IN_QUOTE);	
 			if (DEBUG == 1)
 				printf("---> handle_quote ("") / (line[%d] ~%c~)\n", (*i), line[(*i)]);
@@ -81,7 +91,7 @@ void	post_merge_quote(char *line, int *i, int temp_i)
 			temp_i--;
 			if (line[temp_i] == CC_VAR_TO_INTERPRET)
 			{
-				ft_replace_char(&line[(*i)], CC_VAR_BOUND);	
+				ft_replace_char(&line[(*i)], CC_VAR_BOUND);
 				if (DEBUG == 1)
 					printf("/post_merge/ found CC_VAR_TO_INTERPRET at line[%d] (%c) ! (line[%d] ~%c~)\n", temp_i, line [(temp_i)], (*i), line[(*i)]);
 			}
@@ -124,7 +134,7 @@ void	pass_quotes(char *dst, char *src, size_t *i, size_t *j)
 	}
 	else if (src[(*i)] == CC_VAR_BOUND)
 	{
-		while (src[(*i)] != '\"')
+		while (src[(*i)] != '\"' && src[(*i)] != CC_VAR_BOUND)
 		{
 			if (DEBUG == 1)
 				printf("----> [copy while \"]/ (line[%ld] ~%c~)\n", (*i), src[(*i)]);
@@ -133,6 +143,7 @@ void	pass_quotes(char *dst, char *src, size_t *i, size_t *j)
 			{
 				if (DEBUG == 1)
 					printf("----> [found CC_VAR_BOUND! stop]/ (line[%ld] ~%c~)\n", (*i), src[(*i)]);
+				dst[(*j)] = src[(*i)];
 				break ;
 			}
 		}

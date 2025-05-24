@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:03:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/23 23:57:11 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/25 00:54:30 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,13 @@ char	*ft_nametoval(t_shell *sh, char *rejoined, char **split_args)
 		{
 			j = 0;
 			while (split_args[i][j] && ft_isalnum_x_chr(&split_args[i][j], "_"))
+			{
+				printf("[%c]", split_args[i][j]);
 				j++;
+			}
 			end_name = &(split_args[i][j]);
 			if (DEBUG == 1)
-				printf("[NAMETOVAL] var ends on: ~%c~\n", split_args[i][j]);
+				printf("[NAMETOVAL] var ends on: ~%c~ (is \\0 %d)\n", split_args[i][j], *end_name == '\0');
 			if (*end_name != '\0')
 			{
 				if (DEBUG == 1)
@@ -53,65 +56,41 @@ char	*ft_nametoval(t_shell *sh, char *rejoined, char **split_args)
 	return (rejoined);
 }
 
-char	*rejoin_subarg(char **subargs, char splitter, char *delim, int trailing)
+char	*rejoin_subarg(char **subargs, char *delim)
 {
 	char	*arg;
 	char	*temp;
 
-	trailing++;trailing--; // not needed
-	if (DEBUG == 1)
-			printf("splitter: ~%c~\n", splitter);	
-	if (splitter == '\0' || splitter == CC_VAR_BOUND)
+	if (delim[0] == '\0')
 		arg = join_all_subargs(subargs, 'n');
-	else if (splitter == CC_SUBARG_DELIM && delim[0] == ' ')
-	{	
-		temp = ft_strdup(subargs[0]);
-		free(subargs[0]);	
-		subargs[0] = ft_strjoin(temp, delim);
-		arg = join_all_subargs(subargs, 'n');
-		free(temp);
-	}
-	else if (splitter == CC_SUBARG_DELIM
-		&& ft_ispunct(delim[0]))
+	else
 	{
 		temp = ft_strdup(subargs[0]);
-		free(subargs[0]);	
+		free(subargs[0]);
 		subargs[0] = ft_strjoin(temp, delim);
 		arg = join_all_subargs(subargs, 'n');
 		free(temp);
 	}
-	else
-		arg = join_all_subargs(subargs, 'n');
 	return (arg);
 }
 
-char	*split_rejoin(t_shell *sh, char *rejoined_arg, char *arg, char splitter)
+char	*split_rejoin(t_shell *sh, char *rejoined_arg, char *arg, char symbol)
 {
 	char	**subargs;
 	t_list	*set_var;
-	int		trailing_splitter;
 	char	*delim;
 
+	delim = to_delim(symbol);
 	if (DEBUG == 1)
-		printf("[SPLIT_REJOIN] splitter: ~%c~ \n", splitter);
-	trailing_splitter = (arg[ft_strlen(arg) - 1] == splitter);
-	delim = to_delim(splitter);	
-	if (DEBUG == 1)
-		printf("trailing_splitter: ~%d~ - delim: ~%s~ \n", trailing_splitter, delim);
+		printf("delim: ~%s~ \n", delim);
 	if (!delim)
 		return (NULL);
-	if (ft_ispunct(splitter))
-	{
-		if (DEBUG == 1)
-			printf("ispunct = splitter changed to CC_SUBARG_DELIM\n");
-		splitter = CC_SUBARG_DELIM;
-	}
-	subargs = ft_split(arg, splitter);	
+	subargs = ft_split(arg, CC_SUBARG_DELIM);
 	if (DEBUG == 1)
 		ft_show_strs(subargs, "subargs ");
 	set_var = ft_getenv(subargs[0], &sh->this_env);
 	subargs[0] = ft_setenv(set_var, subargs[0]);
-	arg = rejoin_subarg(subargs, splitter, delim, trailing_splitter);
+	arg = rejoin_subarg(subargs, delim);
 	if (DEBUG == 1)
 		printf("arg: %s\n", arg);
 	free(delim);
@@ -126,7 +105,7 @@ char	*split_rejoin(t_shell *sh, char *rejoined_arg, char *arg, char splitter)
 }
 
 // Set the delim str used to replace the splitter char (restore punct if apply)
-char	*to_delim(char splitter)
+char	*to_delim(char symbol)
 {
 	char	*delim;
 
@@ -134,19 +113,14 @@ char	*to_delim(char splitter)
 	if (!delim)
 		return (NULL);
 	delim[0] = '\0';
-	if (splitter == CC_SPACE_IN_QUOTE
-		|| splitter == CC_SUBARG_DELIM)
-	{
-		if (DEBUG == 1)
-			printf("CC_SPACE_IN_QUOTE OR SUBARG_DELIM: splitter changed to space\n");		
+	if (symbol == CC_SPACE_IN_QUOTE)
 		delim[0] = ' ';
-	}
+	else if (symbol == CC_VAR_BOUND)
+		delim[0] = '\0';
+	else if (symbol == CC_VAR_BOUND_SQUOTE)
+		delim[0] = '\'';
 	else
-	{
-		if (DEBUG == 1)
-			printf("delim = splitter\n");		
-		delim[0] = splitter;
-	}
+		delim[0] = symbol;
 	delim[1] = '\0';
 	return (delim);
 }
