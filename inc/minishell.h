@@ -6,14 +6,14 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/24 23:39:41 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/25 15:27:21 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define DEBUG 1
+# define DEBUG 0
 
 # define NB_CMDS 7
 

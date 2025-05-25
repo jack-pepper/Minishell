@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:03:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/25 09:27:53 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/25 12:27:07 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,30 +47,33 @@ char	*handle_exit_status_case(t_shell *sh, char *rejoined_arg, char *subarg)
 	char	*exit_status;
 	char	*temp;
 
+	if (DEBUG == 1)
+		printf("EXIT STATUS CASE\n");
 	exit_status = ft_itoa(sh->last_exit_status);
 	if (subarg[1] != '\0')
 	{
 		temp = ft_strdup(&subarg[1]);
-		if (temp[0] == '\'' || temp[0] == CC_VAR_BOUND_SQUOTE)
-			temp[0] = '\'';
+		//if ((temp[0] == '\'' || temp[0] == CC_VAR_BOUND_SQUOTE)
+		//	&& !(temp[1]))
+		//	temp[0] = '\'';
 		if (!temp)
 		{
 			free(exit_status);
 			return (NULL);
 		}
 		arg = ft_strjoin(exit_status, temp);
-		printf("EXIT CASE: arg (1): %s\n)", arg);
 		free(temp);
 	}
 	else
-	{
-		arg = ft_strdup(exit_status);	
-		printf("EXIT CASE: arg (2): %s\n)", arg);
-	}
+		arg = ft_strdup(exit_status);
 	free(exit_status);
 	if (!arg)
 		return (NULL);
+	if (DEBUG == 1)
+		printf("arg: ~%s~\n", arg);
 	rejoined_arg = ft_rejoin_subarg(arg, rejoined_arg);
+	if (DEBUG == 1)
+		printf("rejoined_arg: ~%s~\n", rejoined_arg);
 	free(arg);
 	return (rejoined_arg);
 }

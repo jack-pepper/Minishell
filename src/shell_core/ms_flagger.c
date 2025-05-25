@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:03:35 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/25 00:16:06 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/25 14:31:11 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,12 @@ void	flag_dollar(char *line, int *i)
 {
 	if (line[(*i) + 1])
 	{
-		if (ft_is_in_set(line[(*i) + 1], "\"\'") && (line[(*i) - 1]) && (line[(*i)] != '$'))
+		if (ft_is_in_set(line[(*i) + 1], "\"\'")
+			&& ft_count_char(&line[(*i) + 1], line[(*i) + 1]) > 1)
 			ft_replace_char(&line[(*i)], CC_LONE_DOLLAR);
 		else if (ft_isalnum_x_chr(&line[(*i) + 1], "_?"))
 			ft_replace_char(&line[(*i)], CC_VAR_TO_INTERPRET);
 	}
-	if (DEBUG == 1)
-		printf("/flag_dollar/ (line[%d] ~%c~)\n", (*i), line[(*i)]);
 	return ;
 }
 
@@ -56,9 +55,13 @@ void	flag_quote(char *line, int *i)
 		handle_quote(line, '\'', i);
 	else if (line[(*i)] == '\"' && ft_count_char(&line[(*i)], '\"') > 1)
 	{
-		ante_merge_quote(line, i);
+		if (line[(*i) - 1] && !ft_is_in_set(line[(*i) - 1], " \"\'"))
+			ante_merge_quote(line, i);
 		handle_quote(line, '\"', i);
-		post_merge_quote(line, i, (*i) - 1);
+		if (!line[(*i) + 1] || ft_is_in_set(line[(*i + 1)], " \"\'"))
+			return;
+	//	else
+	//		post_merge_quote(line, i, (*i) - 1);
 	}
 	else if ((ft_is_in_set(line[(*i)], "\"\'"))
 		&& (ft_count_char(&line[(*i)], '\"') == 1

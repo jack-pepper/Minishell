@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/23 21:24:21 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/25 16:19:21 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,6 @@ char	*ft_strflag(char *line)
 			flag_pipe_and_redir(line, &i);
 		else if (ft_is_in_set(line[i], "\"\'"))
 			flag_quote(line, &i);
-		if (DEBUG == 1)
-			printf("[ft_strflag ($, |, ><, "", '')] (line[%d]) ~%c~\n", i, line[i]);
 		i++;
 	}
 	ft_replace_chars_in_str(line, CC_DOLLAR_UNCLOSED, '$');
@@ -72,29 +70,25 @@ char	*copy_collapse(char *dst, char *src, size_t src_len)
 	size_t	i;
 	size_t	j;
 
+	src_len++;src_len--;
 	if (!src)
 		return (NULL);
 	ft_init_two_size_t(0, &i, &j);
 	if (DEBUG == 1)
 		printf("[before copy_collapse] %s\n", src);
-	while (i < src_len)
-	{
-		if ((src[i] == '\'' && ft_count_char(&src[i], '\'') > 1)
-			|| (src[i] == CC_VAR_BOUND)
-			|| (src[i] == '\"' && ft_strrchr(&src[i], CC_VAR_BOUND) != NULL)
-			|| (src[i] == '\"' && ft_count_char(&src[i], '\"') > 1))
+	while (i < src_len) //i < src_len)
+	{	
+		if ((src[i + 1] && (ft_is_in_set(src[i], "\"\'")
+			|| src[i] == CC_VAR_BOUND
+			|| src[i] == CC_VAR_BOUND_SQUOTE)))
 			pass_quotes(dst, src, &i, &j);
 		else if ((ft_isspace(src[i]) && ft_isspace(src[i + 1]))
 			|| (src[i] == CC_LONE_DOLLAR))
 		{
-			if (DEBUG == 1)
-				printf("--> [pass] src[%ld] ~%c~\n", i, src[i]);
 			i++;
 		}
 		else
-		{		
 			dst[j++] = src[i++];
-		}
 	}
 	dst[j] = '\0';
 	return (dst);

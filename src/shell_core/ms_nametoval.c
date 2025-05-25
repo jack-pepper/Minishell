@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:03:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/25 00:54:30 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/25 15:30:40 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,7 @@ char	*ft_nametoval(t_shell *sh, char *rejoined, char **split_args)
 		{
 			j = 0;
 			while (split_args[i][j] && ft_isalnum_x_chr(&split_args[i][j], "_"))
-			{
-				printf("[%c]", split_args[i][j]);
 				j++;
-			}
 			end_name = &(split_args[i][j]);
 			if (DEBUG == 1)
 				printf("[NAMETOVAL] var ends on: ~%c~ (is \\0 %d)\n", split_args[i][j], *end_name == '\0');
