@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:04:47 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/25 13:43:39 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/25 13:58:39 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	**extract_tokens(char **tokens, int start, int end)
 	i = 0;
 	len = end - start;
 	result = malloc(sizeof(char *) * (len + 1));
-	while(i < len)
+	while (i < len)
 	{
 		result[i] = ft_strdup(tokens[start + i]);
 		i++;
@@ -86,15 +86,16 @@ t_commands	parse_command(char **tokens)
 	i = 0;
 	memset(&cmd, 0, sizeof(t_commands));
 	cmd.argv = malloc(sizeof(char *) * (count_args(tokens) + 1));
-	if (!cmd.argv) {
+	if (!cmd.argv)
+	{
 		cmd.infile = NULL;
 		cmd.outfile = NULL;
-		return cmd;
+		return (cmd);
 	}
-	while(tokens[i])
+	while (tokens[i])
 	{
 		if (ft_strcmp(tokens[i],
-			(char[]){CC_REDIR_IN, '\0'}) == 0 && tokens[i + 1])
+				(char[]){CC_REDIR_IN, '\0'}) == 0 && tokens[i + 1])
 		{
 			test_fd = open(tokens[i + 1], O_RDONLY);
 			if (test_fd < 0)
@@ -102,27 +103,30 @@ t_commands	parse_command(char **tokens)
 				perror(tokens[i + 1]);
 				free(cmd.argv);
 				cmd.argv = NULL;
-				return cmd;
+				return (cmd);
 			}
 			close(test_fd);
 			free(cmd.infile);
 			cmd.infile = ft_strdup(tokens[++i]);
 		}
-		else if (ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0 && tokens[i + 1])
+		else if (ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0
+			&& tokens[i + 1])
 		{
 			test_fd = open(tokens[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (test_fd < 0) {
+			if (test_fd < 0)
+			{
 				perror(tokens[i + 1]);
 				free(cmd.argv);
 				cmd.argv = NULL;
-				return cmd;
+				return (cmd);
 			}
 			close(test_fd);
 			free(last_outfile);
 			last_outfile = ft_strdup(tokens[++i]);
 			last_append = false;
 		}
-		else if (ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0 && tokens[i + 1])
+		else if (ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0
+			&& tokens[i + 1])
 		{
 			test_fd = open(tokens[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
 			if (test_fd < 0)
@@ -130,7 +134,7 @@ t_commands	parse_command(char **tokens)
 				perror(tokens[i + 1]);
 				free(cmd.argv);
 				cmd.argv = NULL;
-				return cmd;
+				return (cmd);
 			}
 			close(test_fd);
 			free(last_outfile);
@@ -143,7 +147,8 @@ t_commands	parse_command(char **tokens)
 			cmd.argv[argc++] = ft_strdup(tokens[i]);
 		i++;
 	}
-	if (last_outfile) {
+	if (last_outfile)
+	{
 		free(cmd.outfile);
 		cmd.outfile = last_outfile;
 		cmd.append = last_append;
@@ -155,8 +160,9 @@ t_commands	parse_command(char **tokens)
 void	free_command(t_commands *cmd)
 {
 	int	i;
-	
-	if (cmd->argv) {
+
+	if (cmd->argv)
+	{
 		i = 0;
 		while (cmd->argv[i])
 		{
@@ -167,51 +173,4 @@ void	free_command(t_commands *cmd)
 	}
 	free(cmd->infile);
 	free(cmd->outfile);
-}
-
-void	free_tokens(char **tokens)
-{
-	int i;
-
-	i = 0;
-	while(tokens[i])
-	{
-		free(tokens[i]);
-		i++;
-	}
-	free(tokens);
-}
-
-void	parse_and_build_pipeline(t_pipeline *pipeline, char **tokens)
-{
-	int num_cmds;
-	int i;
-	int cmd_index;
-	int start;
-	char **cmd_tokens;
-	
-	i = 0;
-	num_cmds = count_pipes(tokens) + 1;
-	pipeline->cmd_count = num_cmds;
-	pipeline->cmds = ft_calloc(num_cmds, sizeof(t_commands));
-	if (!pipeline->cmds)
-		exit(1);
-	start = 0;
-	cmd_index = 0;
-	while (tokens[i]) {
-		if (ft_strcmp(tokens[i], (char[]){CC_PIPE, '\0'}) == 0) {
-			if (cmd_index >= num_cmds)
-				exit(1);
-			cmd_tokens = extract_tokens(tokens, start, i);
-			pipeline->cmds[cmd_index++] = parse_command(cmd_tokens);
-			free_tokens(cmd_tokens);
-			start = i + 1;
-		}
-		i++;
-	}
-	if (cmd_index >= num_cmds)
-		exit(1);
-	cmd_tokens = extract_tokens(tokens, start, i);
-	pipeline->cmds[cmd_index] = parse_command(cmd_tokens);
-	free_tokens(cmd_tokens);
 }

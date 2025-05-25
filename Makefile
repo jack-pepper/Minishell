@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+         #
+#    By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/20 17:50:19 by mmalie            #+#    #+#              #
-#    Updated: 2025/05/20 17:50:35 by mmalie           ###   ########.fr        #
+#    Updated: 2025/05/25 13:58:37 by yel-bouk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,6 +64,7 @@ MS_SRC = ./src/minishell.c \
       ./src/utils/ms_flags_utils.c \
       ./src/utils/ms_debug_utils.c \
       ./src/yahya_parsing.c \
+      ./src/parsing_utils_ye.c
 
 PIPEX_SRC =       ./pipex_ms/pipex.c \
       ./pipex_ms/pipex_utils.c \
