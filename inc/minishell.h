@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/25 18:22:08 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/25 23:28:02 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ void		flag_var_bounds(char *line, int *i);
 void		ante_merge_quote(char *line, int *i);
 void		handle_quote(char *line, char quote_type, int *i);
 void		pass_quotes(char *dst, char *src, size_t *i, size_t *j);
+int		two_quotes_case(char *dst, char *src, size_t *i, size_t *j);
 
 	// ms_env_interpreter.c
 int			ft_interpret_env(t_shell *sh);
