@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:03:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/25 00:33:55 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/25 09:27:53 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,22 @@ char	*handle_exit_status_case(t_shell *sh, char *rejoined_arg, char *subarg)
 	if (subarg[1] != '\0')
 	{
 		temp = ft_strdup(&subarg[1]);
+		if (temp[0] == '\'' || temp[0] == CC_VAR_BOUND_SQUOTE)
+			temp[0] = '\'';
 		if (!temp)
 		{
 			free(exit_status);
 			return (NULL);
 		}
 		arg = ft_strjoin(exit_status, temp);
+		printf("EXIT CASE: arg (1): %s\n)", arg);
 		free(temp);
 	}
 	else
-		arg = ft_strdup(exit_status);
+	{
+		arg = ft_strdup(exit_status);	
+		printf("EXIT CASE: arg (2): %s\n)", arg);
+	}
 	free(exit_status);
 	if (!arg)
 		return (NULL);
