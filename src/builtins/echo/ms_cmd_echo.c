@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:17:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 18:17:22 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/25 17:07:24 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ int	cmd_echo(t_shell *sh)
 
 void	echo_set_n(char **input_args, bool *opt_n, int *i)
 {
-	if (input_args[(*i)] && input_args[(*i) + 1]
-		&& input_args[(*i)][0] == '-'
+	if (input_args[(*i)] && input_args[(*i)][0] == '-'
 		&& !ft_strnopbrk(&input_args[(*i)][1], "n"))
 	{
 		*opt_n = true;

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:03:35 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/25 14:31:11 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/25 18:20:40 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ void	flag_pipe_and_redir(char *line, int *i)
 		ft_replace_char(&line[(*i)], CC_REDIR_IN);
 	else if (line[(*i)] == '>')
 		ft_replace_char(&line[(*i)], CC_REDIR_OUT);
-	if (DEBUG == 1)
-		printf("/flag_pipe_and_redir/ (line[%d] ~%c~)\n", (*i), line[(*i)]);
 }
 
 void	flag_quote(char *line, int *i)
@@ -55,20 +53,16 @@ void	flag_quote(char *line, int *i)
 		handle_quote(line, '\'', i);
 	else if (line[(*i)] == '\"' && ft_count_char(&line[(*i)], '\"') > 1)
 	{
-		if (line[(*i) - 1] && !ft_is_in_set(line[(*i) - 1], " \"\'"))
+		if ((*i) > 0 && !ft_is_in_set(line[(*i) - 1], " \"\'"))
 			ante_merge_quote(line, i);
 		handle_quote(line, '\"', i);
 		if (!line[(*i) + 1] || ft_is_in_set(line[(*i + 1)], " \"\'"))
-			return;
-	//	else
-	//		post_merge_quote(line, i, (*i) - 1);
+			return ;
 	}
 	else if ((ft_is_in_set(line[(*i)], "\"\'"))
 		&& (ft_count_char(&line[(*i)], '\"') == 1
 			|| ft_count_char(&line[(*i)], '\'') == 1))
 	{
 		ft_replace_chars_in_str(&line[(*i)], '$', CC_DOLLAR_UNCLOSED);
-	}	
-	if (DEBUG == 1)
-		printf("/flag_quote/ (line[%d] ~%c~)\n", (*i), line[(*i)]);
+	}
 }

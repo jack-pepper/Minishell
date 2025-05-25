@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:03:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/25 15:30:40 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/25 16:45:05 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ char	*ft_nametoval(t_shell *sh, char *rejoined, char **split_args)
 	i = 0;
 	while (split_args[i])
 	{
-		if (DEBUG == 1)
-			printf("--> [NAMETOVAL] split_args[%d] ~%s~\n", i, split_args[i]);
 		if (split_args[i][0] == '?')
 			rejoined = handle_exit_status_case(
 					sh, rejoined, split_args[i]);
@@ -32,21 +30,11 @@ char	*ft_nametoval(t_shell *sh, char *rejoined, char **split_args)
 			while (split_args[i][j] && ft_isalnum_x_chr(&split_args[i][j], "_"))
 				j++;
 			end_name = &(split_args[i][j]);
-			if (DEBUG == 1)
-				printf("[NAMETOVAL] var ends on: ~%c~ (is \\0 %d)\n", split_args[i][j], *end_name == '\0');
 			if (*end_name != '\0')
-			{
-				if (DEBUG == 1)
-					printf("--> not NULL: handle_special_cases");
 				rejoined = handle_special_cases(sh, rejoined,
 						split_args[i], end_name);
-			}
 			else
-			{
 				rejoined = split_rejoin(sh, rejoined, split_args[i], '\0');
-				if (DEBUG == 1)
-					printf("--> NULL: rejoined: ~%s~\n", rejoined);
-			}
 		}
 		i++;
 	}
@@ -83,8 +71,6 @@ char	*split_rejoin(t_shell *sh, char *rejoined_arg, char *arg, char symbol)
 	if (!delim)
 		return (NULL);
 	subargs = ft_split(arg, CC_SUBARG_DELIM);
-	if (DEBUG == 1)
-		ft_show_strs(subargs, "subargs ");
 	set_var = ft_getenv(subargs[0], &sh->this_env);
 	subargs[0] = ft_setenv(set_var, subargs[0]);
 	arg = rejoin_subarg(subargs, delim);
@@ -95,8 +81,6 @@ char	*split_rejoin(t_shell *sh, char *rejoined_arg, char *arg, char symbol)
 	if (!arg)
 		return (NULL);
 	rejoined_arg = ft_rejoin_subarg(arg, rejoined_arg);
-	if (DEBUG == 1)
-		printf("rejoined_arg: %s\n", rejoined_arg);	
 	free(arg);
 	return (rejoined_arg);
 }

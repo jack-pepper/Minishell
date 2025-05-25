@@ -4,13 +4,25 @@
 /*   ms_quotes_handler.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
+/*                                               +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/25 16:18:16 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/25 18:23:06 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+void	flag_var_bounds(char *line, int *i)
+{
+	ft_replace_char(&line[(*i)++], CC_VAR_TO_INTERPRET);
+	while (ft_isalnum_x_chr(&line[(*i)], "_?"))
+		(*i)++;
+	if (line[(*i)] == '\'')
+		line[(*i)] = CC_VAR_BOUND_SQUOTE;
+	else if (line[(*i)] == '\"')
+		line[(*i)] = CC_VAR_BOUND;
+	(*i)--;
+}
 
 void	handle_quote(char *line, char quote_type, int *i)
 {
@@ -25,21 +37,10 @@ void	handle_quote(char *line, char quote_type, int *i)
 		while (line[(*i)] != '\"' && line[(*i)] != CC_VAR_BOUND)
 		{
 			if (line[(*i)] == '$' && ft_isalnum_x_chr(&line[(*i) + 1], "_?"))
-			{
-				ft_replace_char(&line[(*i)], CC_VAR_TO_INTERPRET);
-				(*i)++;
-				while (ft_isalnum_x_chr(&line[(*i)], "_?"))
-					(*i)++;
-				if (line[(*i)] == '\'')
-					line[(*i)] = CC_VAR_BOUND_SQUOTE;
-				else if (line[(*i)] == '\"')
-					line[(*i)] = CC_VAR_BOUND;
-				(*i)--;
-			}
-			else if (line[(*i)] != '\"' && line[(*i)] != CC_VAR_BOUND && line[(*i)] != CC_VAR_BOUND_SQUOTE)
-				ft_replace_if_space(&line[(*i)], CC_SPACE_IN_QUOTE);	
-			if (DEBUG == 1)
-				printf("---> handle_quote ("") / (line[%d] ~%c~)\n", (*i), line[(*i)]);
+				flag_var_bounds(line, i);
+			else if (line[(*i)] != '\"' && line[(*i)] != CC_VAR_BOUND
+				&& line[(*i)] != CC_VAR_BOUND_SQUOTE)
+				ft_replace_if_space(&line[(*i)], CC_SPACE_IN_QUOTE);
 			(*i)++;
 		}
 	}
@@ -60,55 +61,10 @@ void	ante_merge_quote(char *line, int *i)
 			if (line[temp_i] == CC_VAR_TO_INTERPRET)
 			{
 				ft_replace_char(&line[(*i)], CC_VAR_BOUND);
-				if (DEBUG == 1)
-					printf("/ante_merge/ found CC_VAR_TO_INTERPRET at line[%d] (%c) ! (line[%d] ~%c~)\n", temp_i, line [(temp_i)], (*i), line[(*i)]);
 				break ;
 			}
 		}
 	}
-}
-
-void	post_merge_quote(char *line, int *i, int temp_i)
-{
-
-	if (line[(*i) + 1] && line[(*i) + 1] != ' '
-		&& ft_strchr(line, CC_VAR_TO_INTERPRET) != NULL)
-	{
-		while (temp_i >= 0 && line[temp_i] != '\"'
-			&& line[temp_i] != CC_VAR_BOUND && line[temp_i] != ' ')
-		{
-			temp_i--;
-			if (line[temp_i] == CC_VAR_TO_INTERPRET)
-			{
-				ft_replace_char(&line[(*i)], CC_VAR_BOUND);
-				if (DEBUG == 1)
-					printf("/post_merge/ found CC_VAR_TO_INTERPRET at line[%d] (%c) ! (line[%d] ~%c~)\n", temp_i, line [(temp_i)], (*i), line[(*i)]);
-			}
-		}
-		(*i)++;
-		while (line[(*i)] != '\0' && line[(*i)] != ' ')
-		{
-			if (line[(*i)] == '\"' && ft_count_char(&line[(*i)], '\"') > 1)
-			{
-				handle_quote(line, '\"', i);
-			}
-			else if (line[(*i)] == '\'' && ft_count_char(&line[(*i)], '\'') > 1)
-				handle_quote(line, '\'', i);
-			else if (line[(*i)] == '$' && line[(*i) + 1] && line[(*i) + 1] == '\'')
-				ft_replace_char(&line[(*i)], CC_LONE_DOLLAR);
-			else if (line[(*i)] == '$' && line[(*i) + 1] != '\0'
-				&& line[(*i) + 1] != '\"' && line[(*i) + 1] != ' ' && line[(*i) + 1] != '\''
-				&& line[(*i) + 1] != CC_VAR_BOUND && line[(*i) + 1] != '$')
-			{
-				ft_replace_char(&line[(*i)], CC_VAR_TO_INTERPRET);
-				if (DEBUG == 1)
-					printf("/post_merge/ found CC_VAR_TO_INTERPRET at line[%d] (%c) !\n", (*i), line[(*i)]);
-			}
-			(*i)++;
-		}
-		(*i)--;
-	}
-
 }
 
 void	pass_quotes(char *dst, char *src, size_t *i, size_t *j)
@@ -118,23 +74,20 @@ void	pass_quotes(char *dst, char *src, size_t *i, size_t *j)
 		if (src[(*i)] == CC_VAR_BOUND_SQUOTE)
 			dst[(*j)++] = src[(*i)];
 		(*i)++;
-		while (src[(*i)] && src[(*i)] != '\'' && src[(*i)] != CC_VAR_BOUND_SQUOTE)
-		{
+		while (src[(*i)] && src[(*i)] != '\''
+			&& src[(*i)] != CC_VAR_BOUND_SQUOTE)
 			dst[(*j)++] = src[(*i)++];
-		}
 		if (src[(*i)] == CC_VAR_BOUND_SQUOTE)
 			dst[(*j)++] = src[(*i)];
 		(*i)++;
 	}
 	else if (src[(*i)] == '\"' || src[(*i)] == CC_VAR_BOUND)
-	{	
+	{
 		if (src[(*i)] == CC_VAR_BOUND)
 			dst[(*j)++] = src[(*i)];
 		(*i)++;
 		while (src[(*i)] && src[(*i)] != '\"' && src[(*i)] != CC_VAR_BOUND)
-		{
 			dst[(*j)++] = src[(*i)++];
-		}
 		if (src[(*i)] == CC_VAR_BOUND)
 			dst[(*j)++] = src[(*i)];
 		(*i)++;

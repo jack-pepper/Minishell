@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/25 16:19:21 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/25 18:15:33 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ char	*ft_normalize(char *line)
 	if (!spaced)
 		return (NULL);
 	spaced = ft_add_spaces_around_redir(spaced);
-	if (DEBUG == 1)
-		printf("[ft_normalize] (normalized and spaced) %s\n", spaced);
 	return (spaced);
 }
 
@@ -47,6 +45,8 @@ char	*ft_strflag(char *line)
 	i = 0;
 	while (line[i])
 	{
+		if (line[i] == '\0')
+			break ;
 		if (line[i] == '$')
 			flag_dollar(line, &i);
 		else if (ft_is_in_set(line[i], "|<>"))
@@ -70,17 +70,15 @@ char	*copy_collapse(char *dst, char *src, size_t src_len)
 	size_t	i;
 	size_t	j;
 
-	src_len++;src_len--;
 	if (!src)
 		return (NULL);
 	ft_init_two_size_t(0, &i, &j);
-	if (DEBUG == 1)
-		printf("[before copy_collapse] %s\n", src);
-	while (i < src_len) //i < src_len)
-	{	
-		if ((src[i + 1] && (ft_is_in_set(src[i], "\"\'")
-			|| src[i] == CC_VAR_BOUND
-			|| src[i] == CC_VAR_BOUND_SQUOTE)))
+	while (i < src_len)
+	{
+		if ((src[i + 1]
+				&& (ft_is_in_set(src[i], "\"\'")
+					|| src[i] == CC_VAR_BOUND
+					|| src[i] == CC_VAR_BOUND_SQUOTE)))
 			pass_quotes(dst, src, &i, &j);
 		else if ((ft_isspace(src[i]) && ft_isspace(src[i + 1]))
 			|| (src[i] == CC_LONE_DOLLAR))

@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/23 21:39:17 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/25 16:33:02 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,14 @@ int	ft_interpret_env(t_shell *sh)
 			split_args = ft_split(sh->input_args[i], CC_VAR_TO_INTERPRET);
 			if (!split_args)
 				return (-1);
-			if (DEBUG == 1)
-				ft_show_strs(split_args, "[ENV] split_args");
 			rejoined_arg = rejoin_arg(sh, rejoined_arg, split_args, i);
 			free_args(split_args);
 			if (!rejoined_arg)
 				return (-1);
-			if (DEBUG == 1)
-				printf("[ENV] rejoined_arg: %s\n", rejoined_arg);
 			ft_copy_free(&sh->input_args[i], rejoined_arg);
 			free(rejoined_arg);
 			if (!sh->input_args[i])
-				return (-1);	
+				return (-1);
 		}
 		i++;
 	}
@@ -49,20 +45,14 @@ char	*rejoin_arg(t_shell *sh, char *rejoined_arg, char **split_args, int i)
 {
 	if (sh->input_args[i][0] == CC_VAR_TO_INTERPRET)
 	{
-		if (DEBUG == 1)
-			printf("--> [ENV - rejoin_arg] starts with CC_VAR_TO_INTERPRET)\n");
 		rejoined_arg = ft_strdup("");
 		rejoined_arg = ft_nametoval(sh, rejoined_arg, split_args);
 	}
 	else
 	{
-		if (DEBUG == 1)
-			printf("--> [ENV - rejoin_arg] does NOT start with CC_VAR_TO_INTERPRET)\n");
 		rejoined_arg = ft_strdup(split_args[0]);
 		rejoined_arg = ft_nametoval(sh, rejoined_arg, &split_args[1]);
 	}
-	if (DEBUG == 1)
-		printf("--> [ENV - rejoin_arg] sh->input_args[%d]: %s (after nametoval)\n", i, rejoined_arg);
 	return (rejoined_arg);
 }
 
