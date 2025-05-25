@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/21 10:28:15 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/22 04:50:09 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,6 @@ void handle_basic(t_shell *sh, char **env)
 {
 	if (is_builtin(sh->input_args[0]))
 	{
-		// printf("heey\n");
 		sh->last_exit_status = process_input(sh);
 		return;
 	}

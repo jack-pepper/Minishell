@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/21 10:36:04 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/22 05:24:03 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -490,7 +490,6 @@ void exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh) {
 		perror("execve failed");
 		exit(EXIT_FAILURE);
 	}
-
 	int status;
 	status = 0;
 	waitpid(pid, &status, 0);
