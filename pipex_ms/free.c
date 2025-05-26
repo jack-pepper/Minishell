@@ -6,12 +6,11 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/19 14:53:58 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/26 15:59:32 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
 
 void	ft_exit_error(t_pipex *pipex, const char *msg)
 {
@@ -42,9 +41,11 @@ void	ft_free_array(char **arr, int count)
 
 void	ft_free_2d_array(char **arr)
 {
+	int	i;
+
 	if (!arr)
-		return;
-	int i = 0;
+		return ;
+	i = 0;
 	while (arr[i])
 	{
 		free(arr[i]);
@@ -55,12 +56,13 @@ void	ft_free_2d_array(char **arr)
 
 void	free_pipex(t_pipex *pipex)
 {
+	int	i;
+
 	if (!pipex)
-		return;
-	
+		return ;
 	if (pipex->cmd_args)
 	{
-		int i = 0;
+		i = 0;
 		while (i < pipex->cmd_count)
 		{
 			if (pipex->cmd_args[i])
@@ -69,10 +71,8 @@ void	free_pipex(t_pipex *pipex)
 		}
 		free(pipex->cmd_args);
 	}
-	
 	if (pipex->cmd_paths)
 		ft_free_2d_array(pipex->cmd_paths);
-	
 	if (pipex->in_fd != -1)
 		close(pipex->in_fd);
 	if (pipex->out_fd != -1)
