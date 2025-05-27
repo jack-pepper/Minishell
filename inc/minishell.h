@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/25 23:28:02 by mmalie           ###   ########.fr       */
+/*   Created: 2025/05/27 13:56:09 by mmalie            #+#    #+#             */
+/*   Updated: 2025/05/27 13:59:39 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,10 @@
 # define CC_HEREDOC   27 // "<<"
 # define CC_PIPE 28 // "|"
 
-
 # define CC_SPACE_IN_QUOTE 29 // '_' // 29
 # define CC_VAR_TO_INTERPRET 30 // '#' // 30
 # define CC_SUBARG_DELIM 31 // '-' // 31
-# define CC_LONE_DOLLAR 23 // '&' // 23 == $ before opening quote (should disappear)
+# define CC_LONE_DOLLAR 23 // '&' // 23 == $ bfr opening quote(should disappear)
 # define CC_EXTRA_DELIM 31 // ';' // 31
 # define CC_VAR_BOUND 21 // '*' // 21 // To remove "
 # define CC_VAR_BOUND_SQUOTE 19// To restore '
@@ -103,7 +102,7 @@ struct	s_shell;
 typedef struct s_command
 {
 	char	*name;
-	int	(*func)(struct s_shell *);
+	int		(*func)(struct s_shell *);
 	char	*doc;
 }			t_command;
 
@@ -136,7 +135,7 @@ int			init_shell(t_shell *sh, char **env);
 int			init_env(t_shell *sh, char **env);
 void		init_signals(t_shell *sh);
 void		signal_handler(int signum);
-int		normalize_env(t_list *this_env);
+int			normalize_env(t_list *this_env);
 
 	// ms_input_manager.c
 char		*get_input(char *line);
@@ -154,10 +153,9 @@ char		*ft_add_spaces_around(char *str, char special);
 char		*ft_add_spaces_around_str(const char *line, const char *str);
 
 	// ms_flagger.c
-void	flag_dollar(char *line, int *i);
-void	flag_pipe_and_redir(char *line, int *i);
-void	flag_quote(char *line, int *i);
-
+void		flag_dollar(char *line, int *i);
+void		flag_pipe_and_redir(char *line, int *i);
+void		flag_quote(char *line, int *i);
 
 	// ms_quotes_handler.c
 void		flag_var_bounds(char *line, int *i);
@@ -168,11 +166,13 @@ int		two_quotes_case(char *dst, char *src, size_t *i, size_t *j);
 
 	// ms_env_interpreter.c
 int			ft_interpret_env(t_shell *sh);
-char		*rejoin_arg(t_shell *sh, char *rejoined_arg, char **split_args, int i);
+char		*rejoin_arg(t_shell *sh, char *rejoined_arg,
+				char **split_args, int i);
 
 	// ms_nametoval.c
 char		*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args);
-char		*split_rejoin(t_shell *sh, char *rejoined_arg, char *arg, char splitter);
+char		*split_rejoin(t_shell *sh, char *rejoined_arg,
+				char *arg, char splitter);
 char		*to_delim(char splitter);
 
 	// ms_nametoval_cases.c
@@ -214,9 +214,9 @@ int			cmd_env(t_shell *sh);
 	// ms_cmd_exit.c - Cause the shell to exit
 int			cmd_exit(t_shell *sh, unsigned int status);
 void		free_and_exit(t_shell *sh, unsigned int status);
-int     	ft_isnum(char *str);
+int			ft_isnum(char *str);
 char		*ms_trim(char *trimmed_arg, char *arg, int len, int k);
-int		exit_arg_overflow(char *str);
+int			exit_arg_overflow(char *str);
 
 	// ms_cmd_export.c - Set the export attribute for variables
 int			cmd_export(t_shell *sh);
@@ -244,7 +244,7 @@ char		*rejoin_abs_path(char *rejoined_path, char **split_path, int i, int j);
 	// ms_debug_utils.c
 void		ft_show_strs(char **strs, char *debug_msg);
 int			ft_ret(int return_val, char *msg, int fd);
-int		ms_err(char *cmd_name, char *arg, char *err_msg, int return_val);
+int			ms_err(char *cmd_name, char *arg, char *err_msg, int return_val);
 
 	// ms_env_utils.c
 t_list		*ft_getenv(char *var_name, t_list **this_env);
@@ -256,7 +256,7 @@ int			ft_update_env_value(t_list *set_var, char **split_str);
 	// ms_flags_utils.c
 void		ft_flag_delim(char *str, char delim, char flag, char *mode);
 void		ft_flag_all_but_first(char *str, char delim, char flag);
-void            ft_unflag_delim(char *str, char delim, char flag);
+void		ft_unflag_delim(char *str, char delim, char flag);
 char		**split_input_arg(t_shell *sh, size_t *i);
 
 	// ms_replace_utils.c
@@ -269,7 +269,8 @@ void		ft_replace_all_chars(char **input_args, char old_c, char new_c);
 char		*ft_chrtostr(char chr);
 char		*join_with_delim(char *result, char *temp, char delim);
 char		*join_all_subargs(char **args, char delim);
-char		*ft_strjoin_delim(char const *s1, char const *s2, char const *delim);
+char		*ft_strjoin_delim(char const *s1, char const *s2,
+				char const *delim);
 char		*ft_rejoin_subarg(char *rejoined_arg, char *arg);
 
 
@@ -285,7 +286,8 @@ int			add_new_stash_var(t_shell *sh, char **split_str);
 
 	// ms_strs_utils.c
 size_t		ft_strslen(char **strs);
-int			ft_strstolist(t_list **list, char **strs, size_t nb_strs, char delim);
+int			ft_strstolist(t_list **list, char **strs,
+				size_t nb_strs, char delim);
 char		**ft_strschr(char **strs, char c, int forbidden_pos);
 char		**ft_strsdup(char **strs);
 
@@ -295,36 +297,39 @@ void		free_pipeline(t_pipeline *p);
 void		exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh);
 t_pipeline	*parse_redirection_only(char **tokens);
 void		print_pipeline(t_pipeline *p);
-void run_pipes_with_no_redir(t_pipeline *p, char **env);
-void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh);
-char *get_cmd_path(char *cmd, char **envp);
-int validate_and_exec_command(char **argv, char **envp, t_shell *sh);
-typedef enum e_cmd_type {
+void		run_pipes_with_no_redir(t_pipeline *p, char **env);
+void		run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh);
+char		*get_cmd_path(char *cmd, char **envp);
+int			validate_and_exec_command(char **argv, char **envp, t_shell *sh);
+typedef enum e_cmd_type
+{
 	BASIC,
-	REDIR_ONLY,  
-	PIPELINE,   
+	REDIR_ONLY,
+	PIPELINE,
 	MIXED_INVALID,
 	PIPELINE_WITH_RED,
 	HERE_DOC
 }	t_cmd_type;
-typedef struct s_redir {
-	char *file;
-	t_cmd_type type; 
-	struct s_redir *next;
+typedef struct s_redir
+{
+	char			*file;
+	t_cmd_type		type;
+	struct s_redir	*next;
 }	t_redir;
 
 bool		is_builtin(const char *cmd);
-t_cmd_type classify_command(char **tokens);
-int count_pipes(char **tokens);
-void parse_and_build_pipeline(t_pipeline *pipeline, char **tokens);
-bool has_heredoc(t_pipeline *p);
-char **extract_tokens(char **tokens, int start, int end);
-t_commands parse_command(char **tokens);
-void free_command(t_commands *cmd);
-void free_tokens(char **tokens);
-void run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh);
-
+t_cmd_type	classify_command(char **tokens);
+int			count_pipes(char **tokens);
+void		parse_and_build_pipeline(t_pipeline *pipeline, char **tokens);
+bool		has_heredoc(t_pipeline *p);
+char		**extract_tokens(char **tokens, int start, int end);
+t_commands	parse_command(char **tokens);
+void		free_command(t_commands *cmd);
+void		free_tokens(char **tokens);
+void		run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh);
+int			count_cmds(char **tokens);
+int			count_command_tokens(char **tokens, int start);
 // Global shell pointer for signal handling
-extern t_shell *g_shell;
+extern t_shell		*g_shell;
 
 #endif

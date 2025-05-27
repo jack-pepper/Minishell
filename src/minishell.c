@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/25 21:33:36 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/25 21:34:03 by mmalie           ###   ########.fr       */
+/*   Created: 2025/05/27 14:01:27 by mmalie            #+#    #+#             */
+/*   Updated: 2025/05/27 14:02:31 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,8 @@ void handle_basic(t_shell *sh, char **env)
 			break ;
 		}
 		i++;
+		sh->last_exit_status = process_input(sh);
+		return;
 	}
 
 	char * cmd_path = get_cmd_path(sh->input_args[first_arg], env);

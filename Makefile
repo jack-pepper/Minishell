@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/05/20 17:50:19 by mmalie            #+#    #+#              #
-#    Updated: 2025/05/23 19:26:15 by mmalie           ###   ########.fr        #
+#    Created: 2025/05/27 13:21:21 by mmalie            #+#    #+#              #
+#    Updated: 2025/05/27 13:21:27 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,6 +66,8 @@ MS_SRC = ./src/minishell.c \
       ./src/utils/ms_flags_utils.c \
       ./src/utils/ms_debug_utils.c \
       ./src/yahya_parsing.c \
+      ./src/parsing_utils_ye.c \
+      ./src/shell_core/ms_pipex_utils.c
 
 PIPEX_SRC =       ./pipex_ms/pipex.c \
       ./pipex_ms/pipex_utils.c \
