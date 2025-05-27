@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 14:01:27 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/27 14:02:31 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/27 15:14:22 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,12 +166,10 @@ void handle_basic(t_shell *sh, char **env)
 			i++;
 		else if (ft_strpbrk(sh->input_args[i], "|<>") != NULL)
 		{	
-		//	printf("arg[%d] (%s) contains pipe or redir!\n", i, sh->input_args[i]);
+	//		printf("arg[%d] (%s) contains pipe or redir!\n", i, sh->input_args[i]);
 			break ;
 		}
 		i++;
-		sh->last_exit_status = process_input(sh);
-		return;
 	}
 
 	char * cmd_path = get_cmd_path(sh->input_args[first_arg], env);
