@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   yahya_ms_to_pipex.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/26 14:55:45 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/27 13:10:49 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,11 @@ bool	is_builtin(const char *cmd)
 
 static t_pipeline	*init_pipeline(char **tokens)
 {
-	t_pipeline *p = ft_calloc(1, sizeof(t_pipeline));
+	t_pipeline	*p;
+
+	p = ft_calloc(1, sizeof(t_pipeline));
 	if (!p)
 		return (NULL);
-
 	p->cmd_count = count_cmds(tokens);
 	p->cmds = ft_calloc(p->cmd_count, sizeof(t_commands));
 	if (!p->cmds)
@@ -63,76 +64,90 @@ static t_pipeline	*init_pipeline(char **tokens)
 	return (p);
 }
 
-static bool	handle_redirection_tokens(char **tokens, int *i, t_pipeline *p, int cmd_index) {
+static bool	handle_redirection_tokens(char **tokens, int *i,
+		t_pipeline *p, int cmd_index)
+{
 	if (strcmp(tokens[*i], (char[]){CC_HEREDOC, '\0'}) == 0)
 	{
-		if (tokens[*i + 1]) {
+		if (tokens[*i + 1])
+		{
 			p->cmds[cmd_index].infile = ft_strdup("here_doc");
 			p->cmds[cmd_index].limiter = ft_strdup(tokens[++(*i)]);
 			p->cmds[cmd_index].append = false;
 			(*i)++;
-			return true;
+			return (true);
 		}
-		return false;
+		return (false);
 	}
 	if (strcmp(tokens[*i], (char[]){CC_REDIR_IN, '\0'}) == 0)
 	{
-		if (tokens[*i + 1]) {
+		if (tokens[*i + 1])
+		{
 			p->cmds[cmd_index].infile = ft_strdup(tokens[++(*i)]);
 			(*i)++;
-			return true;
+			return (true);
 		}
-		return false;
+		return (false);
 	}
 	if (strcmp(tokens[*i], (char[]){CC_REDIR_OUT, '\0'}) == 0)
 	{
-		if (tokens[*i + 1]) {
+		if (tokens[*i + 1])
+		{
 			p->cmds[cmd_index].outfile = ft_strdup(tokens[++(*i)]);
 			p->cmds[cmd_index].append = false;
 			(*i)++;
-			return true;
+			return (true);
 		}
-		return false;
+		return (false);
 	}
 	if (strcmp(tokens[*i], (char[]){CC_APPEND, '\0'}) == 0)
 	{
-		if (tokens[*i + 1]) {
+		if (tokens[*i + 1])
+		{
 			p->cmds[cmd_index].outfile = ft_strdup(tokens[++(*i)]);
 			p->cmds[cmd_index].append = true;
 			(*i)++;
-			return true;
+			return (true);
 		}
-		return false;
+		return (false);
 	}
-	return false;
+	return (false);
 }
 
 t_pipeline *build_pipeline_from_tokens(char **tokens)
 {
-	int i = 0;
-	t_pipeline *p = init_pipeline(tokens);
-	if (!p) 
-		return NULL;
+	int			i;
+	t_pipeline	*p;
+	int			current_cmd;
 
-	int current_cmd = 0;
-	while (tokens[i]) {
+	i = 0;
+	p = init_pipeline(tokens);
+	if (!p) 
+		return (NULL);
+	current_cmd = 0;
+	while (tokens[i])
+	{
 		if (handle_redirection_tokens(tokens, &i, p, current_cmd))
 			continue;
-		if (ft_strcmp(tokens[i], (char[]){CC_PIPE, '\0'}) == 0) {
+		if (ft_strcmp(tokens[i], (char[]){CC_PIPE, '\0'}) == 0)
+		{
 			current_cmd++;
 			i++;
 			continue;
 		}
-		if (!p->cmds[current_cmd].argv) {
+		if (!p->cmds[current_cmd].argv)
+		{
 			int count = count_command_tokens(tokens + i, 0);
-			if (count > 0) {
+			if (count > 0)
+			{
 				p->cmds[current_cmd].argv = malloc(sizeof(char *) * (count + 1));
 				if (!p->cmds[current_cmd].argv)
-					return NULL;
+					return (NULL);
 				p->cmds[current_cmd].argv[0] = NULL;
 			}
 		}
-		if (p->cmds[current_cmd].argv) {
+		if (p->cmds[current_cmd].argv)
+		{
 			int arg_count = 0;
 			while (p->cmds[current_cmd].argv[arg_count])
 				arg_count++;
@@ -144,7 +159,6 @@ t_pipeline *build_pipeline_from_tokens(char **tokens)
 	return (p);
 }
 
-
 t_pipeline *parse_redirection_only(char **tokens)
 {
 	t_pipeline *p = ft_calloc(1, sizeof(t_pipeline));
@@ -153,7 +167,7 @@ t_pipeline *parse_redirection_only(char **tokens)
 	char **argv = ft_calloc(128, sizeof(char *));
 
 	if (!p || !cmd || !argv)
-		return NULL;
+		return (NULL);
 
 	int i = 0;
 	int arg_i = 0;
@@ -234,6 +248,7 @@ void free_pipeline(t_pipeline *p)
 		i++;
 	}
 }
+
 char *shell_find_cmd_path(char *cmd, char **paths)
 {
 	int i = 0;
@@ -280,7 +295,8 @@ static int open_redirection_fds_mixed(t_commands *cmd, int *in_fd, int *out_fd, 
 {
 	*in_fd = -1;
 	*out_fd = -1;
-	if (cmd->infile) {
+	if (cmd->infile)
+	{
 		*in_fd = open(cmd->infile, O_RDONLY);
 		if (*in_fd < 0)
 		{
@@ -289,10 +305,12 @@ static int open_redirection_fds_mixed(t_commands *cmd, int *in_fd, int *out_fd, 
 			return (-1);
 		}
 	}
-	if (cmd->outfile) {
+	if (cmd->outfile)
+	{
 		int flags = O_WRONLY | O_CREAT | (cmd->append ? O_APPEND : O_TRUNC);
 		*out_fd = open(cmd->outfile, flags, 0644);
-		if (*out_fd < 0) {
+		if (*out_fd < 0)
+		{
 			sh->last_exit_status = 1;
 			perror(cmd->outfile);
 			if (*in_fd != -1)
@@ -307,18 +325,22 @@ static int open_redirection_fds(t_pipeline *cmd, int *in_fd, int *out_fd, t_shel
 {
 	*in_fd = -1;
 	*out_fd = -1;
-	if (cmd->cmds->infile) {
+	if (cmd->cmds->infile)
+	{
 		*in_fd = open(cmd->cmds->infile, O_RDONLY);
-		if (*in_fd < 0) {
+		if (*in_fd < 0)
+		{
 			sh->last_exit_status = 1;
 			perror(cmd->cmds->infile);
 			return (-1);
 		}
 	}
-	if (cmd->cmds->outfile) {
+	if (cmd->cmds->outfile)
+	{
 		int flags = O_WRONLY | O_CREAT | (cmd->cmds->append ? O_APPEND : O_TRUNC);
 		*out_fd = open(cmd->cmds->outfile, flags, 0644);
-		if (*out_fd < 0) {
+		if (*out_fd < 0)
+		{
 			sh->last_exit_status = 1;
 			perror(cmd->cmds->outfile);
 			if (*in_fd != -1)
@@ -331,24 +353,28 @@ static int open_redirection_fds(t_pipeline *cmd, int *in_fd, int *out_fd, t_shel
 
 static void setup_redirections(int in_fd, int out_fd)
 {
-	if (in_fd != -1) {
+	if (in_fd != -1)
+	{
 		dup2(in_fd, STDIN_FILENO);
 		close(in_fd);
 	}
-	if (out_fd != -1) {
+	if (out_fd != -1)
+	{
 		dup2(out_fd, STDOUT_FILENO);
 		close(out_fd);
 	}
 }
+
 void exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh)
 {
-	int in_fd;
-	int out_fd;
-	pid_t pid;
+	int			in_fd;
+	int			out_fd;
+	pid_t		pid;
+	
 	if (open_redirection_fds(cmd, &in_fd, &out_fd, sh) < 0)
 	{
 		printf("Invalid file\n");	
-		return;
+		return ;
 	}
 	pid = fork();
 	if (pid == 0)
@@ -439,7 +465,8 @@ t_cmd_type classify_command(char **tokens)
 int cmd_echo_x(char **argv)
 {
 	int i = 1;
-	while (argv[i]) {
+	while (argv[i])
+	{
 		printf("%s", argv[i]);
 		if (argv[i + 1])
 			printf(" ");
@@ -470,13 +497,16 @@ static bool validate_pipeline_commands(t_pipeline *p, t_shell *sh) {
 	int i;
 
 	i = 0;
-	while (i < p->cmd_count) {
+	while (i < p->cmd_count)
+	{
 		char **argv = p->cmds[i].argv;
 		if (!argv || !argv[0])
 			continue;
 
-		if (strcmp(argv[0], "cd") == 0) {
-			if (!argv[1]) {
+		if (strcmp(argv[0], "cd") == 0)
+		{
+			if (!argv[1])
+			{
 				fprintf(stderr, "cd: missing argument\n");
 				sh->last_exit_status = 1;
 				return false;
@@ -500,13 +530,15 @@ static bool validate_pipeline_commands(t_pipeline *p, t_shell *sh) {
 	return true;
 }
 
-void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
+void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh)
+{
 	int i = 0;
 	int prev_fd = -1;
 	int pipe_fd[2];
 	pid_t last_pid = -1;
 
-	while (i < p->cmd_count) {
+	while (i < p->cmd_count)
+	{
 		if (i < p->cmd_count - 1)
 		{
 			if (pipe(pipe_fd) < 0)
@@ -516,7 +548,8 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 			}
 		}
 		pid_t pid = fork();
-		if (pid == 0) {
+		if (pid == 0)
+		{
 			int in_fd = -1, out_fd = -1;
 
 			if (open_redirection_fds_mixed(&p->cmds[i], &in_fd, &out_fd, sh) < 0)
@@ -525,21 +558,24 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 					exit(1);
 				exit(0);
 			}
-			if (in_fd != -1) {
+			if (in_fd != -1)
+			{
 				dup2(in_fd, STDIN_FILENO);
 				close(in_fd);
-			} else if (prev_fd != -1) {
-				dup2(prev_fd, STDIN_FILENO);
 			}
-			if (out_fd != -1) {
+			else if (prev_fd != -1)
+				dup2(prev_fd, STDIN_FILENO);
+			if (out_fd != -1)
+			{
 				dup2(out_fd, STDOUT_FILENO);
 				close(out_fd);
-			} else if (i < p->cmd_count - 1) {
-				dup2(pipe_fd[1], STDOUT_FILENO);
 			}
+			else if (i < p->cmd_count - 1)
+				dup2(pipe_fd[1], STDOUT_FILENO);
 			if (prev_fd != -1)
 				close(prev_fd);
-			if (i < p->cmd_count - 1) {
+			if (i < p->cmd_count - 1)
+			{
 				close(pipe_fd[0]);
 				close(pipe_fd[1]);
 			}
@@ -574,16 +610,20 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 		if (wpid == -1)
 			break;
 	
-		if (wpid == last_pid) {
+		if (wpid == last_pid)
+		{
 			if (WIFEXITED(status))
 				sh->last_exit_status = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status)) {
+			else if (WIFSIGNALED(status))
+			{
 				int sig = WTERMSIG(status);
-				if (sig == SIGINT) {
+				if (sig == SIGINT)
+				{
 					sh->last_exit_status = 130;
 					printf("\n");
 				}
-				else if (sig == SIGQUIT) {
+				else if (sig == SIGQUIT)
+				{
 					sh->last_exit_status = 131;
 					printf("Quit (core dumped)\n");
 				}
@@ -598,7 +638,7 @@ void run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh) {
 void run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh)
 {
 	if (!validate_pipeline_commands(p, sh))
-		return;
+		return ;
 	int 		j;
 	char 	*cmd_path;
 	j = 0;
@@ -607,10 +647,11 @@ void run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh)
 		if (!is_builtin(p->cmds[j].argv[0]))
 		{
 			cmd_path = get_cmd_path(p->cmds[j].argv[0], env);
-			if (!cmd_path) {
+			if (!cmd_path)
+			{
 				ft_printf("command not found\n");
 				sh->last_exit_status = 127;
-				return;
+				return ;
 			}
 			free(cmd_path);
 		}
@@ -622,7 +663,8 @@ void run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh)
 	int pipe_fd[2];
 	pid_t pid;
 	
-	while (i < p->cmd_count) {
+	while (i < p->cmd_count)
+	{
 		if (i < p->cmd_count - 1)
 		{
 			if (pipe(pipe_fd) < 0)
@@ -636,9 +678,11 @@ void run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh)
 		{
 			if (strcmp(p->cmds[i].argv[0], "cat") == 0 && !p->cmds[i].argv[1]) {
 				signal(SIGPIPE, SIG_IGN);
-				if (i < p->cmd_count - 1) {
+				if (i < p->cmd_count - 1)
+				{
 					int dev_null = open("/dev/null", O_WRONLY);
-					if (dev_null != -1) {
+					if (dev_null != -1)
+					{
 						dup2(dev_null, STDOUT_FILENO);
 						dup2(dev_null, STDERR_FILENO);
 						close(dev_null);
