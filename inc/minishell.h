@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/26 15:45:36 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/27 16:29:48 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,6 +284,9 @@ void		run_pipes_with_no_redir(t_pipeline *p, char **env);
 void		run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh);
 char		*get_cmd_path(char *cmd, char **envp);
 int			validate_and_exec_command(char **argv, char **envp, t_shell *sh);
+void	setup_redirections(int in_fd, int out_fd);
+bool	handle_redirection_tokens(char **tokens, int *i,
+	t_pipeline *p, int cmd_index);
 typedef enum e_cmd_type
 {
 	BASIC,
@@ -312,6 +315,8 @@ void		free_tokens(char **tokens);
 void		run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh);
 int			count_cmds(char **tokens);
 int			count_command_tokens(char **tokens, int start);
+int			exec_builtin_in_child(char **argv, t_shell *sh);
+int			cmd_echo_x(char **argv);
 // Global shell pointer for signal handling
 extern t_shell		*g_shell;
 

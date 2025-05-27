@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+         #
+#    By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/20 17:50:19 by mmalie            #+#    #+#              #
-#    Updated: 2025/05/26 14:54:01 by yel-bouk         ###   ########.fr        #
+#    Updated: 2025/05/27 16:24:32 by yel-bouk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,7 +65,11 @@ MS_SRC = ./src/minishell.c \
       ./src/utils/ms_debug_utils.c \
       ./src/yahya_parsing.c \
       ./src/parsing_utils_ye.c \
-      ./src/shell_core/ms_pipex_utils.c
+      ./src/shell_core/ms_pipex_utils.c \
+	  ./src/shell_core/ms_hand_red.c \
+	  ./src/shell_core/cmd_classifier.c \
+	  ./src/shell_core/ms_handle_basic_pipe.c \
+	  ./src/shell_core/ms_handle_pipe_with_red.c \
 
 PIPEX_SRC =       ./pipex_ms/pipex.c \
       ./pipex_ms/pipex_utils.c \

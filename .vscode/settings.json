@@ -4,6 +4,7 @@
 		"pipex.h": "c",
 		"readline.h": "c",
 		"algorithm": "c",
-		"format": "c"
+		"format": "c",
+		"string": "c"
 	}
 }
