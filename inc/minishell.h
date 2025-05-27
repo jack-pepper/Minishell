@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 13:56:09 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/27 13:59:39 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/27 16:11:49 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,34 +29,18 @@
 # define CC_HEREDOC   27 // "<<"
 # define CC_PIPE 28 // "|"
 
-# define CC_SPACE_IN_QUOTE 29 // '_' // 29
-# define CC_VAR_TO_INTERPRET 30 // '#' // 30
+# define CC_SPACE_IN_QUOTE 29
+# define CC_VAR_TO_INTERPRET 30
 # define CC_SUBARG_DELIM 31 // '-' // 31
-# define CC_LONE_DOLLAR 23 // '&' // 23 == $ bfr opening quote(should disappear)
+# define CC_LONE_DOLLAR 23
 # define CC_EXTRA_DELIM 31 // ';' // 31
-# define CC_VAR_BOUND 21 // '*' // 21 // To remove "
-# define CC_VAR_BOUND_SQUOTE 19// To restore '
-# define CC_STICKY_VAR 22 // '@' // 22
+# define CC_VAR_BOUND 21
+# define CC_VAR_BOUND_SQUOTE 19
 # define CC_TO_BE_DELETED 20 // 'X' // 20
 # define CC_TRAILING_DOLLAR 19 // '%' // 19
 # define CC_DOLLAR_UNCLOSED 18
 
-
-/*
-# define CC_SPACE_IN_QUOTE '0' // 29
-# define CC_VAR_TO_INTERPRET '1' // 30
-# define CC_SUBARG_DELIM '2' // 31
-# define CC_LONE_DOLLAR '3' // 23 == $ before opening quote (should disappear)
-# define CC_EXTRA_DELIM '4' // 31
-# define CC_VAR_BOUND '5' // 21 // For edge case `echo "$HO"ME`
-# define CC_STICKY_VAR '6' // 22
-# define CC_TO_BE_DELETED '7' // 20
-# define CC_TRAILING_DOLLAR '8' // 19
-# define CC_DOLLAR_UNCLOSED '9' // 18
-*/
-
 /* Return messages (ft_ret) */
-
 # define SHELL_NAME "minishell: " // could be used to improve error msg
 
 # define TOO_MANY_ARGS ": too many arguments\n"
@@ -129,18 +113,19 @@ int			is_invalid_for_stash(char *arg);
 int			handle_non_cmd(t_shell *sh);
 int			handle_file_or_dir(t_shell *sh);
 
-
 	// ms_initer.c
 int			init_shell(t_shell *sh, char **env);
 int			init_env(t_shell *sh, char **env);
+int			normalize_env(t_list *this_env);
 void		init_signals(t_shell *sh);
 void		signal_handler(int signum);
-int			normalize_env(t_list *this_env);
 
 	// ms_input_manager.c
 char		*get_input(char *line);
 char		**normalize_input(char *line, t_shell *sh);
 int			process_input(t_shell *sh);
+int			handle_non_cmd(t_shell *sh);
+int			handle_file_or_dir(t_shell *sh);
 
 	// ms_normalizer.c
 char		*ft_normalize(char *line);
@@ -159,27 +144,30 @@ void		flag_quote(char *line, int *i);
 
 	// ms_quotes_handler.c
 void		flag_var_bounds(char *line, int *i);
-void		ante_merge_quote(char *line, int *i);
 void		handle_quote(char *line, char quote_type, int *i);
+void		ante_merge_quote(char *line, int *i);
 void		pass_quotes(char *dst, char *src, size_t *i, size_t *j);
-int		two_quotes_case(char *dst, char *src, size_t *i, size_t *j);
+int			two_quotes_case(char *dst, char *src, size_t *i, size_t *j);
 
 	// ms_env_interpreter.c
 int			ft_interpret_env(t_shell *sh);
 char		*rejoin_arg(t_shell *sh, char *rejoined_arg,
 				char **split_args, int i);
+char		**ft_copy_free(char **input_arg, char *rejoined_arg);
 
 	// ms_nametoval.c
 char		*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args);
+char		*rejoin_subarg(char **subargs, char *delim);
 char		*split_rejoin(t_shell *sh, char *rejoined_arg,
-				char *arg, char splitter);
-char		*to_delim(char splitter);
+				char *arg, char symbol);
+char		*to_delim(char symbol);
 
 	// ms_nametoval_cases.c
-char		*handle_special_cases(t_shell *sh, char *joined, char *split, char *end);
-char		*handle_exit_status_case(t_shell *sh, char *rejoined_arg, char *subarg);
+char		*handle_special_cases(t_shell *sh, char *joined,
+				char *split, char *end);
+char		*handle_exit_status_case(t_shell *sh,
+				char *rejoined_arg, char *subarg);
 char		*handle_var_case(t_shell *sh, char *rejoined_arg, char *arg);
-
 
 	// ms_commands_manager.c
 int			init_cmds(t_shell *sh);
@@ -188,9 +176,9 @@ t_command	*is_registered_cmd(t_shell *sh);
 
 	// ms_free.c
 void		free_memory(t_shell *sh);
+void		free_args(char **input_args);
 void		free_list(t_list **list);
 void		free_commands(t_command **cmds);
-void		free_args(char **input_args);
 
 // ./BUILTINS
 
@@ -239,7 +227,8 @@ char		*handle_dotted_path(char *cwd, char *path);
 char		*get_abs_path(char *joined_path, char *cwd, char *path);
 char		**split_abs_path(char **split_path, char *joined_path);
 void		flag_dotted_path(char **split_path, char ctrl_char);
-char		*rejoin_abs_path(char *rejoined_path, char **split_path, int i, int j);
+char		*rejoin_abs_path(char *rejoined_path, char **split_path,
+				int i, int j);
 
 	// ms_debug_utils.c
 void		ft_show_strs(char **strs, char *debug_msg);
@@ -272,10 +261,6 @@ char		*join_all_subargs(char **args, char delim);
 char		*ft_strjoin_delim(char const *s1, char const *s2,
 				char const *delim);
 char		*ft_rejoin_subarg(char *rejoined_arg, char *arg);
-
-
-
-char		**ft_copy_free(char **input_arg, char *rejoined_arg);
 
 	// ms_stash_utils.c
 int			stash_var(t_shell *sh);
