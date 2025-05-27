@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/27 16:10:17 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:33:07 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,66 +29,69 @@ void	setup_redirections(int in_fd, int out_fd)
 bool	handle_redirection_tokens(char **tokens, int *i,
 	t_pipeline *p, int cmd_index)
 {
-if (strcmp(tokens[*i], (char[]){CC_HEREDOC, '\0'}) == 0)
-{
-	if (tokens[*i + 1])
+	if (strcmp(tokens[*i], (char[]){CC_HEREDOC, '\0'}) == 0)
 	{
-		p->cmds[cmd_index].infile = ft_strdup("here_doc");
-		p->cmds[cmd_index].limiter = ft_strdup(tokens[++(*i)]);
-		p->cmds[cmd_index].append = false;
-		(*i)++;
-		return (true);
+		if (tokens[*i + 1])
+		{
+			p->cmds[cmd_index].infile = ft_strdup("here_doc");
+			p->cmds[cmd_index].limiter = ft_strdup(tokens[++(*i)]);
+			p->cmds[cmd_index].append = false;
+			(*i)++;
+			return (true);
+		}
+		return (false);
+	}
+	if (strcmp(tokens[*i], (char[]){CC_REDIR_IN, '\0'}) == 0)
+	{
+		if (tokens[*i + 1])
+		{
+			p->cmds[cmd_index].infile = ft_strdup(tokens[++(*i)]);
+			(*i)++;
+			return (true);
+		}
+		return (false);
+	}
+	if (strcmp(tokens[*i], (char[]){CC_REDIR_OUT, '\0'}) == 0)
+	{
+		if (tokens[*i + 1])
+		{
+			p->cmds[cmd_index].outfile = ft_strdup(tokens[++(*i)]);
+			p->cmds[cmd_index].append = false;
+			(*i)++;
+			return (true);
+		}
+		return (false);
+	}
+	if (strcmp(tokens[*i], (char[]){CC_APPEND, '\0'}) == 0)
+	{
+		if (tokens[*i + 1])
+		{
+			p->cmds[cmd_index].outfile = ft_strdup(tokens[++(*i)]);
+			p->cmds[cmd_index].append = true;
+			(*i)++;
+			return (true);
+		}
+		return (false);
 	}
 	return (false);
-}
-if (strcmp(tokens[*i], (char[]){CC_REDIR_IN, '\0'}) == 0)
-{
-	if (tokens[*i + 1])
-	{
-		p->cmds[cmd_index].infile = ft_strdup(tokens[++(*i)]);
-		(*i)++;
-		return (true);
-	}
-	return (false);
-}
-if (strcmp(tokens[*i], (char[]){CC_REDIR_OUT, '\0'}) == 0)
-{
-	if (tokens[*i + 1])
-	{
-		p->cmds[cmd_index].outfile = ft_strdup(tokens[++(*i)]);
-		p->cmds[cmd_index].append = false;
-		(*i)++;
-		return (true);
-	}
-	return (false);
-}
-if (strcmp(tokens[*i], (char[]){CC_APPEND, '\0'}) == 0)
-{
-	if (tokens[*i + 1])
-	{
-		p->cmds[cmd_index].outfile = ft_strdup(tokens[++(*i)]);
-		p->cmds[cmd_index].append = true;
-		(*i)++;
-		return (true);
-	}
-	return (false);
-}
-return (false);
 }
 
 t_pipeline	*parse_redirection_only(char **tokens)
 {
-	t_pipeline *p = ft_calloc(1, sizeof(t_pipeline));
-	t_commands *cmd = ft_calloc(1, sizeof(t_commands));
-	p->cmds = cmd;
-	char **argv = ft_calloc(128, sizeof(char *));
+	t_pipeline	*p;
+	t_commands	*cmd;
+	char		**argv;
+	int			arg_i;
+	int			i;
 
+	p = ft_calloc(1, sizeof(t_pipeline));
+	cmd = ft_calloc(1, sizeof(t_commands));
+	p->cmds = cmd;
+	argv = ft_calloc(128, sizeof(char *));
 	if (!p || !cmd || !argv)
 		return (NULL);
-
-	int i = 0;
-	int arg_i = 0;
-
+	i = 0;
+	arg_i = 0;
 	while (tokens[i])
 	{
 		if (ft_strcmp(tokens[i], (char[]){CC_REDIR_IN, '\0'}) == 0)
@@ -98,14 +101,17 @@ t_pipeline	*parse_redirection_only(char **tokens)
 			else
 			{
 				perror("Error: missing infile\n");
-				free(cmd); free(argv); free(p);
+				free(cmd);
+				free(argv);
+				free(p);
 				return (NULL);
 			}
 		}
 		else if (ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0)
 		{
 			if (tokens[i + 1])
-				p->cmds->outfile = ft_strdup(tokens[++i]), p->cmds->append = true;
+				p->cmds->outfile = ft_strdup(tokens[++i]),
+				p->cmds->append = true;
 			else
 			{
 				perror("Error: missing outfile\n");
@@ -116,7 +122,8 @@ t_pipeline	*parse_redirection_only(char **tokens)
 		else if (ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0)
 		{
 			if (tokens[i + 1])
-				p->cmds->outfile = ft_strdup(tokens[++i]), p->cmds->append = false;
+				p->cmds->outfile = ft_strdup(tokens[++i]),
+					p->cmds->append = false;
 			else
 			{
 				perror("Error: missing outfile\n");

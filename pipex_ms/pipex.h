@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:54:10 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/20 16:31:00 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:38:43 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@
 # include <stdio.h>
 # include <string.h>
 # include "../libft/libft.h"
-#include <readline/readline.h>
-
+# include <readline/readline.h>
 
 typedef enum e_bool
 {
@@ -44,21 +43,22 @@ typedef struct s_pipex
 	int			exit_status;
 }	t_pipex;
 
-typedef struct s_commands {
-	char **argv;
-	char *infile;
-    char *outfile;
-	char *limiter; 
-	t_bool append;
-} t_commands;
+typedef struct s_commands
+{
+	char	**argv;
+	char	*infile;
+	char	*outfile;
+	char	*limiter;
+	t_bool	append;
+}	t_commands;
 
-
-typedef struct s_pipeline {
-    char **tokens;
-    t_commands *cmds;
-    int cmd_count;
-    t_pipex	*pipex;
-} t_pipeline;
+typedef struct s_pipeline
+{
+	char		**tokens;
+	t_commands	*cmds;
+	int			cmd_count;
+	t_pipex		*pipex;
+}	t_pipeline;
 
 void	ft_exit_error(t_pipex *pipex, const char *msg);
 void	ft_free_array(char **arr, int count);
@@ -91,5 +91,5 @@ void	read_heredoc_input(t_pipex *pipex, char *limiter);
 void	setup_here_doc_fds(t_pipex *pipex, char *outfile);
 void	parse_here_doc_commands(t_pipex *pipex, int argc, char **argv);
 void	fork_and_run(t_pipex *pipex, int i, int prev_fd, int *pipefd);
-int run_pipex_from_minshell(t_pipeline *pipeline, char **envp);
+int		run_pipex_from_minshell(t_pipeline *pipeline, char **envp);
 #endif

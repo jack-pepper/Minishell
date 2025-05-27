@@ -6,48 +6,47 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/27 16:27:18 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/27 16:54:11 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-
 static int	open_redirection_fds_mixed(t_commands *cmd,
 	int *in_fd, int *out_fd, t_shell *sh)
 {
-int	flags;
+	int	flags;
 
-*in_fd = -1;
-*out_fd = -1;
-if (cmd->infile)
-{
-*in_fd = open(cmd->infile, O_RDONLY);
-if (*in_fd < 0)
-{
-sh->last_exit_status = 1;
-perror(cmd->infile);
-return (-1);
-}
-}
-if (cmd->outfile)
-{
-flags = O_WRONLY | O_CREAT;
-if (cmd->append)
-flags |= O_APPEND;
-else
-flags |= O_TRUNC;
-*out_fd = open(cmd->outfile, flags, 0644);
-if (*out_fd < 0)
-{
-sh->last_exit_status = 1;
-perror(cmd->outfile);
-if (*in_fd != -1)
-	close(*in_fd);
-return (-1);
-}
-}
-return (0);
+	*in_fd = -1;
+	*out_fd = -1;
+	if (cmd->infile)
+	{
+		*in_fd = open(cmd->infile, O_RDONLY);
+		if (*in_fd < 0)
+		{
+			sh->last_exit_status = 1;
+			perror(cmd->infile);
+			return (-1);
+		}
+	}
+	if (cmd->outfile)
+	{
+		flags = O_WRONLY | O_CREAT;
+		if (cmd->append)
+			flags |= O_APPEND;
+		else
+			flags |= O_TRUNC;
+		*out_fd = open(cmd->outfile, flags, 0644);
+		if (*out_fd < 0)
+		{
+			sh->last_exit_status = 1;
+			perror(cmd->outfile);
+			if (*in_fd != -1)
+				close(*in_fd);
+			return (-1);
+		}
+	}
+	return (0);
 }
 
 void	run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh)
