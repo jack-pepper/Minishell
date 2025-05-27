@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free_two_str.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 12:21:17 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 12:22:42 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/27 16:07:58 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,5 @@ void	ft_free_two_str(char *s1, char *s2)
 		free (s1);
 	if (s2)
 		free (s2);
-	return;
+	return ;
 }
