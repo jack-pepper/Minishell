@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_handle_pipe_with_red.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/27 16:54:11 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/28 11:51:15 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,5 +161,5 @@ void	run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh)
 		}
 		i++;
 	}
-	init_signals(sh);
+	// init_signals(sh);
 }

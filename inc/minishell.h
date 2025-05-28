@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/27 16:09:32 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/28 12:08:17 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,8 +284,8 @@ void		run_pipes_with_no_redir(t_pipeline *p, char **env);
 void		run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh);
 char		*get_cmd_path(char *cmd, char **envp);
 int			validate_and_exec_command(char **argv, char **envp, t_shell *sh);
-void	setup_redirections(int in_fd, int out_fd);
-bool	handle_redirection_tokens(char **tokens, int *i,
+void		setup_redirections(int in_fd, int out_fd);
+bool		handle_redirection_tokens(char **tokens, int *i,
 	t_pipeline *p, int cmd_index);
 typedef enum e_cmd_type
 {
@@ -317,7 +317,7 @@ int			count_cmds(char **tokens);
 int			count_command_tokens(char **tokens, int start);
 int			exec_builtin_in_child(char **argv, t_shell *sh);
 int			cmd_echo_x(char **argv);
-// Global shell pointer for signal handling
-extern t_shell		*g_shell;
+// Global variable for signal handling
+extern volatile sig_atomic_t g_signal_status;
 
 #endif

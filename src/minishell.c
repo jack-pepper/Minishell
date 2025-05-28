@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/22 04:50:09 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/28 11:55:40 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,35 +243,32 @@ int main(int argc, char **argv, char **env)
 		sh.input_args = normalize_input(line, &sh);
 		if (!sh.input_args)
 			continue;
-		// int i = 0;
-		// while(sh.input_args[i])
-		// {
-		// 	printf("input_arg[%d] = %s\n", i,sh.input_args[i]);
-		// 	i++;
-		// }
+
+		// Check for signal status
+		if (g_signal_status != 0)
+		{
+			sh.last_exit_status = g_signal_status;
+			g_signal_status = 0;
+		}
+
 		t_cmd_type type = classify_command(sh.input_args);
 
 		// Handle each command type
 		if (type == REDIR_ONLY)
 		{
-			// printf("handle redirection\n");
 			handle_redir_only(&sh, env);
 		}
 		else if (type == BASIC)
 		{
-			// printf("basic\n");
 			validate_and_exec_command(sh.tokens, sh.input_args, &sh);
 			handle_basic(&sh, env);
 		}
 		else if (type == PIPELINE || type == HERE_DOC)
 		{
-			// printf("handle pipeline\n");
 			handle_pipeline(&sh, env);
 		}
 		else if (type == PIPELINE_WITH_RED)
 		{
-			// printf("pipeline with redi\n");
-			// int num_cmds = count_pipes(sh.input_args) + 1;
 			sh.pipeline = ft_calloc(1, sizeof(t_pipeline)); 
 			parse_and_build_pipeline(sh.pipeline, sh.input_args);
 			run_pipeline_with_redir(sh.pipeline, env, &sh);
@@ -286,6 +283,5 @@ int main(int argc, char **argv, char **env)
 	}
 	free(line);
 	rl_clear_history();
-	//return 0;
 	return (sh.last_exit_status);
 }

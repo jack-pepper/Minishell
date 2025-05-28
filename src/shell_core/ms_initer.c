@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ms_initer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:06:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/20 18:06:53 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/28 12:14:58 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-t_shell *g_shell = NULL;  // Global shell pointer for signal handling
+volatile sig_atomic_t g_signal_status = 0;  // Global variable for signal handling
 
 // Initialize what is needed for the shell (signals, env, pipex, commands)
 int	init_shell(t_shell *sh, char **env)
@@ -21,7 +21,11 @@ int	init_shell(t_shell *sh, char **env)
 	sh->input_args = NULL;
 	sh->tokens = NULL;
 	sh->last_exit_status = 0;
-	init_signals(sh);
+	
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGPIPE, SIG_IGN);
+
 	if (init_env(sh, env) != 0)
 		return (-1);
 	if (init_cmds(sh) != 0)
@@ -77,24 +81,6 @@ int	normalize_env(t_list *this_env)
 	return (0);
 }
 
-void	init_signals(t_shell *sh)
-{
-	struct sigaction	act_sigint;
-	struct sigaction	act_sigquit;
-
-	g_shell = sh;  // Store shell pointer for signal handler
-
-	ft_memset(&act_sigquit, 0, sizeof(act_sigquit));
-	act_sigquit.sa_handler = SIG_IGN;
-	act_sigquit.sa_flags = 0;
-	sigaction(SIGQUIT, &act_sigquit, NULL);
-	ft_memset(&act_sigint, 0, sizeof(act_sigint));
-	act_sigint.sa_handler = &signal_handler;
-	act_sigint.sa_flags = 0;
-	sigaction(SIGINT, &act_sigint, NULL);
-	signal(SIGPIPE, SIG_IGN);
-}
-
 void	signal_handler(int signum)
 {
 	if (signum == SIGINT)
@@ -103,7 +89,6 @@ void	signal_handler(int signum)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		if (g_shell)
-			g_shell->last_exit_status = 130;
+		g_signal_status = 130;
 	}
 }
