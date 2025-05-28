@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_hand_red.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/27 17:33:07 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/28 13:44:57 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,24 +110,32 @@ t_pipeline	*parse_redirection_only(char **tokens)
 		else if (ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0)
 		{
 			if (tokens[i + 1])
-				p->cmds->outfile = ft_strdup(tokens[++i]),
-				p->cmds->append = true;
+			{
+				p->cmds->outfile = ft_strdup(tokens[++i]);
+				p->cmds->append = true;	
+			}
 			else
 			{
 				perror("Error: missing outfile\n");
-				free(cmd); free(argv); free(p);
+				free(cmd);
+				free(argv);
+				free(p);
 				return (NULL);
 			}
 		}
 		else if (ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0)
 		{
 			if (tokens[i + 1])
-				p->cmds->outfile = ft_strdup(tokens[++i]),
-					p->cmds->append = false;
+			{
+				p->cmds->outfile = ft_strdup(tokens[++i]);
+				p->cmds->append = false;
+			}
 			else
 			{
 				perror("Error: missing outfile\n");
-				free(cmd); free(argv); free(p);
+				free(cmd);
+				free(argv);
+				free(p);
 				return (NULL);
 			}
 		}
@@ -140,7 +148,9 @@ t_pipeline	*parse_redirection_only(char **tokens)
 	if (arg_i == 0)
 	{
 		perror("Error: no command found\n");
-		free(cmd); free(argv); free(p);
+		free(cmd);
+		free(argv);
+		free(p);
 		return (NULL);
 	}
 	argv[arg_i] = NULL;
@@ -149,4 +159,3 @@ t_pipeline	*parse_redirection_only(char **tokens)
 	p->cmd_count = 1;
 	return (p);
 }
-

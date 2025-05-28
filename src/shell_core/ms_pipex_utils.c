@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/26 15:36:55 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/28 12:33:32 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ char	**extract_command_args(char **tokens, int *i, int count)
 		|| ft_strcmp(tokens[*i], (char[]){CC_APPEND, '\0'}) == 0)
 		&& tokens[*i + 1])
 		{
-		   *i += 2;
-		   continue ;
-		}		   
+			*i +=2;
+			continue ;
+		}
 		argv[j++] = ft_strdup(tokens[*i]);
 		(*i)++;
 	}
@@ -50,16 +50,10 @@ void	parse_next_command(char **tokens, int *i, t_pipeline *p, int *cmd_i)
 		(*i)++;
 	count = count_command_tokens(tokens, *i);
 	if (count == 0)
-	{
-		printf("I am here 400\n");
 		return ;
-	}
 	p->cmds[*cmd_i].argv = extract_command_args(tokens, i, count);
 	if (!p->cmds[*cmd_i].argv)
-	{
-		printf("stuck in extract commands\n");
 		return ;
-	}
 	(*cmd_i)++;
 	if (tokens[*i] && ft_strcmp(tokens[*i], (char[]){CC_PIPE, '\0'}) == 0)
 		(*i)++;
@@ -67,9 +61,9 @@ void	parse_next_command(char **tokens, int *i, t_pipeline *p, int *cmd_i)
 
 int	count_cmds(char **tokens)
 {
-	int i;
-	int count;
-	int in_cmd;
+	int	i;
+	int	count;
+	int	in_cmd;
 
 	in_cmd = 0;
 	count = 0;
@@ -78,10 +72,10 @@ int	count_cmds(char **tokens)
 	{
 		if (ft_strcmp(tokens[i], (char[]){CC_PIPE, '\0'}) == 0)
 			in_cmd = 0;
-		else if (ft_strcmp(tokens[i], (char[]){CC_REDIR_IN, '\0'}) == 0 ||
-				   ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0 ||
-				   ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0)
-			{
+		else if (ft_strcmp(tokens[i], (char[]){CC_REDIR_IN, '\0'}) == 0
+				|| ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0
+				|| ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0)
+		{
 			if (tokens[i + 1])
 				i++;
 			in_cmd = 0;	
@@ -107,10 +101,10 @@ int	count_command_tokens(char **tokens, int start)
 	while (tokens[start]
 		&& ft_strcmp(tokens[start], (char[]){CC_PIPE, '\0'}) != 0)
 	{
-		if ((ft_strcmp(tokens[start], (char[]){CC_REDIR_IN, '\0'}) == 0 ||
-		ft_strcmp(tokens[start], (char[]){CC_REDIR_OUT, '\0'}) == 0 ||
-		ft_strcmp(tokens[start], (char[]){CC_APPEND, '\0'}) == 0) &&
-	   tokens[start + 1])
+		if ((ft_strcmp(tokens[start], (char[]){CC_REDIR_IN, '\0'}) == 0
+		|| ft_strcmp(tokens[start], (char[]){CC_REDIR_OUT, '\0'}) == 0
+		|| ft_strcmp(tokens[start], (char[]){CC_APPEND, '\0'}) == 0) &&
+		tokens[start + 1])
 		{
 			start += 2;
 			continue ;
