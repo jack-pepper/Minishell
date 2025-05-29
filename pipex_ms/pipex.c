@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/29 10:55:41 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/29 11:03:07 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,6 @@ void	ft_init_pipex(t_pipex *pipex, char *infile, char *outfile)
 	pipex->cmd_count = 0;
 }
 
-static void	init_pipex(t_pipex *pipex, char **envp)
-{
-	memset(pipex, 0, sizeof(t_pipex));
-	pipex->envp = envp;
-	pipex->here_doc = true;
-	pipex->in_fd = -1;
-	pipex->out_fd = -1;
-}
 void	ft_execute_pipex(t_pipex *pipex)
 {
 	int		pipefd[2];

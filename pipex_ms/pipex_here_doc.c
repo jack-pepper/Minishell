@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/29 10:56:22 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/29 11:03:39 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,13 @@ size_t	total_args_length(char **args)
 	while (args[i])
 		total += strlen(args[i++]) + 1;
 	return (total);
+}
+
+void	init_pipex(t_pipex *pipex, char **envp)
+{
+	memset(pipex, 0, sizeof(t_pipex));
+	pipex->envp = envp;
+	pipex->here_doc = true;
+	pipex->in_fd = -1;
+	pipex->out_fd = -1;
 }

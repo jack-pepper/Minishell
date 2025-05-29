@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:54:10 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/29 10:51:01 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/29 11:03:47 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,4 +99,5 @@ int		run_pipex_from_minshell(t_pipeline *pipeline, char **envp);
 int		allocate_mem(char **str, int length);
 size_t	total_args_length(char **args);
 char	*join_args(char **args);
+void	init_pipex(t_pipex *pipex, char **envp);
 #endif
