@@ -6,228 +6,232 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/28 11:55:40 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:02:59 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-
-/* 
- *
- *
- */
-
-int validate_and_exec_command(char **argv, char **envp, t_shell *sh)
+int	validate_and_exec_command(char **argv, char **envp, t_shell *sh)
 {
+	struct stat	st;
+	char		*cmd_path;
+
 	if (!argv || !argv[0] || argv[0][0] == '\0')
-		return 0; // Nothing to run (example: $EMPTY)
-	
+		return (0);
 	if (ft_strchr(argv[0], '/'))
 	{
 		if (access(argv[0], F_OK) != 0)
 		{
-			fprintf(stderr, "%s: No such file or directory\n", argv[0]);
+			perror("No such file or directory");
 			sh->last_exit_status = 127;
-			return 1;
+			return (1);
 		}
 		else
 		{
-			struct stat st;
-
-			// if the path exists
 			if (stat(argv[0], &st) != 0)
 			{
 				perror(argv[0]);
-				sh->last_exit_status = 127; // no such file or dir
-				return 1;
+				sh->last_exit_status = 127;
+				return (1);
 			}
-			// is it a valid directory
 			if (S_ISDIR(st.st_mode))
 			{
 				fprintf(stderr, "%s: Is a directory\n", argv[0]);
 				sh->last_exit_status = 126;
-				return 1;  // Return immediately after detecting directory
+				return (1);
 			}
-		
-			// check execute permissions only if it's not a directory
 			if (access(argv[0], X_OK) != 0)
 			{
-				perror(argv[0]); // permission denied
+				perror(argv[0]);
 				sh->last_exit_status = 126;
-				return 1;
+				return (1);
 			}
 		}
 	}
 	else
 	{
-		char *cmd_path = get_cmd_path(argv[0], envp);
+		cmd_path = get_cmd_path(argv[0], envp);
 		if (!cmd_path)
 		{
 			fprintf(stderr, "%s: command not found\n", argv[0]);
-			sh->last_exit_status = 127;
-			return 1;
+			sh->last_exit_status = (127);
+			return (1);
 		}
 		free(cmd_path);
 	}
-	return 0; // if command is valid then you can execve it
+	return (0);
 }
-void restore_quoted_spaces(char *str)
+
+void	restore_quoted_spaces(char *str)
 {
-	for (int i = 0; str && str[i]; i++)
+	int	i;
+
+	i = 0;
+	while (str && str[i])
 	{
 		if (str[i] == CC_SPACE_IN_QUOTE)
 			str[i] = ' ';
+		i++;
 	}
 }
-bool validate_all_redirections(char **tokens, t_shell *sh)
+
+bool	validate_all_redirections(char **tokens, t_shell *sh)
 {
-	for (int i = 0; tokens[i]; i++)
+	int	i;
+	int	fd;
+	int	flags;
+
+	i = 0;
+	while (tokens[i])
 	{
-		if (ft_strcmp(tokens[i], (char[]){CC_REDIR_IN, '\0'}) == 0 ||
-			ft_strcmp(tokens[i], (char[]){CC_HEREDOC, '\0'}) == 0)
+		if (is_token_control_char(tokens[i], CC_REDIR_IN)
+			|| is_token_control_char(tokens[i], CC_HEREDOC))
 		{
-			restore_quoted_spaces(tokens[i+1]);
+			restore_quoted_spaces(tokens[i + 1]);
 			if (!tokens[i + 1] || access(tokens[i + 1], R_OK) != 0)
 			{
 				perror(tokens[i + 1]);
 				sh->last_exit_status = 1;
-				return false;
+				return (false);
 			}
-			i++; // Skip file name
+			i++;
 		}
-		else if (ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0 ||
-		         ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0)
+		else if (is_token_control_char (tokens[i], CC_REDIR_OUT)
+			|| is_token_control_char(tokens[i], CC_APPEND))
 		{
 			if (!tokens[i + 1])
 			{
 				fprintf(stderr, "Error: missing redirection target\n");
 				sh->last_exit_status = 1;
-				return false;
+				return (false);
 			}
-			restore_quoted_spaces(tokens[i+1]);
-			int flags = O_WRONLY | O_CREAT | O_APPEND;
-			int fd = open(tokens[i + 1], flags, 0644);
-			if (fd < 0) {
+			restore_quoted_spaces(tokens[i + 1]);
+			flags = O_WRONLY | O_CREAT | O_APPEND;
+			fd = open(tokens[i + 1], flags, 0644);
+			if (fd < 0)
+			{
 				perror(tokens[i + 1]);
 				sh->last_exit_status = 1;
-				return false;
+				return (false);
 			}
 			close(fd);
-			i++; // Skip file name
+			i++;
 		}
+		i++;
 	}
-	// printf("TUREE!\n");
-	return true;
+	return (true);
 }
 
-void handle_redir_only(t_shell *sh, char **env)
+void	handle_redir_only(t_shell *sh, char **env)
 {
+	t_pipeline	*pipeline;
+	int			new_file;
 
 	if (!validate_all_redirections(sh->input_args, sh))
-		return;
-		
-	if (strcmp(sh->input_args[0], (char[]){CC_REDIR_IN, '\0'}) == 0)
+		return ;
+	if (is_token_control_char(sh->input_args[0], CC_REDIR_IN))
 	{
-		int new_file = open(sh->input_args[1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		new_file = open(sh->input_args[1], O_WRONLY
+				| O_CREAT | O_TRUNC, 0644);
 		if (new_file == -1)
 			perror("open");
 		else
 			close(new_file);
-		return;
+		return ;
 	}
-
-	t_pipeline *pipeline = parse_redirection_only(sh->input_args);
+	pipeline = parse_redirection_only(sh->input_args);
 	if (!pipeline || !pipeline->cmds || !pipeline->cmds[0].argv)
 	{
 		sh->last_exit_status = 1;
 		fprintf(stderr, "Invalid redirection command\n");
 		free_pipeline(pipeline);
-		return;
+		return ;
 	}
-
 	exec_with_redirection(pipeline, env, sh);
 	free_pipeline(pipeline);
 }
-void handle_basic(t_shell *sh, char **env)
+
+void	handle_basic(t_shell *sh, char **env)
 {
+	t_pipeline	*pipeline;
+
 	if (is_builtin(sh->input_args[0]))
 	{
 		sh->last_exit_status = process_input(sh);
-		return;
+		return ;
 	}
-	// Not a builtin, run normally
 	if (!validate_all_redirections(sh->input_args, sh))
-		return;
-	// printf("here again\n");
-	t_pipeline *pipeline = parse_redirection_only(sh->input_args);
+		return ;
+	pipeline = parse_redirection_only(sh->input_args);
 	if (!pipeline || !pipeline->cmds || !pipeline->cmds[0].argv)
 	{
-		// printf("I am here2939\n");
 		sh->last_exit_status = 127;
 		ft_printf("%s: command not found\n", sh->input_args[0]);
 		free_pipeline(pipeline);
-		return;
+		return ;
 	}
-	// printf("here??\n");
 	exec_with_redirection(pipeline, env, sh);
 	free_pipeline(pipeline);
 }
 
-void handle_pipeline(t_shell *sh, char **env) {
-	t_pipeline *pipeline = build_pipeline_from_tokens(sh->input_args);
-	if (!pipeline) {
-		sh->last_exit_status = 1;
-		return;
-	}
+void	handle_pipeline(t_shell *sh, char **env)
+{
+	int			status;
+	t_pipeline	*pipeline;
 
+	pipeline = build_pipeline_from_tokens(sh->input_args);
+	if (!pipeline)
+	{
+		sh->last_exit_status = 1;
+		return ;
+	}
 	if (has_heredoc(pipeline))
 	{
-		// For heredoc, we need at least one command
-		if (pipeline->cmd_count < 1) {
+		if (pipeline->cmd_count < 1)
+		{
 			ft_printf("Error: heredoc requires at least one command\n");
 			sh->last_exit_status = 1;
 			free_pipeline(pipeline);
-			return;
+			return ;
 		}
-		int status = run_pipex_from_minshell(pipeline, env);
-		if (status != 0) {
+		status = run_pipex_from_minshell(pipeline, env);
+		if (status != 0)
+		{
 			sh->last_exit_status = status;
 			free_pipeline(pipeline);
-			return;
+			return ;
 		}
-	} else {
-		run_pipeline_basic_pipeline(pipeline, env, sh);
 	}
-
+	else
+		run_pipeline_basic_pipeline(pipeline, env, sh);
 	free_pipeline(pipeline);
 }
-void handle_pipeline_with_red(t_shell *sh, char **env) {
-	// if (!validate_all_redirections(sh->input_args, sh))
-	// 	return;
 
-	t_pipeline *pipeline = build_pipeline_from_tokens(sh->input_args);
-	if (!pipeline) {
+void	handle_pipeline_with_red(t_shell *sh, char **env)
+{
+	t_pipeline	*pipeline;
+
+	pipeline = build_pipeline_from_tokens(sh->input_args);
+	if (!pipeline)
+	{
 		sh->last_exit_status = 1;
-		return;
+		return ;
 	}
-
 	if (has_heredoc(pipeline))
 		run_pipex_from_minshell(pipeline, env);
 	else
-	{
-		// printf("I am here31\n");	
 		run_pipeline_basic_pipeline(pipeline, env, sh);
-	}
-
 	free_pipeline(pipeline);
 }
 
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
-	t_shell sh;
-	static char *line = NULL;
+	t_shell		sh;
+	static char	*line;
+	t_cmd_type	type;
 
+	line = NULL;
 	if (argc != 1 || argv[1])
 		return (-1);
 	if (init_shell(&sh, env) != 0)
@@ -237,23 +241,17 @@ int main(int argc, char **argv, char **env)
 		line = get_input(line);
 		if (line == NULL)
 			cmd_exit(&sh, 1);
-
 		if (line[0] == '\0')
-			continue;
+			continue ;
 		sh.input_args = normalize_input(line, &sh);
 		if (!sh.input_args)
-			continue;
-
-		// Check for signal status
+			continue ;
 		if (g_signal_status != 0)
 		{
 			sh.last_exit_status = g_signal_status;
 			g_signal_status = 0;
 		}
-
-		t_cmd_type type = classify_command(sh.input_args);
-
-		// Handle each command type
+		type = classify_command(sh.input_args);
 		if (type == REDIR_ONLY)
 		{
 			handle_redir_only(&sh, env);
@@ -269,16 +267,15 @@ int main(int argc, char **argv, char **env)
 		}
 		else if (type == PIPELINE_WITH_RED)
 		{
-			sh.pipeline = ft_calloc(1, sizeof(t_pipeline)); 
+			sh.pipeline = ft_calloc(1, sizeof(t_pipeline));
 			parse_and_build_pipeline(sh.pipeline, sh.input_args);
 			run_pipeline_with_redir(sh.pipeline, env, &sh);
 		}
 		else
 		{
 			sh.last_exit_status = 1;
-			fprintf(stderr, "Error: Unsupported combination of pipes and redirections\n");
+			perror("Error: Unsupported combination of pipes and redirections");
 		}
-
 		ft_free_array(sh.input_args, -1);
 	}
 	free(line);

@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/29 10:22:22 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/29 14:50:48 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -322,6 +322,7 @@ bool		validate_pipeline_commands(t_pipeline *p, t_shell *sh);
 int			validate_all_non_builtins(t_pipeline *p, char **env, t_shell *sh);
 void		open_pipe_if_needed(int i, int cmd_count, int pipe_fd[2]);
 void		handle_cat_no_args(t_commands *cmd, int i, int total);
+int			is_token_control_char(char *token, char ctrl_char);
 // Global variable for signal handling
 extern volatile sig_atomic_t g_signal_status;
 
