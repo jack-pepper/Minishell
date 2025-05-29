@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+         #
+#    By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/20 17:50:19 by mmalie            #+#    #+#              #
-#    Updated: 2025/05/27 16:24:32 by yel-bouk         ###   ########.fr        #
+#    Updated: 2025/05/29 10:55:29 by yel-bouk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,6 +70,7 @@ MS_SRC = ./src/minishell.c \
 	  ./src/shell_core/cmd_classifier.c \
 	  ./src/shell_core/ms_handle_basic_pipe.c \
 	  ./src/shell_core/ms_handle_pipe_with_red.c \
+        ./src/shell_core/ms_handle_pipes_utils.c \
 
 PIPEX_SRC =       ./pipex_ms/pipex.c \
       ./pipex_ms/pipex_utils.c \
@@ -77,6 +78,7 @@ PIPEX_SRC =       ./pipex_ms/pipex.c \
       ./pipex_ms/pipex_bonus_utils.c \
       ./pipex_ms/parsing.c \
       ./pipex_ms/free.c \
+      ./pipex_ms/pipex_here_doc.c \
 
 SRC = $(MS_SRC) $(PIPEX_SRC)
 
@@ -86,6 +88,7 @@ PIPEX_SRC =       ./pipex_ms/pipex.c \
       ./pipex_ms/pipex_bonus_utils.c \
       ./pipex_ms/parsing.c \
       ./pipex_ms/free.c \
+      ./pipex_ms/pipex_here_doc.c \
 
 SRC = $(MS_SRC) $(PIPEX_SRC)
 

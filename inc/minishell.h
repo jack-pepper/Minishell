@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/28 12:08:17 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/29 10:22:22 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,6 +317,11 @@ int			count_cmds(char **tokens);
 int			count_command_tokens(char **tokens, int start);
 int			exec_builtin_in_child(char **argv, t_shell *sh);
 int			cmd_echo_x(char **argv);
+bool		validate_cd_command(char **argv, t_shell *sh);
+bool		validate_pipeline_commands(t_pipeline *p, t_shell *sh);
+int			validate_all_non_builtins(t_pipeline *p, char **env, t_shell *sh);
+void		open_pipe_if_needed(int i, int cmd_count, int pipe_fd[2]);
+void		handle_cat_no_args(t_commands *cmd, int i, int total);
 // Global variable for signal handling
 extern volatile sig_atomic_t g_signal_status;
 

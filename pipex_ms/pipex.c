@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/27 16:05:02 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/29 10:55:41 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,14 @@ void	ft_init_pipex(t_pipex *pipex, char *infile, char *outfile)
 	pipex->cmd_count = 0;
 }
 
+static void	init_pipex(t_pipex *pipex, char **envp)
+{
+	memset(pipex, 0, sizeof(t_pipex));
+	pipex->envp = envp;
+	pipex->here_doc = true;
+	pipex->in_fd = -1;
+	pipex->out_fd = -1;
+}
 void	ft_execute_pipex(t_pipex *pipex)
 {
 	int		pipefd[2];
@@ -88,90 +96,6 @@ void	handle_mandatory(t_pipex *pipex, char **argv, int argc)
 	free_pipex(pipex);
 }
 
-static int	allocate_mem(char **str, int length)
-{
-	*str = malloc(length);
-	if (!*str)
-		return (0);
-	return (1);
-}
-
-static size_t	total_args_length(char **args)
-{
-	size_t	total;
-	int		i;
-
-	i = 0;
-	total = 0;
-	while (args[i])
-		total += strlen(args[i++]) + 1;
-	return (total);
-}
-
-static char	*join_args(char **args)
-{
-	int		i;
-	size_t	total_len;
-	char	*result;
-
-	if (!args || !args[0])
-		return (strdup(""));
-	i = 0;
-	total_len = total_args_length(args);
-	if (total_len == 0)
-		return (strdup(""));
-	if (!allocate_mem(&result, total_len))
-		return (NULL);
-	result[0] = '\0';
-	i = 0;
-	while (args[i])
-	{
-		if (args[i])
-		{
-			strcat(result, args[i]);
-			if (args[i + 1])
-				strcat(result, " ");
-		}
-		i++;
-	}
-	return (result);
-}
-
-int	handle_heredoc(const char *limiter)
-{
-	char	*line;
-	int		fd;
-
-	line = NULL;
-	fd = open(".heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd < 0)
-	{
-		perror("open .heredoc_tmp");
-		return (1);
-	}
-	while (1)
-	{
-		line = readline("> ");
-		if (!line || strcmp(line, limiter) == 0)
-			break ;
-		write(fd, line, strlen(line));
-		write(fd, "\n", 1);
-		free(line);
-	}
-	free(line);
-	close(fd);
-	return (0);
-}
-
-static void	init_pipex(t_pipex *pipex, char **envp)
-{
-	memset(pipex, 0, sizeof(t_pipex));
-	pipex->envp = envp;
-	pipex->here_doc = true;
-	pipex->in_fd = -1;
-	pipex->out_fd = -1;
-}
-
 int	run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 {
 	t_pipex	pipex;
@@ -183,7 +107,7 @@ int	run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 
 	if (!pipeline || !pipeline->cmds->infile)
 	{
-		perror("Invalid pipeline");	
+		perror("Invalid pipeline");
 		return (1);
 	}
 	if (ft_strcmp(pipeline->cmds->infile, "here_doc") != 0)
@@ -217,7 +141,7 @@ int	run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 		if (!pipeline->cmds[i].argv)
 		{
 			j = 0;
-			while(j < k)
+			while (j < k)
 			{
 				free(argv[j]);
 				j++;
@@ -235,7 +159,7 @@ int	run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 	ft_parse_paths(&pipex);
 	handle_bonus(&pipex, argc, argv);
 	i = 0;
-	while(i < argc)
+	while (i < argc)
 	{
 		free(argv[i]);
 		i++;
@@ -244,7 +168,6 @@ int	run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 	free_pipex(&pipex);
 	return (pipex.exit_status);
 }
-
 // int	main(int argc, char **argv, char **envp)
 // {
 // 	t_pipex	pipex;
