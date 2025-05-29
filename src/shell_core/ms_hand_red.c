@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/28 13:44:57 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:24:23 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	setup_redirections(int in_fd, int out_fd)
 bool	handle_redirection_tokens(char **tokens, int *i,
 	t_pipeline *p, int cmd_index)
 {
-	if (strcmp(tokens[*i], (char[]){CC_HEREDOC, '\0'}) == 0)
+	if (is_token_control_char(tokens[*i], CC_HEREDOC))
 	{
 		if (tokens[*i + 1])
 		{
@@ -41,7 +41,7 @@ bool	handle_redirection_tokens(char **tokens, int *i,
 		}
 		return (false);
 	}
-	if (strcmp(tokens[*i], (char[]){CC_REDIR_IN, '\0'}) == 0)
+	if (is_token_control_char(tokens[*i], CC_REDIR_IN))
 	{
 		if (tokens[*i + 1])
 		{
@@ -51,7 +51,7 @@ bool	handle_redirection_tokens(char **tokens, int *i,
 		}
 		return (false);
 	}
-	if (strcmp(tokens[*i], (char[]){CC_REDIR_OUT, '\0'}) == 0)
+	if (is_token_control_char(tokens[*i], CC_REDIR_OUT))
 	{
 		if (tokens[*i + 1])
 		{
@@ -62,7 +62,7 @@ bool	handle_redirection_tokens(char **tokens, int *i,
 		}
 		return (false);
 	}
-	if (strcmp(tokens[*i], (char[]){CC_APPEND, '\0'}) == 0)
+	if (is_token_control_char(tokens[*i], CC_APPEND))
 	{
 		if (tokens[*i + 1])
 		{
@@ -94,7 +94,7 @@ t_pipeline	*parse_redirection_only(char **tokens)
 	arg_i = 0;
 	while (tokens[i])
 	{
-		if (ft_strcmp(tokens[i], (char[]){CC_REDIR_IN, '\0'}) == 0)
+		if (is_token_control_char(tokens[i], CC_REDIR_IN))
 		{
 			if (tokens[i + 1])
 				p->cmds->infile = ft_strdup(tokens[++i]);
@@ -107,12 +107,12 @@ t_pipeline	*parse_redirection_only(char **tokens)
 				return (NULL);
 			}
 		}
-		else if (ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0)
+		else if (is_token_control_char(tokens[i], CC_APPEND))
 		{
 			if (tokens[i + 1])
 			{
 				p->cmds->outfile = ft_strdup(tokens[++i]);
-				p->cmds->append = true;	
+				p->cmds->append = true;
 			}
 			else
 			{
@@ -123,7 +123,7 @@ t_pipeline	*parse_redirection_only(char **tokens)
 				return (NULL);
 			}
 		}
-		else if (ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0)
+		else if (is_token_control_char(tokens[i], CC_REDIR_OUT))
 		{
 			if (tokens[i + 1])
 			{

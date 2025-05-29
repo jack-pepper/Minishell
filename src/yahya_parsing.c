@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 12:04:47 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/25 13:58:39 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:29:45 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	count_pipes(char **tokens)
 	i = 0;
 	while (tokens[i])
 	{
-		if (ft_strcmp(tokens[i], (char[]){CC_PIPE, '\0'}) == 0)
+		if (is_token_control_char(tokens[i], CC_PIPE))
 			count++;
 		i++;
 	}
@@ -37,9 +37,9 @@ int	count_args(char **tokens)
 	i = 0;
 	while (tokens[i])
 	{
-		if ((ft_strcmp(tokens[i], (char[]){CC_REDIR_IN, '\0'}) == 0
-			|| ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0
-			|| ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0)
+		if ((is_token_control_char(tokens[i], CC_REDIR_IN)
+				|| is_token_control_char(tokens[i], CC_REDIR_OUT)
+				|| is_token_control_char(tokens[i], CC_APPEND))
 			&& tokens[i + 1])
 			i += 2;
 		else if ((unsigned char)tokens[i][0] < 32 && tokens[i][1] == '\0')
@@ -94,8 +94,7 @@ t_commands	parse_command(char **tokens)
 	}
 	while (tokens[i])
 	{
-		if (ft_strcmp(tokens[i],
-				(char[]){CC_REDIR_IN, '\0'}) == 0 && tokens[i + 1])
+		if (is_token_control_char(tokens[i], CC_REDIR_IN) && tokens[i + 1])
 		{
 			test_fd = open(tokens[i + 1], O_RDONLY);
 			if (test_fd < 0)
@@ -109,7 +108,7 @@ t_commands	parse_command(char **tokens)
 			free(cmd.infile);
 			cmd.infile = ft_strdup(tokens[++i]);
 		}
-		else if (ft_strcmp(tokens[i], (char[]){CC_REDIR_OUT, '\0'}) == 0
+		else if (is_token_control_char(tokens[i], CC_REDIR_OUT)
 			&& tokens[i + 1])
 		{
 			test_fd = open(tokens[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -125,7 +124,7 @@ t_commands	parse_command(char **tokens)
 			last_outfile = ft_strdup(tokens[++i]);
 			last_append = false;
 		}
-		else if (ft_strcmp(tokens[i], (char[]){CC_APPEND, '\0'}) == 0
+		else if (is_token_control_char(tokens[i], CC_APPEND)
 			&& tokens[i + 1])
 		{
 			test_fd = open(tokens[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -142,7 +141,7 @@ t_commands	parse_command(char **tokens)
 			last_append = true;
 		}
 		else if ((unsigned char)tokens[i][0] < 32 && tokens[i][1] == '\0')
-			continue;
+			continue ;
 		else
 			cmd.argv[argc++] = ft_strdup(tokens[i]);
 		i++;
