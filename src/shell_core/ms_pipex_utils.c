@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/29 11:42:26 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/30 12:19:28 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,14 @@
 int	is_token_control_char(char *token, char ctrl_char)
 {
 	return (ft_strcmp(token, ft_chrtostr(ctrl_char)) == 0);
+}
+
+int	control_token(char *token)
+{
+	return (is_token_control_char(token, CC_PIPE)
+		|| is_token_control_char(token, CC_REDIR_IN)
+		|| is_token_control_char(token, CC_REDIR_OUT)
+		|| is_token_control_char(token, CC_APPEND));
 }
 
 char	**extract_command_args(char **tokens, int *i, int count)
@@ -26,15 +34,9 @@ char	**extract_command_args(char **tokens, int *i, int count)
 	argv = malloc(sizeof(char *) * (count + 1));
 	if (!argv)
 		return (NULL);
-	while (tokens[*i]
-		&& !is_token_control_char(tokens[*i], CC_PIPE)
-		&& !is_token_control_char(tokens[*i], CC_REDIR_IN)
-		&& !is_token_control_char(tokens[*i], CC_REDIR_OUT)
-		&& !is_token_control_char(tokens[*i], CC_APPEND))
+	while (tokens[*i] && !control_token(tokens[*i]))
 	{
-		if ((is_token_control_char(tokens[*i], CC_REDIR_IN)
-				|| is_token_control_char(tokens[*i], CC_REDIR_OUT)
-				|| is_token_control_char(tokens[*i], CC_APPEND))
+		if (control_token(tokens[*i])
 			&& tokens[*i + 1])
 		{
 			*i += 2;
@@ -77,9 +79,7 @@ int	count_cmds(char **tokens)
 	{
 		if (is_token_control_char(tokens[i], CC_PIPE))
 			in_cmd = 0;
-		else if (is_token_control_char(tokens[i], CC_REDIR_IN)
-			|| is_token_control_char(tokens[i], CC_REDIR_OUT)
-			|| is_token_control_char(tokens[i], CC_APPEND))
+		else if (control_token(tokens[i]))
 		{
 			if (tokens[i + 1])
 				i++;
