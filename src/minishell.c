@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/30 12:35:58 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/30 15:52:58 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,22 @@ void	handle_basic(t_shell *sh, char **env)
 
 	if (is_builtin(sh->input_args[0]))
 	{
+// =======
+// 		if (sh->input_args[i][0] == '\0')
+// 			i++;
+// 		else if (ft_strpbrk(sh->input_args[i], "|<>") != NULL)
+// 		{	
+// 	//		printf("arg[%d] (%s) contains pipe or redir!\n", i, sh->input_args[i]);
+// 			break ;
+// 		}
+// 		i++;
+// 	}
+
+// 	char * cmd_path = get_cmd_path(sh->input_args[first_arg], env);
+// 	if (is_registered_cmd(sh) || cmd_path == NULL)
+// 	{
+// 		free(cmd_path);
+// >>>>>>> ebf87a1a334a85b2cf99dc9a7ec2cb31c1d22b2c
 		sh->last_exit_status = process_input(sh);
 		return ;
 	}

@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                               +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/25 18:23:06 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/25 23:33:14 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,9 @@ void	ante_merge_quote(char *line, int *i)
 
 void	pass_quotes(char *dst, char *src, size_t *i, size_t *j)
 {
-	if (src[(*i)] == '\'' || src[(*i)] == CC_VAR_BOUND_SQUOTE)
+	if (two_quotes_case(dst, src, i, j) != 0)
+		return ;
+	else if (src[(*i)] == '\'' || src[(*i)] == CC_VAR_BOUND_SQUOTE)
 	{
 		if (src[(*i)] == CC_VAR_BOUND_SQUOTE)
 			dst[(*j)++] = src[(*i)];
@@ -92,4 +94,20 @@ void	pass_quotes(char *dst, char *src, size_t *i, size_t *j)
 			dst[(*j)++] = src[(*i)];
 		(*i)++;
 	}
+}
+
+int	two_quotes_case(char *dst, char *src, size_t *i, size_t *j)
+{
+	if (!src[2] && ft_is_in_set(src[0], "\"\'")
+		&& ft_is_in_set(src[1], "\"\'"))
+	{
+		while (src[(*i)])
+		{
+			dst[(*j)] = src[(*i)];
+			(*j)++;
+			(*i)++;
+		}
+		return (1);
+	}
+	return (0);
 }

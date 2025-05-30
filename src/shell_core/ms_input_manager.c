@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:06 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/25 18:01:19 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/25 23:32:47 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ char	*get_input(char *line)
 
 // Normalize the input and store the arguments for further use
 char	**normalize_input(char *line, t_shell *sh)
+
 {
 	sh->normalized_line = ft_normalize(line);
 	if (!sh->normalized_line)
@@ -61,7 +62,11 @@ int	process_input(t_shell *sh)
 		sh->last_exit_status = cmd->func(sh);
 	else
 	{
-		if (sh->input_args[0][0] != '\0')
+		if ((ft_strcmp(sh->input_args[0], "\"\"") == 0
+				|| ft_strcmp(sh->input_args[0], "\'\'") == 0)
+			&& !sh->input_args[0][2])
+			sh->last_exit_status = ms_err("", "", CMD_NOT_FOUND, 127);
+		else if (sh->input_args[0][0] != '\0')
 			sh->last_exit_status = handle_non_cmd(sh);
 	}
 	return (sh->last_exit_status);
