@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/30 11:37:11 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/30 12:35:07 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,23 +34,27 @@
 # define CC_SUBARG_DELIM 31 // '-' // 31
 # define CC_LONE_DOLLAR 23 // '&' // 23 == $ bfr opening quote(should disappear)
 # define CC_EXTRA_DELIM 31 // ';' // 31
-# define CC_VAR_BOUND 21 // '*' // 21 // For edge case `echo "$HO"ME`
+# define CC_VAR_BOUND 21 // '*' // 21 // To remove "
+# define CC_VAR_BOUND_SQUOTE 19// To restore '
 # define CC_STICKY_VAR 22 // '@' // 22
 # define CC_TO_BE_DELETED 20 // 'X' // 20
 # define CC_TRAILING_DOLLAR 19 // '%' // 19
+# define CC_DOLLAR_UNCLOSED 18
+
 
 /*
-# define CC_SPACE_IN_QUOTE '_' // 29
-# define CC_VAR_TO_INTERPRET '#' // 30
-# define CC_SUBARG_DELIM '-' // 31
-# define CC_LONE_DOLLAR '&' // 23 == $ before opening quote (should disappear)
-# define CC_EXTRA_DELIM ';' // 31
-# define CC_VAR_BOUND '*' // 21 // For edge case `echo "$HO"ME`
-# define CC_STICKY_VAR '@' // 22
-# define CC_TO_BE_DELETED 'X' // 20
-# define CC_TRAILING_DOLLAR '%' // 19
-
+# define CC_SPACE_IN_QUOTE '0' // 29
+# define CC_VAR_TO_INTERPRET '1' // 30
+# define CC_SUBARG_DELIM '2' // 31
+# define CC_LONE_DOLLAR '3' // 23 == $ before opening quote (should disappear)
+# define CC_EXTRA_DELIM '4' // 31
+# define CC_VAR_BOUND '5' // 21 // For edge case `echo "$HO"ME`
+# define CC_STICKY_VAR '6' // 22
+# define CC_TO_BE_DELETED '7' // 20
+# define CC_TRAILING_DOLLAR '8' // 19
+# define CC_DOLLAR_UNCLOSED '9' // 18
 */
+
 /* Return messages (ft_ret) */
 
 # define SHELL_NAME "minishell: " // could be used to improve error msg
@@ -62,6 +66,7 @@
 # define NUM_ARG_REQ ": numeric argument required\n"
 # define CMD_NOT_FOUND ": command not found\n"
 # define CMD_IS_DIR ": Is a directory\n"
+# define PERM_DENY ": Permission denied\n"
 
 /* Libraries */
 
@@ -121,7 +126,9 @@ typedef struct s_shell
 	// minishell.c
 int			main(int argc, char **argv, char **env);
 int			is_invalid_for_stash(char *arg);
-int			stash_var_or_invalidate(t_shell *sh);
+int			handle_non_cmd(t_shell *sh);
+int			handle_file_or_dir(t_shell *sh);
+
 
 	// ms_initer.c
 int			init_shell(t_shell *sh, char **env);
@@ -138,9 +145,12 @@ int			process_input(t_shell *sh);
 	// ms_normalizer.c
 char		*ft_normalize(char *line);
 char		*ft_strflag(char *line);
+char		*copy_collapse(char *dst, char *src, size_t src_len);
+
+	// ms_normalizer_add_spaces.c
+char		*ft_add_spaces_around_redir(char *spaced);
 char		*ft_add_spaces_around(char *str, char special);
 char		*ft_add_spaces_around_str(const char *line, const char *str);
-char		*copy_collapse(char *dst, char *src, size_t src_len);
 
 	// ms_flagger.c
 void		flag_dollar(char *line, int *i);
@@ -148,10 +158,9 @@ void		flag_pipe_and_redir(char *line, int *i);
 void		flag_quote(char *line, int *i);
 
 	// ms_quotes_handler.c
-//char		*flag_edge_var(char *line, int *i);
+void		flag_var_bounds(char *line, int *i);
 void		ante_merge_quote(char *line, int *i);
 void		handle_quote(char *line, char quote_type, int *i);
-void		post_merge_quote(char *line, int *i);
 void		pass_quotes(char *dst, char *src, size_t *i, size_t *j);
 
 	// ms_env_interpreter.c
@@ -164,9 +173,12 @@ char		*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args);
 char		*split_rejoin(t_shell *sh, char *rejoined_arg,
 				char *arg, char splitter);
 char		*to_delim(char splitter);
-char		*handle_exit_status_case(t_shell *sh, char *rejoined_arg,
-				char *subarg);
+
+	// ms_nametoval_cases.c
+char		*handle_special_cases(t_shell *sh, char *joined, char *split, char *end);
+char		*handle_exit_status_case(t_shell *sh, char *rejoined_arg, char *subarg);
 char		*handle_var_case(t_shell *sh, char *rejoined_arg, char *arg);
+
 
 	// ms_commands_manager.c
 int			init_cmds(t_shell *sh);
@@ -226,7 +238,7 @@ char		*handle_dotted_path(char *cwd, char *path);
 char		*get_abs_path(char *joined_path, char *cwd, char *path);
 char		**split_abs_path(char **split_path, char *joined_path);
 void		flag_dotted_path(char **split_path, char ctrl_char);
-char		*rejoin_abs_path(char *rejoined_path, char **split_path);
+char		*rejoin_abs_path(char *rejoined_path, char **split_path, int i, int j);
 
 	// ms_debug_utils.c
 void		ft_show_strs(char **strs, char *debug_msg);
@@ -254,10 +266,14 @@ void		ft_replace_all_chars(char **input_args, char old_c, char new_c);
 
 	// ms_split_join_utils.c
 char		*ft_chrtostr(char chr);
+char		*join_with_delim(char *result, char *temp, char delim);
 char		*join_all_subargs(char **args, char delim);
 char		*ft_strjoin_delim(char const *s1, char const *s2,
 				char const *delim);
 char		*ft_rejoin_subarg(char *rejoined_arg, char *arg);
+
+
+
 char		**ft_copy_free(char **input_arg, char *rejoined_arg);
 
 	// ms_stash_utils.c

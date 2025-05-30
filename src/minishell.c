@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/29 15:02:59 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/30 12:35:58 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,38 @@ void	handle_basic(t_shell *sh, char **env)
 		sh->last_exit_status = process_input(sh);
 		return ;
 	}
+
+	// int	i;
+	// int	first_arg;
+
+	// i = 0;
+	// if (!sh->input_args[i])
+	// 	return ;
+	// while (sh->input_args[i][0] == '\0')
+	// 	i++;
+	// first_arg = i;
+	// while (sh->input_args[i])
+	// {
+	// 	if (sh->input_args[i][0] == '\0')
+	// 		i++;
+	// 	else if (ft_strpbrk(sh->input_args[i], "|<>") != NULL)
+	// 	{	
+	// 	//	printf("arg[%d] (%s) contains pipe or redir!\n", i, sh->input_args[i]);
+	// 		break ;
+	// 	}
+	// 	i++;
+	// }
+
+	// char * cmd_path = get_cmd_path(sh->input_args[first_arg], env);
+	// if (is_registered_cmd(sh) || cmd_path == NULL)
+	// {
+	// 	free(cmd_path);
+	// 	sh->last_exit_status = process_input(sh);
+	// 	return ;
+	// }
+	// free(cmd_path);
+
+	// Not a builtin, run normally
 	if (!validate_all_redirections(sh->input_args, sh))
 		return ;
 	pipeline = parse_redirection_only(sh->input_args);
@@ -252,6 +284,27 @@ int	main(int argc, char **argv, char **env)
 			g_signal_status = 0;
 		}
 		type = classify_command(sh.input_args);
+// =======
+
+		// // What are those lines for?
+		// if (line[0] == '\0')
+		// 	continue; 
+		// sh.input_args = normalize_input(line, &sh);
+		// if (!sh.input_args)
+		// 	continue;
+		// ////////////////////////////
+
+		// // int i = 0;
+		// // while(sh.input_args[i])
+		// // {
+		// // 	printf("input_arg[%d] = %s\n", i,sh.input_args[i]);
+		// // 	i++;
+		// // }
+
+		// t_cmd_type type = classify_command(sh.input_args);
+
+		// // Handle each command type
+// >>>>>>> main
 		if (type == REDIR_ONLY)
 		{
 			handle_redir_only(&sh, env);

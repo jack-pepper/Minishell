@@ -6,7 +6,7 @@
 #    By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/20 17:50:19 by mmalie            #+#    #+#              #
-#    Updated: 2025/05/30 11:36:45 by yel-bouk         ###   ########.fr        #
+#    Updated: 2025/05/30 12:29:57 by yel-bouk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,12 +40,14 @@ LIBFT = ./libft/libft.a
 MS_SRC = ./src/minishell.c \
       ./src/shell_core/ms_initer.c \
       ./src/shell_core/ms_normalizer.c \
+      ./src/shell_core/ms_normalizer_add_spaces.c \
       ./src/shell_core/ms_flagger.c \
       ./src/shell_core/ms_commands_manager.c \
       ./src/shell_core/ms_input_manager.c \
       ./src/shell_core/ms_quotes_handler.c \
       ./src/shell_core/ms_env_interpreter.c \
       ./src/shell_core/ms_nametoval.c \
+      ./src/shell_core/ms_nametoval_cases.c \
       ./src/shell_core/ms_free.c \
       ./src/shell_core/yahya_ms_to_pipex.c \
       ./src/builtins/cd/ms_cmd_cd.c \

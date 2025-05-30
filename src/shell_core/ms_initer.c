@@ -6,13 +6,13 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:06:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/28 12:23:49 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/30 12:37:11 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-volatile sig_atomic_t g_signal_status = 0;  // Global variable for signal handling
+volatile sig_atomic_t g_signal_status = 0;
 
 // Initialize what is needed for the shell (signals, env, pipex, commands)
 int	init_shell(t_shell *sh, char **env)
@@ -63,12 +63,17 @@ int	normalize_env(t_list *this_env)
 		if (ft_strslen((char **)cur_node->content) > 2)
 		{
 			rejoined_var = ft_strdup(((char **)cur_node->content)[1]);
+			if (!rejoined_var)
+				return (1);
 			free(((char **)cur_node->content)[1]);
 			while (((char **)cur_node->content)[i])
 			{
 				temp = ft_strdup(rejoined_var);
 				free(rejoined_var);
-				rejoined_var = ft_strjoin_delim(temp, ((char **)cur_node->content)[i], "=");
+				if (!temp)
+					return (1);
+				rejoined_var = ft_strjoin_delim(
+						temp, ((char **)cur_node->content)[i], "=");
 				free(temp);
 				i++;
 			}

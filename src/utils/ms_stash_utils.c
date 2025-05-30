@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:42:15 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/09 23:34:44 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/21 23:48:00 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,13 +87,12 @@ int	are_args_stashable(char **args)
 	i = 0;
 	while (args[i] != NULL)
 	{
+		if (ft_strchr(args[i], '/') != NULL)
+			return (1);
 		invalid_cmd = ft_strchr(args[i], '=');
 		if ((invalid_cmd == NULL)
 			|| (is_valid_env_name_sub(args[i]) != 0))
-		{
-			printf("minishell: %s: command not found\n", args[i]);
-			return (127);
-		}
+			return (1);
 		i++;
 	}
 	return (0);

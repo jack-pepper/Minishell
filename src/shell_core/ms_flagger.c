@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:03:35 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/19 22:59:23 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/05/25 18:20:40 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,11 @@ void	flag_dollar(char *line, int *i)
 {
 	if (line[(*i) + 1])
 	{
-		if (ft_is_in_set(line[(*i) + 1], "\"\'"))
+		if (ft_is_in_set(line[(*i) + 1], "\"\'")
+			&& ft_count_char(&line[(*i) + 1], line[(*i) + 1]) > 1)
 			ft_replace_char(&line[(*i)], CC_LONE_DOLLAR);
 		else if (ft_isalnum_x_chr(&line[(*i) + 1], "_?"))
 			ft_replace_char(&line[(*i)], CC_VAR_TO_INTERPRET);
-		else if (ft_isalnum_x_chr(&line[(*i) - 1], "_?"))
-			ft_replace_char(&line[(*i)], CC_TRAILING_DOLLAR);
-	}
-	else
-	{
-		if (line[(*i) - 1]
-			&& ft_isalnum_x_chr(&line[(*i) - 1], "_?"))
-			ft_replace_char(&line[(*i)], CC_TRAILING_DOLLAR);
-		else if (line[(*i) - 1]
-			&& ((ft_is_in_set(line[(*i) - 1], "\"\'")
-					|| line[(*i) - 1] == CC_VAR_BOUND)))
-			ft_replace_char(&line[(*i)], '$');
 	}
 	return ;
 }
@@ -64,8 +53,16 @@ void	flag_quote(char *line, int *i)
 		handle_quote(line, '\'', i);
 	else if (line[(*i)] == '\"' && ft_count_char(&line[(*i)], '\"') > 1)
 	{
-		ante_merge_quote(line, i);
+		if ((*i) > 0 && !ft_is_in_set(line[(*i) - 1], " \"\'"))
+			ante_merge_quote(line, i);
 		handle_quote(line, '\"', i);
-		post_merge_quote(line, i);
+		if (!line[(*i) + 1] || ft_is_in_set(line[(*i + 1)], " \"\'"))
+			return ;
+	}
+	else if ((ft_is_in_set(line[(*i)], "\"\'"))
+		&& (ft_count_char(&line[(*i)], '\"') == 1
+			|| ft_count_char(&line[(*i)], '\'') == 1))
+	{
+		ft_replace_chars_in_str(&line[(*i)], '$', CC_DOLLAR_UNCLOSED);
 	}
 }
