@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/27 16:07:14 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/30 09:36:45 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,19 @@ void	ft_parse_paths(t_pipex *pipex)
 		pipex->cmd_paths[j] = temp;
 		j++;
 	}
+}
+
+void	handle_here_doc(t_pipex *pipex, int argc, char **argv)
+{
+	char	*limiter;
+
+	pipex->here_doc = true;
+	limiter = argv[2];
+	read_heredoc_input(pipex, limiter);
+	setup_here_doc_fds(pipex, argv[argc - 1]);
+	parse_here_doc_commands(pipex, argc, argv);
+	ft_parse_paths(pipex);
+	execute_multiple_cmds(pipex);
+	unlink(".heredoc_tmp");
+	free_pipex(pipex);
 }

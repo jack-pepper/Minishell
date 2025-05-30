@@ -6,26 +6,11 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/27 16:06:37 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/30 09:36:50 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-void	handle_here_doc(t_pipex *pipex, int argc, char **argv)
-{
-	char	*limiter;
-
-	pipex->here_doc = true;
-	limiter = argv[2];
-	read_heredoc_input(pipex, limiter);
-	setup_here_doc_fds(pipex, argv[argc - 1]);
-	parse_here_doc_commands(pipex, argc, argv);
-	ft_parse_paths(pipex);
-	execute_multiple_cmds(pipex);
-	unlink(".heredoc_tmp");
-	free_pipex(pipex);
-}
 
 void	handle_bonus(t_pipex *pipex, int argc, char **argv)
 {
@@ -87,4 +72,39 @@ void	execute_all_children(t_pipex *pipex)
 		}
 		i++;
 	}
+}
+
+void	ft_execute_pipex(t_pipex *pipex)
+{
+	int		pipefd[2];
+	pid_t	pid1;
+	pid_t	pid2;
+	int		status;
+
+	if (pipe(pipefd) == -1)
+		ft_exit_error(pipex, "pipe failed");
+	pid1 = fork();
+	if (pid1 == -1)
+		ft_exit_error(pipex, "fork failed");
+	if (pid1 == 0)
+		execute_first_child(pipex, pipefd);
+	pid2 = fork();
+	if (pid2 == -1)
+		ft_exit_error(pipex, "fork failed");
+	if (pid2 == 0)
+		execute_second_child(pipex, pipefd);
+	close(pipefd[0]);
+	close(pipefd[1]);
+	waitpid(pid1, NULL, 0);
+	waitpid(pid2, &status, 0);
+	pipex->exit_status = WEXITSTATUS(status);
+}
+
+void	handle_mandatory(t_pipex *pipex, char **argv, int argc)
+{
+	ft_init_pipex(pipex, argv[1], argv[argc - 1]);
+	ft_parse_cmds(pipex, argv);
+	ft_parse_paths(pipex);
+	ft_execute_pipex(pipex);
+	free_pipex(pipex);
 }

@@ -6,59 +6,11 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/29 11:30:04 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/30 09:37:32 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-void	ft_init_pipex(t_pipex *pipex, char *infile, char *outfile)
-{
-	int	flags;
-
-	if (!pipex->here_doc)
-	{
-		pipex->in_fd = open(infile, O_RDONLY);
-		if (pipex->in_fd == -1)
-			perror(infile);
-	}
-	flags = O_WRONLY | O_CREAT;
-	if (pipex->here_doc)
-		flags |= O_APPEND;
-	else
-		flags |= O_TRUNC;
-	if (pipex->out_fd == -1)
-		perror(outfile);
-	pipex->cmd_args = NULL;
-	pipex->cmd_paths = NULL;
-	pipex->cmd_count = 0;
-}
-
-void	ft_execute_pipex(t_pipex *pipex)
-{
-	int		pipefd[2];
-	pid_t	pid1;
-	pid_t	pid2;
-	int		status;
-
-	if (pipe(pipefd) == -1)
-		ft_exit_error(pipex, "pipe failed");
-	pid1 = fork();
-	if (pid1 == -1)
-		ft_exit_error(pipex, "fork failed");
-	if (pid1 == 0)
-		execute_first_child(pipex, pipefd);
-	pid2 = fork();
-	if (pid2 == -1)
-		ft_exit_error(pipex, "fork failed");
-	if (pid2 == 0)
-		execute_second_child(pipex, pipefd);
-	close(pipefd[0]);
-	close(pipefd[1]);
-	waitpid(pid1, NULL, 0);
-	waitpid(pid2, &status, 0);
-	pipex->exit_status = WEXITSTATUS(status);
-}
 
 void	execute_child(t_pipex *pipex, int in_fd, int out_fd, char **cmd)
 {
@@ -79,24 +31,18 @@ void	execute_child(t_pipex *pipex, int in_fd, int out_fd, char **cmd)
 	exit(1);
 }
 
-void	handle_mandatory(t_pipex *pipex, char **argv, int argc)
+static void	free_argv(char **argv, int size)
 {
-	ft_init_pipex(pipex, argv[1], argv[argc - 1]);
-	ft_parse_cmds(pipex, argv);
-	ft_parse_paths(pipex);
-	ft_execute_pipex(pipex);
-	free_pipex(pipex);
+	int	i;
+
+	i = 0;
+	while (i < size)
+		free(argv[i++]);
+	free(argv);
 }
 
-int	run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
+static int	validate_pipeline(t_pipeline *pipeline)
 {
-	t_pipex	pipex;
-	char	**argv;
-	int		argc;
-	int		i;
-	int		k;
-	int		j;
-
 	if (!pipeline || !pipeline->cmds->infile)
 	{
 		perror("Invalid pipeline");
@@ -107,40 +53,28 @@ int	run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 		perror("here_doc");
 		return (1);
 	}
-	memset(&pipex, 0, sizeof(pipex));
-	argc = 4 + pipeline->cmd_count;
-	k = 0;
+	return (0);
+}
+
+static char	**build_pipex_argv(t_pipeline *pipeline, int *argc)
+{
+	char	**argv;
+	int		k;
+	int		i;
+
 	i = 0;
-	init_pipex(&pipex, envp);
-	if (handle_heredoc(pipeline->cmds->limiter) != 0)
-	{
-		perror("Error: here_doc failed");
-		return (1);
-	}
-	free(pipeline->cmds->infile);
-	pipeline->cmds->infile = strdup(".heredoc_tmp");
-	argv = malloc(sizeof(char *) * (argc + 1));
+	k = 0;
+	*argc = 4 + pipeline->cmd_count;
+	argv = malloc(sizeof(char *) * (*argc + 1));
 	if (!argv)
-	{
-		perror("malloc");
-		return (1);
-	}
+		return (perror("malloc"), NULL);
 	argv[k++] = strdup("pipex");
 	argv[k++] = strdup("here_doc");
 	argv[k++] = strdup(pipeline->cmds->limiter);
 	while (i < pipeline->cmd_count)
 	{
 		if (!pipeline->cmds[i].argv)
-		{
-			j = 0;
-			while (j < k)
-			{
-				free(argv[j]);
-				j++;
-			}
-			free(argv);
-			return (1);
-		}
+			return (free_argv(argv, k), NULL);
 		argv[k++] = join_args(pipeline->cmds[i++].argv);
 	}
 	if (pipeline->cmds[pipeline->cmd_count - 1].outfile)
@@ -148,18 +82,33 @@ int	run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 	else
 		argv[k++] = strdup("/dev/stdout");
 	argv[k] = NULL;
+	return (argv);
+}
+
+int	run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
+{
+	t_pipex	pipex;
+	char	**argv;
+	int		argc;
+
+	memset(&pipex, 0, sizeof(pipex));
+	if (validate_pipeline(pipeline))
+		return (1);
+	init_pipex(&pipex, envp);
+	if (handle_heredoc(pipeline->cmds->limiter) != 0)
+		return (perror("Error: here_doc failed"), 1);
+	free(pipeline->cmds->infile);
+	pipeline->cmds->infile = strdup(".heredoc_tmp");
+	argv = build_pipex_argv(pipeline, &argc);
+	if (!argv)
+		return (1);
 	ft_parse_paths(&pipex);
 	handle_bonus(&pipex, argc, argv);
-	i = 0;
-	while (i < argc)
-	{
-		free(argv[i]);
-		i++;
-	}
-	free(argv);
+	free_argv(argv, argc);
 	free_pipex(&pipex);
 	return (pipex.exit_status);
 }
+
 // int	main(int argc, char **argv, char **envp)
 // {
 // 	t_pipex	pipex;

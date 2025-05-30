@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_classifier.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/27 16:40:56 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/30 11:56:16 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,28 @@ t_cmd_type	classify_command(char **tokens)
 	if(has_cmd)
 		return (BASIC);
 	return (BASIC);
+}
+
+char	*shell_find_cmd_path(char *cmd, char **paths)
+{
+	int		i;
+	char	*temp;
+	char	*full;
+
+	i = 0;
+	while (paths[i])
+	{
+		temp = ft_strjoin(paths[i], "/");
+		if (!temp)
+			return (NULL);
+		full = ft_strjoin(temp, cmd);
+		free(temp);
+		if (!full)
+			return (NULL);
+		if (access(full, X_OK) == 0)
+			return (full);
+		free(full);
+		i++;
+	}
+	return (NULL);
 }

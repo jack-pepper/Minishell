@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/02/21 10:01:37 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/30 09:37:42 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,26 @@ void	execute_second_child(t_pipex *pipex, int *pipefd)
 	perror("execve");
 	free(cmd_path);
 	exit(1);
+}
+
+void	ft_init_pipex(t_pipex *pipex, char *infile, char *outfile)
+{
+	int	flags;
+
+	if (!pipex->here_doc)
+	{
+		pipex->in_fd = open(infile, O_RDONLY);
+		if (pipex->in_fd == -1)
+			perror(infile);
+	}
+	flags = O_WRONLY | O_CREAT;
+	if (pipex->here_doc)
+		flags |= O_APPEND;
+	else
+		flags |= O_TRUNC;
+	if (pipex->out_fd == -1)
+		perror(outfile);
+	pipex->cmd_args = NULL;
+	pipex->cmd_paths = NULL;
+	pipex->cmd_count = 0;
 }
