@@ -6,13 +6,13 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:06:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/30 12:37:11 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/31 12:37:52 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-volatile sig_atomic_t g_signal_status = 0;
+volatile sig_atomic_t	g_signal_status = 0;
 
 // Initialize what is needed for the shell (signals, env, pipex, commands)
 int	init_shell(t_shell *sh, char **env)
@@ -21,11 +21,9 @@ int	init_shell(t_shell *sh, char **env)
 	sh->input_args = NULL;
 	sh->tokens = NULL;
 	sh->last_exit_status = 0;
-	
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGPIPE, SIG_IGN);
-
 	if (init_env(sh, env) != 0)
 		return (-1);
 	if (init_cmds(sh) != 0)
