@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/30 15:52:58 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/31 10:52:23 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	validate_and_exec_command(char **argv, char **envp, t_shell *sh)
 			}
 			if (S_ISDIR(st.st_mode))
 			{
-				fprintf(stderr, "%s: Is a directory\n", argv[0]);
+				ft_putstr_fd(" Is a directory\n", 2);
 				sh->last_exit_status = 126;
 				return (1);
 			}
@@ -54,7 +54,7 @@ int	validate_and_exec_command(char **argv, char **envp, t_shell *sh)
 		cmd_path = get_cmd_path(argv[0], envp);
 		if (!cmd_path)
 		{
-			fprintf(stderr, "%s: command not found\n", argv[0]);
+			ft_putstr_fd(" command not found\n", 2);
 			sh->last_exit_status = (127);
 			return (1);
 		}
@@ -102,7 +102,7 @@ bool	validate_all_redirections(char **tokens, t_shell *sh)
 		{
 			if (!tokens[i + 1])
 			{
-				fprintf(stderr, "Error: missing redirection target\n");
+				ft_putstr_fd(" Error: missing redirection target\n", 2);
 				sh->last_exit_status = 1;
 				return (false);
 			}
@@ -144,7 +144,8 @@ void	handle_redir_only(t_shell *sh, char **env)
 	if (!pipeline || !pipeline->cmds || !pipeline->cmds[0].argv)
 	{
 		sh->last_exit_status = 1;
-		fprintf(stderr, "Invalid redirection command\n");
+		
+		ft_putstr_fd(" Invalid redirection command\n", 2);
 		free_pipeline(pipeline);
 		return ;
 	}
@@ -158,57 +159,9 @@ void	handle_basic(t_shell *sh, char **env)
 
 	if (is_builtin(sh->input_args[0]))
 	{
-// =======
-// 		if (sh->input_args[i][0] == '\0')
-// 			i++;
-// 		else if (ft_strpbrk(sh->input_args[i], "|<>") != NULL)
-// 		{	
-// 	//		printf("arg[%d] (%s) contains pipe or redir!\n", i, sh->input_args[i]);
-// 			break ;
-// 		}
-// 		i++;
-// 	}
-
-// 	char * cmd_path = get_cmd_path(sh->input_args[first_arg], env);
-// 	if (is_registered_cmd(sh) || cmd_path == NULL)
-// 	{
-// 		free(cmd_path);
-// >>>>>>> ebf87a1a334a85b2cf99dc9a7ec2cb31c1d22b2c
 		sh->last_exit_status = process_input(sh);
 		return ;
 	}
-
-	// int	i;
-	// int	first_arg;
-
-	// i = 0;
-	// if (!sh->input_args[i])
-	// 	return ;
-	// while (sh->input_args[i][0] == '\0')
-	// 	i++;
-	// first_arg = i;
-	// while (sh->input_args[i])
-	// {
-	// 	if (sh->input_args[i][0] == '\0')
-	// 		i++;
-	// 	else if (ft_strpbrk(sh->input_args[i], "|<>") != NULL)
-	// 	{	
-	// 	//	printf("arg[%d] (%s) contains pipe or redir!\n", i, sh->input_args[i]);
-	// 		break ;
-	// 	}
-	// 	i++;
-	// }
-
-	// char * cmd_path = get_cmd_path(sh->input_args[first_arg], env);
-	// if (is_registered_cmd(sh) || cmd_path == NULL)
-	// {
-	// 	free(cmd_path);
-	// 	sh->last_exit_status = process_input(sh);
-	// 	return ;
-	// }
-	// free(cmd_path);
-
-	// Not a builtin, run normally
 	if (!validate_all_redirections(sh->input_args, sh))
 		return ;
 	pipeline = parse_redirection_only(sh->input_args);
@@ -300,27 +253,6 @@ int	main(int argc, char **argv, char **env)
 			g_signal_status = 0;
 		}
 		type = classify_command(sh.input_args);
-// =======
-
-		// // What are those lines for?
-		// if (line[0] == '\0')
-		// 	continue; 
-		// sh.input_args = normalize_input(line, &sh);
-		// if (!sh.input_args)
-		// 	continue;
-		// ////////////////////////////
-
-		// // int i = 0;
-		// // while(sh.input_args[i])
-		// // {
-		// // 	printf("input_arg[%d] = %s\n", i,sh.input_args[i]);
-		// // 	i++;
-		// // }
-
-		// t_cmd_type type = classify_command(sh.input_args);
-
-		// // Handle each command type
-// >>>>>>> main
 		if (type == REDIR_ONLY)
 		{
 			handle_redir_only(&sh, env);

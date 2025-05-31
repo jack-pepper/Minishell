@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:19:08 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/29 15:19:14 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/31 10:54:05 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,19 @@ bool	validate_cd_command(char **argv, t_shell *sh)
 
 	if (!argv[1])
 	{
-		fprintf(stderr, "cd: missing argument\n");
+		ft_putstr_fd(" cd: missing argument\n", 2);
 		sh->last_exit_status = 1;
 		return (false);
 	}
 	if (stat(argv[1], &st) != 0)
 	{
-		fprintf(stderr, "cd: %s: No such file or directory\n", argv[1]);
+		ft_putstr_fd(" cd: No such file or directory\n", 2);
 		sh->last_exit_status = 1;
 		return (false);
 	}
 	if (!S_ISDIR(st.st_mode))
 	{
-		fprintf(stderr, "cd: %s: Not a directory\n", argv[1]);
+		ft_putstr_fd(" cd: Not a directory\n", 2);
 		sh->last_exit_status = 1;
 		return (false);
 	}

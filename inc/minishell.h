@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/30 15:57:33 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/30 17:08:50 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,7 +326,9 @@ void		open_pipe_if_needed(int i, int cmd_count, int pipe_fd[2]);
 void		handle_cat_no_args(t_commands *cmd, int i, int total);
 int			is_token_control_char(char *token, char ctrl_char);
 char		*shell_find_cmd_path(char *cmd, char **paths);
+int			get_output_flags(int append);
+int			open_fd(const char *filename, int flags, t_shell *sh);
+void		close_fds(int in, int out);
 // Global variable for signal handling
-extern volatile	sig_atomic_t		g_signal_status;
-
+extern volatile sig_atomic_t	g_signal_status;
 #endif
