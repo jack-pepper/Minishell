@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/30 17:08:50 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/05/31 11:41:27 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,6 +329,14 @@ char		*shell_find_cmd_path(char *cmd, char **paths);
 int			get_output_flags(int append);
 int			open_fd(const char *filename, int flags, t_shell *sh);
 void		close_fds(int in, int out);
+void		handle_redir_only(t_shell *sh, char **env);
+void		handle_basic(t_shell *sh, char **env);
+void		handle_pipeline(t_shell *sh, char **env);
+void		restore_quoted_spaces(char *str);
+bool		validate_all_redirections(char **tokens, t_shell *sh);
+int			validate_direct_path(char **argv, t_shell *sh);
+int			validate_in_path(char **argv, char **envp, t_shell *sh);
+
 // Global variable for signal handling
 extern volatile sig_atomic_t	g_signal_status;
 #endif
