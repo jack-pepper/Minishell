@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_handler.c                                     :+:      :+:    :+:   */
+/*   ms_exec_handler.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 10:58:30 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/31 11:00:38 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/01 14:12:29 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,8 +126,14 @@ bool	validate_all_redirections(char **tokens, t_shell *sh)
 		if (is_token_control_char(tokens[i], CC_REDIR_IN)
 			|| is_token_control_char(tokens[i], CC_HEREDOC))
 		{
+			if (!tokens[i + 1])
+			{
+				ft_putstr_fd(" Error: missing input file\n", 2);
+				sh->last_exit_status = 1;
+				return (false);
+			}
 			restore_quoted_spaces(tokens[i + 1]);
-			if (!tokens[i + 1] || access(tokens[i + 1], R_OK) != 0)
+			if (access(tokens[i + 1], R_OK) != 0)
 			{
 				perror(tokens[i + 1]);
 				sh->last_exit_status = 1;
@@ -135,12 +141,12 @@ bool	validate_all_redirections(char **tokens, t_shell *sh)
 			}
 			i++;
 		}
-		else if (is_token_control_char (tokens[i], CC_REDIR_OUT)
+		else if (is_token_control_char(tokens[i], CC_REDIR_OUT)
 			|| is_token_control_char(tokens[i], CC_APPEND))
 		{
 			if (!tokens[i + 1])
 			{
-				ft_putstr_fd(" Error: missing redirection target\n", 2);
+				ft_putstr_fd(" Error: missing output file\n", 2);
 				sh->last_exit_status = 1;
 				return (false);
 			}
@@ -155,6 +161,15 @@ bool	validate_all_redirections(char **tokens, t_shell *sh)
 			}
 			close(fd);
 			i++;
+		}
+		else if (is_token_control_char(tokens[i], CC_PIPE))
+		{
+			if (!tokens[i + 1])
+			{
+				ft_putstr_fd(" Error: missing command after pipe\n", 2);
+				sh->last_exit_status = 1;
+				return (false);
+			}
 		}
 		i++;
 	}

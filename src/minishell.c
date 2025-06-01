@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/31 11:40:52 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/01 14:17:30 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,8 @@ void	dispatch_command(t_cmd_type type, t_shell *sh, char **env)
 	}
 	else
 	{
-		sh->last_exit_status = 1;
-		perror("Error: Unsupported combination of pipes and redirections");
+		sh->last_exit_status = 2;
+		ft_putstr_fd("synthax error\n", 2);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/31 12:20:49 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/01 14:12:29 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ t_cmd_type	classify_command(char **tokens)
 	int	here_doc;
 	int	has_cmd;
 	int	first_is_redir;
+	int	consecutive_redirs;
 
 	i = 0;
 	has_pipe = 0;
@@ -49,24 +50,41 @@ t_cmd_type	classify_command(char **tokens)
 	here_doc = 0;
 	has_cmd = 0;
 	first_is_redir = 0;
+	consecutive_redirs = 0;
 	first_is_redir = is_first_token_redirection(tokens);
 	while (tokens[i])
 	{
 		if (is_token_control_char(tokens[i], CC_PIPE))
+		{
 			has_pipe = 1;
+			if (!tokens[i + 1])
+				return (MIXED_INVALID);
+		}
 		else if (is_token_control_char(tokens[i], CC_HEREDOC))
+		{
 			here_doc = 1;
+			if (!tokens[i + 1])
+				return (MIXED_INVALID);
+			i++;
+		}
 		else if (token_redirection(tokens, i))
 		{
 			has_redir = 1;
 			if (!tokens[i + 1])
 				return (MIXED_INVALID);
+			if (token_redirection(tokens, i + 1))
+				consecutive_redirs = 1;
 			i++;
 		}
 		else if ((unsigned char)tokens[i][0] >= 32)
+		{
 			has_cmd = 1;
+			consecutive_redirs = 0;
+		}
 		i++;
 	}
+	if (consecutive_redirs)
+		return (MIXED_INVALID);
 	if (here_doc)
 		return (HERE_DOC);
 	if (has_pipe && has_redir)
