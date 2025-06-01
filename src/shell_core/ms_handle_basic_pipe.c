@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/29 10:30:18 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/01 07:21:53 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,3 +104,4 @@ void	run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh)
 	}
 	wait_for_all_children_basic(sh);
 }
+

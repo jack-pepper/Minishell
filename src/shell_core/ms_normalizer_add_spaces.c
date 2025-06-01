@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/23 19:44:01 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/01 07:43:38 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,27 @@ char	*ft_add_spaces_around_redir(char *spaced)
 
 char	*ft_add_spaces_around(char *str, char special)
 {
-	int	i = 0;
-	int	len = ft_strlen(str);
-	int	extra = 0;
+	int		i;
+	int		extra;
+	int		len;
+	char	*new_str;
+	int		j;
 
-	// Count how many extra spaces we need
-	for (i = 0; str[i]; i++)
+	len = ft_strlen(str);
+	extra = 0;
+	i = 0;
+	while (str[i])
+	{
 		if (str[i] == special)
 			extra += 2;
-
-	char *new_str = malloc(len + extra + 1);
-	if (!new_str) return NULL;
-
-	int j = 0;
-	for (i = 0; str[i]; i++)
+		i++;
+	}
+	new_str = malloc(len + extra + 1);
+	if (!new_str)
+		return (NULL);
+	j = 0;
+	i = 0;
+	while (str[i])
 	{
 		if (str[i] == special)
 		{
@@ -64,40 +71,56 @@ char	*ft_add_spaces_around(char *str, char special)
 		}
 		else
 			new_str[j++] = str[i];
+		i++;
 	}
 	new_str[j] = '\0';
-	return new_str;
+	return (new_str);
 }
 
 char	*ft_add_spaces_around_str(const char *line, const char *str)
 {
-	int	len = strlen(line);
-	int	op_len = strlen(str);
-	int	count = 0;
-	for (int i = 0; line[i]; i++) {
+	int		len;
+	int		op_len;
+	int		i;
+	int		j;
+	int		k;
+	int		count;
+	char	*result;
+
+	count = 0;
+	i = 0;
+	op_len = strlen(str);
+	len = strlen(line);
+	while (line[i])
+	{
 		if (strncmp(&line[i], str, op_len) == 0)
 			count++;
+		i++;
 	}
 	if (count == 0)
-		return strdup(line);
-
-	// Each match will add 2 extra spaces
-	char *result = malloc(len + count * 2 + 1);
+		return (strdup(line));
+	result = malloc(len + count * 2 + 1);
 	if (!result)
-		return NULL;
-
-	int i = 0, j = 0;
-	while (line[i]) {
-		if (strncmp(&line[i], str, op_len) == 0) {
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (line[i])
+	{
+		if (strncmp(&line[i], str, op_len) == 0)
+		{
 			result[j++] = ' ';
-			for (int k = 0; k < op_len; k++)
+			k = 0;
+			while (k < op_len)
+			{
 				result[j++] = str[k];
+				k++;	
+			}
 			result[j++] = ' ';
 			i += op_len;
-		} else {
-			result[j++] = line[i++];
 		}
+		else
+			result[j++] = line[i++];
 	}
 	result[j] = '\0';
-	return result;
+	return (result);
 }

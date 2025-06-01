@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/30 15:53:53 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/01 07:23:43 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ t_pipeline	*build_pipeline_from_tokens(char **tokens)
 	{
 		if (handle_redirection_tokens(tokens, &i, p, current_cmd))
 			continue ;
-		if (ft_strcmp(tokens[i], (char[]){CC_PIPE, '\0'}) == 0)
+		if (is_token_control_char(tokens[i], CC_PIPE))
 		{
 			current_cmd++;
 			i++;

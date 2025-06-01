@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/31 12:35:43 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/01 07:15:43 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -339,9 +339,14 @@ int			validate_in_path(char **argv, char **envp, t_shell *sh);
 
 void		run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh);
 void		wait_for_pipeline(t_pipeline *p, pid_t last_pid, t_shell *sh);
-void		handle_parent_pipe_closing(int *prev_fd, int pipe_fd[2], int i, int cmd_count);
-void		execute_child_pipeline_cmd(t_pipeline *p, char **env, t_shell *sh, int i, int prev_fd, int pipe_fd[2]);
+void		handle_parent_pipe_closing(int *prev_fd,
+				int pipe_fd[2], int i, int cmd_count);
+void		execute_child_pipeline_cmd(t_pipeline *p, char **env, t_shell *sh,
+				int i, int prev_fd, int pipe_fd[2]);
 int			pipeline_fork_loop(t_pipeline *p, char **env, t_shell *sh);
+int			open_redirection_fds_mixed(t_commands *cmd,
+	int *in_fd, int *out_fd, t_shell *sh);
 // Global variable for signal handling
-extern volatile sig_atomic_t	g_signal_status;
+extern volatile	sig_atomic_t
+	g_signal_status;
 #endif
