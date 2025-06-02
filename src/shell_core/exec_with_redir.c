@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:29:54 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/30 16:57:01 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/03 00:19:40 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh)
 
 	if (open_redirection_fds(cmd, &in_fd, &out_fd, sh) < 0)
 	{
-		printf("Invalid file\n");
+		printf("Invalid file\n"); // exit_status?
 		return ;
 	}
 	pid = fork();
@@ -106,7 +106,7 @@ int	exec_builtin_in_child(char **argv, t_shell *sh)
 	else if (argv[0][0] == CC_VAR_TO_INTERPRET
 				&& argv[0][1] == '?' && !argv[0][2])
 	{
-		perror(" ");
+		perror(" "); // ?
 		sh->last_exit_status = 1;
 		return (0);
 	}

@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/01 14:17:30 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/03 00:12:17 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	dispatch_command(t_cmd_type type, t_shell *sh, char **env)
 		handle_redir_only(sh, env);
 	else if (type == BASIC)
 	{
-		validate_and_exec_command(sh->tokens, sh->input_args, sh);
+		//validate_and_exec_command(sh->tokens, sh->input_args, sh); // already handled in handle_basic by handle_file_or_dir
 		handle_basic(sh, env);
 	}
 	else if (type == PIPELINE || type == HERE_DOC)
@@ -105,8 +105,9 @@ void	dispatch_command(t_cmd_type type, t_shell *sh, char **env)
 	}
 	else
 	{
-		sh->last_exit_status = 2;
-		ft_putstr_fd("synthax error\n", 2);
+		//sh->last_exit_status = 2;
+		//ft_putstr_fd("synthax error\n", 2);
+		sh->last_exit_status = ms_err("", "", PIPE_SYNTAX_ERR, 2);
 	}
 }
 
