@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/20 18:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/03 21:04:52 by mmalie           ###   ########.fr       */
+/*   Created: 2025/06/03 22:05:33 by mmalie            #+#    #+#             */
+/*   Updated: 2025/06/03 22:17:26 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,57 +21,6 @@ int	validate_and_exec_command(char **argv, char **envp, t_shell *sh)
 	else
 		return (validate_in_path(argv, envp, sh));
 }
-
-// int	validate_and_exec_command(char **argv, char **envp, t_shell *sh)
-// {
-// 	struct stat	st;
-// 	char		*cmd_path;
-
-// 	if (!argv || !argv[0] || argv[0][0] == '\0')
-// 		return (0);
-// 	if (ft_strchr(argv[0], '/'))
-// 	{
-// 		if (access(argv[0], F_OK) != 0)
-// 		{
-// 			perror("No such file or directory");
-// 			sh->last_exit_status = 127;
-// 			return (1);
-// 		}
-// 		else
-// 		{
-// 			if (stat(argv[0], &st) != 0)
-// 			{
-// 				perror(argv[0]);
-// 				sh->last_exit_status = 127;
-// 				return (1);
-// 			}
-// 			if (S_ISDIR(st.st_mode))
-// 			{
-// 				ft_putstr_fd(" Is a directory\n", 2);
-// 				sh->last_exit_status = 126;
-// 				return (1);
-// 			}
-// 			if (access(argv[0], X_OK) != 0)
-// 			{
-// 				perror(argv[0]);
-// 				sh->last_exit_status = 126;
-// 				return (1);
-// 			}
-// 		}
-// 	}
-// 	else
-// 	{
-// 		cmd_path = get_cmd_path(argv[0], envp);
-// 		if (!cmd_path)
-// 		{
-// 			ft_putstr_fd(" command not found\n", 2);
-// 			sh->last_exit_status = (127);
-// 			return (1);
-// 		}
-// 		free(cmd_path);
-// 	}
-// 	return (0);
-// }
 
 void	restore_quoted_spaces(char *str)
 {

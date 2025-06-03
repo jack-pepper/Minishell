@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/01 07:21:53 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/03 15:32:50 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,25 @@ static void	wait_for_all_children_basic(t_shell *sh)
 	}
 }
 
-void	run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh)
+static void	exec_pipeline_child_pipe(t_pipeline *p, char **env, t_shell *sh,
+	int i, int prev_fd, int pipe_fd[2])
 {
 	char	*cmd_path;
+
+	handle_cat_no_args(&p->cmds[i], i, p->cmd_count);
+	setup_child_fds(prev_fd, i, p->cmd_count, pipe_fd);
+	if (is_builtin(p->cmds[i].argv[0]))
+		exit(exec_builtin_in_child(p->cmds[i].argv, sh));
+	cmd_path = get_cmd_path(p->cmds[i].argv[0], env);
+	if (!cmd_path)
+		exit(127);
+	execve(cmd_path, p->cmds[i].argv, env);
+	perror("execve failed");
+	exit(EXIT_FAILURE);
+}
+
+void	run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh)
+{
 	int		i;
 	int		prev_fd;
 	int		pipe_fd[2];
@@ -87,21 +103,9 @@ void	run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh)
 		open_pipe_if_needed(i, p->cmd_count, pipe_fd);
 		pid = fork();
 		if (pid == 0)
-		{
-			handle_cat_no_args(&p->cmds[i], i, p->cmd_count);
-			setup_child_fds(prev_fd, i, p->cmd_count, pipe_fd);
-			if (is_builtin(p->cmds[i].argv[0]))
-				exit(exec_builtin_in_child(p->cmds[i].argv, sh));
-			cmd_path = get_cmd_path(p->cmds[i].argv[0], env);
-			if (!cmd_path)
-				exit(127);
-			execve(cmd_path, p->cmds[i].argv, env);
-			perror("execve failed");
-			exit(EXIT_FAILURE);
-		}
+			exec_pipeline_child_pipe(p, env, sh, i, prev_fd, pipe_fd);
 		close_parent_pipe_ends(i, &prev_fd, pipe_fd, p->cmd_count);
 		i++;
 	}
 	wait_for_all_children_basic(sh);
 }
-

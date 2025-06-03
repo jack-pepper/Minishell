@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:06 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/25 23:32:47 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/03 22:34:29 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ char	*get_input(char *line)
 char	**normalize_input(char *line, t_shell *sh)
 
 {
+	if (ft_strnopbrk(line, " \f\n\r\t\v") == NULL) // If NULL, no char other than the one specified in the arg str is found
+		return (NULL);
 	sh->normalized_line = ft_normalize(line);
 	if (!sh->normalized_line)
 		return (NULL);
