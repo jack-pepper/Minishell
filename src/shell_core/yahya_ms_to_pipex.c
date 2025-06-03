@@ -6,45 +6,21 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/01 07:23:43 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/03 15:11:30 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-bool	has_heredoc(t_pipeline *p)
+static void	append_token_to_argvs(t_pipeline *p, char *token, int current_cmd)
 {
-	int	i;
+	int	arg_count;
 
-	i = 0;
-	while (i < p->cmd_count)
-	{
-		if (p->cmds[i].limiter)
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
-bool	is_builtin(const char *cmd)
-{
-	if (!cmd)
-		return (false);
-	if (ft_strcmp(cmd, "cd") == 0
-		|| ft_strcmp(cmd, "echo") == 0
-		|| ft_strcmp(cmd, "env") == 0
-		|| ft_strcmp(cmd, "pwd") == 0
-		|| ft_strcmp(cmd, "export") == 0
-		|| ft_strcmp(cmd, "unset") == 0
-		|| ft_strcmp(cmd, "exit") == 0
-		|| ft_strchr(cmd, '=') != NULL
-		|| (cmd[0] == CC_VAR_TO_INTERPRET)
-		|| ((cmd[0] == CC_VAR_TO_INTERPRET) && (cmd[1] == '?'))
-		|| (cmd[0] == '$')
-		|| ((cmd[0] == '$') && (cmd[1] == '?'))
-	)
-		return (true);
-	return (false);
+	arg_count = 0;
+	while (p->cmds[current_cmd].argv[arg_count])
+		arg_count++;
+	p->cmds[current_cmd].argv[arg_count] = ft_strdup(token);
+	p->cmds[current_cmd].argv[arg_count + 1] = NULL;
 }
 
 static t_pipeline	*init_pipeline(char **tokens)
@@ -69,8 +45,6 @@ t_pipeline	*build_pipeline_from_tokens(char **tokens)
 	int			i;
 	t_pipeline	*p;
 	int			current_cmd;
-	int			count;
-	int			arg_count;
 
 	i = 0;
 	p = init_pipeline(tokens);
@@ -81,32 +55,12 @@ t_pipeline	*build_pipeline_from_tokens(char **tokens)
 	{
 		if (handle_redirection_tokens(tokens, &i, p, current_cmd))
 			continue ;
-		if (is_token_control_char(tokens[i], CC_PIPE))
-		{
-			current_cmd++;
-			i++;
+		if (handle_pipe_token(tokens, &i, &current_cmd))
 			continue ;
-		}
-		if (!p->cmds[current_cmd].argv)
-		{
-			count = count_command_tokens(tokens + i, 0);
-			if (count > 0)
-			{
-				p->cmds[current_cmd].argv = malloc(sizeof(char *) * (count
-							+ 1));
-				if (!p->cmds[current_cmd].argv)
-					return (NULL);
-				p->cmds[current_cmd].argv[0] = NULL;
-			}
-		}
+		if (init_argv_if_needed(p, tokens, i, current_cmd))
+			return (NULL);
 		if (p->cmds[current_cmd].argv)
-		{
-			arg_count = 0;
-			while (p->cmds[current_cmd].argv[arg_count])
-				arg_count++;
-			p->cmds[current_cmd].argv[arg_count] = ft_strdup(tokens[i]);
-			p->cmds[current_cmd].argv[arg_count + 1] = NULL;
-		}
+			append_token_to_argvs(p, tokens[i], current_cmd);
 		i++;
 	}
 	return (p);

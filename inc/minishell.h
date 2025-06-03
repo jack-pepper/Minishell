@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/02 23:24:33 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/03 15:36:56 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,26 @@
 /* Structures */
 
 struct	s_shell;
+
+typedef struct s_parse_redir_ctx
+{
+	t_pipeline	*p;
+	t_commands	*cmd;
+	char		**argv;
+	int			arg_i;
+	int			i;
+}	t_parse_redir_ctx;
+
+typedef struct s_cmd_flags
+{
+	int	has_pipe;
+	int	has_redir;
+	int	here_doc;
+	int	has_cmd;
+	int	first_is_redir;
+	int	consecutive_redirs;
+}	t_cmd_flags;
+
 
 typedef struct s_command
 {
@@ -288,6 +308,9 @@ void		run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh);
 char		*get_cmd_path(char *cmd, char **envp);
 int			validate_and_exec_command(char **argv, char **envp, t_shell *sh);
 void		setup_redirections(int in_fd, int out_fd);
+int			exec_parse_redir_loop(t_parse_redir_ctx *ctx, char **tokens);
+void		append_token_to_argv(char **argv, char *token, int *arg_i);
+int			handle_redirection_token(t_pipeline *p, char **tokens, int *i);
 bool		handle_redirection_tokens(char **tokens, int *i,
 				t_pipeline *p, int cmd_index);
 typedef enum e_cmd_type
@@ -337,7 +360,6 @@ void		restore_quoted_spaces(char *str);
 bool		validate_all_redirections(char **tokens, t_shell *sh);
 int			validate_direct_path(char **argv, t_shell *sh);
 int			validate_in_path(char **argv, char **envp, t_shell *sh);
-
 void		run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh);
 void		wait_for_pipeline(t_pipeline *p, pid_t last_pid, t_shell *sh);
 void		handle_parent_pipe_closing(int *prev_fd,
@@ -346,8 +368,22 @@ void		execute_child_pipeline_cmd(t_pipeline *p, char **env, t_shell *sh,
 				int i, int prev_fd, int pipe_fd[2]);
 int			pipeline_fork_loop(t_pipeline *p, char **env, t_shell *sh);
 int			open_redirection_fds_mixed(t_commands *cmd,
-	int *in_fd, int *out_fd, t_shell *sh);
+				int *in_fd, int *out_fd, t_shell *sh);
+t_cmd_type	check_cmd_class(t_cmd_flags flags);
+int			check_pipe(char **tokens, int i, t_cmd_flags *flags);
+int			check_heredoc(char **tokens, int *i, t_cmd_flags *flags);
+int			check_redirection(char **tokens, int *i, t_cmd_flags *flags);
+void		check_normal_cmd(char **tokens, int i, t_cmd_flags *flags);
+int			handle_pipe_token(char **tokens, int *i, int *current_cmd);
+int			init_argv_if_needed(t_pipeline *p, char **tokens,
+				int i, int current_cmd);
+void		cleanup_exec(t_parse_redir_ctx	ctx);
+void		setup_redirections(int in_fd, int out_fd);
+void		cleanup_pipeline_on_error(t_pipeline *p, t_commands *cmd, char **argv);
+int			handle_redir_in(t_pipeline *p, char **tokens, int *i);
+int			handle_redir_out(t_pipeline *p, char **tokens, int *i);
+int			handle_append(t_pipeline *p, char **tokens, int *i);
+
 // Global variable for signal handling
-extern volatile	sig_atomic_t
-	g_signal_status;
+extern volatile	sig_atomic_t g_signal_status;
 #endif

@@ -6,62 +6,60 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/29 15:24:23 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/03 15:14:07 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	setup_redirections(int in_fd, int out_fd)
+static bool	check_heredoc_variables(char **tokens, int *i,
+			t_pipeline *p, int cmd_index)
 {
-	if (in_fd != -1)
+	if (tokens[*i + 1])
 	{
-		dup2(in_fd, STDIN_FILENO);
-		close(in_fd);
+		p->cmds[cmd_index].infile = ft_strdup("here_doc");
+		p->cmds[cmd_index].limiter = ft_strdup(tokens[++(*i)]);
+		p->cmds[cmd_index].append = false;
+		(*i)++;
+		return (true);
 	}
-	if (out_fd != -1)
+	return (false);
+}
+
+static bool	check_redir_in_variables(char **tokens, int *i,
+			t_pipeline *p, int cmd_index)
+{
+	if (tokens[*i + 1])
 	{
-		dup2(out_fd, STDOUT_FILENO);
-		close(out_fd);
+		p->cmds[cmd_index].infile = ft_strdup(tokens[++(*i)]);
+		(*i)++;
+		return (true);
 	}
+	return (false);
+}
+
+static bool	check_redir_out_variables(char **tokens, int *i,
+			t_pipeline *p, int cmd_index)
+{
+	if (tokens[*i + 1])
+	{
+		p->cmds[cmd_index].outfile = ft_strdup(tokens[++(*i)]);
+		p->cmds[cmd_index].append = false;
+		(*i)++;
+		return (true);
+	}
+	return (false);
 }
 
 bool	handle_redirection_tokens(char **tokens, int *i,
 	t_pipeline *p, int cmd_index)
 {
 	if (is_token_control_char(tokens[*i], CC_HEREDOC))
-	{
-		if (tokens[*i + 1])
-		{
-			p->cmds[cmd_index].infile = ft_strdup("here_doc");
-			p->cmds[cmd_index].limiter = ft_strdup(tokens[++(*i)]);
-			p->cmds[cmd_index].append = false;
-			(*i)++;
-			return (true);
-		}
-		return (false);
-	}
+		return (check_heredoc_variables(tokens, i, p, cmd_index));
 	if (is_token_control_char(tokens[*i], CC_REDIR_IN))
-	{
-		if (tokens[*i + 1])
-		{
-			p->cmds[cmd_index].infile = ft_strdup(tokens[++(*i)]);
-			(*i)++;
-			return (true);
-		}
-		return (false);
-	}
+		return (check_redir_in_variables(tokens, i, p, cmd_index));
 	if (is_token_control_char(tokens[*i], CC_REDIR_OUT))
-	{
-		if (tokens[*i + 1])
-		{
-			p->cmds[cmd_index].outfile = ft_strdup(tokens[++(*i)]);
-			p->cmds[cmd_index].append = false;
-			(*i)++;
-			return (true);
-		}
-		return (false);
-	}
+		return (check_redir_out_variables(tokens, i, p, cmd_index));
 	if (is_token_control_char(tokens[*i], CC_APPEND))
 	{
 		if (tokens[*i + 1])
@@ -76,86 +74,14 @@ bool	handle_redirection_tokens(char **tokens, int *i,
 	return (false);
 }
 
-t_pipeline	*parse_redirection_only(char **tokens)
+int	handle_redirection_token(t_pipeline *p, char **tokens, int *i)
 {
-	t_pipeline	*p;
-	t_commands	*cmd;
-	char		**argv;
-	int			arg_i;
-	int			i;
-
-	p = ft_calloc(1, sizeof(t_pipeline));
-	cmd = ft_calloc(1, sizeof(t_commands));
-	p->cmds = cmd;
-	argv = ft_calloc(128, sizeof(char *));
-	if (!p || !cmd || !argv)
-		return (NULL);
-	i = 0;
-	arg_i = 0;
-	while (tokens[i])
-	{
-		if (is_token_control_char(tokens[i], CC_REDIR_IN))
-		{
-			if (tokens[i + 1])
-				p->cmds->infile = ft_strdup(tokens[++i]);
-			else
-			{
-				perror("Error: missing infile\n");
-				free(cmd);
-				free(argv);
-				free(p);
-				return (NULL);
-			}
-		}
-		else if (is_token_control_char(tokens[i], CC_APPEND))
-		{
-			if (tokens[i + 1])
-			{
-				p->cmds->outfile = ft_strdup(tokens[++i]);
-				p->cmds->append = true;
-			}
-			else
-			{
-				perror("Error: missing outfile\n");
-				free(cmd);
-				free(argv);
-				free(p);
-				return (NULL);
-			}
-		}
-		else if (is_token_control_char(tokens[i], CC_REDIR_OUT))
-		{
-			if (tokens[i + 1])
-			{
-				p->cmds->outfile = ft_strdup(tokens[++i]);
-				p->cmds->append = false;
-			}
-			else
-			{
-				perror("Error: missing outfile\n");
-				free(cmd);
-				free(argv);
-				free(p);
-				return (NULL);
-			}
-		}
-		else
-		{
-			argv[arg_i++] = ft_strdup(tokens[i]);
-		}
-		i++;
-	}
-	if (arg_i == 0)
-	{
-		perror("Error: no command found\n");
-		free(cmd);
-		free(argv);
-		free(p);
-		return (NULL);
-	}
-	argv[arg_i] = NULL;
-	cmd->argv = argv;
-	p->cmds = cmd;
-	p->cmd_count = 1;
-	return (p);
+	if (is_token_control_char(tokens[*i], CC_REDIR_IN))
+		return (handle_redir_in(p, tokens, i));
+	else if (is_token_control_char(tokens[*i], CC_APPEND))
+		return (handle_append(p, tokens, i));
+	else if (is_token_control_char(tokens[*i], CC_REDIR_OUT))
+		return (handle_redir_out(p, tokens, i));
+	else
+		return (0);
 }
