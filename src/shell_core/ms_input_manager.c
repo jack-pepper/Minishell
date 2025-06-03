@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:06 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/03 22:34:29 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/03 22:57:35 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,11 +102,11 @@ int	handle_file_or_dir(t_shell *sh)
 	if (ft_strchr(sh->input_args[0], '/'))
 	{
 		if (access(sh->input_args[0], F_OK) != 0)
-			return (ms_err("", sh->input_args[0], NO_FILE_OR_DIR, 127));
+			return (ms_err("", sh->input_args[0], NO_FILE_OR_DIR, 126));
 		else
 		{
 			if (stat(sh->input_args[0], &st) != 0)
-				return (ms_err("", sh->input_args[0], NO_FILE_OR_DIR, 127));
+				return (ms_err("", sh->input_args[0], NO_FILE_OR_DIR, 126));
 			if (S_ISDIR(st.st_mode))
 				return (ms_err("", sh->input_args[0], CMD_IS_DIR, 126));
 			if (access(sh->input_args[0], X_OK) != 0)

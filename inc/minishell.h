@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/03 22:05:18 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/04 00:11:58 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ typedef struct s_cmd_flags
 	int	first_is_redir;
 	int	consecutive_redirs;
 }	t_cmd_flags;
-
 
 typedef struct s_command
 {
