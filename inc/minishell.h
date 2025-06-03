@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/02 23:24:33 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/03 20:09:35 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@
 # define CMD_NOT_FOUND ": command not found\n"
 # define CMD_IS_DIR ": Is a directory\n"
 # define PERM_DENY ": Permission denied\n"
-# define PIPE_SYNTAX_ERR "syntax error near unexpected token `|'\n"
+# define SYNTAX_ERR "syntax error near unexpected token\n"
 
 /* Libraries */
 

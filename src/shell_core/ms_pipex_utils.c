@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 12:57:41 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/30 12:19:28 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/03 21:01:19 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,13 @@
 
 int	is_token_control_char(char *token, char ctrl_char)
 {
-	return (ft_strcmp(token, ft_chrtostr(ctrl_char)) == 0);
+	char	*ctrl_char_str;
+	char	*res;
+	
+	ctrl_char_str = ft_chrtostr(ctrl_char);
+	res = ft_strcmp(token, ctrl_char_str);
+	free(ctrl_char_str);
+	return (res == 0);
 }
 
 int	control_token(char *token)

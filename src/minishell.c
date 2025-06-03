@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/03 00:12:17 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/03 21:04:52 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void	dispatch_command(t_cmd_type type, t_shell *sh, char **env)
 	{
 		//sh->last_exit_status = 2;
 		//ft_putstr_fd("synthax error\n", 2);
-		sh->last_exit_status = ms_err("", "", PIPE_SYNTAX_ERR, 2);
+		sh->last_exit_status = ms_err("", "", SYNTAX_ERR, 2);
 	}
 }
 
@@ -121,7 +121,7 @@ void	main_loop(t_shell*sh, char **env)
 	{
 		line = get_input(line);
 		if (line == NULL)
-			cmd_exit(sh, 1);
+			cmd_exit(sh, 1);	
 		if (line[0] == '\0')
 			continue ;
 		sh->input_args = normalize_input(line, sh);

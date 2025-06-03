@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 10:58:30 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/01 14:12:29 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/03 20:02:53 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	handle_redir_only(t_shell *sh, char **env)
 	{
 		sh->last_exit_status = 1;
 		ft_putstr_fd(" Invalid redirection command\n", 2);
+	
 		free_pipeline(pipeline);
 		return ;
 	}
