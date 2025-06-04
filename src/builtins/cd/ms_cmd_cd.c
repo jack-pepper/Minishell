@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 00:03:54 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/24 00:04:09 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/04 20:06:19 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	cmd_cd(t_shell *sh)
 
 	cwd = NULL;
 	home_var = ft_getenv("HOME", &sh->this_env);
-	if (!sh->input_args[1])
+	if (!sh->input_args[1] || ft_strcmp(sh->input_args[1], "~") == 0)
 	{
 		if (!home_var)
 			return (ms_err("cd", "", HOME_NON_SET, 1));
@@ -74,8 +74,15 @@ int	change_directory(t_shell *sh, char *cwd, char *path)
 	char	*trimmed;
 
 	trimmed = NULL;
+	if (!path)
+	{
+		sh->last_exit_status = ms_err("chdir", NO_CUR_DIR, NO_ACC_PAR, 0);
+		return (0);
+	}
 	if (chdir(path) != 0)
-		return (ms_err("cd: ", path, NO_FILE_OR_DIR, 1));
+		return (ms_err("cd: ", sh->input_args[1], NO_FILE_OR_DIR, 1));
+	if (sh->input_args[1] && ft_strcmp(sh->input_args[1], "-") == 0)
+		printf("%s\n", path);
 	trimmed = store_cwd(trimmed);
 	update_pwds_vars(sh, cwd, trimmed);
 	free(trimmed);

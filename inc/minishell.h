@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/20 18:05:50 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/03 15:36:56 by yel-bouk         ###   ########.fr       */
+/*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
+/*   Updated: 2025/06/04 20:05:26 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,9 @@
 # define CMD_NOT_FOUND ": command not found\n"
 # define CMD_IS_DIR ": Is a directory\n"
 # define PERM_DENY ": Permission denied\n"
-# define PIPE_SYNTAX_ERR "syntax error near unexpected token `|'\n"
+# define SYNTAX_ERR "syntax error near unexpected token\n"
+# define NO_CUR_DIR ": error retrieving current directory"
+# define NO_ACC_PAR ": getcwd: cannot access parent directories: No such file or directory\n"
 
 /* Libraries */
 
@@ -102,7 +104,6 @@ typedef struct s_cmd_flags
 	int	first_is_redir;
 	int	consecutive_redirs;
 }	t_cmd_flags;
-
 
 typedef struct s_command
 {

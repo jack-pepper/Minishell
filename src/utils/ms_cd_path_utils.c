@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 11:48:09 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/22 21:56:55 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/04 20:02:53 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,11 @@ char	*get_abs_path(char *joined_path, char *cwd, char *path)
 	temp = ft_strjoin("/", path);
 	if (!temp)
 		return (NULL);
+	if (!cwd)
+	{
+		free(temp);
+		return (NULL);
+	}
 	joined_path = ft_strjoin(cwd, temp);
 	free(temp);
 	if (!joined_path)
