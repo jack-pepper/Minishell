@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:51 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/09 11:28:49 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/04 11:39:36 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ int	cmd_pwd(void)
 
 	cwd = NULL;
 	cwd = store_cwd(cwd);
-	printf("%s\n", cwd);
+	if (cwd != NULL)
+		printf("%s\n", cwd);
 	free(cwd);
 	return (0);
 }

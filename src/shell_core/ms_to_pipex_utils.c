@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:38:07 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/03 11:39:20 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/04 12:45:30 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ bool	is_builtin(const char *cmd)
 {
 	if (!cmd)
 		return (false);
+	
 	if (ft_strcmp(cmd, "cd") == 0
 		|| ft_strcmp(cmd, "echo") == 0
 		|| ft_strcmp(cmd, "env") == 0
@@ -42,9 +43,12 @@ bool	is_builtin(const char *cmd)
 		|| ((cmd[0] == CC_VAR_TO_INTERPRET) && (cmd[1] == '?'))
 		|| (cmd[0] == '$')
 		|| ((cmd[0] == '$') && (cmd[1] == '?'))
+//		|| (ft_isalnum_x_str((char *)cmd, "") == 0) // added to solve input like "abc" exiting with the pipeline... but bad with redir
 	)
 		return (true);
 	return (false);
+
+//	return (true); // [m]
 }
 
 int	handle_pipe_token(char **tokens, int *i, int *current_cmd)

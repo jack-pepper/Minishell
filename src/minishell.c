@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:33 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/03 22:17:26 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/04 12:32:28 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	dispatch_command(t_cmd_type type, t_shell *sh, char **env)
 	}
 }
 
-void	main_loop(t_shell*sh, char **env)
+void	main_loop(t_shell *sh, char **env)
 {
 	static char	*line;
 	t_cmd_type	type;
@@ -70,7 +70,8 @@ void	main_loop(t_shell*sh, char **env)
 	{
 		line = get_input(line);
 		if (line == NULL)
-			cmd_exit(sh, 1);	
+			free_and_exit(sh, 0);
+			//cmd_exit(sh, 1); // replaced by the prev line to escape some reading errors issue	
 		if (line[0] == '\0')
 			continue ;
 		sh->input_args = normalize_input(line, sh);
