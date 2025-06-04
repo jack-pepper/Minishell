@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/04 00:11:58 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/04 20:05:26 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@
 # define CMD_IS_DIR ": Is a directory\n"
 # define PERM_DENY ": Permission denied\n"
 # define SYNTAX_ERR "syntax error near unexpected token\n"
+# define NO_CUR_DIR ": error retrieving current directory"
+# define NO_ACC_PAR ": getcwd: cannot access parent directories: No such file or directory\n"
 
 /* Libraries */
 

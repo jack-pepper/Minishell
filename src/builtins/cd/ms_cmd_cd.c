@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 00:03:54 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/04 11:26:46 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/04 20:06:19 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,11 @@ int	change_directory(t_shell *sh, char *cwd, char *path)
 	char	*trimmed;
 
 	trimmed = NULL;
+	if (!path)
+	{
+		sh->last_exit_status = ms_err("chdir", NO_CUR_DIR, NO_ACC_PAR, 0);
+		return (0);
+	}
 	if (chdir(path) != 0)
 		return (ms_err("cd: ", sh->input_args[1], NO_FILE_OR_DIR, 1));
 	if (sh->input_args[1] && ft_strcmp(sh->input_args[1], "-") == 0)
