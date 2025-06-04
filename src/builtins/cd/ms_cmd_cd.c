@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 00:03:54 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/04 20:06:19 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/04 23:37:28 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,22 @@ int	cmd_cd(t_shell *sh)
 	char	*cwd;
 	char	*path;
 	t_list	*home_var;
+	int		res;
 
-	cwd = NULL;
 	home_var = ft_getenv("HOME", &sh->this_env);
-	if (!sh->input_args[1] || ft_strcmp(sh->input_args[1], "~") == 0)
+	path = NULL;
+	res = cd_set_path(sh, home_var, &path);
+	if (res < 2)
+		return (res);
+	cwd = store_cwd(NULL);
+	if (!cwd)
 	{
-		if (!home_var)
-			return (ms_err("cd", "", HOME_NON_SET, 1));
-		else if (home_var && !((char **)home_var->content)[1])
-			return (0);
+		home_var = ft_getenv("PWD", &sh->this_env);
+		if (home_var != NULL && ((char **)home_var->content)[1])
+			cwd = ft_strdup(((char **)home_var->content)[1]);
 		else
-			path = ((char **)home_var->content)[1];
+			return (ms_err("cd", "", PWD_NON_SET, 1));
 	}
-	else if (sh->input_args[2])
-		return (ms_err("cd", "", TOO_MANY_ARGS, 1));
-	else
-		path = sh->input_args[1];
-	cwd = store_cwd(cwd);
 	if (cd_process_path(sh, cwd, path) != 0)
 		return (1);
 	free(cwd);

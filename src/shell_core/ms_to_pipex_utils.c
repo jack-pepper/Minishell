@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:38:07 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/04 12:45:30 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/04 21:22:37 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ bool	is_builtin(const char *cmd)
 		|| ((cmd[0] == CC_VAR_TO_INTERPRET) && (cmd[1] == '?'))
 		|| (cmd[0] == '$')
 		|| ((cmd[0] == '$') && (cmd[1] == '?'))
-//		|| (ft_isalnum_x_str((char *)cmd, "") == 0) // added to solve input like "abc" exiting with the pipeline... but bad with redir
+//		|| ((ft_isalnum_x_str((char *)cmd, "") == 0)) // added to solve input like "abc" exiting with the pipeline... but bad with redir
 	)
 		return (true);
 	return (false);

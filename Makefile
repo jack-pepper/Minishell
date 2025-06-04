@@ -6,7 +6,7 @@
 #    By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/20 17:50:19 by mmalie            #+#    #+#              #
-#    Updated: 2025/06/03 15:06:17 by yel-bouk         ###   ########.fr        #
+#    Updated: 2025/06/04 23:35:45 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,6 +51,7 @@ MS_SRC = ./src/minishell.c \
       ./src/shell_core/ms_free.c \
       ./src/shell_core/yahya_ms_to_pipex.c \
       ./src/builtins/cd/ms_cmd_cd.c \
+      ./src/builtins/cd/ms_cmd_cd_set_path.c \
       ./src/builtins/echo/ms_cmd_echo.c \
       ./src/builtins/env/ms_cmd_env.c \
       ./src/builtins/exit/ms_cmd_exit.c \

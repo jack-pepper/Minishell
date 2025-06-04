@@ -1,35 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ms_cmd_pwd.c                                       :+:      :+:    :+:   */
+/*   ms_cmd_cd_set_path.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/20 13:03:51 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/04 23:28:09 by mmalie           ###   ########.fr       */
+/*   Created: 2025/06/04 23:33:38 by mmalie            #+#    #+#             */
+/*   Updated: 2025/06/04 23:36:13 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../inc/minishell.h"
 
-int	cmd_pwd(void)
+int	cd_set_path(t_shell *sh, t_list *home_var, char **path)
 {
-	char	*cwd;	
-
-	cwd = NULL;
-	cwd = store_cwd(cwd);
-	if (cwd != NULL)
-		printf("%s\n", cwd);
+	if (!sh->input_args[1] || ft_strcmp(sh->input_args[1], "~") == 0)
+	{
+		if (!home_var)
+			return (ms_err("cd", "", HOME_NON_SET, 1));
+		else if (home_var && !((char **)home_var->content)[1])
+			return (0);
+		*path = ((char **)home_var->content)[1];
+	}
+	else if (sh->input_args[2])
+		return (ms_err("cd", "", TOO_MANY_ARGS, 1));
 	else
-		return (ms_err("pwd", NO_CUR_DIR, NO_ACC_PAR, 1));
-	free(cwd);
-	return (0);
-}
-
-char	*store_cwd(char *cwd)
-{
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
-		return (NULL);
-	return (cwd);
+		*path = sh->input_args[1];
+	return (2);
 }
