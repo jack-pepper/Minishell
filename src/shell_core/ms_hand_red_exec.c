@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:03:51 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/04 12:40:21 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/04 17:25:27 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	handle_append(t_pipeline *p, char **tokens, int *i)
 {
 	if (tokens[*i + 1])
 	{
-		p->cmds->outfile = ft_strdup(tokens[++(*i)]); // leak
+		p->cmds->outfile = ft_strdup(tokens[++(*i)]);
 		p->cmds->append = true;
 		return (2);
 	}

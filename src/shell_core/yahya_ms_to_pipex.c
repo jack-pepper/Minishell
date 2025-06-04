@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/04 11:51:59 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/04 17:26:00 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,6 @@ void	free_pipeline(t_pipeline *p)
 		}
 		i++;
 	}
-	free(p->cmds); // [m] I added those two lines to solve the leak in ms_exec_handler.
-	free(p); // But you might want to check if it's right
+	free(p->cmds);
+	free(p);
 }

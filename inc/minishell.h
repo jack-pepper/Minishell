@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/04 20:05:26 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/04 17:52:37 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -384,6 +384,8 @@ void		cleanup_pipeline_on_error(t_pipeline *p, t_commands *cmd, char **argv);
 int			handle_redir_in(t_pipeline *p, char **tokens, int *i);
 int			handle_redir_out(t_pipeline *p, char **tokens, int *i);
 int			handle_append(t_pipeline *p, char **tokens, int *i);
+char		**extract_command_args(char **tokens, int *i, int count);
+int			control_token(char *token);
 
 // Global variable for signal handling
 extern volatile	sig_atomic_t g_signal_status;

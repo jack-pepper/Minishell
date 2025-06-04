@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:00:45 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/04 11:34:48 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/04 17:22:25 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_pipeline	*parse_redirection_only(char **tokens)
 {
 	t_parse_redir_ctx	ctx;
 
-	ctx.p = ft_calloc(1, sizeof(t_pipeline)); // leak: cf l.91 dans yahya_to_pipex
+	ctx.p = ft_calloc(1, sizeof(t_pipeline));
 	ctx.cmd = ft_calloc(1, sizeof(t_commands));
 	ctx.argv = ft_calloc(128, sizeof(char *));
 	if (!ctx.p || !ctx.cmd || !ctx.argv)

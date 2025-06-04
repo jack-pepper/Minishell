@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/04 14:19:13 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/04 17:29:25 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,11 @@ void	restore_quoted_spaces(char *str)
 void	dispatch_command(t_cmd_type type, t_shell *sh, char **env)
 {
 	if (type == REDIR_ONLY)
-		handle_redir_only(sh, env);
-	else if (type == BASIC)
 	{
-		//validate_and_exec_command(sh->tokens, sh->input_args, sh); // already handled in handle_basic by handle_file_or_dir
-		handle_basic(sh, env);
+		handle_redir_only(sh, env);
 	}
+	else if (type == BASIC)
+		handle_basic(sh, env);
 	else if (type == PIPELINE || type == HERE_DOC)
 		handle_pipeline(sh, env);
 	else if (type == PIPELINE_WITH_RED)
@@ -53,11 +52,7 @@ void	dispatch_command(t_cmd_type type, t_shell *sh, char **env)
 		run_pipeline_with_redir(sh->pipeline, env, sh);
 	}
 	else
-	{
-		//sh->last_exit_status = 2;
-		//ft_putstr_fd("synthax error\n", 2);
 		sh->last_exit_status = ms_err("", "", SYNTAX_ERR, 2);
-	}
 }
 
 void	main_loop(t_shell *sh, char **env)
@@ -71,7 +66,6 @@ void	main_loop(t_shell *sh, char **env)
 		line = get_input(line);
 		if (line == NULL)
 			free_and_exit(sh, 0);
-			//cmd_exit(sh, 1); // replaced by the prev line to escape some reading errors issue	
 		if (line[0] == '\0')
 			continue ;
 		sh->input_args = normalize_input(line, sh);
@@ -84,7 +78,7 @@ void	main_loop(t_shell *sh, char **env)
 		}
 		type = classify_command(sh->input_args);
 		dispatch_command(type, sh, env);
-		ft_free_array(sh->input_args, -1);
+		// ft_free_array(sh->input_args, -1);
 	}
 	free(line);
 }

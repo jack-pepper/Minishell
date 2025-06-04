@@ -6,7 +6,7 @@
 #    By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/20 17:50:19 by mmalie            #+#    #+#              #
-#    Updated: 2025/06/03 15:06:17 by yel-bouk         ###   ########.fr        #
+#    Updated: 2025/06/04 17:19:43 by yel-bouk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,6 +82,8 @@ MS_SRC = ./src/minishell.c \
         ./src/shell_core/ms_hand_red_exec.c \
         ./src/ms_exec_handler.c \
         ./src/ms_minishell_utils.c \
+        ./src/ms_exec_hanlder_utils.c \
+        ./src/shell_core/ms_pipex_count_cmds.c \
 
 
 PIPEX_SRC =       ./pipex_ms/pipex.c \

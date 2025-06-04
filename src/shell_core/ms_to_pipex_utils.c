@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:38:07 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/04 12:45:30 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/04 17:26:50 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ bool	is_builtin(const char *cmd)
 {
 	if (!cmd)
 		return (false);
-	
+
 	if (ft_strcmp(cmd, "cd") == 0
 		|| ft_strcmp(cmd, "echo") == 0
 		|| ft_strcmp(cmd, "env") == 0
