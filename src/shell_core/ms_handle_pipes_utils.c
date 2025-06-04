@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:19:08 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/31 10:54:05 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/04 12:40:34 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,22 +94,22 @@ void	open_pipe_if_needed(int i, int cmd_count, int pipe_fd[2])
 	}
 }
 
-void	handle_cat_no_args(t_commands *cmd, int i, int total)
-{
-	int	dev_null;
+// void	handle_cat_no_args(t_commands *cmd, int i, int total)
+// {
+// 	int	dev_null;
 
-	if (strcmp(cmd->argv[0], "cat") == 0 && !cmd->argv[1])
-	{
-		signal(SIGPIPE, SIG_IGN);
-		if (i < total - 1)
-		{
-			dev_null = open("/dev/null", O_WRONLY);
-			if (dev_null != -1)
-			{
-				dup2(dev_null, STDOUT_FILENO);
-				dup2(dev_null, STDERR_FILENO);
-				close(dev_null);
-			}
-		}
-	}
-}
+// 	if (strcmp(cmd->argv[0], "cat") == 0 && !cmd->argv[1])
+// 	{
+// 		// signal(SIGPIPE, SIG_IGN);
+// 		if (i < total - 1)
+// 		{
+// 			dev_null = open("/dev/null", O_WRONLY);
+// 			if (dev_null != -1)
+// 			{
+// 				// dup2(dev_null, STDOUT_FILENO);
+// 				// dup2(dev_null, STDERR_FILENO);
+// 				close(dev_null);
+// 			}
+// 		}
+// 	}
+// }

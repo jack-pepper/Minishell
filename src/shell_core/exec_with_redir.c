@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:29:54 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/03 15:37:30 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/04 11:36:05 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ static void	execute_command(t_pipeline *cmd, char **env, t_shell *sh)
 	}
 	else
 	{
+		printf("get_cmd_path");
 		cmd_path = get_cmd_path(argv[0], env);
 		execve(cmd_path, argv, env);
 		perror("execve failed");
@@ -78,7 +79,7 @@ void	exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh)
 
 	if (open_redirection_fds(cmd, &in_fd, &out_fd, sh) < 0)
 	{
-		printf("Invalid file\n"); // exit_status?
+		ft_printf("Invalid file\n");
 		return ;
 	}
 	pid = fork();
@@ -106,7 +107,7 @@ int	exec_builtin_in_child(char **argv, t_shell *sh)
 	else if (argv[0][0] == CC_VAR_TO_INTERPRET
 				&& argv[0][1] == '?' && !argv[0][2])
 	{
-		perror(" "); // ?
+		perror(" ");
 		sh->last_exit_status = 1;
 		return (0);
 	}

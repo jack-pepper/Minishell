@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/03 15:32:50 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/04 12:38:18 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static void	exec_pipeline_child_pipe(t_pipeline *p, char **env, t_shell *sh,
 {
 	char	*cmd_path;
 
-	handle_cat_no_args(&p->cmds[i], i, p->cmd_count);
+	// handle_cat_no_args(&p->cmds[i], i, p->cmd_count);
 	setup_child_fds(prev_fd, i, p->cmd_count, pipe_fd);
 	if (is_builtin(p->cmds[i].argv[0]))
 		exit(exec_builtin_in_child(p->cmds[i].argv, sh));

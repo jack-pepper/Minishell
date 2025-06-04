@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/30 09:37:32 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/04 12:02:00 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,10 @@ int	run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 		return (1);
 	init_pipex(&pipex, envp);
 	if (handle_heredoc(pipeline->cmds->limiter) != 0)
-		return (perror("Error: here_doc failed"), 1);
+	{
+		perror("Error: here_doc failed");
+		return (1);
+	}
 	free(pipeline->cmds->infile);
 	pipeline->cmds->infile = strdup(".heredoc_tmp");
 	argv = build_pipex_argv(pipeline, &argc);

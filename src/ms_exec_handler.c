@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 10:58:30 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/03 11:10:45 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/04 11:37:41 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,21 @@
 void	handle_redir_only(t_shell *sh, char **env)
 {
 	t_pipeline	*pipeline;
-	int			new_file;
+	// int			new_file;
 
 	if (!validate_all_redirections(sh->input_args, sh))
 		return ;
-	if (is_token_control_char(sh->input_args[0], CC_REDIR_IN))
-	{
-		new_file = open(sh->input_args[1], O_WRONLY
-				| O_CREAT | O_TRUNC, 0644);
-		if (new_file == -1)
-			perror("open");
-		else
-			close(new_file);
-		return ;
-	}
+	// if (is_token_control_char(sh->input_args[0], CC_REDIR_IN))
+	// {
+	// 	printf(" I am here\n");
+	// 	new_file = open(sh->input_args[1], O_WRONLY
+	// 			| O_CREAT | O_TRUNC, 0644);
+	// 	if (new_file == -1)
+	// 		perror("open");
+	// 	else
+	// 		close(new_file);
+	// 	return ;
+	// }
 	pipeline = parse_redirection_only(sh->input_args);
 	if (!pipeline || !pipeline->cmds || !pipeline->cmds[0].argv)
 	{
