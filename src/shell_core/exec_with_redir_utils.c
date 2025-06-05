@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:29:54 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/30 17:04:18 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:52:09 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,32 @@ void	close_fds(int in, int out)
 		close(in);
 	if (out != -1)
 		close(out);
+}
+
+char	*get_cmd_path_from_list(char *cmd, t_list *env_list)
+{
+	char	*path_str;
+	char	**paths;
+	char	*full_path;
+	t_list	*path_node;
+
+	if (ft_strchr(cmd, '/'))
+	{
+		if (access(cmd, X_OK) == 0)
+			return (ft_strdup(cmd));
+		else
+			return (NULL);
+	}
+	path_node = ft_getenv("PATH", &env_list);
+	if (!path_node)
+		return (NULL);
+	path_str = ((char **)path_node->content)[1];
+	if (!path_str)
+		return (NULL);
+	paths = ft_split(path_str, ':');
+	if (!paths)
+		return (NULL);
+	full_path = shell_find_cmd_path(cmd, paths);
+	ft_free_array(paths, -1);
+	return (full_path);
 }

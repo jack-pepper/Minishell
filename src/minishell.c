@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/20 18:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/05 18:46:32 by mmalie           ###   ########.fr       */
+/*   Created: 2025/06/05 19:22:54 by mmalie            #+#    #+#             */
+/*   Updated: 2025/06/05 19:23:02 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,7 @@ void	restore_quoted_spaces(char *str)
 void	dispatch_command(t_cmd_type type, t_shell *sh, char **env)
 {
 	if (type == REDIR_ONLY)
-	{
 		handle_redir_only(sh, env);
-	}
 	else if (type == BASIC)
 		handle_basic(sh, env);
 	else if (type == PIPELINE || type == HERE_DOC)

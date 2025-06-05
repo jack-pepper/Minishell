@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:29:54 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/04 16:53:39 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:34:47 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,7 @@ static void	execute_command(t_pipeline *cmd, char **env, t_shell *sh)
 
 	argv = cmd->cmds[0].argv;
 	if (validate_and_exec_command(argv, env, sh))
-	{
 		exit(sh->last_exit_status);
-	}
 	if (strcmp(argv[0], "echo") == 0)
 	{
 		sh->input_args = argv;
@@ -64,9 +62,16 @@ static void	execute_command(t_pipeline *cmd, char **env, t_shell *sh)
 	}
 	else
 	{
-		cmd_path = get_cmd_path(argv[0], env);
+		cmd_path = get_cmd_path_from_list(argv[0], sh->this_env);
+		if (!cmd_path)
+		{
+			ft_printf("%s: command not found\n", argv[0]);
+			free(cmd_path);
+			exit(127);
+		}
 		execve(cmd_path, argv, env);
 		perror("execve failed");
+		free(cmd_path);
 		exit(EXIT_FAILURE);
 	}
 }

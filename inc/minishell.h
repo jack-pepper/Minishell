@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/05 10:24:02 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/05 11:19:33 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -446,6 +446,7 @@ void		init_ctx_pipeline_one(t_exec_context *ctx,
 				int	prev_fd, int pipe_fd[2], char **env);
 void		init_ctx_pipeline_two(t_exec_context *ctx,
 				t_shell *sh, t_pipeline *p, int i);
+char		*get_cmd_path_from_list(char *cmd, t_list *env_list);
 // Global variable for signal handling
 extern volatile	sig_atomic_t g_signal_status;
 #endif
