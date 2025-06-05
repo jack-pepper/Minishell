@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/04 17:29:25 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/05 06:53:59 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ void	main_loop(t_shell *sh, char **env)
 		}
 		type = classify_command(sh->input_args);
 		dispatch_command(type, sh, env);
-		// ft_free_array(sh->input_args, -1);
 	}
 	free(line);
 }

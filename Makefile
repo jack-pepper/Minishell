@@ -6,7 +6,7 @@
 #    By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/20 17:50:19 by mmalie            #+#    #+#              #
-#    Updated: 2025/06/04 17:19:43 by yel-bouk         ###   ########.fr        #
+#    Updated: 2025/06/05 10:07:53 by yel-bouk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,6 +65,9 @@ MS_SRC = ./src/minishell.c \
       ./src/utils/ms_replace_utils.c \
       ./src/utils/ms_flags_utils.c \
       ./src/utils/ms_debug_utils.c \
+      ./src/utils/ms_args_utils.c \
+      ./src/utils/ms_parsing_utils.c \
+      ./src/utils/ms_handle_basic_pipe_utils.c \
       ./src/yahya_parsing.c \
       ./src/parsing_utils_ye.c \
       ./src/shell_core/ms_pipex_utils.c \

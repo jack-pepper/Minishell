@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 11:40:20 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/04 14:18:26 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/05 06:56:27 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int	validate_direct_path(char **argv, t_shell *sh)
 	return (0);
 }
 
-
 int	validate_in_path(char **argv, char **envp, t_shell *sh)
 {
 	char	*cmd_path;
@@ -51,5 +50,21 @@ int	validate_in_path(char **argv, char **envp, t_shell *sh)
 		return (1);
 	}
 	free(cmd_path);
+	return (0);
+}
+
+int	cmd_echo_x(char **argv)
+{
+	int	i;
+
+	i = 1;
+	while (argv[i])
+	{
+		printf("%s", argv[i]);
+		if (argv[i + 1])
+			printf(" ");
+		i++;
+	}
+	printf("\n");
 	return (0);
 }

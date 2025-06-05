@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 13:57:41 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/25 15:10:11 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/05 09:44:12 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,47 +27,49 @@ void	free_tokens(char **tokens)
 	free(tokens);
 }
 
-static void	process_command_segment(t_pipeline *pipeline, char **tokens,
-		int *cmd_index, int start, int i)
+static void	process_command_segment(t_pipeline *pipeline,
+	char **tokens, t_parse_utils *build)
 {
 	char	**cmd_tokens;
 
-	cmd_tokens = extract_tokens(tokens, start, i);
-	pipeline->cmds[*cmd_index] = parse_command(cmd_tokens);
-	(*cmd_index)++;
+	cmd_tokens = extract_tokens(tokens, build->start, build->i);
+	pipeline->cmds[build->cmd_index] = parse_command(cmd_tokens);
+	(build->cmd_index)++;
 	free_tokens(cmd_tokens);
+}
+
+void	safe_process_command_segment(t_pipeline *pipeline,
+	char **tokens, t_parse_utils *build)
+{
+	if (build->cmd_index >= build->num_cmds)
+		exit(1);
+	process_command_segment(pipeline, tokens, build);
 }
 
 void	parse_and_build_pipeline(t_pipeline *pipeline, char **tokens)
 {
-	int		num_cmds;
-	int		i;
-	int		cmd_index;
-	int		start;
-	char	pipe_token[2];
+	t_parse_utils	build;
 
-	pipe_token[0] = CC_PIPE;
-	pipe_token[1] = '\0';
-	i = 0;
-	start = 0;
-	cmd_index = 0;
-	num_cmds = count_pipes(tokens) + 1;
-	pipeline->cmd_count = num_cmds;
-	pipeline->cmds = ft_calloc(num_cmds, sizeof(t_commands));
+	build.pipe_token[0] = CC_PIPE;
+	build.pipe_token[1] = '\0';
+	build.i = 0;
+	build.start = 0;
+	build.cmd_index = 0;
+	build.num_cmds = count_pipes(tokens) + 1;
+	pipeline->cmd_count = build.num_cmds;
+	pipeline->cmds = ft_calloc(build.num_cmds, sizeof(t_commands));
 	if (!pipeline->cmds)
 		exit(1);
-	while (tokens[i])
+	while (tokens[build.i])
 	{
-		if (ft_strcmp(tokens[i], pipe_token) == 0)
+		if (ft_strcmp(tokens[build.i], build.pipe_token) == 0)
 		{
-			if (cmd_index >= num_cmds)
-				exit(1);
-			process_command_segment(pipeline, tokens, &cmd_index, start, i);
-			start = i + 1;
+			safe_process_command_segment(pipeline, tokens, &build);
+			build.start = build.i + 1;
 		}
-		i++;
+		build.i++;
 	}
-	if (cmd_index >= num_cmds)
+	if (build.cmd_index >= build.num_cmds)
 		exit(1);
-	process_command_segment(pipeline, tokens, &cmd_index, start, i);
+	process_command_segment(pipeline, tokens, &build);
 }

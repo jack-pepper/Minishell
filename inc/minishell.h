@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/04 17:52:37 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/05 10:09:34 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,54 @@ typedef struct s_shell
 	int				last_exit_status;
 	char			**tokens;
 }					t_shell;
+
+typedef struct s_parse_state
+{
+	char	*last_outfile;
+	bool	last_append;
+	int		test_fd;
+}			t_parse_state;
+
+typedef struct s_parse_context
+{
+	t_commands		*cmd;
+	t_parse_state	*fd;
+	char			**tokens;
+	int				i;
+	int				argc;
+}			t_parse_context;
+
+typedef struct s_parse_utils
+{
+	int		num_cmds;
+	int		i;
+	int		cmd_index;
+	int		start;
+	char	pipe_token[2];
+}			t_parse_utils;
+
+typedef struct s_exec_context
+{
+    t_pipeline *pipeline;
+    int        cmd_index;
+    int        prev_fd;
+    int        pipe_fd[2];
+    t_shell    *sh;
+    char      **env;
+
+    int        in_fd;
+    int        out_fd;
+    int        redir_status;
+}			t_exec_context;
+
+
+
+typedef struct s_pipeline_parser
+{
+    t_pipeline     *pipeline;
+    char           **tokens;
+    t_parse_utils  *build;
+} t_pipeline_parser;
 
 /* Prototypes */
 
@@ -380,13 +428,23 @@ int			init_argv_if_needed(t_pipeline *p, char **tokens,
 				int i, int current_cmd);
 void		cleanup_exec(t_parse_redir_ctx	ctx);
 void		setup_redirections(int in_fd, int out_fd);
-void		cleanup_pipeline_on_error(t_pipeline *p, t_commands *cmd, char **argv);
+void		cleanup_pipeline_on_error(t_pipeline *p,
+				t_commands *cmd, char **argv);
 int			handle_redir_in(t_pipeline *p, char **tokens, int *i);
 int			handle_redir_out(t_pipeline *p, char **tokens, int *i);
 int			handle_append(t_pipeline *p, char **tokens, int *i);
 char		**extract_command_args(char **tokens, int *i, int count);
 int			control_token(char *token);
-
+int			count_args(char **tokens);
+bool		handle_redirection_parsing(t_parse_context *parse);
+bool		handle_redir_in_parsing(t_commands *cmd,
+				t_parse_state *fd, char **tokens, int *i);
+bool		parse_tokens_loop(t_commands *cmd,
+				t_parse_state *fd, char **tokens);
+void		init_ctx_pipeline_one(t_exec_context *ctx,
+				int	prev_fd, int pipe_fd[2], char **env);
+void		init_ctx_pipeline_two(t_exec_context *ctx,
+				t_shell *sh, t_pipeline *p, int i);
 // Global variable for signal handling
 extern volatile	sig_atomic_t g_signal_status;
 #endif

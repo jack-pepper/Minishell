@@ -6,27 +6,11 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/04 12:38:18 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/05 10:06:26 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-int	cmd_echo_x(char **argv)
-{
-	int	i;
-
-	i = 1;
-	while (argv[i])
-	{
-		printf("%s", argv[i]);
-		if (argv[i + 1])
-			printf(" ");
-		i++;
-	}
-	printf("\n");
-	return (0);
-}
 
 static void	setup_child_fds(int prev_fd, int i, int total, int pipe_fd[2])
 {
@@ -68,29 +52,31 @@ static void	wait_for_all_children_basic(t_shell *sh)
 	}
 }
 
-static void	exec_pipeline_child_pipe(t_pipeline *p, char **env, t_shell *sh,
-	int i, int prev_fd, int pipe_fd[2])
+static void	exec_pipeline_child_pipe(t_exec_context *ctx)
 {
 	char	*cmd_path;
 
-	// handle_cat_no_args(&p->cmds[i], i, p->cmd_count);
-	setup_child_fds(prev_fd, i, p->cmd_count, pipe_fd);
-	if (is_builtin(p->cmds[i].argv[0]))
-		exit(exec_builtin_in_child(p->cmds[i].argv, sh));
-	cmd_path = get_cmd_path(p->cmds[i].argv[0], env);
+	setup_child_fds(ctx->prev_fd, ctx->cmd_index,
+		ctx->pipeline->cmd_count, ctx->pipe_fd);
+	if (is_builtin(ctx->pipeline->cmds[ctx->cmd_index].argv[0]))
+		exit(exec_builtin_in_child(ctx->pipeline->cmds[ctx->cmd_index].argv,
+				ctx->sh));
+	cmd_path = get_cmd_path(ctx->pipeline->cmds[ctx->cmd_index].argv[0],
+			ctx->env);
 	if (!cmd_path)
 		exit(127);
-	execve(cmd_path, p->cmds[i].argv, env);
+	execve(cmd_path, ctx->pipeline->cmds[ctx->cmd_index].argv, ctx->env);
 	perror("execve failed");
 	exit(EXIT_FAILURE);
 }
 
 void	run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh)
 {
-	int		i;
-	int		prev_fd;
-	int		pipe_fd[2];
-	pid_t	pid;
+	int				i;
+	int				prev_fd;
+	int				pipe_fd[2];
+	pid_t			pid;
+	t_exec_context	ctx;
 
 	prev_fd = -1;
 	if (!validate_pipeline_commands(p, sh))
@@ -101,9 +87,11 @@ void	run_pipeline_basic_pipeline(t_pipeline *p, char **env, t_shell *sh)
 	while (i < p->cmd_count)
 	{
 		open_pipe_if_needed(i, p->cmd_count, pipe_fd);
+		init_ctx_pipeline_one(&ctx, prev_fd, pipe_fd, env);
+		init_ctx_pipeline_two(&ctx, sh, p, i);
 		pid = fork();
 		if (pid == 0)
-			exec_pipeline_child_pipe(p, env, sh, i, prev_fd, pipe_fd);
+			exec_pipeline_child_pipe(&ctx);
 		close_parent_pipe_ends(i, &prev_fd, pipe_fd, p->cmd_count);
 		i++;
 	}
