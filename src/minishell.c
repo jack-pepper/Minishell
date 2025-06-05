@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/05 10:16:28 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/05 18:46:32 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	dispatch_command(t_cmd_type type, t_shell *sh, char **env)
 
 void	main_loop(t_shell *sh, char **env)
 {
-	static char	*line;
+	char		*line;
 	t_cmd_type	type;
 
 	line = NULL;
@@ -78,6 +78,7 @@ void	main_loop(t_shell *sh, char **env)
 		}
 		type = classify_command(sh->input_args);
 		dispatch_command(type, sh, env);
+		free_args(sh->input_args);
 	}
 	free(line);
 }
@@ -91,6 +92,6 @@ int	main(int argc, char **argv, char **env)
 	if (init_shell(&sh, env) != 0)
 		return (-1);
 	main_loop(&sh, env);
-	rl_clear_history();
+	free_memory(&sh);
 	return (sh.last_exit_status);
 }

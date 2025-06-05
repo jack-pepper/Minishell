@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:01:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/13 14:10:08 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/05 18:49:32 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	cmd_exit(t_shell *sh, unsigned int status)
 			return (ms_err("exit", "", TOO_MANY_ARGS, 1));
 		else
 			status = (unsigned char)(ft_atoll(sh->input_args[1]));
+		free_args(sh->input_args);
 		free_and_exit(sh, status);
 	}
 	return (0);

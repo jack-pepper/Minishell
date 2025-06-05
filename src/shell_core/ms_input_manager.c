@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:06 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/04 17:26:23 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/05 19:20:04 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ char	*get_input(char *line)
 
 // Normalize the input and store the arguments for further use
 char	**normalize_input(char *line, t_shell *sh)
-
 {
 	if (ft_strnopbrk(line, " \f\n\r\t\v") == NULL)
 		return (NULL);

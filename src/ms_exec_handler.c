@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 10:58:30 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/05 10:18:38 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/05 19:20:16 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	handle_basic(t_shell *sh, char **env)
 {
 	t_pipeline	*pipeline;
 
+	if (!sh->input_args[0])
+		return ;
 	if (is_builtin(sh->input_args[0]))
 	{
 		sh->last_exit_status = process_input(sh);
@@ -41,10 +43,13 @@ void	handle_basic(t_shell *sh, char **env)
 	}	
 	if (!validate_all_redirections(sh->input_args, sh))
 		return ;
+	if (ft_isalnum_x_str(sh->input_args[0], "!#$%&()*+,'\"-:;?@[\\]^{}~.") == 0) // we might be able to solve some other errors here
+	{
+		sh->last_exit_status = ms_err("", sh->input_args[0], CMD_NOT_FOUND, 127);
+		return ;
+	}
 	pipeline = parse_redirection_only(sh->input_args);
-	if (!pipeline || !pipeline->cmds || !pipeline->cmds[0].argv
-		|| ft_strcmp(sh->input_args[0], "..") == 0
-		|| ft_strcmp(sh->input_args[0], ".") == 0) // we might be able to solve some other errors here
+	if (!pipeline || !pipeline->cmds || !pipeline->cmds[0].argv)
 	{
 		sh->last_exit_status = ms_err("", sh->input_args[0], CMD_NOT_FOUND, 127);
 		free_pipeline(pipeline);
