@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_commands_manager.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:25:28 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/18 00:12:37 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/05 11:53:36 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,4 +88,25 @@ t_command	*is_registered_cmd(t_shell *sh)
 			j++;
 	}
 	return (NULL);
+}
+
+void	cleanup_commands(t_shell *sh)
+{
+	int	i;
+
+	if (!sh || !sh->cmds)
+		return ;
+	i = 0;
+	while (i < NB_CMDS)
+	{
+		if (sh->cmds[i])
+		{
+			free(sh->cmds[i]->name);
+			free(sh->cmds[i]->doc);
+			free(sh->cmds[i]);
+		}
+		i++;
+	}
+	free(sh->cmds);
+	sh->cmds = NULL;
 }

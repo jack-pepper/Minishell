@@ -6,17 +6,12 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:00:45 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/04 17:22:25 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:31:23 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-void	cleanup_exec(t_parse_redir_ctx	ctx)
-{
-	perror("Error: no command found\n");
-	cleanup_pipeline_on_error(ctx.p, ctx.cmd, ctx.argv);
-}
 
 void	setup_redirections(int in_fd, int out_fd)
 {
@@ -64,7 +59,7 @@ t_pipeline	*parse_redirection_only(char **tokens)
 	}
 	if (ctx.arg_i == 0)
 	{
-		cleanup_exec(ctx);
+		cleanup_pipeline_on_error(ctx.p, ctx.cmd, ctx.argv);
 		return (NULL);
 	}
 	ctx.argv[ctx.arg_i] = NULL;

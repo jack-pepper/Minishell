@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 10:58:30 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/05 10:18:38 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/05 12:45:39 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	handle_basic(t_shell *sh, char **env)
 	{
 		sh->last_exit_status = process_input(sh);
 		return ;
-	}	
+	}
 	if (!validate_all_redirections(sh->input_args, sh))
 		return ;
 	pipeline = parse_redirection_only(sh->input_args);
@@ -46,6 +46,14 @@ void	handle_basic(t_shell *sh, char **env)
 		|| ft_strcmp(sh->input_args[0], "..") == 0
 		|| ft_strcmp(sh->input_args[0], ".") == 0) // we might be able to solve some other errors here
 	{
+		if (is_token_control_char(sh->input_args[0], CC_REDIR_OUT)
+			|| is_token_control_char(sh->input_args[0], CC_APPEND)
+			|| is_token_control_char(sh->input_args[0], CC_REDIR_IN)
+			|| is_token_control_char(sh->input_args[0], CC_HEREDOC))
+		{
+			free_pipeline(pipeline);
+			return ;
+		}
 		sh->last_exit_status = ms_err("", sh->input_args[0], CMD_NOT_FOUND, 127);
 		free_pipeline(pipeline);
 		return ;
