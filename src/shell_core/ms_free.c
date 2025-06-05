@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 11:53:00 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/11 22:13:23 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/05 00:27:39 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	free_memory(t_shell *sh)
 {
 	if (sh->normalized_line != NULL)
 		free(sh->normalized_line);
-	if (sh->input_args != NULL)
-		free_args(sh->input_args);
+//	if (sh->input_args != NULL) 		// removing it seems to solve the leak from ft_free_arr
+//		free_args(sh->input_args);
 	if (sh->this_env != NULL)
 		free_list(&sh->this_env);
 	if (sh->env_stash != NULL)

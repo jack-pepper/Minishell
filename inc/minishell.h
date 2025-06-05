@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/05 10:09:34 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/05 10:24:02 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@
 # define SYNTAX_ERR "syntax error near unexpected token\n"
 # define NO_CUR_DIR ": error retrieving current directory"
 # define NO_ACC_PAR ": getcwd: cannot access parent directories: No such file or directory\n"
+# define PWD_NON_SET ": PWD non set\n"
 
 /* Libraries */
 
@@ -93,7 +94,7 @@ typedef struct s_parse_redir_ctx
 	char		**argv;
 	int			arg_i;
 	int			i;
-}	t_parse_redir_ctx;
+}			t_parse_redir_ctx;
 
 typedef struct s_cmd_flags
 {
@@ -103,7 +104,7 @@ typedef struct s_cmd_flags
 	int	has_cmd;
 	int	first_is_redir;
 	int	consecutive_redirs;
-}	t_cmd_flags;
+}			t_cmd_flags;
 
 typedef struct s_command
 {
@@ -152,26 +153,23 @@ typedef struct s_parse_utils
 
 typedef struct s_exec_context
 {
-    t_pipeline *pipeline;
-    int        cmd_index;
-    int        prev_fd;
-    int        pipe_fd[2];
-    t_shell    *sh;
-    char      **env;
-
-    int        in_fd;
-    int        out_fd;
-    int        redir_status;
+	t_pipeline	*pipeline;
+	int			cmd_index;
+	int			prev_fd;
+	int			pipe_fd[2];
+	t_shell		*sh;
+	char		**env;
+	int			in_fd;
+	int			out_fd;
+	int			redir_status;
 }			t_exec_context;
-
-
 
 typedef struct s_pipeline_parser
 {
-    t_pipeline     *pipeline;
-    char           **tokens;
-    t_parse_utils  *build;
-} t_pipeline_parser;
+	t_pipeline		*pipeline;
+	char			**tokens;
+	t_parse_utils	*build;
+}			t_pipeline_parser;
 
 /* Prototypes */
 
@@ -258,6 +256,9 @@ int			cd_process_path(t_shell *sh, char *cwd, char *path);
 int			change_directory(t_shell *sh, char *cwd, char *path);
 void		update_pwds_vars(t_shell *sh, char *prev_cwd, char *new_pwd);
 void		update_pwd_var(t_shell *sh, char **split_pwd, char *key);
+
+	// ms_cmd_cd_set_path.c
+int			cd_set_path(t_shell *sh, t_list *home_var, char **path);
 
 	// ms_cmd_echo.c - Display a line of text
 int			cmd_echo(t_shell *sh);
