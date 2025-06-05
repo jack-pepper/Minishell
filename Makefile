@@ -6,7 +6,7 @@
 #    By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/20 17:50:19 by mmalie            #+#    #+#              #
-#    Updated: 2025/06/05 10:15:53 by yel-bouk         ###   ########.fr        #
+#    Updated: 2025/06/05 16:51:45 by yel-bouk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,6 +72,7 @@ MS_SRC = ./src/minishell.c \
       ./src/yahya_parsing.c \
       ./src/parsing_utils_ye.c \
       ./src/shell_core/ms_pipex_utils.c \
+      ./src/shell_core/ms_input_manager_converter.c \
 	  ./src/shell_core/ms_hand_red.c \
 	  ./src/shell_core/cmd_classifier.c \
 	  ./src/shell_core/ms_handle_basic_pipe.c \
