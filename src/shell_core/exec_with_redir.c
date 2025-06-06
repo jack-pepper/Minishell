@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:29:54 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/06 17:48:59 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:28:10 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,7 @@ static void	execute_command(t_pipeline *cmd, char **env, t_shell *sh)
 	char	*cmd_path;
 
 	argv = cmd->cmds[0].argv;
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	set_signals_to_default();
 	if (validate_and_exec_command(argv, env, sh))
 		exit(sh->last_exit_status);
 	if (strcmp(argv[0], "echo") == 0)
@@ -67,8 +66,7 @@ static void	execute_command(t_pipeline *cmd, char **env, t_shell *sh)
 		cmd_path = get_cmd_path_from_list(argv[0], sh->this_env);
 		if (!cmd_path)
 		{
-			ft_printf("%s: command not found\n", argv[0]);
-			free(cmd_path);
+			print_cmd_not_found_and_free(cmd_path, argv[0]);
 			exit(127);
 		}
 		execve(cmd_path, argv, env);
@@ -90,22 +88,19 @@ void	exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh)
 		ft_printf("Invalid file\n");
 		return ;
 	}
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
+	set_signals_to_ignore();
 	pid = fork();
 	if (pid == 0)
 	{
 		setup_redirections(in_fd, out_fd);
 		if (cmd->cmd_count < 1)
-		{
 			exit(0);
-		}
 		execute_command(cmd, env, sh);
 	}
 	status = 0;
 	waitpid(pid, &status, 0);
 	signal(SIGINT, signal_handler);
-    signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	update_exit_status(sh, status);
 	close_fds(in_fd, out_fd);
 }

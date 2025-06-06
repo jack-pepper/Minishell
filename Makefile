@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+         #
+#    By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/20 17:50:19 by mmalie            #+#    #+#              #
-#    Updated: 2025/06/05 16:51:45 by yel-bouk         ###   ########.fr        #
+#    Updated: 2025/06/06 18:28:40 by yel-bouk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,6 +77,7 @@ MS_SRC = ./src/minishell.c \
 	  ./src/shell_core/cmd_classifier.c \
 	  ./src/shell_core/ms_handle_basic_pipe.c \
 	  ./src/shell_core/ms_handle_pipe_with_red.c \
+	  ./src/shell_core/exec_with_redir_sign.c \
         ./src/shell_core/ms_handle_pipe_w_red_utils.c \
         ./src/shell_core/ms_handle_pipes_utils.c \
         ./src/shell_core/exec_with_redir.c \

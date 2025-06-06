@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/06 17:52:00 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/06 18:29:17 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -450,7 +450,9 @@ char		*get_cmd_path_from_list(char *cmd, t_list *env_list);
 char		**env_list_to_array(t_list *env_list);
 void		free_env_array(char **env_array);
 int			case_redir_pipeline(t_shell *sh, char **env_arr);
-
+void		set_signals_to_default(void);
+void		print_cmd_not_found_and_free(char *cmd_path, char *cmd_name);
+void		set_signals_to_ignore(void);
 // Global variable for signal handling
 extern volatile	sig_atomic_t		g_signal_status;
 #endif

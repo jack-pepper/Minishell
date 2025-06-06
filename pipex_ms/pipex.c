@@ -6,12 +6,11 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/06 18:09:29 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:33:05 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
 
 void	execute_child(t_pipex *pipex, int in_fd, int out_fd, char **cmd)
 {
@@ -56,7 +55,6 @@ static int	validate_pipeline(t_pipeline *pipeline)
 	}
 	return (0);
 }
-
 
 static char	**build_pipex_argv(t_pipeline *pipeline, int *argc)
 {
