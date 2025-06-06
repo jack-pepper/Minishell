@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:27:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/06 06:14:47 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 14:44:51 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,8 +143,8 @@ int     handle_non_cmd(t_shell *sh)
         {
                 if (ft_strchr(sh->input_args[0], '/') != NULL)
                 {
-                        res = handle_file_or_dir(sh);
-                        return (res);
+                        sh->last_exit_status = handle_file_or_dir(sh);
+                        return (sh->last_exit_status);
                 }
 		else
 		{
