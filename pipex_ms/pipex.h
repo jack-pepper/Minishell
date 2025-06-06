@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:54:10 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/03 14:59:16 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 16:19:29 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	ft_execute_pipex(t_pipex *pipex);
 void	execute_first_child(t_pipex *pipex, int *pipefd);
 void	execute_second_child(t_pipex *pipex, int *pipefd);
 void	handle_mandatory(t_pipex *pipex, char **argv, int argc);
-void	handle_bonus(t_pipex *pipex, int argc, char **argv);
+void	handle_bonus(t_pipex *pipex, int argc, char **argv, int len);
 void	execute_multiple_cmds(t_pipex *pipex);
 void	execute_child(t_pipex *pipex, int in_fd, int out_fd, char **cmd);
 void	handle_here_doc(t_pipex *pipex, int argc, char **argv);

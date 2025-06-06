@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/04 20:48:49 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/06 16:18:07 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,6 @@ void	free_pipex(t_pipex *pipex)
 		ft_free_2d_array(pipex->cmd_paths);
 	if (pipex->in_fd != -1)
 		close(pipex->in_fd);
-	if (pipex->out_fd != -1)
+	if (pipex->out_fd != -1 && pipex->out_fd != STDOUT_FILENO)
 		close(pipex->out_fd);
 }

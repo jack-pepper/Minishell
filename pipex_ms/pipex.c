@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/06 06:44:51 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 16:17:04 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
 
 void	execute_child(t_pipex *pipex, int in_fd, int out_fd, char **cmd)
 {
@@ -55,6 +56,7 @@ static int	validate_pipeline(t_pipeline *pipeline)
 	}
 	return (0);
 }
+
 
 static char	**build_pipex_argv(t_pipeline *pipeline, int *argc)
 {
@@ -102,13 +104,20 @@ int	run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 	}
 	free(pipeline->cmds->infile);
 	pipeline->cmds->infile = strdup(".heredoc_tmp");
+	pipex.in_fd = open(".heredoc_tmp", O_RDONLY);
+	if (pipex.in_fd < 0)
+	{
+		perror("open .heredoc_tmp");
+		return (1);
+	}
+	if (pipex.out_fd < 0)
+		pipex.out_fd = STDOUT_FILENO;
 	argv = build_pipex_argv(pipeline, &argc);
 	if (!argv)
 		return (1);
 	ft_parse_paths(&pipex);
-	handle_bonus(&pipex, argc, argv);
+	handle_bonus(&pipex, argc, argv, pipeline->cmd_count);
 	free_argv(argv, argc);
-	free_pipex(&pipex);
 	return (pipex.exit_status);
 }
 
