@@ -6,12 +6,11 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/06 16:17:04 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:17:58 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
 
 void	execute_child(t_pipex *pipex, int in_fd, int out_fd, char **cmd)
 {
@@ -57,7 +56,6 @@ static int	validate_pipeline(t_pipeline *pipeline)
 	return (0);
 }
 
-
 static char	**build_pipex_argv(t_pipeline *pipeline, int *argc)
 {
 	char	**argv;
@@ -97,19 +95,13 @@ int	run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 	if (validate_pipeline(pipeline))
 		return (1);
 	init_pipex(&pipex, envp);
-	if (handle_heredoc(pipeline->cmds->limiter) != 0)
-	{
-		perror("Error: here_doc failed");
+	if (handle_heredoc_error(pipeline) != 0)
 		return (1);
-	}
 	free(pipeline->cmds->infile);
 	pipeline->cmds->infile = strdup(".heredoc_tmp");
 	pipex.in_fd = open(".heredoc_tmp", O_RDONLY);
-	if (pipex.in_fd < 0)
-	{
-		perror("open .heredoc_tmp");
+	if (handle_pipex_in_fd_error(pipex) != 0)
 		return (1);
-	}
 	if (pipex.out_fd < 0)
 		pipex.out_fd = STDOUT_FILENO;
 	argv = build_pipex_argv(pipeline, &argc);
@@ -120,25 +112,3 @@ int	run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 	free_argv(argv, argc);
 	return (pipex.exit_status);
 }
-
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	t_pipex	pipex;
-
-// 	pipex = (t_pipex){0};
-// 	pipex.envp = envp;
-// 	if (argc >= 6 && ft_strcmp(argv[1], "here_doc") == 0)
-// 		handle_here_doc(&pipex, argc, argv);
-// 	else if (argc == 5)
-// 		handle_mandatory(&pipex, argv, argc);
-// 	else if (argc > 5)
-// 		handle_bonus(&pipex, argc, argv);
-// 	else
-// 	{
-// 		ft_printf("Usage:\n");
-// 		ft_printf("./pipex infile cmd1 cmd2 outfile\n");
-// 		ft_printf("./pipex here_doc LIMITER cmd1 ... outfile\n");
-// 		return (1);
-// 	}
-// 	return (pipex.exit_status);
-// }
