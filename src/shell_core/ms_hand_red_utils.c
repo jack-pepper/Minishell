@@ -6,12 +6,11 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:00:45 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/05 12:31:23 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 16:51:13 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
 
 void	setup_redirections(int in_fd, int out_fd)
 {

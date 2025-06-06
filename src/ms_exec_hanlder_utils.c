@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:45:28 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/05 12:52:51 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 17:26:07 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,14 +96,14 @@ bool	validate_all_redirections(char **tokens, t_shell *sh)
 		{
 			if (!handle_input_redirection(tokens, &i, sh))
 				return (false);
-			continue ;
+		//	continue ; // doesn´t seem needed, left for Yahya to test advanced cases
 		}
 		else if (is_token_control_char(tokens[i], CC_REDIR_OUT)
 			|| is_token_control_char(tokens[i], CC_APPEND))
 		{
 			if (!handle_output_redirection(tokens, &i, sh))
 				return (false);
-			continue ;
+		//	continue ;
 		}
 		else if (is_token_control_char(tokens[i], CC_PIPE))
 		{

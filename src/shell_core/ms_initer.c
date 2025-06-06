@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:06:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/31 12:37:52 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 17:20:55 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,37 +46,45 @@ int	init_env(t_shell *sh, char **env)
 	return (0);
 }
 
-// If a value from env contains more than one equal sign, it has been split. 
-int	normalize_env(t_list *this_env)
+int	rejoin_var(t_list *cur_node)
 {
-	t_list	*cur_node;
 	char	*rejoined_var;
 	char	*temp;
 	int		i;
 
+	i = 2;
+	rejoined_var = ft_strdup(((char **)cur_node->content)[1]);
+	if (!rejoined_var)
+		return (1);
+	free(((char **)cur_node->content)[1]);
+	while (((char **)cur_node->content)[i])
+	{
+		temp = ft_strdup(rejoined_var);
+		free(rejoined_var);
+		if (!temp)
+			return (1);
+		rejoined_var = ft_strjoin_delim(
+				temp, ((char **)cur_node->content)[i], "=");
+		free(temp);
+		i++;
+	}
+	((char **)cur_node->content)[1] = ft_strdup(rejoined_var);
+	free(rejoined_var);
+	return (0);
+}
+
+// If a value from env contains more than one equal sign, it has been split. 
+int	normalize_env(t_list *this_env)
+{
+	t_list	*cur_node;
+
 	cur_node = this_env;
 	while (cur_node != NULL)
 	{
-		i = 2;
 		if (ft_strslen((char **)cur_node->content) > 2)
 		{
-			rejoined_var = ft_strdup(((char **)cur_node->content)[1]);
-			if (!rejoined_var)
+			if (rejoin_var(cur_node) != 0)
 				return (1);
-			free(((char **)cur_node->content)[1]);
-			while (((char **)cur_node->content)[i])
-			{
-				temp = ft_strdup(rejoined_var);
-				free(rejoined_var);
-				if (!temp)
-					return (1);
-				rejoined_var = ft_strjoin_delim(
-						temp, ((char **)cur_node->content)[i], "=");
-				free(temp);
-				i++;
-			}
-			((char **)cur_node->content)[1] = ft_strdup(rejoined_var);
-			free(rejoined_var);
 		}
 		ft_unflag_delim(((char **)cur_node->content)[1], '=', CC_EXTRA_DELIM);
 		cur_node = cur_node->next;

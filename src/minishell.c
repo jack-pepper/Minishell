@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 19:22:54 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/06 16:07:14 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/06 16:41:04 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	dispatch_command(t_cmd_type type, t_shell *sh, char **env)
 	if (type == REDIR_ONLY)
 		handle_redir_only(sh, env);
 	else if (type == BASIC)
-		handle_basic(sh, env);
+		handle_basic(sh);
 	else if (type == PIPELINE || type == HERE_DOC)
 		handle_pipeline(sh, env);
 	else if (type == PIPELINE_WITH_RED)
@@ -78,6 +78,7 @@ void	main_loop(t_shell *sh, char **env)
 		dispatch_command(type, sh, env);
 		free_args(sh->input_args);
 	}
+	free(line);
 }
 
 int	main(int argc, char **argv, char **env)

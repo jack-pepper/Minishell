@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/06 15:57:51 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/06 16:19:38 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -404,7 +404,7 @@ int			get_output_flags(int append);
 int			open_fd(const char *filename, int flags, t_shell *sh);
 void		close_fds(int in, int out);
 void		handle_redir_only(t_shell *sh, char **env);
-void		handle_basic(t_shell *sh, char **env);
+void		handle_basic(t_shell *sh);
 void		handle_pipeline(t_shell *sh, char **env);
 void		restore_quoted_spaces(char *str);
 bool		validate_all_redirections(char **tokens, t_shell *sh);

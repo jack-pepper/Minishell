@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:24:52 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/06 16:12:30 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/06 16:49:44 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,35 +56,21 @@ int	case_no_pipeline_needed(t_shell *sh, char **env_arr)
 	return (0);
 }
 
-void	handle_basic(t_shell *sh, char **env)
+void	handle_basic(t_shell *sh)
 {
-	t_pipeline	*pipeline;
 	char		**env_arr;
 
 	env_arr = env_list_to_array(sh->this_env);
 	if (case_no_pipeline_needed(sh, env_arr) != 0)
 	{
-		free_args(env_arr);
+		free_env_array(env_arr);
 		return ;
 	}
-	free_args(env_arr);
-	pipeline = parse_redirection_only(sh->input_args);
-	if (!pipeline || !pipeline->cmds || !pipeline->cmds[0].argv)
+	if (case_redir_pipeline(sh, env_arr) != 0)
 	{
-		if (is_token_control_char(sh->input_args[0], CC_REDIR_OUT)
-			|| is_token_control_char(sh->input_args[0], CC_APPEND)
-			|| is_token_control_char(sh->input_args[0], CC_REDIR_IN)
-			|| is_token_control_char(sh->input_args[0], CC_HEREDOC))
-		{
-			free_pipeline(pipeline);
-			return ;
-		}
-		sh->last_exit_status = ms_err("", sh->input_args[0], CMD_NOT_FOUND, 127);
-		free_pipeline(pipeline);
+		free_env_array(env_arr);
 		return ;
 	}
-	exec_with_redirection(pipeline, env, sh);
-	free_pipeline(pipeline);
 }
 
 bool	handle_heredoc_pipeline(t_pipeline *pipeline, char **env, t_shell *sh)
