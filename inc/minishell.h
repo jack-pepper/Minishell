@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/06 18:29:17 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 20:12:16 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,16 @@ typedef struct s_shell
 	char			**tokens;
 }					t_shell;
 
+typedef struct s_normalize_var
+{
+	int		len;
+	int		op_len;
+	int		i;
+	int		j;
+	int		k;
+	int		count;
+}			t_normalize_var;
+
 typedef struct s_parse_state
 {
 	char	*last_outfile;
@@ -163,6 +173,19 @@ typedef struct s_exec_context
 	int			out_fd;
 	int			redir_status;
 }			t_exec_context;
+
+typedef struct s_pipeline_loop_context
+{
+	t_pipeline	*pipeline;
+	int			cmd_index;
+	int			prev_fd;
+	int			pipe_fd[2];
+	t_shell		*sh;
+	char		**env;
+	int			in_fd;
+	int			out_fd;
+	int			redir_status;
+}			t_pipeline_loop_context;
 
 typedef struct s_pipeline_parser
 {
@@ -412,11 +435,8 @@ int			validate_direct_path(char **argv, t_shell *sh);
 int			validate_in_path(char **argv, char **envp, t_shell *sh);
 void		run_pipeline_with_redir(t_pipeline *p, char **env, t_shell *sh);
 void		wait_for_pipeline(t_pipeline *p, pid_t last_pid, t_shell *sh);
-void		handle_parent_pipe_closing(int *prev_fd,
-				int pipe_fd[2], int i, int cmd_count);
-void		execute_child_pipeline_cmd(t_pipeline *p, char **env, t_shell *sh,
-				int i, int prev_fd, int pipe_fd[2]);
-int			pipeline_fork_loop(t_pipeline *p, char **env, t_shell *sh);
+void		handle_parent_pipe_closing(t_pipeline_loop_context *ctx);
+void		execute_child_pipeline_cmd(t_pipeline_loop_context *ctx);
 int			open_redirection_fds_mixed(t_commands *cmd,
 				int *in_fd, int *out_fd, t_shell *sh);
 t_cmd_type	check_cmd_class(t_cmd_flags flags);
@@ -453,6 +473,21 @@ int			case_redir_pipeline(t_shell *sh, char **env_arr);
 void		set_signals_to_default(void);
 void		print_cmd_not_found_and_free(char *cmd_path, char *cmd_name);
 void		set_signals_to_ignore(void);
+void		exit_if_redirection_failed(int redir_status, int is_last_cmd);
+void		init_ctx(t_pipeline *p, char **env,
+				t_shell *sh, t_pipeline_loop_context *ctx);
+int			pipeline_fork_loop(t_pipeline *p, char **env, t_shell *sh);
+void		setup_redirections_red(t_pipeline_loop_context *ctx);
+void		setup_child_fds_red(t_pipeline_loop_context *ctx);
+void		copy_with_spaces(char *new_str, const char *str, char special);
+int			count_substring_occurrences(const char *line,
+				const char *str, int op_len);
+int			count_extra_spaces(const char *str, char special);
+void		increase_str(char *new_str, char special, int *j);
+// bool		handle_builtin_if_needed(t_commands *cmd, t_shell *sh);
+// void		exec_external_cmd(t_commands *cmd, char **env);
+// void		execute_child_pipeline_cmd(t_pipeline *p, char **env, t_shell *sh,
+// 	int i, int prev_fd, int pipe_fd[2]);
 // Global variable for signal handling
 extern volatile	sig_atomic_t		g_signal_status;
 #endif

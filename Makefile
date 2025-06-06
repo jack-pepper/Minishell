@@ -6,7 +6,7 @@
 #    By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/20 17:50:19 by mmalie            #+#    #+#              #
-#    Updated: 2025/06/06 18:28:40 by yel-bouk         ###   ########.fr        #
+#    Updated: 2025/06/06 20:08:06 by yel-bouk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ MS_SRC = ./src/minishell.c \
       ./src/shell_core/ms_initer.c \
       ./src/shell_core/ms_normalizer.c \
       ./src/shell_core/ms_normalizer_add_spaces.c \
+	  ./src/shell_core/ms_normalize_add_spaces_utils.c \
       ./src/shell_core/ms_flagger.c \
       ./src/shell_core/ms_commands_manager.c \
       ./src/shell_core/ms_input_manager.c \
@@ -79,6 +80,7 @@ MS_SRC = ./src/minishell.c \
 	  ./src/shell_core/ms_handle_pipe_with_red.c \
 	  ./src/shell_core/exec_with_redir_sign.c \
         ./src/shell_core/ms_handle_pipe_w_red_utils.c \
+		./src/shell_core/ms_handle_pipe_w_red_loop.c \
         ./src/shell_core/ms_handle_pipes_utils.c \
         ./src/shell_core/exec_with_redir.c \
         ./src/shell_core/exec_with_redir_utils.c \
