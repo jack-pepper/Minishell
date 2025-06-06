@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/27 16:07:23 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:14:33 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,18 @@ void	parse_here_doc_commands(t_pipex *pipex, int argc, char **argv)
 			ft_exit_error(pipex, "command not found");
 		i++;
 	}
+}
+
+int pipex_error_heredoc(char *msg, int value)
+{
+	perror(msg);
+	return (value);
+}
+
+void setup_outfd(t_pipex *pipex, char ** argv, int argc)
+{
+	pipex->out_fd = open(argv[argc - 1],
+		O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (pipex->out_fd < 0)
+		ft_exit_error(pipex, "failed to open outfile");
 }

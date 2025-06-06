@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/06 18:17:58 by mmalie           ###   ########.fr       */
+/*   Created: 2025/06/06 18:21:49 by mmalie            #+#    #+#             */
+/*   Updated: 2025/06/06 18:23:12 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,13 +95,13 @@ int	run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 	if (validate_pipeline(pipeline))
 		return (1);
 	init_pipex(&pipex, envp);
-	if (handle_heredoc_error(pipeline) != 0)
-		return (1);
+	if (handle_heredoc(pipeline->cmds->limiter) != 0)
+		pipex_error_heredoc("Error: here_doc failed", 1);
 	free(pipeline->cmds->infile);
 	pipeline->cmds->infile = strdup(".heredoc_tmp");
 	pipex.in_fd = open(".heredoc_tmp", O_RDONLY);
-	if (handle_pipex_in_fd_error(pipex) != 0)
-		return (1);
+	if (pipex.in_fd < 0)
+		pipex_error_heredoc("open .heredoc_tmp", 1);
 	if (pipex.out_fd < 0)
 		pipex.out_fd = STDOUT_FILENO;
 	argv = build_pipex_argv(pipeline, &argc);

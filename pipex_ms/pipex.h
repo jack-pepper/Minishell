@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/16 18:54:10 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/06 18:17:00 by mmalie           ###   ########.fr       */
+/*   Created: 2025/06/06 18:20:50 by mmalie            #+#    #+#             */
+/*   Updated: 2025/06/06 18:21:12 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,4 +102,6 @@ char	*join_args(char **args);
 void	init_pipex(t_pipex *pipex, char **envp);
 int		handle_heredoc_error(t_pipeline *pipeline);
 int		handle_pipex_in_fd_error(t_pipex pipex);
+int		pipex_error_heredoc(char *msg, int value);
+void	setup_outfd(t_pipex *pipex, char ** argv, int argc);
 #endif
