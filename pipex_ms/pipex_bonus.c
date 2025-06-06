@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/06 16:18:29 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:25:26 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	wait_for_all_children(t_pipex *pipex, int count)
 void	execute_multiple_cmds(t_pipex *pipex)
 {
 	execute_all_children(pipex);
-	// printf("I am here 13203\n");
 	wait_for_all_children(pipex, pipex->cmd_count);
 }
 
