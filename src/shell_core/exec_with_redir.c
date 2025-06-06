@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_with_redir.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:29:54 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/06 06:15:39 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 17:48:59 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ static void	execute_command(t_pipeline *cmd, char **env, t_shell *sh)
 	char	*cmd_path;
 
 	argv = cmd->cmds[0].argv;
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	if (validate_and_exec_command(argv, env, sh))
 		exit(sh->last_exit_status);
 	if (strcmp(argv[0], "echo") == 0)
@@ -88,6 +90,8 @@ void	exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh)
 		ft_printf("Invalid file\n");
 		return ;
 	}
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	pid = fork();
 	if (pid == 0)
 	{
@@ -100,6 +104,8 @@ void	exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh)
 	}
 	status = 0;
 	waitpid(pid, &status, 0);
+	signal(SIGINT, signal_handler);
+    signal(SIGQUIT, SIG_IGN);
 	update_exit_status(sh, status);
 	close_fds(in_fd, out_fd);
 }
