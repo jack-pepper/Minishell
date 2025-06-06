@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/06 20:05:31 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 20:23:18 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,57 @@ int	count_extra_spaces(const char *str, char special)
 		i++;
 	}
 	return (extra);
+}
+
+char	*ft_add_two_spaces(char *str, char *new_str, char special)
+{
+	int	i;
+	int	j;
+
+	j = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == special)
+		{
+			new_str[j++] = ' ';
+			new_str[j++] = special;
+			new_str[j++] = ' ';
+		}
+		else
+			new_str[j++] = str[i];
+		i++;
+	}
+	new_str[j] = '\0';
+	return (new_str);
+}
+
+char	*ft_add_after(const char *line,
+			const char *str, int op_len, char *res)
+{
+	int		i;
+	int		j;
+	int		k;
+
+	i = 0;
+	j = 0;
+	while (line[i])
+	{
+		if (strncmp(&line[i], str, op_len) == 0)
+		{
+			res[j++] = ' ';
+			k = 0;
+			while (k < op_len)
+			{
+				res[j++] = str[k];
+				k++;
+			}
+			res[j++] = ' ';
+			i += op_len;
+		}
+		else
+			res[j++] = line[i++];
+	}
+	res[j] = '\0';
+	return (res);
 }
