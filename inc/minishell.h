@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/06 16:19:38 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/06 17:39:43 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -443,14 +443,14 @@ bool		handle_redir_in_parsing(t_commands *cmd,
 bool		parse_tokens_loop(t_commands *cmd,
 				t_parse_state *fd, char **tokens);
 void		init_ctx_pipeline_one(t_exec_context *ctx,
-				int	prev_fd, int pipe_fd[2], char **env);
+				int prev_fd, int pipe_fd[2], char **env);
 void		init_ctx_pipeline_two(t_exec_context *ctx,
 				t_shell *sh, t_pipeline *p, int i);
 char		*get_cmd_path_from_list(char *cmd, t_list *env_list);
 char		**env_list_to_array(t_list *env_list);
 void		free_env_array(char **env_array);
-int		case_redir_pipeline(t_shell *sh, char **env_arr);
+int			case_redir_pipeline(t_shell *sh, char **env_arr);
 
 // Global variable for signal handling
-extern volatile	sig_atomic_t g_signal_status;
+extern volatile	sig_atomic_t		g_signal_status;
 #endif
