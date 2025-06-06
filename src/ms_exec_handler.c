@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:24:52 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/06 16:49:44 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/06 20:39:51 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	case_no_pipeline_needed(t_shell *sh, char **env_arr)
 		return (1);
 	if (is_builtin(sh->input_args[0]))
 	{
+		free_env_array(env_arr);
 		sh->last_exit_status = process_input(sh);
 		return (1);
 	}
@@ -53,6 +54,7 @@ int	case_no_pipeline_needed(t_shell *sh, char **env_arr)
 		if (validate_in_path(sh->input_args, env_arr, sh))
 			return (1);
 	}
+	//free_env_array(env_arr);
 	return (0);
 }
 
@@ -61,6 +63,8 @@ void	handle_basic(t_shell *sh)
 	char		**env_arr;
 
 	env_arr = env_list_to_array(sh->this_env);
+	if (!env_arr)
+		return ;
 	if (case_no_pipeline_needed(sh, env_arr) != 0)
 	{
 		free_env_array(env_arr);

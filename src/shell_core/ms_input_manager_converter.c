@@ -6,17 +6,21 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 16:34:25 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/06 16:57:39 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/06 20:29:18 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-char	**rejoin_env_array(char **env_array, t_list *cur)
+char	**rejoin_env_array(t_list *cur, int count)
 {
+	char	**env_array;
 	int	i;
 
 	i = 0;
+	env_array = malloc(sizeof(char *) * (count + 1));
+	if (!env_array)
+		return (NULL);
 	while (cur)
 	{
 		env_array[i] = ft_strjoin_delim(((char **)cur->content)[0],
@@ -25,11 +29,17 @@ char	**rejoin_env_array(char **env_array, t_list *cur)
 		{
 			while (--i >= 0)
 				free(env_array[i]);
+			//j = 0;
+			//while (j < i)
+			//{
+			//	free(env_array[j]);
+			//	j++;
+			//}
 			free(env_array);
 			return (NULL);
 		}
-		i++;
 		cur = cur->next;
+		i++;
 	}
 	env_array[i] = NULL;
 	return (env_array);
@@ -48,13 +58,7 @@ char	**env_list_to_array(t_list *env_list)
 		count++;
 		cur = cur->next;
 	}
-	env_array = malloc(sizeof(char *) * (count + 1));
-	if (!env_array)
-		return (NULL);
-	cur = env_list;
-	env_array = rejoin_env_array(env_array, cur);
-	if (!env_array)
-		return (NULL);
+	env_array = rejoin_env_array(env_list, count);
 	return (env_array);
 }
 
@@ -95,7 +99,6 @@ int	case_redir_pipeline(t_shell *sh, char **env_arr)
 		return (1);
 	}
 	exec_with_redirection(pipeline, env_arr, sh);
-	free_env_array(env_arr);
 	free_pipeline(pipeline);
 	return (0);
 }
