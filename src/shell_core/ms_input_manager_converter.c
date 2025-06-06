@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 16:34:25 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/05 16:47:26 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 15:56:49 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,31 @@ void	free_env_array(char **env_array)
 		i++;
 	}
 	free(env_array);
+}
+
+int	case_redir_pipeline(t_shell *sh, char **env_arr)
+{
+	t_pipeline	*pipeline;
+
+	pipeline = parse_redirection_only(sh->input_args);
+	if (!pipeline || !pipeline->cmds || !pipeline->cmds[0].argv)
+	{
+		free_env_array(env_arr);
+		if (is_token_control_char(sh->input_args[0], CC_REDIR_OUT)
+			|| is_token_control_char(sh->input_args[0], CC_APPEND)
+			|| is_token_control_char(sh->input_args[0], CC_REDIR_IN)
+			|| is_token_control_char(sh->input_args[0], CC_HEREDOC))
+		{
+			free_pipeline(pipeline);
+			return (1);
+		}
+		sh->last_exit_status = ms_err(
+				"", sh->input_args[0], CMD_NOT_FOUND, 127);
+		free_pipeline(pipeline);
+		return (1);
+	}
+	exec_with_redirection(pipeline, env_arr, sh);
+	free_env_array(env_arr);
+	free_pipeline(pipeline);
+	return (0);
 }

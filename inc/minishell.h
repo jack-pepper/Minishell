@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/05 16:49:31 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 15:57:51 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -449,6 +449,8 @@ void		init_ctx_pipeline_two(t_exec_context *ctx,
 char		*get_cmd_path_from_list(char *cmd, t_list *env_list);
 char		**env_list_to_array(t_list *env_list);
 void		free_env_array(char **env_array);
+int		case_redir_pipeline(t_shell *sh, char **env_arr);
+
 // Global variable for signal handling
 extern volatile	sig_atomic_t g_signal_status;
 #endif
