@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/05/29 11:03:39 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 06:47:45 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,9 @@ char	*join_args(char **args)
 	i = 0;
 	while (args[i])
 	{
-		if (args[i])
-		{
-			strcat(result, args[i]);
-			if (args[i + 1])
-				strcat(result, " ");
-		}
+		ft_strlcat(result, args[i], total_len + 1);
+		if (args[i + 1])
+			ft_strlcat(result, " ", total_len + 1);
 		i++;
 	}
 	return (result);
@@ -83,7 +80,7 @@ size_t	total_args_length(char **args)
 	i = 0;
 	total = 0;
 	while (args[i])
-		total += strlen(args[i++]) + 1;
+		total += ft_strlen(args[i++]) + 1;
 	return (total);
 }
 

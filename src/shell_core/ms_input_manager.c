@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_input_manager.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:27:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/06 00:17:15 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/06 06:14:47 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,6 @@ int	process_input(t_shell *sh)
 		else if (sh->input_args[0][0] != '\0')
 		{
 			handle_non_cmd(sh);
-
-
 		}
 	}
 	return (sh->last_exit_status);

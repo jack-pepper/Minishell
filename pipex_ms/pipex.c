@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/04 12:02:00 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 06:44:51 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ static char	**build_pipex_argv(t_pipeline *pipeline, int *argc)
 	argv = malloc(sizeof(char *) * (*argc + 1));
 	if (!argv)
 		return (perror("malloc"), NULL);
-	argv[k++] = strdup("pipex");
-	argv[k++] = strdup("here_doc");
-	argv[k++] = strdup(pipeline->cmds->limiter);
+	argv[k++] = ft_strdup("pipex");
+	argv[k++] = ft_strdup("here_doc");
+	argv[k++] = ft_strdup(pipeline->cmds->limiter);
 	while (i < pipeline->cmd_count)
 	{
 		if (!pipeline->cmds[i].argv)
@@ -78,9 +78,9 @@ static char	**build_pipex_argv(t_pipeline *pipeline, int *argc)
 		argv[k++] = join_args(pipeline->cmds[i++].argv);
 	}
 	if (pipeline->cmds[pipeline->cmd_count - 1].outfile)
-		argv[k++] = strdup(pipeline->cmds[pipeline->cmd_count - 1].outfile);
+		argv[k++] = ft_strdup(pipeline->cmds[pipeline->cmd_count - 1].outfile);
 	else
-		argv[k++] = strdup("/dev/stdout");
+		argv[k++] = ft_strdup("/dev/stdout");
 	argv[k] = NULL;
 	return (argv);
 }
