@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:54:10 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/06 18:32:28 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:37:35 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ int		allocate_mem(char **str, int length);
 size_t	total_args_length(char **args);
 char	*join_args(char **args);
 void	init_pipex(t_pipex *pipex, char **envp);
+int		handle_heredoc_error(t_pipeline *pipeline);
+int		handle_pipex_in_fd_error(t_pipex pipex);
 int		pipex_error_heredoc(char *msg, int value);
 void	setup_outfd(t_pipex *pipex, char **argv, int argc);
 #endif

@@ -6,7 +6,7 @@
 #    By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/20 07:44:20 by yel-bouk          #+#    #+#              #
-#    Updated: 2025/03/18 13:54:26 by yel-bouk         ###   ########.fr        #
+#    Updated: 2025/06/06 18:15:40 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ SRCS = pipex.c \
 		pipex_bonus.c \
 		pipex_utils.c \
 		pipex_bonus_utils.c \
+                err_cases.c \
 
 OBJS = $(SRCS:.c=.o)
 
