@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 19:22:54 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/05 19:23:02 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/06 16:07:14 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ void	main_loop(t_shell *sh, char **env)
 		dispatch_command(type, sh, env);
 		free_args(sh->input_args);
 	}
-	free(line);
 }
 
 int	main(int argc, char **argv, char **env)
