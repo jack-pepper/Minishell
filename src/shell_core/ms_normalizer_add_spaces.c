@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/04 17:52:09 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 19:06:28 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,26 +39,11 @@ char	*ft_add_spaces_around_redir(char *spaced)
 	return (spaced);
 }
 
-char	*ft_add_spaces_around(char *str, char special)
+char	*ft_add_two_spaces(char *str, char *new_str, char special)
 {
-	int		i;
-	int		extra;
-	int		len;
-	char	*new_str;
-	int		j;
+	int	i;
+	int	j;
 
-	len = ft_strlen(str);
-	extra = 0;
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == special)
-			extra += 2;
-		i++;
-	}
-	new_str = malloc(len + extra + 1);
-	if (!new_str)
-		return (NULL);
 	j = 0;
 	i = 0;
 	while (str[i])
@@ -77,13 +62,63 @@ char	*ft_add_spaces_around(char *str, char special)
 	return (new_str);
 }
 
+char	*ft_add_spaces_around(char *str, char special)
+{
+	int		i;
+	int		extra;
+	int		len;
+	char	*new_str;
+
+	len = ft_strlen(str);
+	extra = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == special)
+			extra += 2;
+		i++;
+	}
+	new_str = malloc(len + extra + 1);
+	if (!new_str)
+		return (NULL);
+	new_str = ft_add_two_spaces(str, new_str, special);
+	return (new_str);
+}
+
+char	*ft_add_after(const char *line, const char *str, int op_len, char *res)
+{
+	int		i;
+	int		j;
+	int		k;
+
+	i = 0;
+	j = 0;
+	while (line[i])
+	{
+		if (strncmp(&line[i], str, op_len) == 0)
+		{
+			res[j++] = ' ';
+			k = 0;
+			while (k < op_len)
+			{
+				res[j++] = str[k];
+				k++;
+			}
+			res[j++] = ' ';
+			i += op_len;
+		}
+		else
+			res[j++] = line[i++];
+	}
+	res[j] = '\0';
+	return (res);
+}
+
 char	*ft_add_spaces_around_str(const char *line, const char *str)
 {
 	int		len;
 	int		op_len;
 	int		i;
-	int		j;
-	int		k;
 	int		count;
 	char	*result;
 
@@ -102,25 +137,6 @@ char	*ft_add_spaces_around_str(const char *line, const char *str)
 	result = malloc(len + count * 2 + 1);
 	if (!result)
 		return (NULL);
-	i = 0;
-	j = 0;
-	while (line[i])
-	{
-		if (strncmp(&line[i], str, op_len) == 0)
-		{
-			result[j++] = ' ';
-			k = 0;
-			while (k < op_len)
-			{
-				result[j++] = str[k];
-				k++;	
-			}
-			result[j++] = ' ';
-			i += op_len;
-		}
-		else
-			result[j++] = line[i++];
-	}
-	result[j] = '\0';
+	result = ft_add_after(line, str, op_len, result);
 	return (result);
 }
