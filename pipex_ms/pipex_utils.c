@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/06 16:17:41 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:15:06 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,7 @@ void	handle_bonus(t_pipex *pipex, int argc, char **argv, int cmd_count)
 	if (ft_strcmp(argv[argc - 1], "/dev/stdout") == 0)
 		pipex->out_fd = STDOUT_FILENO;
 	else
-	{
-		pipex->out_fd = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (pipex->out_fd < 0)
-			ft_exit_error(pipex, "failed to open outfile");
-	}
+		setup_outfd(pipex, argv, argc);
 	pipex->cmd_args = malloc(sizeof(char **) * pipex->cmd_count);
 	if (!pipex->cmd_args)
 		ft_exit_error(pipex, "malloc failed");
@@ -42,7 +38,6 @@ void	handle_bonus(t_pipex *pipex, int argc, char **argv, int cmd_count)
 	free_pipex(pipex);
 }
 
-
 void	fork_and_run(t_pipex *pipex, int i, int prev_fd, int *pipefd)
 {
 	pid_t	pid;
@@ -52,14 +47,12 @@ void	fork_and_run(t_pipex *pipex, int i, int prev_fd, int *pipefd)
 		ft_exit_error(pipex, "fork error");
 	if (pid == 0)
 	{
-		// printf("I am here 101\n");
 		if (i == pipex->cmd_count - 1)
 			execute_child(pipex, prev_fd, pipex->out_fd, pipex->cmd_args[i]);
 		else
 			execute_child(pipex, prev_fd, pipefd[1], pipex->cmd_args[i]);
 	}
 }
-
 
 void	execute_all_children(t_pipex *pipex)
 {
@@ -71,7 +64,6 @@ void	execute_all_children(t_pipex *pipex)
 	prev_fd = pipex->in_fd;
 	while (i < pipex->cmd_count)
 	{
-		
 		if (i < pipex->cmd_count - 1 && pipe(pipefd) == -1)
 			ft_exit_error(pipex, "pipe error");
 		fork_and_run(pipex, i, prev_fd, pipefd);
