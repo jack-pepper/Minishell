@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:24:52 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/06 20:39:51 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/07 18:20:56 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,9 @@ int	case_no_pipeline_needed(t_shell *sh, char **env_arr)
 		return (1);
 	if (is_builtin(sh->input_args[0]))
 	{
-		free_env_array(env_arr);
+		if ((ft_strcmp(sh->input_args[0], "exit") == 0)
+			&& (ft_strslen(sh->input_args) <= 2))
+			free_env_array(env_arr);
 		sh->last_exit_status = process_input(sh);
 		return (1);
 	}
@@ -54,7 +56,6 @@ int	case_no_pipeline_needed(t_shell *sh, char **env_arr)
 		if (validate_in_path(sh->input_args, env_arr, sh))
 			return (1);
 	}
-	//free_env_array(env_arr);
 	return (0);
 }
 
