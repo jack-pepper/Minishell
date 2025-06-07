@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 11:38:07 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/06 17:02:23 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/07 21:49:55 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,10 @@ bool	is_builtin(const char *cmd)
 		|| ((cmd[0] == CC_VAR_TO_INTERPRET) && (cmd[1] == '?'))
 		|| (cmd[0] == '$')
 		|| ((cmd[0] == '$') && (cmd[1] == '?'))
+		|| (cmd[0] == '/')
+		|| (cmd[0] == '.' && cmd[1] && cmd[1] == '/')
+		|| (cmd[0] == '.' && cmd[1] && cmd[1] == '.'
+			&& cmd[2] && cmd[2] == '/')
 	)
 		return (true);
 	return (false);

@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/07 19:21:05 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/07 21:55:20 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,16 @@ t_pipeline	*build_pipeline_from_tokens(char **tokens)
 	return (p);
 }
 
+void	free_cmds_files_and_limiter(t_pipeline *p)
+{
+	if (p->cmds->infile != NULL)
+		free(p->cmds->infile);
+	if (p->cmds->outfile != NULL)
+		free(p->cmds->outfile);
+	if (p->cmds->limiter != NULL)
+		free(p->cmds->limiter);
+}
+
 void	free_pipeline(t_pipeline *p)
 {
 	int	i;
@@ -76,12 +86,7 @@ void	free_pipeline(t_pipeline *p)
 		return ;
 	while (i < p->cmd_count)
 	{
-		if (p->cmds->infile != NULL)
-			free(p->cmds->infile);
-		if (p->cmds->outfile != NULL)
-			free(p->cmds->outfile);
-		if (p->cmds->limiter != NULL)
-			free(p->cmds->limiter);
+		free_cmd_files_and_limiter(p);
 		if (p->cmds[i].argv)
 		{
 			j = 0;

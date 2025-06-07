@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 16:34:25 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/06 20:29:18 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/07 21:52:31 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	**rejoin_env_array(t_list *cur, int count)
 {
 	char	**env_array;
-	int	i;
+	int		i;
 
 	i = 0;
 	env_array = malloc(sizeof(char *) * (count + 1));
@@ -29,12 +29,6 @@ char	**rejoin_env_array(t_list *cur, int count)
 		{
 			while (--i >= 0)
 				free(env_array[i]);
-			//j = 0;
-			//while (j < i)
-			//{
-			//	free(env_array[j]);
-			//	j++;
-			//}
 			free(env_array);
 			return (NULL);
 		}

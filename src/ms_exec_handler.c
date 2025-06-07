@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:24:52 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/07 21:13:58 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/07 21:51:40 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	case_no_pipeline_needed(t_shell *sh, char **env_arr)
 	if (ft_isalnum_x_str(sh->input_args[0], "!#$%&()*+,'\"-:;?@[\\]^{}~.") == 0)
 	{
 		if (validate_in_path(sh->input_args, env_arr, sh) == 1)
-			return (1);	
+			return (1);
 	}
 	return (0);
 }

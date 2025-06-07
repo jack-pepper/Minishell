@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/06 20:12:16 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/07 21:56:40 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@
 # define PERM_DENY ": Permission denied\n"
 # define SYNTAX_ERR "syntax error near unexpected token\n"
 # define NO_CUR_DIR ": error retrieving current directory"
-# define NO_ACC_PAR ": getcwd: cannot access parent directories: No such file or directory\n"
+# define NO_ACC_PAR ": getcwd: cannot access parent directories\n"
 # define PWD_NON_SET ": PWD non set\n"
 
 /* Libraries */
