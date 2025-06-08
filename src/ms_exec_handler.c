@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_exec_handler.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:24:52 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/06 16:49:44 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/08 07:17:26 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,15 @@ void	handle_basic(t_shell *sh)
 	char		**env_arr;
 
 	env_arr = env_list_to_array(sh->this_env);
+	if (!env_arr)
+		return ;
 	if (case_no_pipeline_needed(sh, env_arr) != 0)
 	{
 		free_env_array(env_arr);
 		return ;
 	}
 	if (case_redir_pipeline(sh, env_arr) != 0)
-	{
-		free_env_array(env_arr);
 		return ;
-	}
 }
 
 bool	handle_heredoc_pipeline(t_pipeline *pipeline, char **env, t_shell *sh)
