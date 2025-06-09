@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 00:03:54 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/04 23:37:28 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/09 23:07:19 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	change_directory(t_shell *sh, char *cwd, char *path)
 		return (0);
 	}
 	if (chdir(path) != 0)
-		return (ms_err("cd: ", sh->input_args[1], NO_FILE_OR_DIR, 1));
+		return (ms_err("cd: ", sh->input_args[1], NO_FILE_OR_DIR, 127));
 	if (sh->input_args[1] && ft_strcmp(sh->input_args[1], "-") == 0)
 		printf("%s\n", path);
 	trimmed = store_cwd(trimmed);

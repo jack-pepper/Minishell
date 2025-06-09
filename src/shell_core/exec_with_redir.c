@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:29:54 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/06 18:28:10 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/09 22:58:45 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,17 @@ static void	execute_command(t_pipeline *cmd, char **env, t_shell *sh)
 	argv = cmd->cmds[0].argv;
 	set_signals_to_default();
 	if (validate_and_exec_command(argv, env, sh))
+	{
+		//free_memory(sh); ?
 		exit(sh->last_exit_status);
+	}
 	if (strcmp(argv[0], "echo") == 0)
 	{
 		sh->input_args = argv;
-		exit(cmd_echo(sh));
+		int res = cmd_echo(sh);
+		free_memory(sh);
+		exit(res);
+		//exit(cmd_echo(sh));
 	}
 	else
 	{
@@ -94,7 +100,11 @@ void	exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh)
 	{
 		setup_redirections(in_fd, out_fd);
 		if (cmd->cmd_count < 1)
+		{
+			free_args(sh->input_args);
 			exit(0);
+		}
+		free_args(sh->input_args);
 		execute_command(cmd, env, sh);
 	}
 	status = 0;

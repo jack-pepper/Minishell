@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:07:30 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/07 21:55:20 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/09 20:27:41 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	free_pipeline(t_pipeline *p)
 		return ;
 	while (i < p->cmd_count)
 	{
-		free_cmd_files_and_limiter(p);
+		free_cmds_files_and_limiter(p);
 		if (p->cmds[i].argv)
 		{
 			j = 0;

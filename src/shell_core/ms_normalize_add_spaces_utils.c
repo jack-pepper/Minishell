@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 20:05:11 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/06 20:22:35 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/09 22:25:20 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,16 @@ char	*ft_add_spaces_around_str(const char *line, const char *str)
 	char	*result;
 	int		count;
 	int		len;
+	char		*new_line;
 
 	op_len = strlen(str);
 	count = count_substring_occurrences(line, str, op_len);
 	len = strlen(line);
 	if (count == 0)
-		return (strdup(line));
+	{
+		new_line = ft_strdup(line);
+		return (new_line);
+	}
 	result = malloc(len + count * 2 + 1);
 	if (!result)
 		return (NULL);
