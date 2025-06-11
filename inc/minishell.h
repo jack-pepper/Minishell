@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/11 11:21:42 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/11 16:04:27 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,6 +245,7 @@ int			ft_interpret_env(t_shell *sh);
 char		*rejoin_arg(t_shell *sh, char *rejoined_arg,
 				char **split_args, int i);
 char		**ft_copy_free(char **input_arg, char *rejoined_arg);
+void		remove_empty_args(char **args);
 
 	// ms_nametoval.c
 char		*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args);

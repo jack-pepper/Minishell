@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/05 11:53:46 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/11 15:45:39 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,22 @@ char	**ft_copy_free(char **input_arg, char *rejoined_arg)
 	if (!(*input_arg))
 		return (NULL);
 	return (input_arg);
+}
+
+void	remove_empty_args(char **args)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (args[i])
+	{
+		if (args[i][0] != '\0')
+			args[j++] = args[i];
+		else
+			free(args[i]);
+		i++;
+	}
+	args[j] = NULL;
 }

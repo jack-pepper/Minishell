@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 19:22:54 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/11 13:57:13 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/11 16:00:41 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,10 @@ void	dispatch_command(t_cmd_type type, t_shell *sh, char **env)
 		sh->last_exit_status = ms_err("", "", SYNTAX_ERR, 2);
 }
 
-void	main_loop(t_shell *sh, char **env)
+void	main_loop(t_shell *sh, char **env, char *line)
 {
-	char		*line;
 	t_cmd_type	type;
 
-	line = NULL;
 	while (1)
 	{
 		line = get_input(line);
@@ -75,22 +73,24 @@ void	main_loop(t_shell *sh, char **env)
 			g_signal_status = 0;
 		}
 		ft_interpret_env(sh);
+		remove_empty_args(sh->input_args);
 		type = classify_command(sh->input_args);
 		dispatch_command(type, sh, env);
 		free_args(sh->input_args);
 	}
-	free(line);
 }
 
 int	main(int argc, char **argv, char **env)
 {
 	t_shell		sh;
+	char		*line;
 
+	line = NULL;
 	if (argc != 1 || argv[1])
 		return (-1);
 	if (init_shell(&sh, env) != 0)
 		return (-1);
-	main_loop(&sh, env);
+	main_loop(&sh, env, line);
 	free_memory(&sh);
 	return (sh.last_exit_status);
 }
