@@ -6,7 +6,7 @@
 #    By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/20 17:50:19 by mmalie            #+#    #+#              #
-#    Updated: 2025/06/06 20:08:06 by yel-bouk         ###   ########.fr        #
+#    Updated: 2025/06/11 19:23:50 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -84,6 +84,7 @@ MS_SRC = ./src/minishell.c \
         ./src/shell_core/ms_handle_pipes_utils.c \
         ./src/shell_core/exec_with_redir.c \
         ./src/shell_core/exec_with_redir_utils.c \
+	./src/shell_core/exec_with_redir_exit_cases.c \
         ./src/shell_core/cmd_classifier_utils.c \
         ./src/shell_core/ms_to_pipex_utils.c \
         ./src/shell_core/ms_hand_red_utils.c \

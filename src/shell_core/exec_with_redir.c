@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:29:54 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/11 13:06:01 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/11 19:57:53 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,10 @@ void	update_exit_status(t_shell *sh, int status)
 		sh->last_exit_status = 128 + WTERMSIG(status);
 }
 
-static void	execute_command(t_pipeline *cmd, char **env, t_shell *sh)
+void	execute_command(t_pipeline *cmd, char **env, t_shell *sh)
 {
 	char	**argv;
 	char	*cmd_path;
-	int		res;
 
 	argv = cmd->cmds[0].argv;
 	set_signals_to_default();
@@ -61,12 +60,7 @@ static void	execute_command(t_pipeline *cmd, char **env, t_shell *sh)
 		exit(sh->last_exit_status);
 	}
 	if (strcmp(argv[0], "echo") == 0)
-	{
-		sh->input_args = argv;
-		res = cmd_echo(sh);
-		free_memory(sh);
-		exit(res);
-	}
+		exit(exec_echo_case(sh, argv));
 	else
 	{
 		cmd_path = get_cmd_path_from_list(argv[0], sh->this_env);
@@ -75,10 +69,7 @@ static void	execute_command(t_pipeline *cmd, char **env, t_shell *sh)
 			print_cmd_not_found_and_free(cmd_path, argv[0]);
 			exit(127);
 		}
-		execve(cmd_path, argv, env);
-		perror("execve failed");
-		free(cmd_path);
-		free_memory(sh);
+		exec_cmd(sh, cmd_path, env, argv);
 		exit(EXIT_FAILURE);
 	}
 }
@@ -100,13 +91,7 @@ void	exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh)
 	if (pid == 0)
 	{
 		setup_redirections(in_fd, out_fd);
-		if (cmd->cmd_count < 1)
-		{
-			free_args(sh->input_args);
-			exit(0);
-		}
-		free_args(sh->input_args);
-		execute_command(cmd, env, sh);
+		exec_redir_cmd(cmd, env, sh);
 	}
 	status = 0;
 	waitpid(pid, &status, 0);

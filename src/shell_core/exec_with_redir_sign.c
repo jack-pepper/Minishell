@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 18:27:39 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/06 18:28:14 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/11 19:36:26 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	set_signals_to_default(void)
 
 void	print_cmd_not_found_and_free(char *cmd_path, char *cmd_name)
 {
-	ft_printf("%s: command not found\n", cmd_name);
+	ms_err("", cmd_name, CMD_NOT_FOUND, 127);
 	free(cmd_path);
 }
 

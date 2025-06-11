@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/11 16:04:27 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/11 20:02:01 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -376,6 +376,10 @@ t_pipeline	*build_pipeline_from_tokens(char **tokens);
 void		free_cmds_files_and_limiter(t_commands *cmd);
 void		free_pipeline(t_pipeline *p);
 void		exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh);
+int			exec_echo_case(t_shell *sh, char **argv);
+int			exec_cmd(t_shell *sh, char *cmd_path, char **env, char **argv);
+void		exec_redir_cmd(t_pipeline *cmd, char **env, t_shell *sh);
+void		execute_command(t_pipeline *cmd, char **env, t_shell *sh);
 t_pipeline	*parse_redirection_only(char **tokens);
 void		print_pipeline(t_pipeline *p);
 void		run_pipes_with_no_redir(t_pipeline *p, char **env);
@@ -491,5 +495,5 @@ void		increase_str(char *new_str, char special, int *j);
 // void		execute_child_pipeline_cmd(t_pipeline *p, char **env, t_shell *sh,
 // 	int i, int prev_fd, int pipe_fd[2]);
 // Global variable for signal handling
-extern volatile	sig_atomic_t		g_signal_status;
+extern volatile sig_atomic_t		g_signal_status;
 #endif

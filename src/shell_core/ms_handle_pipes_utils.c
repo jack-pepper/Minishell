@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 15:19:08 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/05 12:34:51 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/11 19:46:05 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ int	validate_all_non_builtins(t_pipeline *p, char **env, t_shell *sh)
 			cmd_path = get_cmd_path(p->cmds[j].argv[0], env);
 			if (!cmd_path)
 			{
-				ft_printf("command not found\n");
-				sh->last_exit_status = 127;
+				sh->last_exit_status = ms_err("",
+						p->cmds[j].argv[0], CMD_NOT_FOUND, 127);
 				return (0);
 			}
 			free(cmd_path);
