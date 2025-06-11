@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 16:34:25 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/11 00:01:30 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/11 11:26:35 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ int	case_redir_pipeline(t_shell *sh, char **env_arr)
 	pipeline = parse_redirection_only(sh->input_args);
 	if (!pipeline || !pipeline->cmds || !pipeline->cmds[0].argv)
 	{
-		//free_env_array(env_arr); // [TO REMOVE] invalid on ms> > pwd
 		if (is_token_control_char(sh->input_args[0], CC_REDIR_OUT)
 			|| is_token_control_char(sh->input_args[0], CC_APPEND)
 			|| is_token_control_char(sh->input_args[0], CC_REDIR_IN)

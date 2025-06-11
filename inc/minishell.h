@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/07 21:56:40 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/11 11:21:42 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -372,6 +372,7 @@ char		**ft_strsdup(char **strs);
 
 /*Yahyas's function*/
 t_pipeline	*build_pipeline_from_tokens(char **tokens);
+void		free_cmds_files_and_limiter(t_commands *cmd);
 void		free_pipeline(t_pipeline *p);
 void		exec_with_redirection(t_pipeline *cmd, char **env, t_shell *sh);
 t_pipeline	*parse_redirection_only(char **tokens);

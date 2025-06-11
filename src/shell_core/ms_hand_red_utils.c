@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:00:45 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/06 16:51:13 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/11 11:20:59 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	setup_redirections(int in_fd, int out_fd)
 
 void	cleanup_pipeline_on_error(t_pipeline *p, t_commands *cmd, char **argv)
 {
+	free_cmds_files_and_limiter(cmd);
 	free(cmd);
 	free(argv);
 	free(p);
