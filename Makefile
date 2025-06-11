@@ -6,7 +6,7 @@
 #    By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/20 17:50:19 by mmalie            #+#    #+#              #
-#    Updated: 2025/06/11 19:23:50 by mmalie           ###   ########.fr        #
+#    Updated: 2025/06/11 20:29:44 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,10 +27,7 @@ CFLAGS=-g -Wall -Wextra -Werror
 ### Dependencies ###
 ####################
 
-DEPS = ./inc/minishell.h ./libft/libft.h
-LIBFT = ./libft/libft.a
-
-DEPS = ./inc/minishell.h ./libft/libft.h
+DEPS = ./inc/minishell.h ./inc/defines.h ./inc/global_var.h ./libft/libft.h
 LIBFT = ./libft/libft.a
 
 ####################
