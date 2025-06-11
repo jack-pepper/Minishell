@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/06 18:37:13 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/11 12:49:01 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	run_pipex_from_minshell(t_pipeline *pipeline, char **envp)
 	argv = build_pipex_argv(pipeline, &argc);
 	if (!argv)
 		return (1);
-	ft_parse_paths(&pipex);
+//	ft_parse_paths(&pipex); // solve leaks on hey << EOF | wc -l
 	handle_bonus(&pipex, argc, argv, pipeline->cmd_count);
 	free_argv(argv, argc);
 	return (pipex.exit_status);

@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:27:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/09 23:06:18 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/11 14:03:17 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int	process_input(t_shell *sh)
 
 	if (!sh->input_args || sh->input_args[0] == NULL)
 		return (-1);
-	ft_interpret_env(sh);
 	ft_replace_all_chars(sh->input_args, CC_TRAILING_DOLLAR, '$');
 	cmd = is_registered_cmd(sh);
 	if (cmd != NULL)

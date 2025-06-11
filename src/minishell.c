@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 19:22:54 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/11 00:14:08 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/11 13:57:13 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	main_loop(t_shell *sh, char **env)
 			sh->last_exit_status = g_signal_status;
 			g_signal_status = 0;
 		}
+		ft_interpret_env(sh);
 		type = classify_command(sh->input_args);
 		dispatch_command(type, sh, env);
 		free_args(sh->input_args);

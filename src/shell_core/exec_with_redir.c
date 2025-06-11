@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:29:54 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/09 22:58:45 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/11 13:06:01 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,21 +51,21 @@ static void	execute_command(t_pipeline *cmd, char **env, t_shell *sh)
 {
 	char	**argv;
 	char	*cmd_path;
+	int		res;
 
 	argv = cmd->cmds[0].argv;
 	set_signals_to_default();
 	if (validate_and_exec_command(argv, env, sh))
 	{
-		//free_memory(sh); ?
+		free_memory(sh);
 		exit(sh->last_exit_status);
 	}
 	if (strcmp(argv[0], "echo") == 0)
 	{
 		sh->input_args = argv;
-		int res = cmd_echo(sh);
+		res = cmd_echo(sh);
 		free_memory(sh);
 		exit(res);
-		//exit(cmd_echo(sh));
 	}
 	else
 	{
@@ -78,6 +78,7 @@ static void	execute_command(t_pipeline *cmd, char **env, t_shell *sh)
 		execve(cmd_path, argv, env);
 		perror("execve failed");
 		free(cmd_path);
+		free_memory(sh);
 		exit(EXIT_FAILURE);
 	}
 }
