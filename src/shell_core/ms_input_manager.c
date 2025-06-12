@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:27:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/12 18:45:01 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/12 22:42:58 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,22 +92,23 @@ int	handle_non_cmd(t_shell *sh)
 		res = stash_var(sh);
 	else if (res != 0)
 	{
-		//if (ft_strchr(sh->input_args[0], '/') != NULL) // Commented to solve /bin/ls
-		//{	
-		//	sh->last_exit_status = handle_file_or_dir(sh);
-		//	return (sh->last_exit_status);
-		//}
+		if (ft_strchr(sh->input_args[0], '/') != NULL)
+		{	
+			sh->last_exit_status = handle_file_or_dir(sh);
+			if (sh->last_exit_status != 0)
+				return (sh->last_exit_status);
+		}
 		env_arr = env_list_to_array(sh->this_env);
 		if (!env_arr)
 			return (0);
 		if (validate_in_path(sh->input_args, env_arr, sh))
 			return (sh->last_exit_status);
 		case_redir_pipeline(sh, env_arr);
+		free_env_array(env_arr);
 	}
 	return (res);
 }
 
-/*
 int	handle_file_or_dir(t_shell *sh)
 {
 	struct stat	st;
@@ -127,4 +128,4 @@ int	handle_file_or_dir(t_shell *sh)
 		}
 	}
 	return (0);
-}*/
+}
