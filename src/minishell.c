@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 19:22:54 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/12 22:42:12 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/12 23:25:50 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	dispatch_command(t_cmd_type type, t_shell *sh, char **env)
 		sh->pipeline = ft_calloc(1, sizeof(t_pipeline));
 		parse_and_build_pipeline(sh->pipeline, sh->input_args);
 		run_pipeline_with_redir(sh->pipeline, env, sh);
+		free_pipeline(sh->pipeline);
 	}
 	else
 		sh->last_exit_status = ms_err("", "", SYNTAX_ERR, 2);
