@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:24:52 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/12 22:10:46 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/13 00:33:35 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ void	handle_pipeline(t_shell *sh, char **env)
 {
 	t_pipeline	*pipeline;
 
+
+	ft_replace_all_chars(sh->input_args, CC_SPACE_IN_QUOTE, ' ');
 	pipeline = build_pipeline_from_tokens(sh->input_args);
 	if (!pipeline)
 	{

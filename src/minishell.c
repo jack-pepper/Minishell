@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 19:22:54 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/12 23:25:50 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/13 00:31:18 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,9 @@ void	dispatch_command(t_cmd_type type, t_shell *sh, char **env)
 	else if (type == BASIC)
 		handle_basic(sh);
 	else if (type == PIPELINE || type == HERE_DOC)
+	{
 		handle_pipeline(sh, env);
+	}
 	else if (type == PIPELINE_WITH_RED)
 	{
 		sh->pipeline = ft_calloc(1, sizeof(t_pipeline));
