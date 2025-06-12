@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+         #
+#    By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/20 17:50:19 by mmalie            #+#    #+#              #
-#    Updated: 2025/06/11 20:29:44 by mmalie           ###   ########.fr        #
+#    Updated: 2025/06/12 06:27:17 by yel-bouk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -90,6 +90,7 @@ MS_SRC = ./src/minishell.c \
         ./src/ms_minishell_utils.c \
         ./src/ms_exec_hanlder_utils.c \
         ./src/shell_core/ms_pipex_count_cmds.c \
+        ./src/shell_core/check_consec_redir.c \
 
 
 PIPEX_SRC =       ./pipex_ms/pipex.c \

@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:27:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/11 14:03:17 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/12 06:26:16 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,13 @@ char	**normalize_input(char *line, t_shell *sh)
 	if (!sh->input_args)
 		return (NULL);
 	ft_replace_all_chars(sh->input_args, '|', CC_PIPE);
+	if (!check_consecutive_redir(sh->input_args))
+	{
+		sh->last_exit_status = ms_err("", "", SYNTAX_ERR, 2);
+		free_args(sh->input_args);
+		sh->input_args = NULL;
+		return (NULL);
+	}
 	return (sh->input_args);
 }
 

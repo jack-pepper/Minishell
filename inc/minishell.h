@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/11 20:31:13 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/12 06:25:04 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -452,6 +452,7 @@ int			count_substring_occurrences(const char *line,
 				const char *str, int op_len);
 int			count_extra_spaces(const char *str, char special);
 void		increase_str(char *new_str, char special, int *j);
+bool		check_consecutive_redir(char **args);
 // bool		handle_builtin_if_needed(t_commands *cmd, t_shell *sh);
 // void		exec_external_cmd(t_commands *cmd, char **env);
 // void		execute_child_pipeline_cmd(t_pipeline *p, char **env, t_shell *sh,
