@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:27:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/13 17:38:28 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/13 18:07:39 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,7 @@ int	process_input(t_shell *sh)
 		if ((ft_strcmp(sh->input_args[0], "\"\"") == 0
 				|| ft_strcmp(sh->input_args[0], "\'\'") == 0)
 			&& !sh->input_args[0][2])
-		{
 			sh->last_exit_status = ms_err("", "", CMD_NOT_FOUND, 127);
-		}
 		else if (sh->input_args[0][0] != '\0')
 			handle_non_cmd(sh);
 	}
