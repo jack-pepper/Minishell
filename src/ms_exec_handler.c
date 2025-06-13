@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:24:52 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/13 22:25:34 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/13 23:06:09 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	handle_redir_only(t_shell *sh, char **env)
 int	case_no_pipeline_needed(t_shell *sh, char **env_arr)
 {
 	if (!sh->input_args[0])
-		return (1);
+		return (2);
 	if (is_builtin(sh->input_args[0]))
 	{
 		if ((ft_strcmp(sh->input_args[0], "exit") == 0)
@@ -44,7 +44,7 @@ int	case_no_pipeline_needed(t_shell *sh, char **env_arr)
 	}
 	if (!validate_all_redirections(sh->input_args, sh))
 		return (1);
-	if (ft_strcmp(sh->input_args[0], ".") == 0
+	if (sh->input_args[0][0] == '\0' || ft_strcmp(sh->input_args[0], ".") == 0
 		|| ft_strcmp(sh->input_args[0], "..") == 0)
 	{
 		sh->last_exit_status = ms_err(
