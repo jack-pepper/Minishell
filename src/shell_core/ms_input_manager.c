@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:27:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/13 00:34:38 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/13 17:38:28 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	process_input(t_shell *sh)
 
 	if (!sh->input_args || sh->input_args[0] == NULL)
 		return (-1);
-	ft_replace_all_chars(sh->input_args, CC_TRAILING_DOLLAR, '$');	
+	ft_replace_all_chars(sh->input_args, CC_TRAILING_DOLLAR, '$');
 	cmd = is_registered_cmd(sh);
 	if (cmd != NULL)
 		sh->last_exit_status = cmd->func(sh);
@@ -93,7 +93,7 @@ int	handle_non_cmd(t_shell *sh)
 	else if (res != 0)
 	{
 		if (ft_strchr(sh->input_args[0], '/') != NULL)
-		{	
+		{
 			sh->last_exit_status = handle_file_or_dir(sh);
 			if (sh->last_exit_status != 0)
 				return (sh->last_exit_status);

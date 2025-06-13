@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 06:24:39 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/13 15:47:51 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/13 17:42:14 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ bool	check_consecutive_redir(char **args)
 			|| is_token_control_char(args[i], CC_REDIR_IN)
 			|| is_token_control_char(args[i], CC_REDIR_OUT)
 			|| is_token_control_char(args[i], CC_APPEND))
-		//	|| is_token_control_char(args[i], CC_PIPE))
 		{
 			if (!args[i + 1])
 				return (false);
@@ -36,7 +35,6 @@ bool	check_consecutive_redir(char **args)
 				|| is_token_control_char(args[i + 1], CC_REDIR_IN)
 				|| is_token_control_char(args[i + 1], CC_REDIR_OUT)
 				|| is_token_control_char(args[i + 1], CC_APPEND))
-				//|| is_token_control_char(args[i + 1], CC_PIPE))
 				return (false);
 		}
 		i++;
