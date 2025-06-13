@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 18:17:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/05 17:31:56 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/13 22:24:20 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,10 @@ char	*echo_process_all_args(t_shell *sh, char *joined_input, int *i)
 {
 	ft_replace_all_chars(sh->input_args, CC_PIPE, '|');
 	ft_replace_all_chars(sh->input_args, CC_SPACE_IN_QUOTE, ' ');
+	replace_cc_empty_str(sh);
 	while (sh->input_args[(*i)])
 	{
-		if (sh->input_args[(*i)] && sh->input_args[(*i)][0] != '\0')
+		if (sh->input_args[(*i)])
 		{
 			joined_input = echo_join_input(joined_input, sh->input_args, i);
 			if (!joined_input)

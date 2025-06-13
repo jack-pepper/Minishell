@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/12 06:25:04 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/13 22:16:50 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,8 @@ int			handle_file_or_dir(t_shell *sh);
 char		*ft_normalize(char *line);
 char		*ft_strflag(char *line);
 char		*copy_collapse(char *dst, char *src, size_t src_len);
+void		flag_double_quotes(char *src);
+char		*replace_cc_empty_str(t_shell *sh);
 
 	// ms_normalizer_add_spaces.c
 char		*ft_add_spaces_around_redir(char *spaced);

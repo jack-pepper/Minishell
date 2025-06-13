@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:24:52 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/13 18:11:51 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/13 22:25:34 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	case_no_pipeline_needed(t_shell *sh, char **env_arr)
 				"", sh->input_args[0], CMD_NOT_FOUND, 127);
 		return (1);
 	}
-	if (ft_isalnum_x_str(sh->input_args[0], "!#$%&()*+,'\"-:;?@[\\]^{}~. ") == 0)
+	if (ft_isalnum_x_str(sh->input_args[0], "!#$%&()*+,'\"-:;?@[\\]^{}~.") == 0)
 	{
 		if (validate_in_path(sh->input_args, env_arr, sh) == 1)
 			return (1);
@@ -64,6 +64,7 @@ void	handle_basic(t_shell *sh)
 	char		**env_arr;
 
 	ft_replace_all_chars(sh->input_args, CC_SPACE_IN_QUOTE, ' ');
+	replace_cc_empty_str(sh);
 	env_arr = env_list_to_array(sh->this_env);
 	if (!env_arr)
 		return ;
@@ -104,6 +105,7 @@ void	handle_pipeline(t_shell *sh, char **env)
 	t_pipeline	*pipeline;
 
 	ft_replace_all_chars(sh->input_args, CC_SPACE_IN_QUOTE, ' ');
+	replace_cc_empty_str(sh);
 	pipeline = build_pipeline_from_tokens(sh->input_args);
 	if (!pipeline)
 	{

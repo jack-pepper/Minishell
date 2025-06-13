@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/13 17:40:40 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/13 22:23:10 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,53 @@ char	*ft_strflag(char *line)
 	return (flagged_line);
 }
 
+void	flag_double_quotes(char *src)
+{
+	int	i;
+
+	i = 0;
+	while (src[i])
+	{
+		if ((src[i] == '\"')
+			&& (src[i - 1] && src[i - 1] == ' ')
+			&& (src[i + 1] && src[i + 1] == '\"')
+			&& (src[i + 2] && src[i + 2] == ' '))
+		{
+			ft_replace_char(&src[i], CC_EMPTY_STR);
+			ft_replace_char(&src[i + 1], CC_EMPTY_STR);
+		}
+		else if ((src[i] == '\'')
+			&& (src[i - 1] && src[i - 1] == ' ')
+			&& (src[i + 1] && src[i + 1] == '\'')
+			&& (src[i + 2] && src[i + 2] == ' '))
+		{
+			ft_replace_char(&src[i], CC_EMPTY_STR);
+			ft_replace_char(&src[i + 1], CC_EMPTY_STR);
+		}
+		i++;
+	}
+	return ;
+}
+
+char	*replace_cc_empty_str(t_shell *sh)
+{
+	int	i;
+
+	i = 0;
+	while (sh->input_args[i])
+	{
+		if (sh->input_args[i][0] == CC_EMPTY_STR)
+		{
+			free(sh->input_args[i]);
+			sh->input_args[i] = ft_strdup("");
+			if (sh->input_args[i] == NULL)
+				return (NULL);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
 // Both the src and dst are expected to be non-NULL and their size is correct
 char	*copy_collapse(char *dst, char *src, size_t src_len)
 {
@@ -73,6 +120,7 @@ char	*copy_collapse(char *dst, char *src, size_t src_len)
 	if (!src)
 		return (NULL);
 	ft_init_two_size_t(0, &i, &j);
+	flag_double_quotes(src);
 	while (i < src_len)
 	{
 		if ((src[i + 1])

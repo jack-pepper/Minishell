@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/11 20:22:20 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/13 21:11:05 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 # define CC_TO_BE_DELETED 20
 # define CC_TRAILING_DOLLAR 19
 # define CC_DOLLAR_UNCLOSED 18
+# define CC_EMPTY_STR 17
 
 /* Return messages (ft_ret) */
 # define SHELL_NAME "minishell: "
