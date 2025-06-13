@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 06:24:39 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/12 23:07:02 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/13 15:47:51 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ bool	check_consecutive_redir(char **args)
 	int	i;
 
 	i = 0;
+	if (args[0] && is_token_control_char(args[0], CC_PIPE))
+		return (false);
 	while (args[i])
 	{
 		if (is_token_control_char(args[i], CC_PIPE)

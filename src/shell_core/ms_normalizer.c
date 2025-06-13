@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/09 22:06:31 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/13 16:04:02 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ char	*copy_collapse(char *dst, char *src, size_t src_len)
 	ft_init_two_size_t(0, &i, &j);
 	while (i < src_len)
 	{
+//		if (src[i + 1]
+//				&& (src[i] == '\'' && ft_count_char(&src[i], '\'') != 1)) // seem to solve 'abc (but: mistake on 'abc 'def: the space is lost)
 		if ((src[i + 1]
 				&& (ft_is_in_set(src[i], "\"\'")
 					|| src[i] == CC_VAR_BOUND
@@ -82,9 +84,7 @@ char	*copy_collapse(char *dst, char *src, size_t src_len)
 			pass_quotes(dst, src, &i, &j);
 		else if ((ft_isspace(src[i]) && ft_isspace(src[i + 1]))
 			|| (src[i] == CC_LONE_DOLLAR))
-		{
 			i++;
-		}
 		else
 			dst[j++] = src[i++];
 	}
