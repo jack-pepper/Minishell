@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/14 20:42:41 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/14 21:26:34 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	flag_double_quotes(char *src)
 		if ((src[i] == '\"')
 			&& (i == 0 || (src[i - 1] && src[i - 1] == ' '))
 			&& (src[i + 1] && src[i + 1] == '\"')
-			&& ((src[i + 2] && src[i + 2] == ' ') || src[i + 2] == '\0'))
+			&& ((src[i + 2] && (src[i + 2] == ' ' || src[i + 2] == '\0'))))
 		{
 			ft_replace_char(&src[i], CC_EMPTY_STR);
 			ft_replace_char(&src[i + 1], CC_EMPTY_STR);
@@ -82,7 +82,7 @@ void	flag_double_quotes(char *src)
 		else if ((src[i] == '\'')
 			&& (i == 0 || (src[i - 1] && src[i - 1] == ' '))
 			&& (src[i + 1] && src[i + 1] == '\'')
-			&& ((src[i + 2] && src[i + 2] == ' ') || src[i + 2] == '\0'))
+			&& ((src[i + 2] && (src[i + 2] == ' ' || src[i + 2] == '\0'))))
 		{
 			ft_replace_char(&src[i], CC_EMPTY_STR);
 			ft_replace_char(&src[i + 1], CC_EMPTY_STR);
@@ -100,6 +100,7 @@ char	*replace_cc_empty_str(t_shell *sh)
 	i = 0;
 	while (sh->input_args[i])
 	{
+		ft_replace_chars_in_str(sh->input_args[i], CC_VAR_BOUND, CC_EMPTY_STR);
 		if (sh->input_args[i][0] == CC_EMPTY_STR && sh->input_args[i][1]
 			&& sh->input_args[i][1] == CC_EMPTY_STR)
 		{
