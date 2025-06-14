@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/11 15:46:57 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/14 06:07:57 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,31 +39,8 @@ static void	free_argv(char **argv, int size)
 	while (i < size)
 		free(argv[i++]);
 	free(argv);
-}
 
-static int	validate_pipeline(t_pipeline *pipeline)
-{
-	if (!pipeline || !pipeline->cmds->infile)
-	{
-		perror("Invalid pipeline");
-		return (1);
-	}
-	if (ft_strcmp(pipeline->cmds->infile, "here_doc") != 0)
-	{
-		perror("here_doc");
-		return (1);
-	}
-	return (0);
-}
 
-static char	**build_pipex_argv(t_pipeline *pipeline, int *argc)
-{
-	char	**argv;
-	int		k;
-	int		i;
-
-	i = 0;
-	k = 0;
 	*argc = 4 + pipeline->cmd_count;
 	argv = malloc(sizeof(char *) * (*argc + 1));
 	if (!argv)
