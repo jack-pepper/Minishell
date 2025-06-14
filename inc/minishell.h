@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/14 17:02:48 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/15 01:31:10 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -455,6 +455,10 @@ int			count_substring_occurrences(const char *line,
 int			count_extra_spaces(const char *str, char special);
 void		increase_str(char *new_str, char special, int *j);
 bool		check_consecutive_redir(char **args);
+int		loop_case_empty_str(t_shell *sh);
+int		basic_case_empty_str(t_shell *sh);
+int		basic_case_empty_var(t_shell *sh);
+
 // bool		handle_builtin_if_needed(t_commands *cmd, t_shell *sh);
 // void		exec_external_cmd(t_commands *cmd, char **env);
 // void		execute_child_pipeline_cmd(t_pipeline *p, char **env, t_shell *sh,

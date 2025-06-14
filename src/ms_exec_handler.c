@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:24:52 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/14 16:01:40 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/15 01:29:16 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,11 @@ void	handle_basic(t_shell *sh)
 {
 	char		**env_arr;
 
+	if (basic_case_empty_var(sh) != 0)
+		return ;
 	ft_replace_all_chars(sh->input_args, CC_SPACE_IN_QUOTE, ' ');
-	replace_cc_empty_str(sh);
+	if (basic_case_empty_str(sh) != 0)
+		return ;
 	env_arr = env_list_to_array(sh->this_env);
 	if (!env_arr)
 		return ;

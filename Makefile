@@ -6,7 +6,7 @@
 #    By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/20 17:50:19 by mmalie            #+#    #+#              #
-#    Updated: 2025/06/14 22:19:43 by mmalie           ###   ########.fr        #
+#    Updated: 2025/06/15 01:31:47 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -89,6 +89,7 @@ MS_SRC = ./src/minishell.c \
         ./src/ms_exec_handler.c \
         ./src/ms_minishell_utils.c \
         ./src/ms_exec_hanlder_utils.c \
+	./src/loop_and_basic_cases.c \
         ./src/shell_core/ms_pipex_count_cmds.c \
         ./src/shell_core/check_consec_redir.c \
 
