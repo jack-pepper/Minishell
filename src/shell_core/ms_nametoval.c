@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 21:03:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/25 16:45:05 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/14 20:13:16 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,12 @@ char	*split_rejoin(t_shell *sh, char *rejoined_arg, char *arg, char symbol)
 	t_list	*set_var;
 	char	*delim;
 
-	delim = to_delim(symbol);
-	if (DEBUG == 1)
-		printf("delim: ~%s~ \n", delim);
-	if (!delim)
-		return (NULL);
 	subargs = ft_split(arg, CC_SUBARG_DELIM);
 	set_var = ft_getenv(subargs[0], &sh->this_env);
 	subargs[0] = ft_setenv(set_var, subargs[0]);
+	delim = to_delim(sh, subargs, symbol);
+	if (!delim)
+		return (NULL);
 	arg = rejoin_subarg(subargs, delim);
 	if (DEBUG == 1)
 		printf("arg: %s\n", arg);
@@ -86,7 +84,7 @@ char	*split_rejoin(t_shell *sh, char *rejoined_arg, char *arg, char symbol)
 }
 
 // Set the delim str used to replace the splitter char (restore punct if apply)
-char	*to_delim(char symbol)
+char	*to_delim(t_shell *sh, char **subargs, char symbol)
 {
 	char	*delim;
 
@@ -97,7 +95,12 @@ char	*to_delim(char symbol)
 	if (symbol == CC_SPACE_IN_QUOTE)
 		delim[0] = ' ';
 	else if (symbol == CC_VAR_BOUND)
-		delim[0] = '\0';
+	{
+		if (ft_getenv(subargs[0], &sh->this_env) == NULL)
+			delim[0] = CC_EMPTY_STR;
+		else
+			delim[0] = '\0';
+	}
 	else if (symbol == CC_VAR_BOUND_SQUOTE)
 		delim[0] = '\'';
 	else

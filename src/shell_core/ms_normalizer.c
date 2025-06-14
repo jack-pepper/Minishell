@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/13 22:57:51 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/14 20:31:28 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,17 +94,25 @@ void	flag_double_quotes(char *src)
 
 char	*replace_cc_empty_str(t_shell *sh)
 {
-	int	i;
+	int		i;
+	char	**split_arg;
 
 	i = 0;
 	while (sh->input_args[i])
 	{
-		if (sh->input_args[i][0] == CC_EMPTY_STR)
+		if (sh->input_args[i][0] == CC_EMPTY_STR && sh->input_args[i][1]
+			&& sh->input_args[i][1] == CC_EMPTY_STR)
 		{
 			free(sh->input_args[i]);
 			sh->input_args[i] = ft_strdup("");
 			if (sh->input_args[i] == NULL)
 				return (NULL);
+		}
+		else if (ft_strchr(sh->input_args[i], CC_EMPTY_STR) != NULL)
+		{
+			split_arg = ft_split(sh->input_args[i], CC_EMPTY_STR);
+			free(sh->input_args[i]);
+			sh->input_args[i] = join_all_subargs(split_arg, 'n');
 		}
 		i++;
 	}

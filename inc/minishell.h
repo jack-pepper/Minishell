@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/13 22:16:50 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/14 17:02:48 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,7 @@ char		*ft_nametoval(t_shell *sh, char *rejoined_arg, char **split_args);
 char		*rejoin_subarg(char **subargs, char *delim);
 char		*split_rejoin(t_shell *sh, char *rejoined_arg,
 				char *arg, char splitter);
-char		*to_delim(char splitter);
+char		*to_delim(t_shell *sh, char **subargs, char symbol);
 
 	// ms_nametoval_cases.c
 char		*handle_special_cases(t_shell *sh, char *joined,
