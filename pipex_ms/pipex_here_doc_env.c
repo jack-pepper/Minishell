@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 10:22:18 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/14 13:11:43 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/14 20:37:56 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ static char	*handle_env_var(char *str, int *index)
 	return (new_str);
 }
 
-
 char	*expand_env_vars(const char *line)
 {
 	char	*result;
@@ -94,14 +93,14 @@ char	*expand_env_vars(const char *line)
 	{
 		if (result[i] == '$')
 		{
-			if (result[i + 1] && (ft_isalnum(result[i + 1]) || result[i + 1] == '_'))
+			if (result[i + 1] && (ft_isalnum(result[i + 1])
+					|| result[i + 1] == '_'))
 			{
 				result = handle_env_var(result, &i);
-				continue;
+				continue ;
 			}
 		}
 		i++;
 	}
 	return (result);
 }
-
