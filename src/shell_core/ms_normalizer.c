@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:57:21 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/14 20:31:28 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/14 20:42:41 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ char	*replace_cc_empty_str(t_shell *sh)
 			split_arg = ft_split(sh->input_args[i], CC_EMPTY_STR);
 			free(sh->input_args[i]);
 			sh->input_args[i] = join_all_subargs(split_arg, 'n');
+			free_args(split_arg);
 		}
 		i++;
 	}
