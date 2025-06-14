@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:54:10 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/06 18:37:35 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/14 10:34:16 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,4 +104,6 @@ int		handle_heredoc_error(t_pipeline *pipeline);
 int		handle_pipex_in_fd_error(t_pipex pipex);
 int		pipex_error_heredoc(char *msg, int value);
 void	setup_outfd(t_pipex *pipex, char **argv, int argc);
+char	*expand_env_vars(const char *line);
+int		open_heredoc_file(void);
 #endif
