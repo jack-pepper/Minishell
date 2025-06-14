@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/06 06:47:45 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/14 10:59:38 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,30 @@
 int	handle_heredoc(const char *limiter)
 {
 	char	*line;
+	char	*expanded;
 	int		fd;
 
 	line = NULL;
-	fd = open(".heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	expanded = NULL;
+	fd = open_heredoc_file();
 	if (fd < 0)
-	{
-		perror("open .heredoc_tmp");
 		return (1);
-	}
 	while (1)
 	{
 		line = readline("> ");
 		if (!line || strcmp(line, limiter) == 0)
 			break ;
-		write(fd, line, strlen(line));
+		expanded = expand_env_vars(line);
+		if (!expanded)
+		{
+			free(line);
+			close(fd);
+			return (1);
+		}
+		write(fd, expanded, strlen(expanded));
 		write(fd, "\n", 1);
 		free(line);
+		free(expanded);
 	}
 	free(line);
 	close(fd);
