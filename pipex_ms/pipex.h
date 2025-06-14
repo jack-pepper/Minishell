@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:54:10 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/14 10:34:16 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/14 22:17:29 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,4 +106,6 @@ int		pipex_error_heredoc(char *msg, int value);
 void	setup_outfd(t_pipex *pipex, char **argv, int argc);
 char	*expand_env_vars(const char *line);
 int		open_heredoc_file(void);
+void	free_line_and_close_fd(char *line, int fd);
+int		heredoc_loop(char *line, const char *limiter, int fd);
 #endif

@@ -6,7 +6,7 @@
 #    By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/20 17:50:19 by mmalie            #+#    #+#              #
-#    Updated: 2025/06/14 10:24:39 by yel-bouk         ###   ########.fr        #
+#    Updated: 2025/06/14 22:19:43 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -111,6 +111,7 @@ PIPEX_SRC =       ./pipex_ms/pipex.c \
       ./pipex_ms/free.c \
       ./pipex_ms/pipex_here_doc.c \
       ./pipex_ms/pipex_here_doc_env.c \
+      ./pipex_ms/pipex_here_doc_utils.c \
 
 SRC = $(MS_SRC) $(PIPEX_SRC)
 
