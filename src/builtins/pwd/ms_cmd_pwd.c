@@ -3,28 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   ms_cmd_pwd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:51 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/04 23:28:09 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/15 17:51:44 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../inc/minishell.h"
 
-int	cmd_pwd(void)
-{
-	char	*cwd;	
+// int	cmd_pwd(void)
+// {
+// 	char	*cwd;	
 
-	cwd = NULL;
-	cwd = store_cwd(cwd);
+// 	cwd = NULL;
+// 	cwd = store_cwd(cwd);
+// 	if (cwd != NULL)
+// 		printf("%s\n", cwd);
+// 	else
+// 		return (ms_err("pwd", NO_CUR_DIR, NO_ACC_PAR, 1));
+// 	free(cwd);
+// 	return (0);
+// }
+
+int	cmd_pwd(t_shell *sh)
+{
+	char	*cwd;
+	t_list	*pwd;
+
+	cwd = store_cwd(NULL);
 	if (cwd != NULL)
+	{
 		printf("%s\n", cwd);
-	else
-		return (ms_err("pwd", NO_CUR_DIR, NO_ACC_PAR, 1));
-	free(cwd);
-	return (0);
+		free(cwd);
+		return (0);
+	}
+	pwd = ft_getenv("PWD", &sh->this_env);
+	if (pwd && ((char **)pwd->content)[1])
+	{
+		printf("%s\n", ((char **)pwd->content)[1]);
+		return (0);
+	}
+	return (ms_err("pwd", NO_CUR_DIR, NO_ACC_PAR, 1));
 }
+
 
 char	*store_cwd(char *cwd)
 {

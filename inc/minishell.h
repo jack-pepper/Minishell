@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/15 15:39:36 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/15 17:51:16 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,8 +238,8 @@ void		free_commands(t_command **cmds);
 
 	// ms_cmd_cd.c - Change the working directory
 int			cmd_cd(t_shell *sh);
-int			cd_process_path(t_shell *sh, char *cwd, char *path);
-int			change_directory(t_shell *sh, char *cwd, char *path);
+int			cd_process_path(t_shell *sh, char *cwd, char *path, char *user_path);
+int			change_directory(t_shell *sh, char *cwd, char *path, char *user_path);
 void		update_pwds_vars(t_shell *sh, char *prev_cwd, char *new_pwd);
 void		update_pwd_var(t_shell *sh, char **split_pwd, char *key);
 
@@ -270,7 +270,7 @@ int			export_from_term(t_shell *sh, size_t *i);
 void		export_from_stash(t_shell *sh, t_list *stashed_var);
 
 	// ms_cmd_pwd.c - Print name of current/working directory
-int			cmd_pwd(void);
+int			cmd_pwd(t_shell *sh);
 char		*store_cwd(char *cwd);
 
 	// ms_cmd_unset.c - Unset values and attributes of variables and functions
@@ -458,6 +458,7 @@ int			basic_case_empty_str(t_shell *sh);
 int			basic_case_empty_var(t_shell *sh);
 void		protect_spaces_in_assignements(char *str);
 void		restore_protected_spaces(char **args);
+
 
 // bool		handle_builtin_if_needed(t_commands *cmd, t_shell *sh);
 // void		exec_external_cmd(t_commands *cmd, char **env);

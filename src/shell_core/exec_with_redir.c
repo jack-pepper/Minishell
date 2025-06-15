@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:29:54 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/12 18:36:28 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/15 17:51:00 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	exec_builtin_in_child(char **argv, t_shell *sh)
 	if (ft_strcmp(argv[0], "echo") == 0)
 		return (cmd_echo_x(argv));
 	else if (ft_strcmp(argv[0], "pwd") == 0)
-		return (cmd_pwd());
+		return (cmd_pwd(sh));
 	else if (ft_strcmp(argv[0], "env") == 0)
 		return (cmd_env(sh));
 	else if (argv[0][0] == CC_VAR_TO_INTERPRET
