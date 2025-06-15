@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:12:12 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/13 23:54:21 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/15 14:15:44 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*ft_setenv(t_list *set_var, char *arg)
 	if (arg != NULL)
 	{
 		free(arg);
-		if (set_var != NULL)
+		if (set_var != NULL && ((char **)set_var->content)[1] != NULL)
 			arg = ft_strdup(((char **)set_var->content)[1]);
 		else
 			arg = ft_strdup("");
