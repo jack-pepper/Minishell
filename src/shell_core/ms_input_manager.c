@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:27:22 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/13 22:23:41 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/15 10:23:22 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,13 @@ char	**normalize_input(char *line, t_shell *sh)
 int	process_input(t_shell *sh)
 {
 	t_command	*cmd;
+	int			res;
 
+	res = 0;
 	if (!sh->input_args || sh->input_args[0] == NULL)
 		return (-1);
 	ft_replace_all_chars(sh->input_args, CC_TRAILING_DOLLAR, '$');
+	ft_replace_chars_in_str(sh->input_args[0], CC_SPACE_IN_QUOTE, ' ');
 	cmd = is_registered_cmd(sh);
 	if (cmd != NULL)
 		sh->last_exit_status = cmd->func(sh);
@@ -74,17 +77,15 @@ int	process_input(t_shell *sh)
 			&& !sh->input_args[0][2])
 			sh->last_exit_status = ms_err("", "", CMD_NOT_FOUND, 127);
 		else if (sh->input_args[0][0] != '\0')
-			handle_non_cmd(sh);
+			handle_non_cmd(sh, res);
 	}
 	return (sh->last_exit_status);
 }
 
-int	handle_non_cmd(t_shell *sh)
+int	handle_non_cmd(t_shell *sh, int res)
 {
-	int		res;
 	char	**env_arr;
 
-	ft_replace_chars_in_str(sh->input_args[0], CC_SPACE_IN_QUOTE, ' ');
 	res = are_args_stashable(sh->input_args);
 	if (res == 0)
 		res = stash_var(sh);
@@ -100,7 +101,10 @@ int	handle_non_cmd(t_shell *sh)
 		if (!env_arr)
 			return (0);
 		if (validate_in_path(sh->input_args, env_arr, sh))
+		{
+			free_env_array(env_arr);
 			return (sh->last_exit_status);
+		}
 		case_redir_pipeline(sh, env_arr);
 		free_env_array(env_arr);
 	}

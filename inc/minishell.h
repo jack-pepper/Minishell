@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/15 01:31:10 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/15 10:23:37 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,8 +163,6 @@ typedef struct s_pipeline_parser
 	// minishell.c
 int			main(int argc, char **argv, char **env);
 int			is_invalid_for_stash(char *arg);
-int			handle_non_cmd(t_shell *sh);
-int			handle_file_or_dir(t_shell *sh);
 
 	// ms_initer.c
 int			init_shell(t_shell *sh, char **env);
@@ -177,7 +175,7 @@ void		signal_handler(int signum);
 char		*get_input(char *line);
 char		**normalize_input(char *line, t_shell *sh);
 int			process_input(t_shell *sh);
-int			handle_non_cmd(t_shell *sh);
+int			handle_non_cmd(t_shell *sh, int res);
 int			handle_file_or_dir(t_shell *sh);
 
 	// ms_normalizer.c
@@ -455,9 +453,9 @@ int			count_substring_occurrences(const char *line,
 int			count_extra_spaces(const char *str, char special);
 void		increase_str(char *new_str, char special, int *j);
 bool		check_consecutive_redir(char **args);
-int		loop_case_empty_str(t_shell *sh);
-int		basic_case_empty_str(t_shell *sh);
-int		basic_case_empty_var(t_shell *sh);
+int			loop_case_empty_str(t_shell *sh);
+int			basic_case_empty_str(t_shell *sh);
+int			basic_case_empty_var(t_shell *sh);
 
 // bool		handle_builtin_if_needed(t_commands *cmd, t_shell *sh);
 // void		exec_external_cmd(t_commands *cmd, char **env);
