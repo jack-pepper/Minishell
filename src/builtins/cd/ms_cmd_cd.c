@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 00:03:54 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/15 16:06:24 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/15 19:18:10 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,20 @@ int	cmd_cd(t_shell *sh)
 	char	*path;
 	t_list	*home_var;
 	int		res;
+	t_list	*pwd_var;
 
 	home_var = ft_getenv("HOME", &sh->this_env);
 	path = NULL;
 	res = cd_set_path(sh, home_var, &path);
 	if (res < 2)
 		return (res);
-	cwd = store_cwd(NULL);
+	cwd = store_cwd(sh, NULL);
 	if (!cwd)
-	{
-		home_var = ft_getenv("PWD", &sh->this_env);
-		if (home_var != NULL && ((char **)home_var->content)[1])
-			cwd = ft_strdup(((char **)home_var->content)[1]);
-		else
+	{       
+		pwd_var = ft_getenv("PWD", &sh->this_env);
+		if (pwd_var && (const char *)((char **)pwd_var->content)[1])
+			cwd = ft_strdup((const char *)((const char **)pwd_var->content)[1]);
+		if (!cwd)
 			return (ms_err("cd", "", PWD_NON_SET, 1));
 	}
 	if (cd_process_path(sh, cwd, path) != 0)
@@ -45,7 +46,7 @@ int	cd_process_path(t_shell *sh, char *cwd, char *path)
 
 	if (path[0] == '.')
 	{
-		cur_path = handle_dotted_path(cwd, path);
+		cur_path = handle_dotted_path(sh, cwd, path);
 		if (change_directory(sh, cwd, cur_path) != 0)
 		{
 			free(cur_path);
@@ -76,13 +77,36 @@ int	change_directory(t_shell *sh, char *cwd, char *path)
 	if (!path)
 	{
 		sh->last_exit_status = ms_err("chdir", NO_CUR_DIR, NO_ACC_PAR, 0);
-		return (0);
+		return (1);
 	}
 	if (chdir(path) != 0)
-		return (ms_err("cd: ", sh->input_args[1], NO_FILE_OR_DIR, 127));
+	{
+		char *old_cwd = ft_strdup(cwd);
+		cwd = getcwd(NULL, 0);
+		if (!cwd)
+		{
+			update_pwds_vars(sh, old_cwd, path);
+			free(old_cwd);
+			return (ms_err("chdir", NO_CUR_DIR, NO_ACC_PAR, 0));
+		}
+		else
+		{
+			free(old_cwd);	
+			return (ms_err("cd: ", path, NO_FILE_OR_DIR, 127));
+		}
+	}
+
+	trimmed = store_cwd(sh, trimmed);
+	if (!trimmed)
+	{
+		t_list *pwd_var = ft_getenv("PWD", &sh->this_env);
+		if (pwd_var && ((char **)pwd_var->content)[1])
+			trimmed = handle_dotted_path(sh, cwd, path);
+//		return (ms_err("cd: ", "", NO_CUR_DIR, 1));
+	}	
 	if (sh->input_args[1] && ft_strcmp(sh->input_args[1], "-") == 0)
 		printf("%s\n", path);
-	trimmed = store_cwd(trimmed);
+
 	update_pwds_vars(sh, cwd, trimmed);
 	free(trimmed);
 	return (0);

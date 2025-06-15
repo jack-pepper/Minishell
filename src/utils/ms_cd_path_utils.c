@@ -6,13 +6,13 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 11:48:09 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/04 20:02:53 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/15 18:54:11 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-char	*handle_dotted_path(char *cwd, char *path)
+char	*handle_dotted_path(t_shell *sh, char *cwd, char *path)
 {
 	char	*joined_path;
 	char	**split_path;
@@ -21,7 +21,7 @@ char	*handle_dotted_path(char *cwd, char *path)
 	joined_path = NULL;
 	split_path = NULL;
 	rejoined_path = NULL;
-	joined_path = get_abs_path(joined_path, cwd, path);
+	joined_path = get_abs_path(sh, joined_path, cwd, path);
 	if (!joined_path)
 		return (NULL);
 	split_path = split_abs_path(split_path, joined_path);
@@ -36,17 +36,24 @@ char	*handle_dotted_path(char *cwd, char *path)
 }
 
 // Form absolute path from cwd and path and store to joined_path
-char	*get_abs_path(char *joined_path, char *cwd, char *path)
+char	*get_abs_path(t_shell *sh, char *joined_path, char *cwd, char *path)
 {
 	char	*temp;
+	t_list	*pwd_var;
 
 	temp = ft_strjoin("/", path);
 	if (!temp)
 		return (NULL);
 	if (!cwd)
 	{
-		free(temp);
-		return (NULL);
+		pwd_var = ft_getenv("PWD", &sh->this_env);
+		if (pwd_var && (const char *)((char **)pwd_var->content)[1])
+			cwd = ft_strdup((const char *)((const char **)pwd_var->content)[1]);
+		else
+		{
+			free(temp);
+			return (NULL);
+		}
 	}
 	joined_path = ft_strjoin(cwd, temp);
 	free(temp);

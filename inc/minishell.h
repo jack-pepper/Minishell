@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/15 15:39:36 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/15 17:40:45 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,8 +270,8 @@ int			export_from_term(t_shell *sh, size_t *i);
 void		export_from_stash(t_shell *sh, t_list *stashed_var);
 
 	// ms_cmd_pwd.c - Print name of current/working directory
-int			cmd_pwd(void);
-char		*store_cwd(char *cwd);
+int			cmd_pwd(t_shell *sh);
+char		*store_cwd(t_shell *sh, char *cwd);
 
 	// ms_cmd_unset.c - Unset values and attributes of variables and functions
 int			cmd_unset(t_shell *sh);
@@ -280,8 +280,8 @@ t_list		*get_prev_node(t_list *cur_node, t_list *this_env);
 	// ./UTILS
 
 	// ms_cd_path_utils.c
-char		*handle_dotted_path(char *cwd, char *path);
-char		*get_abs_path(char *joined_path, char *cwd, char *path);
+char		*handle_dotted_path(t_shell *sh, char *cwd, char *path);
+char		*get_abs_path(t_shell *sh, char *joined_path, char *cwd, char *path);
 char		**split_abs_path(char **split_path, char *joined_path);
 void		flag_dotted_path(char **split_path, char ctrl_char);
 char		*rejoin_abs_path(char *rejoined_path, char **split_path,
