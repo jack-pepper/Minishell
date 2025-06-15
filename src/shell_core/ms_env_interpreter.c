@@ -6,11 +6,26 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/11 15:45:39 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/15 13:41:31 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
+
+int	handle_env_spaces(t_shell *sh)
+{
+	char	*temp;
+
+	temp = join_all_subargs(sh->input_args, ' ');
+	if (!temp)
+		return (1);
+	free_args(sh->input_args);
+	sh->input_args = ft_split(temp, ' ');
+	free(temp);
+	if (!sh->input_args)
+		return (1);
+	return (0);
+}
 
 int	ft_interpret_env(t_shell *sh)
 {
@@ -38,7 +53,7 @@ int	ft_interpret_env(t_shell *sh)
 		}
 		i++;
 	}
-	return (0);
+	return (handle_env_spaces(sh));
 }
 
 char	*rejoin_arg(t_shell *sh, char *rejoined_arg, char **split_args, int i)
