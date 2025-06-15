@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/15 10:23:37 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/15 15:39:36 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -456,6 +456,8 @@ bool		check_consecutive_redir(char **args);
 int			loop_case_empty_str(t_shell *sh);
 int			basic_case_empty_str(t_shell *sh);
 int			basic_case_empty_var(t_shell *sh);
+void		protect_spaces_in_assignements(char *str);
+void		restore_protected_spaces(char **args);
 
 // bool		handle_builtin_if_needed(t_commands *cmd, t_shell *sh);
 // void		exec_external_cmd(t_commands *cmd, char **env);

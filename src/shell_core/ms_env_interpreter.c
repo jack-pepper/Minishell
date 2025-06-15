@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_env_interpreter.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/15 13:41:31 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/15 15:38:37 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,13 @@ int	handle_env_spaces(t_shell *sh)
 	temp = join_all_subargs(sh->input_args, ' ');
 	if (!temp)
 		return (1);
+	protect_spaces_in_assignements(temp);
 	free_args(sh->input_args);
 	sh->input_args = ft_split(temp, ' ');
 	free(temp);
 	if (!sh->input_args)
 		return (1);
+	restore_protected_spaces(sh->input_args);
 	return (0);
 }
 
