@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 00:03:54 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/09 23:07:19 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/15 16:06:24 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	cd_process_path(t_shell *sh, char *cwd, char *path)
 	}
 	else
 	{
-		if (ft_strcmp(path, "-") == 0)
+		if (ft_strcmp(path, "-") == 0 && ft_getenv("OLDPWD", &sh->this_env))
 			path = ((char **)(ft_getenv("OLDPWD", &sh->this_env))
 					->content)[1];
 		if (change_directory(sh, cwd, path) != 0)
