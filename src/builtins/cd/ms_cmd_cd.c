@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_cmd_cd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 00:03:54 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/15 19:44:20 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/16 06:39:05 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,27 @@
 
 char	*join_parts(char **parts)
 {
-	char	*res;
+	char	*res = ft_strdup("/");
 	char	*tmp;
 	char	*tmp2;
-	int		i;
+	int		i = 0;
 
-	res = ft_strdup("/");
 	if (!res)
 		return (NULL);
-	i = 0;
 	while (parts[i])
 	{
 		tmp = ft_strjoin(res, parts[i]);
 		free(res);
+		if (!tmp)
+			return (NULL); // Memory error
 		if (parts[i + 1])
 			tmp2 = ft_strjoin(tmp, "/");
 		else
 			tmp2 = ft_strdup(tmp);
 		free(tmp);
+
+		if (!tmp2)
+			return (NULL); // Memory error
 		res = tmp2;
 		i++;
 	}
@@ -40,24 +43,27 @@ char	*join_parts(char **parts)
 
 char	*apply_logical_cd(char *pwd, char *cd_path)
 {
-	char	**pwd_split;
-	char	**path_split;
+	char	**pwd_split = ft_split(pwd, '/');
+	char	**path_split = ft_split(cd_path, '/');
 	char	**result;
-	int		i;
-	int		j;
+	char	*final_result;
+	int		i = 0, j = 0;
 
-	pwd_split = ft_split(pwd, '/');
-	path_split = ft_split(cd_path, '/');
-	result = malloc(sizeof(char *) * 1024);
-	if (!pwd_split || !path_split || !result)
+	if (!pwd_split || !path_split)
 		return (NULL);
-	i = 0;
+	result = malloc(sizeof(char *) * 1024); // NOTE: consider dynamic realloc in future
+	if (!result)
+	{
+		free_args(pwd_split);
+		free_args(path_split);
+		return (NULL);
+	}
+
 	while (pwd_split[i])
 	{
 		result[i] = ft_strdup(pwd_split[i]);
 		i++;
 	}
-	j = 0;
 	while (path_split[j])
 	{
 		if (!ft_strcmp(path_split[j], "..") && i > 0)
@@ -67,10 +73,15 @@ char	*apply_logical_cd(char *pwd, char *cd_path)
 		j++;
 	}
 	result[i] = NULL;
+	final_result = join_parts(result);
+
+	free_args(result);
 	free_args(pwd_split);
 	free_args(path_split);
-	return (join_parts(result));
+
+	return (final_result);
 }
+
 
 int	cmd_cd(t_shell *sh)
 {
@@ -121,54 +132,82 @@ char *resolve_logical_path(char *cwd, char *user_path)
 
 int	cd_process_path(t_shell *sh, char *cwd, char *path, char *user_path)
 {
-	char	*cur_path;
+	char			*cur_path = NULL;
+	char			*logical_path = NULL;
+	// struct stat		sb;
 
 	if (path[0] == '.')
 	{
-		char *logical_path;
-
-		// Try normal way
+		// Try normal dotted path first
 		cur_path = handle_dotted_path(cwd, path);
-		if (chdir(cur_path) == 0)
+		if (cur_path && chdir(cur_path) == 0)
 		{
-			update_pwds_vars(sh, cwd, cur_path);
+			// Physical directory exists — update with real path
+			char *real_path = store_cwd(NULL);
+			if (real_path)
+			{
+				update_pwds_vars(sh, cwd, real_path);
+				free(real_path);
+			}
+			else
+			{
+				// fallback to logical if real path can't be resolved
+				update_pwds_vars(sh, cwd, cur_path);
+			}
 			free(cur_path);
 			return (0);
 		}
+		free(cur_path);
 
-		// Fallback: simulate logical cd .. behavior
+		// Fallback: we simulate the ".." behavior
 		logical_path = resolve_logical_path(cwd, user_path);
 		if (!logical_path)
-		{
-			free(cur_path);
 			return (1);
+
+		// Attempt to chdir into simulated path
+		if (chdir(logical_path) != 0)
+		{
+			// getcwd failed — simulate by appending "/.."
+			char *simulated = ft_strjoin(cwd, "/..");
+			if (!simulated)
+			{
+				free(logical_path);
+				return (1);
+			}
+			update_pwds_vars(sh, cwd, simulated);
+			free(simulated);
+			free(logical_path);
+			return (0);
 		}
-		update_pwds_vars(sh, cwd, logical_path);
+
+		// chdir worked, maybe getcwd still fails
+		char *new_real = store_cwd(NULL);
+		if (!new_real)
+		{
+			// getcwd failed — simulate manually
+			char *simulated = ft_strjoin(cwd, "/..");
+			update_pwds_vars(sh, cwd, simulated);
+			free(simulated);
+		}
+		else
+		{
+			update_pwds_vars(sh, cwd, new_real);
+			free(new_real);
+		}
 		free(logical_path);
-		free(cur_path);
 		return (0);
 	}
 	else
 	{
-		if (ft_strcmp(path, "-") == 0 )
+		if (ft_strcmp(path, "-") == 0)
 		{
 			t_list *oldpwd_var = ft_getenv("OLDPWD", &sh->this_env);
 			if (!oldpwd_var)
 				return ms_err("cd", "", OLDPWD_NON_SET, 1);
-			else
-			{
-				path = ((char **)(ft_getenv("OLDPWD", &sh->this_env))
-						->content)[1];
-			}
+			path = ((char **)oldpwd_var->content)[1];
 		}
-		if (change_directory(sh, cwd, path, user_path) != 0)
-		{
-			printf("heey\n");
-			free(cwd);
-			return (1);
-		}
+		return change_directory(sh, cwd, path, user_path);
 	}
-	return (0);
 }
 
 int	change_directory(t_shell *sh, char *cwd, char *path, char *user_path)
@@ -176,31 +215,20 @@ int	change_directory(t_shell *sh, char *cwd, char *path, char *user_path)
 	char	*trimmed;
 	char	*logical_pwd;
 
-	printf("Hello \n");
 	if (!path)
 	{
 		sh->last_exit_status = ms_err("chdir", NO_CUR_DIR, NO_ACC_PAR, 0);
 		return (0);
 	}
 
-	printf("[change_dir] Attempting to chdir to: %s\n", path);
 	if (chdir(path) != 0)
 	{
-		printf("[change_dir] chdir failed. Attempting fallback using logical_cd.\n");
-
 		if (!cwd || !user_path)
-		{
-			if(!getcwd(NULL, 0))
-			{
-				ft_strlcat(path, cwd, ft_strlen(".."));
-			}
 			return (ms_err("cd: ", sh->input_args[1], NO_FILE_OR_DIR, 127));
-		}
 
 		logical_pwd = apply_logical_cd(cwd, user_path);
 		if (!logical_pwd)
 			return (1);
-
 		update_pwds_vars(sh, cwd, logical_pwd);
 		free(logical_pwd);
 		return (0);
@@ -209,19 +237,19 @@ int	change_directory(t_shell *sh, char *cwd, char *path, char *user_path)
 	trimmed = store_cwd(NULL);
 	if (!trimmed)
 	{
-		printf("[change_dir] getcwd failed after chdir. Fallback to logical.\n");
 		logical_pwd = apply_logical_cd(cwd, user_path);
 		if (!logical_pwd)
 			return (1);
 		update_pwds_vars(sh, cwd, logical_pwd);
-		printf("[logical_cd] Logical fallback path: %s\n", logical_pwd);
 		free(logical_pwd);
 		return (0);
 	}
+
 	update_pwds_vars(sh, cwd, trimmed);
 	free(trimmed);
 	return (0);
 }
+
 
 
 void	update_pwds_vars(t_shell *sh, char *prev_cwd, char *new_pwd)
