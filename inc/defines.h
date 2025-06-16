@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   defines.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/15 18:19:02 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/16 11:03:46 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,5 @@
 # define NO_ACC_PAR ": getcwd: cannot access parent directories\n"
 # define PWD_NON_SET ": PWD non set\n"
 # define OLDPWD_NON_SET ": OLDPWD non set\n"
-
 
 #endif

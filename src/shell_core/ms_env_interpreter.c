@@ -3,31 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ms_env_interpreter.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 21:05:23 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/15 15:38:37 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/16 08:58:41 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
-
-int	handle_env_spaces(t_shell *sh)
-{
-	char	*temp;
-
-	temp = join_all_subargs(sh->input_args, ' ');
-	if (!temp)
-		return (1);
-	protect_spaces_in_assignements(temp);
-	free_args(sh->input_args);
-	sh->input_args = ft_split(temp, ' ');
-	free(temp);
-	if (!sh->input_args)
-		return (1);
-	restore_protected_spaces(sh->input_args);
-	return (0);
-}
 
 int	ft_interpret_env(t_shell *sh)
 {
@@ -55,7 +38,7 @@ int	ft_interpret_env(t_shell *sh)
 		}
 		i++;
 	}
-	return (handle_env_spaces(sh));
+	return (0);
 }
 
 char	*rejoin_arg(t_shell *sh, char *rejoined_arg, char **split_args, int i)
