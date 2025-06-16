@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/16 08:58:29 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/16 22:54:10 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,12 +241,33 @@ void		free_commands(t_command **cmds);
 	// ms_cmd_cd.c - Change the working directory
 int			cmd_cd(t_shell *sh);
 int			cd_process_path(t_shell *sh, char *cwd, char *path, char *user_path);
+int			cd_set_path(t_shell *sh, t_list *home_var, char **path);
+char		*fallback_to_pwd_if_cwd_fails(t_shell *sh);
+int			handle_cd_path_failure(char *user_path);
+
+	// ms_cmd_cd_chdir.c
 int			change_directory(t_shell *sh, char *cwd, char *path, char *user_path);
+int			cd_case_invalid_chdir(t_shell *sh, char *cwd, char *user_path, char *logical_pwd);
+int			cd_case_invalid_cwd(t_shell *sh, char *cwd, char *user_path, char *logical_pwd);
 void		update_pwds_vars(t_shell *sh, char *prev_cwd, char *new_pwd);
 void		update_pwd_var(t_shell *sh, char **split_pwd, char *key);
 
-	// ms_cmd_cd_set_path.c
-int			cd_set_path(t_shell *sh, t_list *home_var, char **path);
+	// ms_cmd_cd_logical_path.c
+char	*handle_cd_dotdot_case(char *pwd,
+                        char **pwd_split, char **path_split);
+char    *apply_logical_cd(char *pwd, char *cd_path);
+char    *resolve_logical_path(char *cwd, char *user_path);
+int		try_logical_cd(t_shell *sh, char *cwd, char *user_path);
+int		handle_relative_cd(t_shell *sh, char *cwd,
+                char *path, char *user_path);
+
+	// ms_cmd_cd_utils.c
+char			*join_parts(char **parts, int i);
+int		append_and_replace(char **dst, char *suffix);
+void     update_if_exists(char **last_existing, char *current);
+char    *find_last_existing_dir(char *path, int i);
+char     *merge_pwd_and_path(char **pwd_split, char **path_split, int i, int j);
+
 
 	// ms_cmd_echo.c - Display a line of text
 int			cmd_echo(t_shell *sh);
