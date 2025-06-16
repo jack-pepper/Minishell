@@ -6,51 +6,11 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 00:03:54 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/16 22:51:24 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/16 23:28:59 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../inc/minishell.h"
-
-char	*handle_cd_dotdot_case(char *pwd,
-			char **pwd_split, char **path_split)
-{
-	static int	cd_up_count;
-	static int	deleted_dirs;
-	char		*current_path;
-	int			i;
-
-	i = 0;
-	if (cd_up_count == 0)
-	{
-		current_path = ft_strdup("/");
-		while (pwd_split[i])
-		{
-			if (!append_and_replace(&current_path, pwd_split[i]))
-				return (NULL);
-			if (access(current_path, F_OK) != 0)
-				deleted_dirs++;
-			if (!append_and_replace(&current_path, "/"))
-				return (NULL);
-			i++;
-		}
-		free(current_path);
-	}
-	cd_up_count++;
-	if (cd_up_count >= deleted_dirs)
-	{
-		cd_up_count = 0;
-		deleted_dirs = 0;
-		free_args(pwd_split);
-		free_args(path_split);
-		return (find_last_existing_dir(pwd, 0));
-	}
-	free_args(pwd_split);
-	free_args(path_split);
-	ft_printf("cd: error retrieving current directory: getcwd:"
-		"cannot access parent directories: No such file or directory\n");
-	return (ft_strjoin(pwd, "/.."));
-}
 
 char	*apply_logical_cd(char *pwd, char *cd_path)
 {
@@ -86,22 +46,12 @@ int	try_logical_cd(t_shell *sh, char *cwd, char *user_path)
 	char	*new_real;
 	char	*simulated;
 
+	simulated = NULL;
 	logical_path = resolve_logical_path(cwd, user_path);
 	if (!logical_path)
 		return (1);
 	if (chdir(logical_path) != 0)
-	{
-		simulated = ft_strjoin(cwd, "/..");
-		if (!simulated)
-		{
-			free(logical_path);
-			return (1);
-		}
-		update_pwds_vars(sh, cwd, simulated);
-		free(simulated);
-		free(logical_path);
-		return (0);
-	}
+		return (simulate_path(sh, cwd, logical_path));
 	new_real = store_cwd(NULL);
 	if (!new_real)
 	{
@@ -114,6 +64,20 @@ int	try_logical_cd(t_shell *sh, char *cwd, char *user_path)
 		update_pwds_vars(sh, cwd, new_real);
 		free(new_real);
 	}
+	free(logical_path);
+	return (0);
+}
+
+int	simulate_path(t_shell *sh, char *cwd, char *logical_path)
+{
+	simulated = ft_strjoin(cwd, "/..");
+	if (!simulated)
+	{
+		free(logical_path);
+		return (1);
+	}
+	update_pwds_vars(sh, cwd, simulated);
+	free(simulated);
 	free(logical_path);
 	return (0);
 }

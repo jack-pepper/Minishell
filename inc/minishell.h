@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/16 22:54:10 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/16 23:37:06 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,9 @@ typedef struct s_shell
 	char			**input_args;
 	int				last_exit_status;
 	char			**tokens;
-	int logical_up_count;
-	char *last_logical_pwd;
-}					t_shell;
+	int				logical_up_count;
+	char			*last_logical_pwd;
+}				t_shell;
 
 typedef struct s_normalize_var
 {
@@ -240,34 +240,43 @@ void		free_commands(t_command **cmds);
 
 	// ms_cmd_cd.c - Change the working directory
 int			cmd_cd(t_shell *sh);
-int			cd_process_path(t_shell *sh, char *cwd, char *path, char *user_path);
-int			cd_set_path(t_shell *sh, t_list *home_var, char **path);
+int			cd_process_path(t_shell *sh, char *cwd, char *path,
+				char *user_path);
+int			cd_set_path(t_shell *sh, t_list *home_var,
+				char **path);
 char		*fallback_to_pwd_if_cwd_fails(t_shell *sh);
 int			handle_cd_path_failure(char *user_path);
 
 	// ms_cmd_cd_chdir.c
-int			change_directory(t_shell *sh, char *cwd, char *path, char *user_path);
-int			cd_case_invalid_chdir(t_shell *sh, char *cwd, char *user_path, char *logical_pwd);
-int			cd_case_invalid_cwd(t_shell *sh, char *cwd, char *user_path, char *logical_pwd);
+int			change_directory(t_shell *sh, char *cwd, char *path,
+				char *user_path);
+int			cd_case_invalid_chdir(t_shell *sh, char *cwd,
+				char *user_path, char *logical_pwd);
+int			cd_case_invalid_cwd(t_shell *sh, char *cwd,
+				char *user_path, char *logical_pwd);
 void		update_pwds_vars(t_shell *sh, char *prev_cwd, char *new_pwd);
 void		update_pwd_var(t_shell *sh, char **split_pwd, char *key);
 
+	// ms_cmd_cd_dotdot.c
+char		*handle_cd_dotdot_case(char *pwd,
+				char **pwd_split, char **path_split);
+int			test_pwd_split(char **pwd_split, char *current_path, int i);
+
 	// ms_cmd_cd_logical_path.c
-char	*handle_cd_dotdot_case(char *pwd,
-                        char **pwd_split, char **path_split);
-char    *apply_logical_cd(char *pwd, char *cd_path);
-char    *resolve_logical_path(char *cwd, char *user_path);
-int		try_logical_cd(t_shell *sh, char *cwd, char *user_path);
-int		handle_relative_cd(t_shell *sh, char *cwd,
-                char *path, char *user_path);
+char		*apply_logical_cd(char *pwd, char *cd_path);
+char		*resolve_logical_path(char *cwd, char *user_path);
+int			try_logical_cd(t_shell *sh, char *cwd, char *user_path);
+int			simulate_path(t_shell *sh, char *cwd, char *logical_path);
+int			handle_relative_cd(t_shell *sh, char *cwd,
+				char *path, char *user_path);
 
 	// ms_cmd_cd_utils.c
-char			*join_parts(char **parts, int i);
-int		append_and_replace(char **dst, char *suffix);
-void     update_if_exists(char **last_existing, char *current);
-char    *find_last_existing_dir(char *path, int i);
-char     *merge_pwd_and_path(char **pwd_split, char **path_split, int i, int j);
-
+char		*join_parts(char **parts, int i);
+int			append_and_replace(char **dst, char *suffix);
+void		update_if_exists(char **last_existing, char *current);
+char		*find_last_existing_dir(char *path, int i);
+char		*merge_pwd_and_path(char **pwd_split, char **path_split,
+				int i, int j);
 
 	// ms_cmd_echo.c - Display a line of text
 int			cmd_echo(t_shell *sh);
@@ -481,7 +490,6 @@ int			basic_case_empty_str(t_shell *sh);
 int			basic_case_empty_var(t_shell *sh);
 void		protect_spaces_in_assignements(char *str);
 void		restore_protected_spaces(char **args);
-
 
 // bool		handle_builtin_if_needed(t_commands *cmd, t_shell *sh);
 // void		exec_external_cmd(t_commands *cmd, char **env);
