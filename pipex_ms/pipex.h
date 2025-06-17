@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:54:10 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/17 08:47:30 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:27:33 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,5 +110,6 @@ char	*expand_env_vars(const char *line, int exit_status);
 int		open_heredoc_file(void);
 void	free_line_and_close_fd(char *line, int fd);
 int		heredoc_loop(char *line, const char *limiter, int fd, int exit_status);
+char	*strip_quotes_and_encode_expand(char *str);
 int		open_heredoc_file(void);
 #endif

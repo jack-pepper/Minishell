@@ -3,14 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   ms_cmd_export.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:03:40 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/16 08:45:55 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/17 16:51:27 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../inc/minishell.h"
+
+void	exec_export_no_arg(t_shell *sh)
+{
+	char	**env_array;
+	int		count;
+
+	env_array = env_list_to_array(sh->this_env);
+	count = count_args(env_array);
+	sort_env_array(env_array, count);
+	print_sorted_export(env_array);
+	free_args(env_array);
+}
 
 // Handle "export var_name" (from stash) & "export var_name=[value]"
 int	cmd_export(t_shell *sh)
@@ -19,7 +31,10 @@ int	cmd_export(t_shell *sh)
 	int		res;
 
 	if (sh->input_args[1] == NULL)
-		cmd_env((sh));
+	{
+		exec_export_no_arg(sh);
+		return (0);
+	}
 	else
 	{
 		i = 1;

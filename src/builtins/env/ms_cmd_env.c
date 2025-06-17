@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_cmd_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 13:01:09 by mmalie            #+#    #+#             */
-/*   Updated: 2025/05/09 11:28:17 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/17 16:40:40 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,49 @@ int	cmd_env(t_shell *sh)
 		cur_node = cur_node->next;
 	}
 	return (0);
+}
+
+void	sort_env_array(char **env_array, int count)
+{
+	int		i;
+	int		j;
+	char	*temp;
+
+	i = 0;
+	while (i < count - 1)
+	{
+		j = i + 1;
+		while (j < count)
+		{
+			if (ft_strcmp(env_array[i], env_array[j]) > 0)
+			{
+				temp = env_array[i];
+				env_array[i] = env_array[j];
+				env_array[j] = temp;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+void	print_sorted_export(char **env_array)
+{
+	int		i;
+	char	*equal_sign;
+
+	i = 0;
+	while (env_array[i])
+	{
+		equal_sign = ft_strchr(env_array[i], '=');
+		if (equal_sign)
+		{
+			*equal_sign = '\0';
+			printf("declare -x %s=\"%s\"\n", env_array[i], equal_sign + 1);
+			*equal_sign = '=';
+		}
+		else
+			printf("declare -x %s\n", env_array[i]);
+		i++;
+	}
 }

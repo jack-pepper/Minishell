@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/17 05:27:29 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/17 16:31:21 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,6 +299,8 @@ char		*ms_trim(char *trimmed_arg, char *arg, int len, int k);
 int			exit_arg_overflow(char *str);
 
 	// ms_cmd_export.c - Set the export attribute for variables
+void		sort_env_array(char **env_array, int count);
+void		print_sorted_export(char **env_array);
 int			cmd_export(t_shell *sh);
 int			try_export(t_shell *sh, size_t *i);
 int			export_from_term(t_shell *sh, size_t *i);
