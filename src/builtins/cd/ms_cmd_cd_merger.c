@@ -6,11 +6,11 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 19:22:29 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/17 19:37:58 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/17 19:51:07 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../minishell.h"
+#include "../../../inc/minishell.h"
 
 char	*merge_pwd_and_path(char **pwd_split, char **path_split,
 		int i, int j)
@@ -29,7 +29,7 @@ char	*merge_pwd_and_path(char **pwd_split, char **path_split,
 			return (free_incomplete_strs(result, i));
 		i++;
 	}
-	if (try_merge != 0)
+	if (try_merge(path_split, result, i, j) != 0)
 		return (free_incomplete_strs(result, i));
 	final_result = join_parts(result, 0);
 	free_args(result);
@@ -38,6 +38,8 @@ char	*merge_pwd_and_path(char **pwd_split, char **path_split,
 
 void	init_to_null(char **result)
 {
+	int	i;
+
 	i = 0;
 	while (i < 1024)
 	{

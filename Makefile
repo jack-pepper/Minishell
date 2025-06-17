@@ -6,7 +6,7 @@
 #    By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/20 17:50:19 by mmalie            #+#    #+#              #
-#    Updated: 2025/06/16 23:18:05 by mmalie           ###   ########.fr        #
+#    Updated: 2025/06/17 19:48:57 by mmalie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,6 +53,7 @@ MS_SRC = ./src/minishell.c \
       ./src/builtins/cd/ms_cmd_cd_dotdot.c \
       ./src/builtins/cd/ms_cmd_cd_utils.c \
       ./src/builtins/cd/ms_cmd_cd_logical_path.c \
+      ./src/builtins/cd/ms_cmd_cd_merger.c \
       ./src/builtins/echo/ms_cmd_echo.c \
       ./src/builtins/env/ms_cmd_env.c \
       ./src/builtins/exit/ms_cmd_exit.c \
