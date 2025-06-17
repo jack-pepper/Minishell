@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 22:03:51 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/17 04:58:36 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/17 08:47:04 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,14 @@ int	heredoc_loop(char *line, const char *limiter, int fd, int exit_status)
 	write(fd, "\n", 1);
 	ft_free_two_str(line, expanded);
 	return (0);
+}
+
+int	open_heredoc_file(void)
+{
+	int	fd;
+
+	fd = open(".heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd < 0)
+		perror("open .heredoc_tmp");
+	return (fd);
 }

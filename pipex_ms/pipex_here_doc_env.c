@@ -6,21 +6,11 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 10:22:18 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/17 04:38:27 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/17 08:46:48 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-int	open_heredoc_file(void)
-{
-	int	fd;
-
-	fd = open(".heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd < 0)
-		perror("open .heredoc_tmp");
-	return (fd);
-}
 
 static int	get_var_bounds(const char *str, int start, int *end)
 {
