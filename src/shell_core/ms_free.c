@@ -6,7 +6,7 @@
 /*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 19:23:34 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/06 17:00:28 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/17 19:07:31 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,18 @@ void	free_commands(t_command **cmds)
 		}
 		free(cmds);
 	}
+}
+
+char	*free_incomplete_strs(char **arr, int up_to)
+{
+	int	i;
+
+	i = 0;
+	while (i < up_to)
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+	return (NULL);
 }

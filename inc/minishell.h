@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/17 16:31:21 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/17 19:33:02 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,6 +235,7 @@ void		free_memory(t_shell *sh);
 void		free_args(char **input_args);
 void		free_list(t_list **list);
 void		free_commands(t_command **cmds);
+char		*free_incomplete_strs(char **arr, int up_to);
 
 // ./BUILTINS
 
@@ -245,7 +246,7 @@ int			cd_process_path(t_shell *sh, char *cwd, char *path,
 int			cd_set_path(t_shell *sh, t_list *home_var,
 				char **path);
 char		*fallback_to_pwd_if_cwd_fails(t_shell *sh);
-int			handle_cd_path_failure(char *user_path);
+int			handle_cd_path_failure(char *user_path, char *cwd);
 
 	// ms_cmd_cd_chdir.c
 int			change_directory(t_shell *sh, char *cwd, char *path,
@@ -278,8 +279,12 @@ char		*join_parts(char **parts, int i);
 int			append_and_replace(char **dst, char *suffix);
 void		update_if_exists(char **last_existing, char *current);
 char		*find_last_existing_dir(char *path, int i);
+
+	// ms_cmd_cd_merger
 char		*merge_pwd_and_path(char **pwd_split, char **path_split,
 				int i, int j);
+void		init_to_null(char **result);
+int			try_merge(char **path_split, char **result, int i, int j);
 
 	// ms_cmd_echo.c - Display a line of text
 int			cmd_echo(t_shell *sh);

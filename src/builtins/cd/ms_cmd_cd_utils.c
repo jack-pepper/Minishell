@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 00:03:54 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/16 22:53:57 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/17 19:36:42 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,34 +88,4 @@ char	*find_last_existing_dir(char *path, int i)
 	free(current_path);
 	free_args(path_parts);
 	return (last_existing);
-}
-
-char	*merge_pwd_and_path(char **pwd_split, char **path_split,
-		int i, int j)
-{
-	char	**result;
-	char	*final_result;
-
-	result = malloc(sizeof(char *) * 1024);
-	if (!result)
-		return (NULL);
-	i = 0;
-	while (pwd_split[i])
-	{
-		result[i] = ft_strdup(pwd_split[i]);
-		i++;
-	}
-	j = 0;
-	while (path_split[j])
-	{
-		if (!ft_strcmp(path_split[j], "..") && i > 0)
-			i--;
-		else if (ft_strcmp(path_split[j], ".") && path_split[j][0])
-			result[i++] = ft_strdup(path_split[j]);
-		j++;
-	}
-	result[i] = NULL;
-	final_result = join_parts(result, 0);
-	free_args(result);
-	return (final_result);
 }

@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 00:03:54 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/17 08:43:39 by yel-bouk         ###   ########.fr       */
+/*   Updated: 2025/06/17 19:17:21 by mmalie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	cmd_cd(t_shell *sh)
 			return (ms_err("cd", "", PWD_NON_SET, 1));
 	}
 	if (cd_process_path(sh, cwd, path, user_path) != 0)
-		return (handle_cd_path_failure(user_path));
+		return (handle_cd_path_failure(user_path, cwd));
 	free(user_path);
 	free(cwd);
 	return (0);
@@ -86,8 +86,9 @@ int	cd_process_path(t_shell *sh, char *cwd, char *path, char *user_path)
 	return (change_directory(sh, cwd, path, user_path));
 }
 
-int	handle_cd_path_failure(char *user_path)
+int	handle_cd_path_failure(char *user_path, char *cwd)
 {
 	free(user_path);
+	free(cwd);
 	return (1);
 }
