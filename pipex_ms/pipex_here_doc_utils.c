@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_here_doc_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 22:03:51 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/14 22:40:47 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/17 04:58:36 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	free_line_and_close_fd(char *line, int fd)
 	return ;
 }
 
-int	heredoc_loop(char *line, const char *limiter, int fd)
+int	heredoc_loop(char *line, const char *limiter, int fd, int exit_status)
 {
 	char	*expanded;
 
@@ -31,7 +31,7 @@ int	heredoc_loop(char *line, const char *limiter, int fd)
 		free(line);
 		return (2);
 	}
-	expanded = expand_env_vars(line);
+	expanded = expand_env_vars(line, exit_status);
 	if (!expanded)
 	{
 		free_line_and_close_fd(line, fd);

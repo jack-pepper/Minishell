@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:54:10 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/14 22:17:29 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/17 04:37:02 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,11 +91,13 @@ void	read_heredoc_input(t_pipex *pipex, char *limiter);
 void	setup_here_doc_fds(t_pipex *pipex, char *outfile);
 void	parse_here_doc_commands(t_pipex *pipex, int argc, char **argv);
 void	fork_and_run(t_pipex *pipex, int i, int prev_fd, int *pipefd);
-int		run_pipex_from_minshell(t_pipeline *pipeline, char **envp);
+int		run_pipex_from_minshell(t_pipeline *pipeline,
+			char **envp, int exit_status);
 char	*join_args(char **args);
 void	ft_init_pipex(t_pipex *pipex, char *infile, char *outfile);
-int		handle_heredoc(const char *limiter);
-int		run_pipex_from_minshell(t_pipeline *pipeline, char **envp);
+int		handle_heredoc(const char *limiter, int exit_status);
+int		run_pipex_from_minshell(t_pipeline *pipeline,
+			char **envp, int exit_status);
 int		allocate_mem(char **str, int length);
 size_t	total_args_length(char **args);
 char	*join_args(char **args);
@@ -104,8 +106,8 @@ int		handle_heredoc_error(t_pipeline *pipeline);
 int		handle_pipex_in_fd_error(t_pipex pipex);
 int		pipex_error_heredoc(char *msg, int value);
 void	setup_outfd(t_pipex *pipex, char **argv, int argc);
-char	*expand_env_vars(const char *line);
+char	*expand_env_vars(const char *line, int exit_status);
 int		open_heredoc_file(void);
 void	free_line_and_close_fd(char *line, int fd);
-int		heredoc_loop(char *line, const char *limiter, int fd);
+int		heredoc_loop(char *line, const char *limiter, int fd, int exit_status);
 #endif

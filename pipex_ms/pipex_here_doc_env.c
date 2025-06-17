@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 10:22:18 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/14 20:37:56 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/17 04:38:27 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,21 @@ static char	*handle_env_var(char *str, int *index)
 	return (new_str);
 }
 
-char	*expand_env_vars(const char *line)
+static char	*handle_exit_status_var(char *str, int *index, int exit_status)
+{
+	char	*exit_status_str;
+	char	*new_str;
+
+	exit_status_str = ft_itoa(exit_status);
+	if (!exit_status_str)
+		return (str);
+	new_str = replace_var(str, *index, *index + 2, exit_status_str);
+	*index += ft_strlen(exit_status_str);
+	free(exit_status_str);
+	return (new_str);
+}
+
+char	*expand_env_vars(const char *line, int exit_status)
 {
 	char	*result;
 	int		i;
@@ -91,16 +105,13 @@ char	*expand_env_vars(const char *line)
 		return (NULL);
 	while (result[i])
 	{
-		if (result[i] == '$')
-		{
-			if (result[i + 1] && (ft_isalnum(result[i + 1])
-					|| result[i + 1] == '_'))
-			{
-				result = handle_env_var(result, &i);
-				continue ;
-			}
-		}
-		i++;
+		if (result[i] == '$' && result[i + 1] == '?')
+			result = handle_exit_status_var(result, &i, exit_status);
+		else if (result[i] == '$' && result[i + 1]
+			&& (ft_isalnum(result[i + 1]) || result[i + 1] == '_'))
+			result = handle_env_var(result, &i);
+		else
+			i++;
 	}
 	return (result);
 }

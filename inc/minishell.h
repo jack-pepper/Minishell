@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 22:05:05 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/16 23:37:06 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/17 04:52:59 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,7 +260,10 @@ void		update_pwd_var(t_shell *sh, char **split_pwd, char *key);
 	// ms_cmd_cd_dotdot.c
 char		*handle_cd_dotdot_case(char *pwd,
 				char **pwd_split, char **path_split);
-int			test_pwd_split(char **pwd_split, char *current_path, int i);
+int			test_pwd_split(char **pwd_split, char *current_path,
+				int i, int *deleted_dirs);
+void		reset_count_and_free(int *cd_up_count, int *deleted_dirs,
+				char **pwd_split, char **path_split);
 
 	// ms_cmd_cd_logical_path.c
 char		*apply_logical_cd(char *pwd, char *cd_path);

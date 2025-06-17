@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_exec_hanlder_utils.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 18:21:24 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/06 18:21:35 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/17 04:56:39 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	handle_pipeline_with_red(t_shell *sh, char **env)
 		return ;
 	}
 	if (has_heredoc(pipeline))
-		run_pipex_from_minshell(pipeline, env);
+		run_pipex_from_minshell(pipeline, env, sh->last_exit_status);
 	else
 		run_pipeline_basic_pipeline(pipeline, env, sh);
 	free_pipeline(pipeline);

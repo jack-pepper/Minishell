@@ -6,7 +6,7 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 00:03:54 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/16 23:28:59 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/17 04:53:58 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ int	try_logical_cd(t_shell *sh, char *cwd, char *user_path)
 
 int	simulate_path(t_shell *sh, char *cwd, char *logical_path)
 {
+	char	*simulated;
+
 	simulated = ft_strjoin(cwd, "/..");
 	if (!simulated)
 	{

@@ -6,13 +6,13 @@
 /*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:55:38 by yel-bouk          #+#    #+#             */
-/*   Updated: 2025/06/14 22:23:37 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/17 04:57:47 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	handle_heredoc(const char *limiter)
+int	handle_heredoc(const char *limiter, int exit_status)
 {
 	char	*line;
 	int		fd;
@@ -25,7 +25,7 @@ int	handle_heredoc(const char *limiter)
 		return (1);
 	while (1)
 	{
-		res = heredoc_loop(line, limiter, fd);
+		res = heredoc_loop(line, limiter, fd, exit_status);
 		if (res == 1)
 			return (1);
 		else if (res == 2)

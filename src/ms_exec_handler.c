@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_exec_handler.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmalie <mmalie@student.42nice.fr>          +#+  +:+       +#+        */
+/*   By: yel-bouk <yel-bouk@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 23:24:52 by mmalie            #+#    #+#             */
-/*   Updated: 2025/06/15 01:29:16 by mmalie           ###   ########.fr       */
+/*   Updated: 2025/06/17 04:55:31 by yel-bouk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ bool	handle_heredoc_pipeline(t_pipeline *pipeline, char **env, t_shell *sh)
 		sh->last_exit_status = 1;
 		return (false);
 	}
-	status = run_pipex_from_minshell(pipeline, env);
+	status = run_pipex_from_minshell(pipeline, env, sh->last_exit_status);
 	if (status != 0)
 	{
 		sh->last_exit_status = status;
