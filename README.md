@@ -21,7 +21,7 @@ To test this project locally:
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/pepper/Minishell.git
+   git clone https://github.com/jack-pepper/Minishell.git
 2. Navigate into the project directory:
    ```bash
    cd Minishell
